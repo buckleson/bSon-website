@@ -1,0 +1,27 @@
+---
+/** A tab button on product pages (original ScrewFast layout, new tokens). */
+interface Props {
+  id: string;
+  dataTab: string;
+  title: string;
+  icon?: string;
+  first?: boolean;
+}
+
+import Glyph from '@components/ui/Glyph.astro';
+
+const { id, dataTab, title, icon, first } = Astro.props;
+---
+
+<button
+  type="button"
+  class="product-tab flex w-full items-center justify-center gap-2 rounded-full border border-transparent px-4 py-3 text-sm font-semibold text-muted outline-hidden transition duration-300 hover:text-ink focus-visible:ring-3 focus-visible:ring-orange-500/50 aria-selected:bg-sheet aria-selected:text-white md:text-base dark:aria-selected:bg-orange-700"
+  id={id}
+  data-target={dataTab}
+  role="tab"
+  aria-selected={first ? 'true' : 'false'}
+  aria-controls={dataTab.slice(1)}
+>
+  {icon && <Glyph icon={icon} class="size-5" />}
+  {title}
+</button>

@@ -132,7 +132,17 @@ export const en = {
       claim: 'Tell us what to put on-chain.',
       payoff: 'We build it with you.',
       body: 'Four things we build for clients, each on its own private L2. Scroll to switch.',
+      stats: {
+      title: 'Built for institutional scale',
+      subTitle: 'We run what we sell. These numbers come from our own products in production.',
       items: [
+        { value: '2M+', label: 'transactions through Hyper Wallet' },
+        { value: '33K+', label: 'portfolios managed' },
+        { value: '$128K+', label: 'saved by users in fees' },
+        { value: '100M+', label: 'AI tokens saved by Pavii' },
+      ],
+    },
+    items: [
         {
           id: 'custom-blockchains',
           title: 'Custom blockchains',
@@ -375,6 +385,16 @@ export const en = {
     subTitle:
       'Every product we ship runs on Hyper 0X, our own blockchain. Start with the chain itself, secure your AI agents with Pavii, or launch a wallet with Hyper Wallet & SDKs.',
     soonHeading: 'Coming soon',
+    why: {
+      title: 'Why build on Hyper 0X?',
+      subTitle:
+        "Most blockchains make you inherit someone else's fees, roadmap and outages. Hyper 0X is ours, so every product we build, and every chain we build for you, gets the same foundation.",
+      benefits: [
+        'Final in one pass: no reorgs, no front-running.',
+        'Post-quantum-resistant encryption on every connection.',
+        'A private L2 for every customer, on one shared record.',
+      ],
+    },
     cta: {
       title: 'Not sure where to start?',
       subTitle: 'Book a 30-minute call. We will map your use case to the right product or a custom chain.',

@@ -1,0 +1,37 @@
+---
+import BlogCover from '@components/ui/BlogCover.astro';
+import { Image } from 'astro:assets';
+import { formatDate } from '@utils/utils';
+import { localeOf, pathFor, slugOf } from '@utils/content';
+import type { CollectionEntry } from 'astro:content';
+
+/**
+ * Blog card in the original layout: the cover fills the card, the author and
+ * date sit at the top and the title and summary at the bottom, over a shade.
+ */
+interface Props {
+  blogEntry: CollectionEntry<'blog'>;
+}
+
+const { blogEntry } = Astro.props;
+const data = blogEntry.data;
+---
+
+<a class="group relative block overflow-hidden rounded-[1.6rem] ring-1 ring-line outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500" href={pathFor(blogEntry)} data-astro-prefetch data-reveal>
+  <div class="relative h-[22rem] w-full overflow-hidden">
+    <BlogCover seed={slugOf(blogEntry)} label="" fill class="transition duration-700 group-hover:scale-105" />
+    <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/10"></div>
+  </div>
+  <div class="absolute inset-x-0 top-0 flex items-center gap-3 p-5 sm:p-6">
+    <Image src={data.authorImage} alt={data.authorImageAlt} width={40} height={40} densities={[1, 2]} class="size-10 rounded-full ring-2 ring-white/30" />
+    <div>
+      <p class="text-sm font-semibold text-white">{data.author}</p>
+      <p class="text-xs text-white/75">{formatDate(data.pubDate, localeOf(blogEntry))} · {data.readTime} min read</p>
+    </div>
+    {data.tags[0] && <span class="ms-auto rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">{data.tags[0]}</span>}
+  </div>
+  <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+    <h3 class="text-xl font-semibold text-balance text-white group-hover:text-white/85 sm:text-2xl">{data.title}</h3>
+    <p class="mt-2 line-clamp-2 text-sm text-pretty text-white/80">{data.description}</p>
+  </div>
+</a>

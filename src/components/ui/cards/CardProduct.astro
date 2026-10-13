@@ -1,0 +1,45 @@
+---
+import Glyph from '@components/ui/Glyph.astro';
+import ProductArt from '@components/ui/ProductArt.astro';
+import type { CollectionEntry } from 'astro:content';
+import { pathFor, slugOf } from '@utils/content';
+
+/**
+ * A clickable product card (the original ScrewFast layout): the product's
+ * animated scene fills the card, a shade rises from the bottom and the name
+ * and one-line description sit at the bottom left. `wide` spans two columns.
+ */
+interface Props {
+  product: CollectionEntry<'products'>;
+  wide?: boolean;
+}
+
+const { product, wide = false } = Astro.props;
+type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
+const soon = product.data.status === 'coming-soon';
+---
+
+<a
+  href={pathFor(product)}
+  data-astro-prefetch
+  class:list={[
+    'group relative flex h-64 items-end overflow-hidden rounded-[1.6rem] ring-1 ring-line outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500 md:h-80',
+    wide && 'md:col-span-2',
+  ]}
+  data-reveal
+>
+  <ProductArt product={slugOf(product) as Art} class="absolute inset-0 transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105" />
+  <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent"></div>
+  <span class="relative flex w-full items-end justify-between gap-4 p-5 md:p-6">
+    <span>
+      <span class="flex items-center gap-2 text-xl font-semibold text-white md:text-2xl">
+        {product.data.title}
+        {soon && <span class="rounded-md bg-white/15 px-1.5 py-0.5 text-xs font-semibold text-white">Coming soon</span>}
+      </span>
+      <span class="mt-1 block max-w-md text-sm text-white/75">{product.data.tagline}</span>
+    </span>
+    <span class="grid size-10 shrink-0 place-items-center rounded-full bg-white/15 text-white transition duration-300 group-hover:rotate-45 group-hover:bg-white group-hover:text-black">
+      <Glyph icon="arrow-up-right" class="size-4" />
+    </span>
+  </span>
+</a>

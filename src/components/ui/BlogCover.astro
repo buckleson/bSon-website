@@ -8,9 +8,11 @@ interface Props {
   seed: string;
   label: string;
   class?: string;
+  /** Fill a positioned parent (cover-style) instead of sizing itself. */
+  fill?: boolean;
 }
 
-const { seed, label, class: className } = Astro.props;
+const { seed, label, class: className, fill = false } = Astro.props;
 
 // Deterministic pseudo-random numbers from the slug.
 let h = 2166136261;
@@ -35,7 +37,7 @@ const hero = Math.floor(rand() * nodes.length);
 ---
 
 <svg
-  class:list={['blog-cover block h-auto w-full', className]}
+  class:list={['blog-cover block', fill ? 'absolute inset-0 size-full' : 'h-auto w-full', className]}
   viewBox={`0 0 ${W} ${H}`}
   role="img"
   aria-label={`${label} illustration`}

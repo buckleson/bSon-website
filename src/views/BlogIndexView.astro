@@ -1,46 +1,45 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import PostCard from '@components/ui/cards/PostCard.astro';
+import CardBlog from '@components/ui/cards/CardBlog.astro';
+import CardBlogRecent from '@components/ui/cards/CardBlogRecent.astro';
 import { entriesFor } from '@utils/content';
 import { getCopy } from '@/copy';
 import type { MarketingLocale } from '@utils/locale';
 
-/** The blog index: newest post featured, the rest in a grid. */
+/**
+ * Blog index in the original layout: a centred header, the newest post as a
+ * large card, then every other post as cover cards in two columns.
+ */
 interface Props {
   locale: MarketingLocale;
 }
 
 const { locale } = Astro.props;
 const copy = getCopy(locale).blogIndex;
-const [featured, ...others] = await entriesFor('blog', locale);
+const [mostRecentPost, ...otherPosts] = await entriesFor('blog', locale);
 ---
 
-<MainLayout
-  title={copy.title}
-  seoTitle={copy.seoTitle}
-  description={copy.metaDescription}
-  ogImage="/og/blog.png"
-  kind={{ type: 'CollectionPage' }}
->
-  <section class="mx-auto max-w-[85rem] px-4 pt-12 pb-8 sm:px-6 lg:px-8 lg:pt-20">
-    <div class="max-w-3xl" data-reveal>
-      <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
-        {copy.heading}
-      </h1>
-      <p class="mt-5 max-w-[60ch] text-lg text-pretty text-neutral-600 dark:text-neutral-400">{copy.subTitle}</p>
+<MainLayout title={copy.title} seoTitle={copy.seoTitle} description={copy.metaDescription} ogImage="/og/blog.png" kind={{ type: 'CollectionPage' }}>
+  <section class="mx-auto max-w-[85rem] px-4 pt-14 sm:px-6 lg:px-8 lg:pt-20">
+    <div class="mx-auto max-w-3xl text-left sm:text-center">
+      <p class="font-mono text-xs tracking-wide text-muted uppercase" data-reveal>Blog</p>
+      <h1 class="mt-3 text-5xl leading-[1] font-semibold text-balance text-ink sm:text-6xl" data-reveal>{copy.heading}</h1>
+      <p class="mt-5 text-lg text-pretty text-muted" data-reveal>{copy.subTitle}</p>
     </div>
   </section>
 
-  {featured ? (
-    <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8">
-      <div data-reveal><PostCard post={featured} featured headingLevel="h2" /></div>
-      <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
-        {others.map(post => (
-          <div data-reveal-item><PostCard post={post} headingLevel="h2" /></div>
-        ))}
-      </div>
-    </section>
+  {mostRecentPost ? (
+    <>
+      <section class="mx-auto max-w-[85rem] px-4 pt-12 sm:px-6 lg:px-8">
+        <CardBlogRecent blogEntry={mostRecentPost} />
+      </section>
+      <section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:pb-20">
+        <div class="grid gap-5 lg:grid-cols-2">
+          {otherPosts.map(blogEntry => <CardBlog blogEntry={blogEntry} />)}
+        </div>
+      </section>
+    </>
   ) : (
-    <p class="px-4 pb-20 text-neutral-600 dark:text-neutral-400">{copy.noPosts}</p>
+    <p class="px-4 py-20 text-center text-muted">{copy.noPosts}</p>
   )}
 </MainLayout>
