@@ -25,8 +25,8 @@ const { badge, lead, phrases, intro, primary, secondary, counter, chips } = Astr
 const eth = brand('ethereum');
 
 const cards = [
-  { id: 'kyc', pos: 'left-[-2%] top-[14%] sm:left-[2%]', icon: 'seal-check', tone: 'ok', title: 'Compliance passed', sub: 'KYC · limit OK' },
-  { id: 'pavii', pos: 'left-[-4%] top-[56%] hidden sm:flex', icon: 'shield-warning', tone: 'bad', title: 'Pavii blocked', sub: 'Prompt injection' },
+  { id: 'kyc', pos: 'left-[-2%] top-[34%] sm:left-[-3%]', icon: 'seal-check', tone: 'ok', title: 'Compliance passed', sub: 'KYC · limit OK' },
+  { id: 'pavii', pos: 'left-[-6%] top-[62%] hidden sm:flex', icon: 'shield-warning', tone: 'bad', title: 'Pavii blocked', sub: 'Prompt injection' },
   { id: 'l2', pos: 'right-[-2%] top-[8%] sm:right-[2%]', icon: 'stack', tone: 'accent', title: 'Your L2 → Hyper 0X', sub: 'State root final' },
   { id: 'bridge', pos: 'right-[-4%] top-[60%] hidden sm:flex', icon: 'arrows-left-right', tone: 'neutral', title: '250 USDC → Ethereum', sub: 'Bridge · 3 of 5 signed' },
   { id: 'gold', pos: 'left-[10%] bottom-[2%] sm:left-[14%]', icon: 'diamond', tone: 'accent', title: 'Tokenized gold', sub: '+0.01 g added' },
@@ -43,8 +43,8 @@ const cards = [
         <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400/70"></span><span class="relative inline-flex size-2 rounded-full bg-emerald-400"></span></span>
         {badge}
       </p>
-      <h1 class="mt-6 text-[2.75rem] leading-[0.98] font-semibold sm:text-6xl lg:text-[4.6rem]" data-hero-in>
-        <span class="block">{lead}</span>
+      <h1 class="mt-6 text-[2.6rem] leading-[0.98] font-semibold sm:text-6xl lg:text-[3.9rem] xl:text-[4.3rem]" data-hero-in>
+        <span class="block whitespace-nowrap">{lead}</span>
         <span class="block min-h-[1.05em]" data-typer={JSON.stringify(phrases)}>
           <span class="mark" data-typer-text>{phrases[0]}</span><span class="typer-caret" aria-hidden="true"></span>
         </span>

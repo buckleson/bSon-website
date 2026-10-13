@@ -38,7 +38,7 @@ if (!reduced) {
     el.textContent = format(0);
     ScrollTrigger.create({
       trigger: el,
-      start: 'top 90%',
+      start: 'top bottom',
       once: true,
       onEnter: () =>
         gsap.to(state, { n: target, duration: 1.6, ease: 'expo.out', onUpdate: () => (el.textContent = format(state.n)) }),

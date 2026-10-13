@@ -114,7 +114,7 @@ export const en = {
     logos: 'Connects to',
     why: {
       label: 'Why Hyper 0X',
-      claim: "Public chains weren't built for banks.",
+      claim: "Public chains don't fit banks.",
       payoff: 'So we built our own.',
       body:
         "Renting a public chain means sharing its fees, its roadmap and its outages. Hyper 0X gives every customer a private L2 with their own rules, settled on one shared L1.",

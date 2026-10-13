@@ -1,11 +1,12 @@
 ---
 import SectionHead from '@components/home/SectionHead.astro';
 import Glyph from '@components/ui/Glyph.astro';
+import IsoFigure from '@components/ui/IsoFigure.astro';
 
 /**
- * "Why Hyper 0X" on a dark sheet. A canvas scene scrubbed by scroll:
- * scattered transactions gather into three private L2s (bank, fintech, AI),
- * then each L2 settles into the shared Hyper 0X L1 at the bottom.
+ * "Why Hyper 0X" on a dark sheet, explained by Fig 1, the block press: three
+ * private L2s hand over a state root each, the press seals them into one
+ * block in a single stroke, and the block joins the shared ledger.
  */
 interface Props {
   label: string;
@@ -16,29 +17,14 @@ interface Props {
 }
 
 const { label, claim, payoff, body, facts } = Astro.props;
-const clusters = [
-  { label: 'Bank L2', x: 20 },
-  { label: 'Fintech L2', x: 50 },
-  { label: 'AI L2', x: 80 },
-];
 ---
 
 <section class="on-sheet relative rounded-t-[2rem] bg-sheet text-white">
   <div class="mx-auto max-w-[85rem] px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-28">
     <SectionHead index="01" label={label} claim={claim} payoff={payoff} body={body} tone="sheet" />
 
-    <div class="relative mt-12 overflow-hidden rounded-[1.6rem] bg-sheet-card ring-1 ring-sheet-line" data-why>
-      <canvas class="block aspect-[16/9] w-full sm:aspect-[16/7]" aria-hidden="true"></canvas>
-      {clusters.map((cluster, i) => (
-        <span class="why-label absolute top-[16%] -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-3 py-1 font-mono text-[0.7rem] tracking-wide text-white/85 uppercase" style={`left:${cluster.x}%`} data-why-label={i}>
-          {cluster.label}
-        </span>
-      ))}
-      <span class="why-l1 absolute bottom-[7%] left-1/2 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-orange-600 px-4 py-1.5 text-sm font-semibold text-white dark:bg-orange-700" data-why-l1>
-        <Glyph icon="cube" class="size-4" />Hyper 0X L1 · one shared record
-      </span>
-      <p class="absolute top-4 left-5 font-mono text-[0.7rem] tracking-wide text-white/50 uppercase" data-why-status>Transactions arriving</p>
-      <p class="sr-only">Animation: scattered transactions gather into three private L2 networks for a bank, a fintech and an AI team, and each L2 settles into the shared Hyper 0X L1.</p>
+    <div class="mt-12" data-reveal>
+      <IsoFigure name="block-press" tone="sheet" />
     </div>
 
     <ul class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-sheet-line lg:grid-cols-4">
@@ -50,116 +36,3 @@ const clusters = [
     </ul>
   </div>
 </section>
-
-<style>
-  .why-label, .why-l1 { opacity: 0; transition: opacity 400ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1); }
-  .why-label.is-on, .why-l1.is-on { opacity: 1; }
-</style>
-
-<script>
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  type P = { sx: number; sy: number; tx: number; ty: number; c: number; r: number; d: number };
-
-  document.querySelectorAll<HTMLElement>('[data-why]').forEach(root => {
-    const canvas = root.querySelector('canvas')!;
-    const ctx = canvas.getContext('2d')!;
-    const labels = [...root.querySelectorAll<HTMLElement>('[data-why-label]')];
-    const l1 = root.querySelector<HTMLElement>('[data-why-l1]')!;
-    const status = root.querySelector<HTMLElement>('[data-why-status]')!;
-    const centers = [0.2, 0.5, 0.8];
-    let W = 0, H = 0, dpr = 1;
-    let particles: P[] = [];
-    let progress = 0;
-    let accent = '#f97316';
-    let t = 0;
-
-    const seed = (n: number) => { const x = Math.sin(n * 9301 + 49297) * 233280; return x - Math.floor(x); };
-
-    function layout() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = canvas.clientWidth; H = canvas.clientHeight;
-      canvas.width = W * dpr; canvas.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-400').trim() || accent;
-      const count = W < 640 ? 110 : 190;
-      particles = Array.from({ length: count }, (_, i) => {
-        const c = i % 3;
-        const ang = seed(i + 1) * Math.PI * 2;
-        const rad = Math.sqrt(seed(i + 7)) * Math.min(W, H) * 0.12;
-        return {
-          sx: seed(i + 3) * W, sy: seed(i + 5) * H * 0.85,
-          tx: centers[c] * W + Math.cos(ang) * rad, ty: H * 0.42 + Math.sin(ang) * rad * 0.7,
-          c, r: 1.2 + seed(i + 11) * 1.8, d: seed(i + 13),
-        };
-      });
-    }
-
-    const ease = (x: number) => 1 - Math.pow(1 - Math.min(Math.max(x, 0), 1), 3);
-
-    function draw() {
-      t += 0.016;
-      ctx.clearRect(0, 0, W, H);
-      const gather = ease(progress / 0.6);
-      const settle = ease((progress - 0.55) / 0.35);
-      const l1y = H * 0.88;
-      // Settlement lines from each L2 to the L1.
-      if (settle > 0) {
-        ctx.lineWidth = 1.5;
-        centers.forEach((cx, i) => {
-          ctx.strokeStyle = `rgba(255,255,255,${0.18 * settle})`;
-          ctx.setLineDash([4, 6]);
-          ctx.beginPath(); ctx.moveTo(cx * W, H * 0.42 + Math.min(W, H) * 0.1); ctx.lineTo(W * 0.5, l1y); ctx.stroke();
-          // A pulse travelling down each line.
-          const k = (t * 0.5 + i * 0.33) % 1;
-          ctx.setLineDash([]);
-          ctx.fillStyle = accent;
-          ctx.globalAlpha = settle;
-          ctx.beginPath();
-          ctx.arc(cx * W + (W * 0.5 - cx * W) * k, H * 0.42 + Math.min(W, H) * 0.1 + (l1y - H * 0.42 - Math.min(W, H) * 0.1) * k, 3, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.globalAlpha = 1;
-        });
-      }
-      for (const p of particles) {
-        const jitter = (1 - gather) * 6;
-        const x = p.sx + (p.tx - p.sx) * gather + Math.sin(t * 1.3 + p.d * 10) * (2 + jitter);
-        const y = p.sy + (p.ty - p.sy) * gather + Math.cos(t * 1.1 + p.d * 10) * (2 + jitter);
-        ctx.fillStyle = gather > 0.6 ? accent : 'rgba(255,255,255,0.75)';
-        ctx.globalAlpha = 0.45 + 0.55 * gather;
-        ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2); ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      labels.forEach(l => l.classList.toggle('is-on', gather > 0.7));
-      l1.classList.toggle('is-on', settle > 0.3);
-      status.textContent = settle > 0.3 ? 'Settled on Hyper 0X' : gather > 0.7 ? 'Grouped into private L2s' : 'Transactions arriving';
-    }
-
-    layout();
-    window.addEventListener('resize', layout);
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      progress = 1;
-      draw();
-      return;
-    }
-
-    ScrollTrigger.create({
-      trigger: root,
-      start: 'top 85%',
-      end: 'bottom 35%',
-      scrub: 0.8,
-      onUpdate: self => { progress = self.progress; },
-    });
-    let running = false;
-    let frame = 0;
-    const loop = () => { draw(); frame = requestAnimationFrame(loop); };
-    new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !running) { running = true; loop(); }
-      else if (!entry.isIntersecting && running) { running = false; cancelAnimationFrame(frame); }
-    }).observe(root);
-  });
-</script>
