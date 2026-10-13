@@ -7,6 +7,7 @@ import EmailContactInput from '@components/ui/forms/input/EmailContactInput.astr
 import PhoneInput from '@components/ui/forms/input/PhoneInput.astro';
 import TextAreaInput from '@components/ui/forms/input/TextAreaInput.astro';
 import Icon from '@components/ui/icons/Icon.astro';
+import { localePath } from '@utils/locale';
 
 const copy = Astro.locals.copy.contact;
 const blockIconClass =
@@ -73,7 +74,7 @@ const blockIconClass =
           content={copy.knowledgeContent}
           isLinkVisible={true}
           linkTitle={copy.knowledgeLink}
-          linkURL="#"
+          linkURL={localePath('en', '/welcome-to-docs/')}
           isArrowVisible={true}
         >
           <Icon name="question" class={blockIconClass} />
@@ -84,27 +85,28 @@ const blockIconClass =
           content={copy.faqContent}
           isLinkVisible={true}
           linkTitle={copy.faqLink}
-          linkURL="#"
+          linkURL={localePath('en', '/#faq')}
           isArrowVisible={true}
         >
           <Icon name="chatBubble" class={blockIconClass} />
         </ContactIconBlock>
 
         <ContactIconBlock
-          heading={copy.officeHeading}
-          content={copy.officeContent}
-          isAddressVisible={true}
-          addressContent="72 Union Terrace, E10 4PE London"
+          heading={copy.websiteHeading}
+          content={copy.websiteContent}
+          isLinkVisible={true}
+          linkTitle="www.buckleson.com"
+          linkURL="https://www.buckleson.com"
         >
-          <Icon name="mapPin" class={blockIconClass} />
+          <Icon name="earth" class={blockIconClass} />
         </ContactIconBlock>
 
         <ContactIconBlock
           heading={copy.emailHeading}
           content={copy.emailContent}
           isLinkVisible={true}
-          linkTitle="support@screwfast.uk"
-          linkURL="mailto:support@screwfast.uk"
+          linkTitle="vijay@buckleson.com"
+          linkURL="mailto:vijay@buckleson.com"
         >
           <Icon name="envelopeOpen" class={blockIconClass} />
         </ContactIconBlock>

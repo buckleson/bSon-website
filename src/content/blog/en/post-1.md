@@ -1,22 +1,35 @@
 ---
-title: "Maximizing Efficiency with ScrewFast's Cutting-Edge Tools"
-description: 'Innovating Construction Efficiency with Precision Tools & Support'
-author: 'Jacob'
-authorImage: '@/images/blog/jacob.avif'
-authorImageAlt: 'Jacob avatar'
-pubDate: 2024-02-06
+title: 'Why Hyper 0X Is Post-Quantum-Resistant Today'
+description: 'Harvest now, decrypt later is a real threat for records that must stay private for decades. Here is how Hyper 0X defends against it.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-01
 cardImage: '@/images/blog/post-1.avif'
-cardImageAlt: 'Top view mechanical tools arrangement'
+cardImageAlt: 'Abstract illustration of layered encryption'
 readTime: 4
-tags: ['tools', 'construction', 'workflow']
+tags: ['hyper-0x', 'security', 'cryptography']
 ---
 
-In today's fast-paced construction industry, efficiency is key to success. At ScrewFast, we understand the importance of optimizing your project workflow to meet deadlines and stay within budget. That's why we're thrilled to introduce our cutting-edge tools designed to empower your projects like never before.
+Settlement records, medical data and financial agreements often have to stay confidential for decades. That creates a problem: an attacker can record encrypted traffic today and simply wait until a large enough quantum computer exists to decrypt it. This is called **harvest now, decrypt later**, and it is why we built post-quantum resistance into Hyper 0X from day one.
 
-Our range of hardware tools combines precision engineering with user-centric design, ensuring maximum productivity on every job site. From power drills to advanced fastening solutions, ScrewFast's tools are built to withstand the rigors of construction while streamlining your workflow.
+## Hybrid key exchange on every connection
 
-One of our standout offerings is our intuitive dashboards, which provide real-time insights into project progress, resource allocation, and more. With user-friendly interfaces, navigating and overseeing your projects has never been easier.
+Every connection on Hyper 0X uses a hybrid key exchange: **ML-KEM-768** (standardised by NIST as FIPS 203 in 2024) combined with the classic **X25519** elliptic curve. The two shared secrets are combined, so an attacker would have to break _both_ the lattice problem and the elliptic curve to read anything.
 
-But efficiency isn't just about the tools you use–it's also about the support you receive. That's why ScrewFast offers comprehensive documentation and expert guidance every step of the way. Our dedicated teams are committed to your success, providing personalized assistance to ensure you get the most out of our products.
+ML-KEM-768 sits at NIST security category 3, roughly equivalent to AES-192. It is the same hybrid group modern browsers now use. The trade-off is size: public keys are about 35 times larger than X25519 alone, and each handshake carries roughly 2.3 KB more. For records that must stay private for decades, that is a price worth paying.
 
-Join the countless industry leaders who have already experienced the difference ScrewFast tools can make. With our cutting-edge solutions, you can fast-track your projects to success and stay ahead of the competition.
+## Four locks in four places
+
+Key exchange protects data on the wire, but that is only the first layer. Hyper 0X protects data in four places, and each layer assumes the one before it has already failed:
+
+1. **In transit:** TLS 1.3 with hybrid X25519 + ML-KEM-768 and AES-256-GCM.
+2. **In computation:** per-party keys, so each party's data is only readable by that party.
+3. **On the ledger:** hash commitments and per-party encrypted payloads.
+4. **At rest:** AES-256-GCM envelope encryption, with master keys held in hardware security modules.
+
+## A note on wording
+
+We will never claim Hyper 0X is immune to every future quantum attack. No honest engineer can promise that. What we can say is that Hyper 0X is **post-quantum-resistant under known attacks**, and that its modular core lets us add or swap encryption layers without a fork as the field evolves.
+
+Want to run your workloads on a chain built for the long term? [Talk to our team](../../contact/).

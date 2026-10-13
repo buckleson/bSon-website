@@ -1,24 +1,54 @@
 ---
-title: 'Enhancing Safety and Workmanship with ScrewFast Construction Services'
-description: 'Quality construction services for lasting results'
-author: 'Brad'
-authorImage: '@/images/blog/brad.avif'
-authorImageAlt: 'Brad avatar'
-pubDate: 2024-02-10
+title: 'Eight Attacks Pavii Stops Before They Reach Your Systems'
+description: 'AI agents need deep access to be useful. Pavii makes sure that access cannot be turned against you.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-06
 cardImage: '@/images/blog/post-2.avif'
-cardImageAlt: 'Man in black sweatpants using DEWALT circular saw and cutting a wood plank'
+cardImageAlt: 'Abstract illustration of AI agents passing through security gates'
 readTime: 5
-tags: ['safety', 'craftsmanship', 'management']
+tags: ['pavii', 'ai-security', 'agents']
 ---
 
-When it comes to construction, safety and quality workmanship are non-negotiable. At ScrewFast, we're proud to offer a range of construction services that prioritize both, ensuring your projects are built to last.
+Modern AI agents need deep access to be useful: your data, your internal APIs, the ability to take actions on their own. Current infrastructure forces a trade-off between that usefulness and security. **Pavii** removes the trade-off. Any agent, whether Claude, Claude Code, Codex, ChatGPT, Grok, OpenCode or your own, passes six gates before it can touch your systems, and Hyper 0X keeps the receipts.
 
-Our team of skilled craftsmen brings precision and expertise to every job, from minor installations to large-scale structural work. With top-quality tools and materials from our extensive inventory, we guarantee the highest standards of safety and craftsmanship on every project.
+Here are the eight attacks Pavii is built to stop, mapped to the OWASP Top 10 for LLM applications.
 
-But our commitment to excellence doesn't end there. We also provide thorough project management services to keep your build on track and within budget. From workflow coordination to stakeholder communication, ScrewFast handles the complexities so you can focus on your vision.
+## 1. Prompt injection (LLM01)
 
-What sets ScrewFast apart is our dedication to ongoing support. We don't just finish the job and walk away–we're here for the long haul. Our maintenance services ensure that your construction remains in optimal condition, providing peace of mind for years to come.
+An analyst asks an agent to summarise a vendor PDF. Hidden inside the PDF are instructions telling the agent to send data elsewhere. Pavii treats untrusted text as data, never as instructions. A detector flags the injection and an on-chain contract hard-stops it.
 
-For larger enterprise clients, we offer custom solutions tailored to your unique challenges. By understanding your specific needs, we engineer strategies aimed at maximizing efficiency and driving your business forward.
+## 2. Data leaks (LLM02)
 
-With ScrewFast construction services, you can trust that your projects are in good hands. Experience the difference today and see why so many clients choose ScrewFast for their construction needs.
+A privacy gate redacts personal data and secrets before any model sees them.
+
+## 3. Supply-chain attacks (LLM03)
+
+When an agent wants to install a package or connect a new MCP server, Pavii checks it against allow-lists and pinned hashes, runs it in a sandbox, or sends it to a human for approval.
+
+## 4. Unsafe output (LLM05)
+
+Scripts and secrets are stripped from agent output before it is delivered.
+
+## 5. Excessive agency (LLM06)
+
+An egress smart contract on Hyper 0X decides what an agent is allowed to send or do. The rules themselves live on-chain, so they cannot be quietly changed.
+
+## 6. Runaway cost (LLM10)
+
+Budgets and MCP compaction keep spend under control. In our own measurements on a real Claude Code task, Pavii used **30–60% fewer tokens**, and it has saved over 100 million tokens across 82,000+ queries.
+
+## 7. Rogue agents
+
+An agent that misbehaves is watched, then restricted, then halted. The more an agent misbehaves, the less it can do, until a human pulls the plug.
+
+## 8. Log tampering
+
+Imagine a coding agent runs `rm -rf logs/`. With Pavii, logs are hash-chained and their roots are anchored on Hyper 0X, so the fingerprint on-chain shows exactly what is missing.
+
+## Observability that makes agents better
+
+Pavii is not only a shield. Its observability engine lets your agents see their own logs and learn from them, with small, versioned memory notes that are loaded only when a task needs them.
+
+Ready to put your agents behind six gates? [Contact us](../../contact/).

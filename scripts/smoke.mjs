@@ -1,41 +1,34 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, isAbsolute, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const DIST = resolve(new URL('../dist/', import.meta.url).pathname);
-// Marketing routes exist once per locale (src/pages/ vs src/pages/fr/).
-const LOCALE_PREFIXES = ['', '/fr'];
-const MARKETING_ROUTES = [
+const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
+const ROUTES = [
   '/',
   '/products/',
-  '/products/item-a765/',
+  '/products/hyper-0x/',
+  '/products/pavii/',
+  '/products/hyper-wallet/',
+  '/products/h0x-pay/',
+  '/products/hyperrun/',
   '/services/',
   '/blog/',
   '/blog/post-1/',
   '/insights/insight-1/',
   '/contact/',
-];
-const ROUTES = [
-  ...LOCALE_PREFIXES.flatMap(prefix =>
-    MARKETING_ROUTES.map(route => `${prefix}${route}`)
-  ),
+  '/welcome-to-docs/',
   '/404',
-  '/fr/404/',
 ];
 
-// Cheap content assertions on top of the status check.
+// Cheap content assertions on top of the status check. Links carry the
+// GitHub Pages base path (/bSon-website).
 const EXPECTATIONS = {
-  '/fr/': [
-    '<html lang="fr"',
-    '<meta property="og:locale" content="fr_FR"',
-    'hreflang="en" href="https://screwfast.uk"',
-  ],
-  '/': ['<html lang="en"', 'hreflang="fr" href="https://screwfast.uk/fr"'],
-  '/fr/404/': ['<html lang="fr"'],
-  '/contact/': ['data-demo-form', 'data-demo-status'],
-  '/fr/contact/': ['data-demo-form', 'data-demo-status'],
+  '/': ['<html lang="en"', 'Hyper 0X', 'href="/bSon-website/products"'],
+  '/contact/': ['data-demo-form', 'data-demo-status', 'vijay@buckleson.com'],
   '/blog/post-1/': ['"@type":"BlogPosting"'],
-  '/fr/blog/post-1/': ['"inLanguage":"fr"'],
+  '/products/h0x-pay/': ['Coming soon'],
+  '/products/hyperrun/': ['Coming soon'],
 };
 
 const MIME = {

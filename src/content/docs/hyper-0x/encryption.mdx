@@ -1,0 +1,28 @@
+---
+title: Encryption
+description: Hybrid post-quantum key exchange and the four encryption layers of Hyper 0X.
+sidebar:
+  order: 2
+---
+
+Settlement records often have to stay private for decades, which makes **harvest now, decrypt later** a real threat. Hyper 0X is post-quantum-resistant under known attacks.
+
+## Hybrid post-quantum key exchange
+
+- **Key exchange:** ML-KEM-768 (NIST FIPS 203, 2024; security category 3, roughly AES-192), always paired with X25519. An attacker has to break both the lattice and the elliptic curve.
+- **Data:** AES-256.
+- **Hashes:** SHA-2 and SHA-3.
+- **Sizes:** public key 1,184 bytes, ciphertext 1,088 bytes, shared secret 32 bytes.
+
+This is the same hybrid group modern browsers use (X25519MLKEM768). The trade-off is larger keys and about 2.3 KB extra per handshake.
+
+## Four layers
+
+Each layer assumes the one before it has already failed: four locks in four places, on the wire, inside the server, on the shared ledger and in backups.
+
+| Layer             | What it uses                                              |
+| ----------------- | --------------------------------------------------------- |
+| 1. In transit     | TLS 1.3, hybrid X25519 + ML-KEM-768, AES-256-GCM          |
+| 2. In computation | Per-party keys                                            |
+| 3. On the ledger  | Hash commitments and per-party encrypted payloads         |
+| 4. At rest        | AES-256-GCM envelope encryption, master keys held in HSMs |

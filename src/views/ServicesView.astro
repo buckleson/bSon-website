@@ -5,16 +5,16 @@ import AlternatingSections, {
   type Article,
 } from '@components/ui/blocks/AlternatingSections.astro';
 import FeaturesStats from '@components/sections/features/FeaturesStats.astro';
-import blueprints from '@images/blueprints-image.avif';
+import hyper0xDiagram from '@images/diagrams/hyper0x-architecture.png';
+import platformDiagram from '@images/diagrams/platform-architecture.png';
+import walletDiagram from '@images/diagrams/wallet-architecture.png';
+import paviiDiagram from '@images/diagrams/pavii-architecture.png';
 import personWorking from '@images/person-working.avif';
-import beforeAfter from '@images/before-after.avif';
 import constructionWorkers from '@images/construction-workers.avif';
 import aerialView from '@images/aerial-view.avif';
-import usingTools from '@images/using-tools.avif';
-import progressBuilding from '@images/progress-building.avif';
 import underConstruction from '@images/under-construction.avif';
 import { getCopy } from '@/copy';
-import type { MarketingLocale } from '@utils/locale';
+import { localePath, type MarketingLocale } from '@utils/locale';
 
 /** The services page in one locale. */
 interface Props {
@@ -30,15 +30,18 @@ const articles: Article[] = [
     title: articleCopy.guidance.title,
     subTitle: articleCopy.guidance.subTitle,
     images: [
-      { src: blueprints, alt: articleCopy.guidance.imageAlts[0] },
+      { src: hyper0xDiagram, alt: articleCopy.guidance.imageAlts[0] },
       { src: personWorking, alt: articleCopy.guidance.imageAlts[1] },
     ],
   },
   {
     title: articleCopy.craftsmanship.title,
     subTitle: articleCopy.craftsmanship.subTitle,
-    images: [{ src: beforeAfter, alt: articleCopy.craftsmanship.imageAlts[0] }],
-    cta: { title: articleCopy.craftsmanship.cta, url: '#' },
+    images: [{ src: walletDiagram, alt: articleCopy.craftsmanship.imageAlts[0] }],
+    cta: {
+      title: articleCopy.craftsmanship.cta,
+      url: localePath(locale, '/products/hyper-wallet/'),
+    },
   },
   {
     title: articleCopy.oversight.title,
@@ -51,16 +54,16 @@ const articles: Article[] = [
   {
     title: articleCopy.maintenance.title,
     subTitle: articleCopy.maintenance.subTitle,
-    images: [{ src: usingTools, alt: articleCopy.maintenance.imageAlts[0] }],
+    images: [{ src: paviiDiagram, alt: articleCopy.maintenance.imageAlts[0] }],
   },
   {
     title: articleCopy.bespoke.title,
     subTitle: articleCopy.bespoke.subTitle,
     images: [
-      { src: progressBuilding, alt: articleCopy.bespoke.imageAlts[0] },
+      { src: platformDiagram, alt: articleCopy.bespoke.imageAlts[0] },
       { src: underConstruction, alt: articleCopy.bespoke.imageAlts[1] },
     ],
-    cta: { title: articleCopy.bespoke.cta, url: '#' },
+    cta: { title: articleCopy.bespoke.cta, url: localePath(locale, '/contact') },
   },
 ];
 ---
@@ -73,7 +76,7 @@ const articles: Article[] = [
   <MainSection
     title={copy.intro.title}
     subTitle={copy.intro.subTitle}
-    cta={{ title: copy.intro.cta, url: '#' }}
+    cta={{ title: copy.intro.cta, url: localePath(locale, '/contact') }}
   />
   <AlternatingSections articles={articles} />
   <FeaturesStats

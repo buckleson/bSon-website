@@ -3,6 +3,7 @@ import ProductTabBtn from '@components/ui/buttons/ProductTabBtn.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { localePath } from '@utils/locale';
 
 interface Props {
   product: CollectionEntry<'products'>;
@@ -81,7 +82,7 @@ const { copy: t } = Astro.locals;
             <p class="mt-5">
               <PrimaryCTA
                 title={product.data.longDescription.btnTitle}
-                url={product.data.longDescription.btnURL}
+                url={localePath('en', product.data.longDescription.btnURL)}
               />
             </p>
           </div>
@@ -187,7 +188,7 @@ const { copy: t } = Astro.locals;
             <Image
               src={product.data.blueprints.first}
               class="h-full w-full object-cover object-center"
-              alt="Blueprint Illustration"
+              alt={`${product.data.title} architecture diagram`}
               format={'avif'}
             />
           )}
@@ -198,7 +199,7 @@ const { copy: t } = Astro.locals;
             <Image
               src={product.data.blueprints.second}
               class="h-full w-full object-cover object-center"
-              alt="Blueprint Illustration"
+              alt={`${product.data.title} architecture diagram`}
               format={'avif'}
             />
           )}

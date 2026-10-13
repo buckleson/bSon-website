@@ -1,29 +1,33 @@
 {
-  "subTitle": "Ask us anything about our brand and products, and get factual responses.",
+  "subTitle": "Answers to the questions we hear most about Hyper 0X and our products.",
   "faqs": [
     {
-      "question": "What types of tools are included in the Starter Kit?",
-      "answer": "The Starter Kit features essential hand and power tools for diverse DIY projects, including hammers, drills, screwdrivers, and a variety of fasteners. It's a curated selection to help beginners and experienced DIYers alike tackle most home improvement tasks."
+      "question": "What is Hyper 0X?",
+      "answer": "Hyper 0X is Buckleson's own permissioned L1 blockchain, engineered from scratch. It uses leaderless aBFT consensus for deterministic finality, hybrid post-quantum encryption on every connection, and gives every customer their own L2. All Buckleson products run on it."
     },
     {
-      "question": "Can I upgrade from the Starter Kit to the Professional Toolbox?",
-      "answer": "Absolutely! You can upgrade to the Professional Toolbox at any time to access a wider range of high-quality tools, enjoy priority customer support, and receive exclusive content. Contact our support team for a seamless transition."
+      "question": "Can you build a custom blockchain for my company?",
+      "answer": "Yes. That is our core service. We design a dedicated L2 on Hyper 0X with your own policies, privacy model and bridges, integrate it with your existing systems, and support you from pilot to production."
     },
     {
-      "question": "What discounts are available for bulk orders through the Professional Toolbox plan?",
-      "answer": "Professional Toolbox members are entitled to exclusive discounts on bulk orders, the percentage of which may vary depending on the order volume. Get in touch with us to discuss your needs, and we'll provide a tailored discount structure."
+      "question": "What does asset tokenization involve?",
+      "answer": "We help you represent real-world assets such as gold, funds, bonds or invoices on-chain, with compliance rules like limits, KYC and approvals enforced as code before any transaction executes. Trades settle atomically: both legs or neither."
     },
     {
-      "question": "What kind of customer support can I expect?",
-      "answer": "All our customers receive dedicated email support. With the Starter Kit, you'll receive our standard support, while the Professional Toolbox plan upgrades you to priority support, meaning faster response times and specialized assistance."
+      "question": "How does Pavii protect AI agents?",
+      "answer": "Pavii connects to Claude, Claude Code, Codex, ChatGPT, Grok, OpenCode or your own agents. Every agent call passes six security gates that stop prompt injection, data leaks, excessive agency, runaway costs, rogue agents, supply-chain attacks, unsafe output and log tampering, and every action is recorded on Hyper 0X."
     },
     {
-      "question": "How current are the online resources and tutorials?",
-      "answer": "We regularly update our online resources and tutorials to reflect the latest trends in DIY and construction, as well as introductions to new tools and techniques. Our material aims to be comprehensive and user-friendly for all skill levels."
+      "question": "Is Hyper 0X quantum-safe?",
+      "answer": "Hyper 0X is post-quantum-resistant under known attacks. Every connection uses hybrid ML-KEM-768 + X25519 key exchange, so an attacker would have to break both the lattice and the elliptic-curve scheme."
     },
     {
-      "question": "Does ScrewFast offer services for large-scale construction projects?",
-      "answer": "Yes, our Enterprise Solutions are designed for larger companies requiring comprehensive services. We provide consultation, planning, and supply of high-grade tools and materials, as well as staffing solutions for substantial construction needs. Contact us for a customized quote."
+      "question": "Can I connect Hyper 0X to other blockchains?",
+      "answer": "Yes. Bridge adapters connect Hyper 0X to EVM chains, Solana and Sui, and our SDKs reach bank DLTs and APIs. Any L2 can also run its own bridge."
+    },
+    {
+      "question": "When do H0X Pay and HyperRun launch?",
+      "answer": "Both are coming soon. Contact us to join the early-access list and we'll let you know as soon as they launch."
     }
   ]
 }

@@ -13,10 +13,13 @@
  * Every function here is pure so it can be unit-tested without Astro.
  */
 
-export const MARKETING_LOCALES = ['en', 'fr'] as const;
+export const MARKETING_LOCALES = ['en'] as const;
 export type MarketingLocale = (typeof MARKETING_LOCALES)[number];
 
 export const DEFAULT_LOCALE: MarketingLocale = 'en';
+
+/** Deploy base path without a trailing slash ('' at the domain root). */
+export const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /** Locales that carry a URL prefix (every locale except the default). */
 const PREFIXED_LOCALES: readonly MarketingLocale[] = MARKETING_LOCALES.filter(
@@ -45,13 +48,6 @@ export const LOCALE_INFO: Record<
     ogLocale: 'en_US',
     inLanguage: 'en-US',
     intl: 'en-US',
-  },
-  fr: {
-    label: 'Français',
-    lang: 'fr',
-    ogLocale: 'fr_FR',
-    inLanguage: 'fr',
-    intl: 'fr-FR',
   },
 };
 
@@ -107,24 +103,13 @@ export function resolveLocale(
  *   localePath('en', '/products')  -> '/products'
  *   localePath('fr')               -> '/fr'
  *   localePath('fr', '#')          -> '#'   (fragments and absolute URLs pass through)
+ *
+ * The result is prefixed with the deploy base path (`BASE`).
  */
 export function localePath(locale: MarketingLocale, path = '/'): string {
   if (path.startsWith('#') || /^[a-z]+:/i.test(path)) return path;
   const clean = path.startsWith('/') ? path : `/${path}`;
-  if (locale === DEFAULT_LOCALE) return clean;
-  if (clean === '/') return `/${locale}`;
-  return `/${locale}${clean}`;
-}
-
-/**
- * The same page in every marketing locale, for hreflang links and the
- * language picker. Works from any localised or unlocalised pathname.
- */
-export function alternatePaths(
-  pathname: string
-): Record<MarketingLocale, string> {
-  const { path } = splitLocale(pathname);
-  return Object.fromEntries(
-    MARKETING_LOCALES.map(locale => [locale, localePath(locale, path)])
-  ) as Record<MarketingLocale, string>;
+  if (locale === DEFAULT_LOCALE) return `${BASE}${clean}`;
+  if (clean === '/') return `${BASE}/${locale}`;
+  return `${BASE}/${locale}${clean}`;
 }

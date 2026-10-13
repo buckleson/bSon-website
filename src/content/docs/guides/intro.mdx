@@ -1,37 +1,32 @@
 ---
-title: Introduction to ScrewFast Services
-description: Explore ScrewFast's comprehensive documentation for an in-depth look at our premium tools and construction services.
+title: What is Hyper 0X?
+description: An introduction to Hyper 0X, the permissioned L1 blockchain that powers every Buckleson product.
 sidebar:
-  label: Introduction to Services
-  order: 2
+  order: 1
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+Hyper 0X is Buckleson's own **permissioned L1 blockchain**, engineered from scratch. Every Buckleson product, including Hyper Wallet, the Wallet SDKs and Pavii, signs, settles and logs on Hyper 0X, so all of them write to the same record.
 
-As part of our commitment to providing an end-to-end solution for all your construction and hardware needs, we at ScrewFast are proud to offer a comprehensive suite of professional services. From initial consultations to final inspections, our multifaceted services encompass the entirety of your project, ensuring quality results and client satisfaction. This section of the documentation will guide you through everything you need to know to leverage our expertise to its fullest potential.
+## Why our own L1?
 
-## Overview of Services
+Building on a public chain means inheriting its fees, its roadmap and its outages. Owning the chain lets us design for what enterprises actually need:
 
-<Tabs>
-  <TabItem label="Tailored Solutions">
-    Each construction project carries its unique challenges and demands. At
-    ScrewFast, we customize our services to match your specific needs, ensuring
-    that no matter the scale or complexity of your project, our team is equipped
-    to handle it with precision and professionalism.
-  </TabItem>
-  <TabItem label="Expert Team">
-    Leverage the skills of our knowledgeable staff, from architects and
-    engineers to skilled laborers, each contributing their expertise to bring
-    your vision to life.
-  </TabItem>
-  <TabItem label="Commitment to Quality">
-    Quality is at the heart of everything we do. We employ stringent quality
-    control measures to assure that the work we deliver meets and exceeds
-    industry standards.
-  </TabItem>
-  <TabItem label="Ongoing Support">
-    Our relationship with our clients doesn't end once the project is completed.
-    We provide continuous support to address any issues and ensure lasting
-    satisfaction with your investment.
-  </TabItem>
-</Tabs>
+- **Final in one pass:** leaderless aBFT ordering, so there are no reorgs and no front-running.
+- **Post-quantum today:** hybrid ML-KEM-768 on every connection, plus four layers of encryption.
+- **Modular core:** add an encryption layer, L2 type, bridge or rule without a fork.
+- **An L2 per customer:** each with its own design, policies and bridge, all on one shared record.
+- **Dynamic blocks:** blocks resize with load, fast when quiet, no backlog at peaks.
+- **Compliance as code:** limits, KYC and maker-checker approvals run before a transaction executes.
+- **Connects to anything:** bridges and SDKs reach public chains, bank DLTs and APIs.
+
+## How it is layered
+
+The core sits at the bottom and never depends on the products built on top of it.
+
+| Layer               | What lives here                               |
+| ------------------- | --------------------------------------------- |
+| Apps                | Hyper Wallet, Pavii and customer applications |
+| SDK, L2 and interop | Wallet SDKs, customer L2s, bridges            |
+| Core                | Policy, ledger, consensus and cryptography    |
+
+Four parts plug into the core through their own interfaces: [consensus](../../hyper-0x/consensus/), [encryption](../../hyper-0x/encryption/), [L2s and scaling](../../hyper-0x/l2-scaling/), and [bridges, SDKs and contracts](../../hyper-0x/bridges-contracts/).

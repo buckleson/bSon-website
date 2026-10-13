@@ -1,29 +1,24 @@
 ---
-title: ScrewFast Docs
+title: Hyper 0X Docs
 head:
   - tag: title
-    content: ScrewFast Docs
-description: Explore ScrewFast's comprehensive documentation for an in-depth look at our premium tools and construction services.
+    content: Hyper 0X Docs | Buckleson
+description: Learn how Hyper 0X, Buckleson's own L1 blockchain, works, from consensus and encryption to L2s, bridges and smart contracts.
 template: splash
 editUrl: false
 lastUpdated: false
 next: false
 hero:
-  title: Documentation Hub
-  tagline: Your central hub for streamlined tool guidance, detailed service docs, and project support.
+  title: Hyper 0X Docs
+  tagline: How our own L1 works, part by part. Every Buckleson product inherits from it.
   image:
-    alt: A ScrewFast's Logo
-    dark: ../../images/starlight/screwfast_hero.svg
-    light: ../../images/starlight/screwfast_hero_dark.svg
+    alt: Hyper 0X logo
+    file: ../../images/brand/hyper-0x.png
   actions:
     - text: Get started
       icon: right-arrow
       variant: primary
-      link: /guides/getting-started/
-    - text: View on GitHub
-      icon: external
-      variant: minimal
-      link: https://github.com/mearashadowfax/ScrewFast
+      link: ../guides/intro/
 ---
 
 import '@styles/starlight_main.css';
@@ -31,24 +26,24 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid stagger>
 
-<Card title="Quick Start Guides" icon="document">
-  Get up and running swiftly with our straightforward and concise guides,
-  tailored for new users and seasoned experts alike.
+<Card title="Consensus" icon="approve-check">
+  Leaderless aBFT ordering with deterministic finality. No reorgs, no
+  front-running.
 </Card>
 
-<Card title="Tools & Equipment" icon="seti:eslint">
-  Discover the complete lineup of ScrewFast's superior quality tools and
-  equipment. Each subsection offers detailed specifications, usage instructions,
-  and maintenance tips.
+<Card title="Encryption" icon="seti:lock">
+  Hybrid ML-KEM-768 + X25519 on every connection, plus four layers of data
+  protection.
 </Card>
 
-<Card title="Construction Services" icon="seti:puppet">
-  Discover the complete lineup of ScrewFast's superior quality tools and
-  equipment. Each subsection offers detailed specifications, usage instructions,
-  and maintenance tips.
+<Card title="L2s & Scaling" icon="puzzle">
+  An L2 for every customer, with dynamic block sizes and batch settlement to
+  the L1.
 </Card>
 
-   <Card title="Advanced Topics" icon="seti:terraform">
-    Discover the complete lineup of ScrewFast's superior quality tools and equipment. Each subsection offers detailed specifications, usage instructions, and maintenance tips.
-  </Card>
+<Card title="Bridges, SDKs & Contracts" icon="rocket">
+  Connect to EVM chains, Solana and Sui, and deploy Rust smart contracts with
+  governed upgrades.
+</Card>
+
 </CardGrid>

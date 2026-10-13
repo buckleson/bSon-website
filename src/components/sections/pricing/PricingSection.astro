@@ -2,6 +2,7 @@
 // Import SecondaryCTA component for use in this module
 import SecondaryCTA from '@components/ui/buttons/SecondaryCTA.astro';
 import Icon from '@components/ui/icons/Icon.astro';
+import { localePath } from '@utils/locale';
 
 // Define props from Astro
 const { pricing } = Astro.props;
@@ -77,7 +78,7 @@ interface PricingSectionProps {
       </ul>
       {/* CTA for purchasing the product */}
       <a
-        href={pricing.starterKit.purchaseLink}
+        href={localePath('en', pricing.starterKit.purchaseLink)}
         class="block rounded-lg bg-orange-400 px-8 py-3 text-center text-sm font-bold text-neutral-50 ring-orange-300 outline-hidden transition duration-100 hover:bg-orange-500 focus-visible:ring-3 active:bg-orange-500 md:text-base"
       >
         {pricing.starterKit.purchaseBtnTitle}
@@ -123,7 +124,7 @@ interface PricingSectionProps {
       </ul>
       {/* CTA for purchasing the product */}
       <a
-        href={pricing.professionalToolbox.purchaseLink}
+        href={localePath('en', pricing.professionalToolbox.purchaseLink)}
         class="bg-opacity-50 block rounded-lg bg-neutral-100 px-8 py-3 text-center text-sm font-bold text-neutral-800 ring-orange-300 outline-hidden transition duration-300 hover:bg-white focus-visible:ring-3 active:bg-neutral-200 md:text-base"
       >
         {pricing.professionalToolbox.purchaseBtnTitle}
@@ -136,6 +137,6 @@ interface PricingSectionProps {
       {pricing.thirdOption}
     </p>
 
-    <SecondaryCTA title={pricing.btnText} url="#" />
+    <SecondaryCTA title={pricing.btnText} url={localePath('en', '/contact')} />
   </div>
 </section>

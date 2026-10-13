@@ -1,38 +1,38 @@
 {
-  "title": "Simple, Transparent Pricing",
-  "subTitle": "Boost efficiency with ScrewFast's clear, value-driven plans.",
-  "badge": "Best value",
-  "thirdOption": "Enterprise Solutions?",
-  "btnText": "Get a Custom Quote",
+  "title": "Ways to Work With Us",
+  "subTitle": "Every engagement is scoped to your workload. Start small with a pilot, or go straight to your own L2 on Hyper 0X.",
+  "badge": "Most popular",
+  "thirdOption": "Need a fully custom build?",
+  "btnText": "Talk to Our Team",
 
   "starterKit": {
-    "name": "Starter Kit",
-    "description": "Best option for DIY projects",
-    "price": "49",
-    "cents": ".00",
-    "billingFrequency": "USD / monthly",
+    "name": "Pilot",
+    "description": "Prove it on one workload",
+    "price": "Pilot",
+    "cents": "",
+    "billingFrequency": "scoped per project",
     "features": [
-      "Key hardware tools",
-      "Access to guides & tutorials",
-      "Standard support"
+      "One use case on Hyper 0X",
+      "Forward-deployed engineer",
+      "Success metrics agreed up front"
     ],
-    "purchaseBtnTitle": "Get the Starter Kit",
-    "purchaseLink": "#"
+    "purchaseBtnTitle": "Start a Pilot",
+    "purchaseLink": "/contact"
   },
 
   "professionalToolbox": {
-    "name": "Professional Toolbox",
-    "description": "Best for large scale uses",
-    "price": "89",
-    "cents": ".00",
-    "billingFrequency": "USD / monthly",
+    "name": "Enterprise L2",
+    "description": "Your own chain in production",
+    "price": "Custom",
+    "cents": "",
+    "billingFrequency": "licence + transaction fees",
     "features": [
-      "Premium tool selection",
-      "Priority support",
-      "Exclusive content & deals",
-      "Bulk order discounts"
+      "Dedicated L2 with your own policies",
+      "Bridges to your systems and public chains",
+      "Pavii security for your AI agents",
+      "Wallet SDKs for your apps"
     ],
-    "purchaseBtnTitle": "Get the Professional Toolbox",
-    "purchaseLink": "#"
+    "purchaseBtnTitle": "Request a Proposal",
+    "purchaseLink": "/contact"
   }
 }

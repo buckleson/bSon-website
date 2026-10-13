@@ -2,8 +2,6 @@ import { SITE } from '@data/constants';
 import { getCopy } from '@/copy';
 import {
   LOCALE_INFO,
-  MARKETING_LOCALES,
-  alternatePaths,
   localePath,
   type MarketingLocale,
 } from '@utils/locale';
@@ -13,7 +11,7 @@ import {
  *
  * Turns the five things a page knows about itself (locale, path, title,
  * description, kind) into everything the `<head>` needs: title, description,
- * Open Graph fields, canonical, hreflang alternates and schema.org JSON-LD
+ * Open Graph fields, canonical and schema.org JSON-LD
  * with the site boilerplate filled in. Pages never hand-write schema.org
  * objects or the site URL.
  *
@@ -58,13 +56,12 @@ export interface PageMetadata {
   ogDescription: string;
   ogLocale: string;
   canonical: string;
-  alternates: { hreflang: string; href: string }[];
   jsonLd: Record<string, unknown>;
 }
 
-/** Absolute URL on the marketing site; the root has no trailing slash. */
+/** Absolute URL for a site-relative path (which already includes the base). */
 export function absoluteUrl(path: string): string {
-  return path === '/' ? SITE.url : `${SITE.url}${path}`;
+  return new URL(path, SITE.url).href;
 }
 
 export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
@@ -81,12 +78,6 @@ export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
       : copy.site.ogTitle);
   const ogDescription = input.description ?? copy.site.ogDescription;
   const canonical = absoluteUrl(pathname);
-
-  const paths = alternatePaths(pathname);
-  const alternates = MARKETING_LOCALES.map(alt => ({
-    hreflang: LOCALE_INFO[alt].lang,
-    href: absoluteUrl(paths[alt]),
-  }));
 
   const publisher = {
     '@type': 'Organization',
@@ -151,7 +142,6 @@ export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
     ogDescription,
     ogLocale: info.ogLocale,
     canonical,
-    alternates,
     jsonLd: {
       '@context': 'https://schema.org',
       ...jsonLd,

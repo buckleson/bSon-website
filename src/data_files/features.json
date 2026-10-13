@@ -1,22 +1,32 @@
 [
   {
-    "heading": "Dedicated Teams",
-    "content": "Benefit from our committed teams who ensure your success is personal. Count on expert guidance and exceptional results throughout your project journey.",
-    "svg": "groups"
-  },
-  {
-    "heading": "Simplicity and Affordability",
-    "content": "Find easy-to-use, affordable solutions with ScrewFast's line of tools and equipment. Our products make procurement simple and keep projects within budget.",
+    "heading": "Post-Quantum-Resistant",
+    "content": "Every connection uses hybrid ML-KEM-768 + X25519 key exchange, so records that must stay private for decades are protected against harvest-now, decrypt-later attacks.",
     "svg": "verified"
   },
   {
-    "heading": "Comprehensive Documentation",
-    "content": "Integrate with ease using ScrewFast's exhaustive guides and libraries. Achieve seamless product adoption with our full suite of documentation designed for your success.",
-    "svg": "books"
+    "heading": "4-Layer Encryption",
+    "content": "Data is protected in transit, during computation, on the ledger and at rest. Each layer assumes the one before it has already failed.",
+    "svg": "frame"
   },
   {
-    "heading": "User-Centric Design",
-    "content": "Experience the difference with ScrewFast's user-focused design – where functionality meets practicality for an enhanced work experience.",
-    "svg": "frame"
+    "heading": "Final in One Pass",
+    "content": "Leaderless aBFT consensus gives deterministic finality: no reorgs, no front-running, and no single leader to attack or censor.",
+    "svg": "rocket"
+  },
+  {
+    "heading": "An L2 for Every Customer",
+    "content": "Each institution gets its own L2 with its own policies, privacy and bridge, and blocks resize with load. Every L2 settles to one shared record.",
+    "svg": "puzzle"
+  },
+  {
+    "heading": "Account Abstraction",
+    "content": "Users never handle seed phrases or gas tokens, and apps can pay the fees. One face scan to pay, and a lost phone is not a lost wallet.",
+    "svg": "groups"
+  },
+  {
+    "heading": "Connects to Anything",
+    "content": "Bridges and SDKs reach EVM chains, Solana, Sui, bank DLTs and APIs. No lock-in, shared liquidity.",
+    "svg": "earth"
   }
 ]

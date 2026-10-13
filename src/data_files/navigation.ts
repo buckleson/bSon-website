@@ -19,9 +19,7 @@ export type FooterLinkId =
   | 'documentation'
   | 'tools'
   | 'services'
-  | 'about'
   | 'blog'
-  | 'careers'
   | 'customers';
 
 export const footerSections: {
@@ -39,18 +37,12 @@ export const footerSections: {
   {
     id: 'company',
     links: [
-      { id: 'about', path: '#' },
       { id: 'blog', path: '/blog' },
-      { id: 'careers', path: '#', badge: 'hiring' },
-      { id: 'customers', path: '#' },
+      { id: 'customers', path: '/contact' },
     ],
   },
 ];
 
 export const socialLinks = {
-  facebook: 'https://www.facebook.com/',
-  x: 'https://twitter.com/',
-  github: 'https://github.com/mearashadowfax/ScrewFast',
-  google: 'https://www.google.com/',
-  slack: 'https://slack.com/',
+  github: 'https://github.com/buckleson/bSon-website',
 };

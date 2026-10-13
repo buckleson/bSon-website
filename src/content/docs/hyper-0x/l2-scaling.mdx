@@ -1,0 +1,29 @@
+---
+title: L2s and scaling
+description: Per-customer L2s, dynamic block sizes and batch settlement on Hyper 0X.
+sidebar:
+  order: 3
+---
+
+## One L2 per customer
+
+Every customer gets their own L2, with its own sequencer, prover, policies and bridge. All L2s settle to one root of record on the Hyper 0X L1. Faults stay local to one L2, and one institution's traffic never slows down another's.
+
+A single L2 can also run several policy sets side by side, for example retail and corporate rulebooks.
+
+## Dynamic block size
+
+A block seals when it reaches its size target or when its time limit runs out, whichever comes first. Each L2 sets its own minimum size, maximum size and time limit.
+
+In an illustrative salary-day model, a bank's payroll L2 receives 6,000 payments per second for ten minutes. Fixed blocks capped at 2,000 transactions per second take about 23 minutes to clear the backlog. Dynamic blocks grow from about 150 to 3,000 payments and keep waits under one second. Dynamic blocks do not add compute; they remove the fixed-size bottleneck.
+
+## Batch settlement
+
+L2s settle to the L1 in batches. A single L1 commit can settle thousands of L2 payments, followed by a challenge window.
+
+## What modularity buys
+
+- Add an encryption layer without a fork.
+- Add or change an L2 type, for example moving from fraud proofs to validity proofs.
+- Connect an existing chain to Hyper 0X.
+- Keep faults local to one L2.
