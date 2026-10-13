@@ -1,33 +1,34 @@
 ---
 import Glyph from '@components/ui/Glyph.astro';
 import SystemDiagram from '@components/ui/SystemDiagram.astro';
+import SectionHead from '@components/home/SectionHead.astro';
 import type { SystemName } from '@data/systems';
 
 /** Tabbed animated system diagrams: pick a flow, watch it run. */
 interface Props {
-  title: string;
-  subTitle: string;
+  index: string;
+  label: string;
+  claim: string;
+  payoff: string;
+  body: string;
   tabs: { label: string; icon: string; system: SystemName }[];
 }
 
-const { title, subTitle, tabs } = Astro.props;
+const { index, label, claim, payoff, body, tabs } = Astro.props;
 ---
 
-<section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16" data-how>
-  <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
-    <div class="max-w-2xl">
-      <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100">{title}</h2>
-      <p class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">{subTitle}</p>
-    </div>
-    <div role="tablist" aria-label={title} class="flex flex-wrap gap-2 rounded-2xl bg-neutral-200/70 p-1.5 dark:bg-neutral-900">
-      {tabs.map((tab, index) => (
+<section id="how-it-works" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-28" data-how>
+  <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} />
+  <div class="mt-10 flex" data-reveal>
+    <div role="tablist" aria-label={label} class="flex flex-wrap gap-1.5 rounded-full bg-card p-1.5 ring-1 ring-line">
+      {tabs.map((tab, i) => (
         <button
           type="button"
           role="tab"
           id={`how-tab-${tab.system}`}
           aria-controls={`how-panel-${tab.system}`}
-          aria-selected={index === 0 ? 'true' : 'false'}
-          class="how-tab inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold text-neutral-600 transition aria-selected:bg-white aria-selected:text-neutral-900 aria-selected:shadow-sm dark:text-neutral-400 dark:aria-selected:bg-neutral-800 dark:aria-selected:text-neutral-100"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          class="how-tab inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-muted transition hover:text-ink aria-selected:bg-sheet aria-selected:text-white dark:aria-selected:bg-orange-700"
         >
           <Glyph icon={tab.icon} class="size-4" />
           {tab.label}
@@ -35,9 +36,9 @@ const { title, subTitle, tabs } = Astro.props;
       ))}
     </div>
   </div>
-  <div class="mt-8" data-reveal>
-    {tabs.map((tab, index) => (
-      <div role="tabpanel" id={`how-panel-${tab.system}`} aria-labelledby={`how-tab-${tab.system}`} hidden={index !== 0}>
+  <div class="mt-6" data-reveal>
+    {tabs.map((tab, i) => (
+      <div role="tabpanel" id={`how-panel-${tab.system}`} aria-labelledby={`how-tab-${tab.system}`} hidden={i !== 0}>
         <SystemDiagram name={tab.system} />
       </div>
     ))}

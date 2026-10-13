@@ -1,0 +1,48 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import BlogCover from '@components/ui/BlogCover.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import { entriesFor, pathFor, slugOf } from '@utils/content';
+import { formatDate } from '@utils/utils';
+
+/** Latest writing: one featured post with its cover, and a short list. */
+interface Props {
+  label: string;
+  claim: string;
+  payoff: string;
+  cta: string;
+}
+
+const { label, claim, payoff, cta } = Astro.props;
+const [featured, ...rest] = await entriesFor('blog', 'en');
+const list = rest.slice(0, 4);
+---
+
+<section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+  <SectionHead index="08" label={label} claim={claim} payoff={payoff} cta={{ title: cta, url: '/blog/' }} />
+  <div class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,6fr)]">
+    {featured && (
+      <a href={pathFor(featured)} class="group overflow-hidden rounded-[1.6rem] bg-card ring-1 ring-line" data-reveal>
+        <div class="overflow-hidden"><BlogCover seed={slugOf(featured)} label={featured.data.tags[0] ?? 'Hyper 0X'} class="transition duration-500 group-hover:scale-[1.03]" /></div>
+        <div class="p-6">
+          <p class="font-mono text-xs text-muted uppercase">{featured.data.tags[0]} · {formatDate(featured.data.pubDate, 'en')}</p>
+          <h3 class="mt-2 text-2xl font-semibold text-balance text-ink">{featured.data.title}</h3>
+          <p class="mt-2 text-muted">{featured.data.description}</p>
+        </div>
+      </a>
+    )}
+    <ul class="divide-y divide-line" data-reveal-group>
+      {list.map(post => (
+        <li data-reveal-item>
+          <a href={pathFor(post)} class="group flex items-start justify-between gap-6 py-5">
+            <span>
+              <span class="font-mono text-xs text-muted uppercase">{post.data.tags[0]} · {post.data.readTime} min read</span>
+              <span class="mt-1.5 block text-lg font-semibold text-ink group-hover:text-orange-700 dark:group-hover:text-orange-300">{post.data.title}</span>
+            </span>
+            <span class="mt-1 grid size-9 shrink-0 place-items-center rounded-full ring-1 ring-line transition group-hover:bg-ink group-hover:text-ground"><Glyph icon="arrow-up-right" class="size-4" /></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

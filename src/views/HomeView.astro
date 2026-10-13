@@ -1,68 +1,69 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import HeroSection from '@components/sections/landing/HeroSection.astro';
-import HeroSectionAlt from '@components/sections/landing/HeroSectionAlt.astro';
-import PromptShieldAnimation from '@components/sections/landing/PromptShieldAnimation.astro';
-import LogoStrip from '@components/sections/landing/LogoStrip.astro';
-import DomainsSection from '@components/sections/landing/DomainsSection.astro';
+import HomeHero from '@components/home/HomeHero.astro';
+import GlanceBento from '@components/home/GlanceBento.astro';
+import WhySection from '@components/home/WhySection.astro';
+import ProductsAccordion from '@components/home/ProductsAccordion.astro';
+import ServicesScroll from '@components/home/ServicesScroll.astro';
+import ProcessSticky from '@components/home/ProcessSticky.astro';
 import HowItWorks from '@components/sections/landing/HowItWorks.astro';
-import ClientsSection from '@components/sections/landing/ClientsSection.astro';
-import ProofStrip from '@components/sections/landing/ProofStrip.astro';
-import LatestPosts from '@components/sections/landing/LatestPosts.astro';
-import FAQ from '@components/sections/misc/FAQ.astro';
-import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
-import { BOOKING_URL, partnersData } from '@data/constants';
+import VisionSection from '@components/home/VisionSection.astro';
+import FaqTimeline from '@components/home/FaqTimeline.astro';
+import InsightsSection from '@components/home/InsightsSection.astro';
+import FinalCta from '@components/home/FinalCta.astro';
+import { BOOKING_URL } from '@data/constants';
 import type { SystemName } from '@data/systems';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
-/** The home page: who we are, what we build, how it works, proof. */
+/**
+ * Home: who we are (hero), proof at a glance, why we built our own chain,
+ * products, services, how we work, a live system view, vision, FAQ,
+ * insights and a closing call to action. One idea per section.
+ */
 interface Props {
   locale: MarketingLocale;
 }
 
 const { locale } = Astro.props;
 const t = getCopy(locale);
-const copy = t.home;
+const c = t.home;
+const over = 'relative z-[1] -mt-8 rounded-t-[2rem] bg-ground';
 ---
 
-<MainLayout seoTitle={copy.metaTitle} kind={{ type: 'Home' }} faqs={t.data.faqs.faqs}>
-  <AnnouncementBanner
-    btnId="dismiss-button"
-    btnTitle={copy.banner}
-    url={localePath(locale, '/products/h0x-pay/')}
+<MainLayout seoTitle={c.metaTitle} kind={{ type: 'Home' }} faqs={t.data.faqs.faqs}>
+  <HomeHero
+    badge={c.hero.badge}
+    lead={c.hero.lead}
+    phrases={c.hero.phrases}
+    intro={c.hero.intro}
+    primary={{ title: c.hero.primaryBtn, url: BOOKING_URL }}
+    secondary={{ title: c.hero.secondaryBtn, url: localePath(locale, '/products/') }}
+    counter={{ value: 2000000, label: c.hero.counterLabel }}
+    chips={c.hero.chips}
   />
 
-  <HeroSection
-    lead={copy.hero.lead}
-    phrases={copy.hero.phrases}
-    intro={copy.hero.intro}
-    primaryBtn={copy.hero.primaryBtn}
-    primaryBtnURL={BOOKING_URL}
-    secondaryBtn={copy.hero.secondaryBtn}
-    secondaryBtnURL={localePath(locale, '/products/hyper-0x/')}
-    proof={copy.hero.proof}
-  >
-    <PromptShieldAnimation slot="visual" />
-  </HeroSection>
+  <GlanceBento label={c.glanceIntro.label} statement={c.glanceIntro.statement} quote={c.glanceIntro.quote} logosTitle={c.logos} />
 
-  <LogoStrip title={copy.logos} />
+  <WhySection {...c.why} />
 
-  <DomainsSection title={copy.domains.title} subTitle={copy.domains.subTitle} items={copy.domains.items} />
+  <div class={over}>
+    <ProductsAccordion {...c.products} />
+    <ServicesScroll {...c.services} />
+  </div>
 
-  <HowItWorks
-    title={copy.how.title}
-    subTitle={copy.how.subTitle}
-    tabs={copy.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))}
-  />
+  <ProcessSticky {...c.process} />
 
-  <ClientsSection title={copy.clients.title} subTitle={copy.clients.subTitle} partners={partnersData} />
+  <div class={over}>
+    <HowItWorks index="05" {...c.how} tabs={c.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))} />
+  </div>
 
-  <ProofStrip title={copy.proof.title} stats={copy.proof.stats} quote={copy.proof.quote} />
+  <VisionSection {...c.vision} />
 
-  <FAQ title={copy.faqTitle} faqs={t.data.faqs} />
+  <div class={over}>
+    <FaqTimeline {...c.faq} faqs={t.data.faqs.faqs} />
+    <InsightsSection {...c.latestPosts} />
+  </div>
 
-  <LatestPosts title={copy.latestPosts.title} cta={copy.latestPosts.cta} />
-
-  <HeroSectionAlt title={copy.heroAlt.title} subTitle={copy.heroAlt.subTitle} url={BOOKING_URL} />
+  <FinalCta {...c.finalCta} />
 </MainLayout>

@@ -1,5 +1,5 @@
 ---
-/** Secondary call to action: an outlined link next to PrimaryCTA. */
+/** Secondary call to action: an outlined pill next to PrimaryCTA. */
 interface Props {
   title?: string;
   url?: string;
@@ -8,9 +8,4 @@ interface Props {
 const { title, url } = Astro.props;
 ---
 
-<a
-  href={url}
-  class="inline-flex items-center justify-center gap-x-2 rounded-lg border border-neutral-400 px-4 py-3 text-center text-sm font-semibold text-neutral-800 transition duration-300 hover:border-neutral-900 hover:bg-neutral-900/5 focus-visible:ring-3 focus-visible:ring-orange-500 focus-visible:outline-hidden 2xl:text-base dark:border-neutral-600 dark:text-neutral-200 dark:hover:border-neutral-300 dark:hover:bg-white/5"
->
-  {title}
-</a>
+<a href={url} class="cta-ghost text-ink focus-visible:ring-3 focus-visible:ring-orange-500/50 focus-visible:outline-hidden">{title}</a>

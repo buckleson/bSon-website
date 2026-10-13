@@ -1,7 +1,7 @@
 ---
 import { getImage } from 'astro:assets';
 import hyper0x from '@images/brand/hyper-0x.png';
-import { brand, lucide } from '@utils/glyphs';
+import { brand, glyph } from '@utils/glyphs';
 
 /**
  * Hero scene: traffic from any AI model (prompts, agents, tool calls, SDKs,
@@ -25,14 +25,14 @@ const sources = [
   ['Tool calls', 'wrench'],
   ['SDKs', 'code'],
   ['Emails', 'mail'],
-].map(([label, icon]) => ({ label, icon: lucide(icon) }));
+].map(([label, icon]) => ({ label, icon: glyph(icon) }));
 const targets = [
   ['Users', 'user'],
   ['Database', 'database'],
   ['Your tools', 'plug'],
   ['APIs', 'globe'],
-].map(([label, icon]) => ({ label, icon: lucide(icon) }));
-const shield = lucide('shield-check');
+].map(([label, icon]) => ({ label, icon: glyph(icon) }));
+const shield = glyph('shield-check');
 ---
 
 <div
@@ -207,7 +207,7 @@ const shield = lucide('shield-check');
     };
     const ctrl = (a: Pt, b: Pt): Pt => (L.dir === 'h' ? { x: (a.x + b.x) / 2, y: a.y } : { x: a.x, y: (a.y + b.y) / 2 });
     const icon = (markup: string, x: number, y: number, size: number, cls: string) => {
-      const s = el('svg', { x, y, width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 1.9, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: cls }, top);
+      const s = el('svg', { x, y, width: size, height: size, viewBox: '0 0 256 256', fill: 'currentColor', class: cls }, top);
       s.innerHTML = markup;
     };
     const card = (r: Rect, item: Item, iconCls: string) => {

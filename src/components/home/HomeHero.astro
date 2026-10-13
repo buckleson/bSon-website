@@ -1,0 +1,211 @@
+---
+import Glyph from '@components/ui/Glyph.astro';
+import { brand } from '@utils/glyphs';
+
+/**
+ * Home hero on a dark rounded sheet. Left: who we are, in one headline whose
+ * last line rotates through who we build for, plus a one-sentence summary,
+ * calls to action, a live-style counter and the four domains. Right: a
+ * Hyper Wallet phone with transaction cards (compliance check, Pavii block,
+ * L2 settlement, bridge, tokenized gold) that fan out on load and drift
+ * with scroll.
+ */
+interface Props {
+  badge: string;
+  lead: string;
+  phrases: string[];
+  intro: string;
+  primary: { title: string; url: string };
+  secondary: { title: string; url: string };
+  counter: { value: number; label: string };
+  chips: string[];
+}
+
+const { badge, lead, phrases, intro, primary, secondary, counter, chips } = Astro.props;
+const eth = brand('ethereum');
+
+const cards = [
+  { id: 'kyc', pos: 'left-[-2%] top-[14%] sm:left-[2%]', icon: 'seal-check', tone: 'ok', title: 'Compliance passed', sub: 'KYC · limit OK' },
+  { id: 'pavii', pos: 'left-[-4%] top-[56%] hidden sm:flex', icon: 'shield-warning', tone: 'bad', title: 'Pavii blocked', sub: 'Prompt injection' },
+  { id: 'l2', pos: 'right-[-2%] top-[8%] sm:right-[2%]', icon: 'stack', tone: 'accent', title: 'Your L2 → Hyper 0X', sub: 'State root final' },
+  { id: 'bridge', pos: 'right-[-4%] top-[60%] hidden sm:flex', icon: 'arrows-left-right', tone: 'neutral', title: '250 USDC → Ethereum', sub: 'Bridge · 3 of 5 signed' },
+  { id: 'gold', pos: 'left-[10%] bottom-[2%] sm:left-[14%]', icon: 'diamond', tone: 'accent', title: 'Tokenized gold', sub: '+0.01 g added' },
+];
+---
+
+<section class="on-sheet relative mx-2 overflow-hidden rounded-[2rem] bg-sheet text-white sm:mx-3" data-hero>
+  <div aria-hidden="true" class="hero-grid pointer-events-none absolute inset-0"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute -top-40 right-[-10%] size-[42rem] rounded-full bg-orange-600/25 blur-[120px]"></div>
+
+  <div class="relative mx-auto grid max-w-[85rem] grid-cols-[minmax(0,1fr)] items-center gap-10 px-5 pt-14 pb-10 sm:px-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:pt-20">
+    <div>
+      <p class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80" data-hero-in>
+        <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400/70"></span><span class="relative inline-flex size-2 rounded-full bg-emerald-400"></span></span>
+        {badge}
+      </p>
+      <h1 class="mt-6 text-[2.75rem] leading-[0.98] font-semibold sm:text-6xl lg:text-[4.6rem]" data-hero-in>
+        <span class="block">{lead}</span>
+        <span class="block min-h-[1.05em]" data-typer={JSON.stringify(phrases)}>
+          <span class="mark" data-typer-text>{phrases[0]}</span><span class="typer-caret" aria-hidden="true"></span>
+        </span>
+      </h1>
+      <p class="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-white/70" data-hero-in>{intro}</p>
+      <div class="mt-8 flex flex-wrap gap-3" data-hero-in>
+        <a href={primary.url} class="cta-pill"><span>{primary.title}</span><span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span></a>
+        <a href={secondary.url} class="cta-ghost text-white">{secondary.title}</a>
+      </div>
+    </div>
+
+    <div class="relative mx-auto aspect-[5/6] w-full max-w-[34rem]" data-stage>
+      <div class="phone absolute top-[6%] left-1/2 w-[58%] -translate-x-1/2" data-phone>
+        <div class="rounded-[2.4rem] border border-white/15 bg-[#0f1115] p-2.5 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.8)]">
+          <div class="overflow-hidden rounded-[1.9rem] bg-[#16181d] px-4 pt-3 pb-5">
+            <div class="mx-auto h-5 w-24 rounded-full bg-black"></div>
+            <div class="mt-4 flex items-center justify-between text-[0.7rem] text-white/50">
+              <span>Hyper Wallet</span><Glyph icon="bell" class="size-4" />
+            </div>
+            <p class="mt-3 text-[0.7rem] text-white/50">Portfolio</p>
+            <p class="font-display text-[1.7rem] leading-tight font-semibold tabular-nums">$12,480.25</p>
+            <p class="text-[0.7rem] font-medium text-emerald-400">+2.4% this week</p>
+            <div class="mt-4 grid grid-cols-3 gap-2 text-[0.65rem]">
+              {[['paper-plane-tilt', 'Send'], ['arrows-clockwise', 'Swap'], ['download-simple', 'Deposit']].map(([icon, label]) => (
+                <span class="flex flex-col items-center gap-1 rounded-xl bg-white/5 py-2"><Glyph icon={icon} class="size-4 text-orange-300" />{label}</span>
+              ))}
+            </div>
+            <ul class="mt-4 space-y-2.5 text-[0.7rem]">
+              {[
+                ['diamond', 'Tokenized gold', '0.82 g', '$71.40'],
+                ['currency-eth', 'Ethereum', '1.20 ETH', '$3,912.00'],
+                ['currency-circle-dollar', 'USDC', '8,496.85', '$8,496.85'],
+              ].map(([icon, name, qty, value]) => (
+                <li class="flex items-center gap-2.5">
+                  <span class="grid size-7 place-items-center rounded-full bg-white/8"><Glyph icon={icon} class="size-4 text-white/80" /></span>
+                  <span class="flex-1"><span class="block font-medium text-white/90">{name}</span><span class="text-white/45">{qty}</span></span>
+                  <span class="tabular-nums text-white/80">{value}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-4 flex items-center gap-1.5 rounded-xl bg-emerald-400/10 px-3 py-2 text-[0.68rem] font-medium text-emerald-300">
+              <Glyph icon="check-circle" class="size-4" />Payment settled · final
+            </p>
+          </div>
+        </div>
+      </div>
+      {cards.map(card => (
+        <div class:list={['tx-card absolute flex items-center gap-2.5 rounded-2xl border border-white/10 bg-[#1b1e24]/95 py-2.5 ps-2.5 pe-4 shadow-[0_20px_40px_-20px_rgb(0_0_0/0.9)] backdrop-blur', card.pos]} data-card={card.id}>
+          <span class:list={['grid size-9 place-items-center rounded-xl', {
+            'bg-emerald-400/15 text-emerald-300': card.tone === 'ok',
+            'bg-red-500/15 text-red-300': card.tone === 'bad',
+            'bg-orange-500/20 text-orange-200': card.tone === 'accent',
+            'bg-white/8 text-white/80': card.tone === 'neutral',
+          }]}>
+            {card.id === 'bridge' ? <svg viewBox="0 0 24 24" class="size-4.5" style={`color:#${eth.hex}`} aria-hidden="true"><path d={eth.path} fill="currentColor" /></svg> : <Glyph icon={card.icon} class="size-5" />}
+          </span>
+          <span class="whitespace-nowrap">
+            <span class="block text-[0.8rem] font-semibold text-white">{card.title}</span>
+            <span class="block text-[0.7rem] text-white/55">{card.sub}</span>
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="relative mx-auto grid max-w-[85rem] gap-6 border-t border-white/10 px-5 py-7 sm:px-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:items-center">
+    <div>
+      <p class="font-display text-4xl font-semibold tabular-nums" data-count={counter.value} data-suffix="+">{counter.value.toLocaleString('en-US')}+</p>
+      <p class="mt-1 font-mono text-[0.7rem] tracking-wide text-white/55 uppercase">{counter.label}</p>
+    </div>
+    <ul class="flex flex-wrap gap-2 lg:justify-end">
+      {chips.map((chip, index) => (
+        <li class="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/4 px-3.5 py-2 text-sm text-white/85">
+          <span class="font-mono text-[0.7rem] text-orange-300">0{index + 1}</span>{chip}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at 70% 30%, #000 0%, transparent 70%);
+  }
+  .typer-caret {
+    display: inline-block;
+    width: 0.06em;
+    height: 0.82em;
+    margin-left: 0.08em;
+    vertical-align: -0.06em;
+    background: currentColor;
+    animation: typer-blink 1s steps(1) infinite;
+  }
+  @keyframes typer-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .typer-caret { animation: none; } }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-hero]').forEach(hero => {
+    // Rotating last line: type, pause, erase, next.
+    const typer = hero.querySelector<HTMLElement>('[data-typer]');
+    if (typer && !reduced) {
+      const phrases: string[] = JSON.parse(typer.dataset.typer!);
+      const out = typer.querySelector<HTMLElement>('[data-typer-text]')!;
+      let index = 0;
+      let shown = phrases[0].length;
+      let erasing = true;
+      const tick = () => {
+        if (erasing) {
+          shown--;
+          if (shown <= 0) { erasing = false; index = (index + 1) % phrases.length; }
+        } else shown++;
+        out.textContent = phrases[index].slice(0, Math.max(shown, 0)) || ' ';
+        let delay = erasing ? 30 : 60;
+        if (!erasing && shown >= phrases[index].length) { erasing = true; delay = 2000; }
+        window.setTimeout(tick, delay);
+      };
+      window.setTimeout(tick, 2400);
+    }
+    if (reduced) return;
+
+    const stage = hero.querySelector<HTMLElement>('[data-stage]')!;
+    const phone = hero.querySelector<HTMLElement>('[data-phone]')!;
+    const cards = [...hero.querySelectorAll<HTMLElement>('[data-card]')];
+
+    // On load: copy rises in, cards fan out from behind the phone.
+    const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
+    intro.from(hero.querySelectorAll('[data-hero-in]'), { y: 24, opacity: 0, duration: 0.9, stagger: 0.08 });
+    intro.from(phone, { y: 60, opacity: 0, duration: 1.1 }, 0.1);
+    cards.forEach((card, i) => {
+      const s = stage.getBoundingClientRect();
+      const c = card.getBoundingClientRect();
+      const dx = s.left + s.width / 2 - (c.left + c.width / 2);
+      const dy = s.top + s.height * 0.45 - (c.top + c.height / 2);
+      intro.from(card, { x: dx * 0.8, y: dy * 0.8, scale: 0.6, opacity: 0, duration: 1.2 }, 0.45 + i * 0.09);
+    });
+
+    // On scroll: the phone rises a little, cards drift at different speeds.
+    gsap.to(phone, { y: -40, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 0.5 } });
+    cards.forEach((card, i) => {
+      gsap.to(card, {
+        y: -30 - (i % 3) * 28,
+        rotation: i % 2 ? 2.5 : -2.5,
+        ease: 'none',
+        scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 0.6 },
+      });
+    });
+
+    // Cards take turns lifting, like live events arriving.
+    gsap.timeline({ repeat: -1, delay: 2.4 }).add(
+      cards.map((card, i) => gsap.to(card, { scale: 1.06, duration: 0.35, yoyo: true, repeat: 1, ease: 'power2.out', delay: i * 1.1 }))
+    );
+  });
+</script>

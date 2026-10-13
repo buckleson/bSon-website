@@ -1,0 +1,74 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import { BOOKING_URL } from '@data/constants';
+
+/**
+ * FAQ: a dark "still unsure?" card beside an accordion whose timeline line
+ * fills as the list scrolls past. Answers stay in the HTML (native details)
+ * so search engines and assistants can read them.
+ */
+interface Props {
+  label: string;
+  claim: string;
+  payoff: string;
+  stillUnsure: string;
+  stillUnsureText: string;
+  faqs: { question: string; answer: string }[];
+}
+
+const { label, claim, payoff, stillUnsure, stillUnsureText, faqs } = Astro.props;
+---
+
+<section id="faq" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+  <SectionHead index="07" label={label} claim={claim} payoff={payoff} />
+  <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
+    <div class="on-sheet h-fit rounded-[1.6rem] bg-sheet p-7 text-white lg:sticky lg:top-24" data-reveal>
+      <Glyph icon="chats-circle" class="size-9 text-orange-300" />
+      <p class="mt-5 text-2xl font-semibold">{stillUnsure}</p>
+      <p class="mt-2 text-white/70">{stillUnsureText}</p>
+      <div class="mt-6"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
+      <a href="mailto:vijay@buckleson.com" class="mt-4 block text-sm text-white/60 hover:text-white">vijay@buckleson.com</a>
+    </div>
+    <div class="relative ps-8" data-faq>
+      <span class="absolute top-2 bottom-2 left-[0.6rem] w-0.5 rounded-full bg-line"></span>
+      <span class="faq-fill absolute top-2 left-[0.6rem] w-0.5 origin-top rounded-full bg-orange-500" data-faq-fill></span>
+      {faqs.map((faq, index) => (
+        <details class="group relative border-b border-line py-5" open={index === 0} data-reveal>
+          <span class="absolute top-6 -left-8 grid size-5 place-items-center rounded-full bg-ground ring-2 ring-line transition group-open:ring-orange-500"><span class="size-1.5 rounded-full bg-line transition group-open:bg-orange-500"></span></span>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-semibold text-ink">
+            {faq.question}
+            <span class="grid size-8 shrink-0 place-items-center rounded-full bg-card ring-1 ring-line transition duration-300 group-open:rotate-45"><Glyph icon="plus" class="size-4" /></span>
+          </summary>
+          <p class="mt-3 max-w-[62ch] text-pretty text-muted">{faq.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-fill { height: calc(100% - 1rem); transform: scaleY(var(--p, 0)); }
+</style>
+
+<script>
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { gsap } from 'gsap';
+
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach(list => {
+    const fill = list.querySelector<HTMLElement>('[data-faq-fill]')!;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      fill.style.setProperty('--p', '1');
+      return;
+    }
+    ScrollTrigger.create({
+      trigger: list,
+      start: 'top 75%',
+      end: 'bottom 60%',
+      scrub: 0.4,
+      onUpdate: self => fill.style.setProperty('--p', String(self.progress)),
+    });
+  });
+</script>
