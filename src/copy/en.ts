@@ -132,17 +132,7 @@ export const en = {
       claim: 'Tell us what to put on-chain.',
       payoff: 'We build it with you.',
       body: 'Four things we build for clients, each on its own private L2. Scroll to switch.',
-      stats: {
-      title: 'Built for institutional scale',
-      subTitle: 'We run what we sell. These numbers come from our own products in production.',
       items: [
-        { value: '2M+', label: 'transactions through Hyper Wallet' },
-        { value: '33K+', label: 'portfolios managed' },
-        { value: '$128K+', label: 'saved by users in fees' },
-        { value: '100M+', label: 'AI tokens saved by Pavii' },
-      ],
-    },
-    items: [
         {
           id: 'custom-blockchains',
           title: 'Custom blockchains',
@@ -253,6 +243,16 @@ export const en = {
       subTitle:
         'We design, build and run blockchain systems for banks, fintechs, asset issuers and AI teams. Everything runs on Hyper 0X, the blockchain we built, so you get your own L2 with your own rules on one verifiable record.',
       cta: 'Book a call',
+    },
+    stats: {
+      title: 'Built for institutional scale',
+      subTitle: 'We run what we sell. These numbers come from our own products in production.',
+      items: [
+        { value: '2M+', label: 'transactions through Hyper Wallet' },
+        { value: '33K+', label: 'portfolios managed' },
+        { value: '$128K+', label: 'saved by users in fees' },
+        { value: '100M+', label: 'AI tokens saved by Pavii' },
+      ],
     },
     items: [
       {
