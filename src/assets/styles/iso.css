@@ -108,3 +108,5 @@ html:not(.dark) .iso.iso-auto{
 
 .iso-sheet{--anatomy-page:transparent;--anatomy-card:var(--sheet-card);--anatomy-paper:var(--sheet-card)}
 .iso .iso-figure{margin:0}
+.iso .iso-plate{border-radius:1.6rem;box-shadow:0 0 0 1px color-mix(in oklab,var(--anatomy-mid) 45%,transparent)}
+.iso .iso-legend{margin-top:14px}
