@@ -23,7 +23,9 @@ const script = live[`../home/figures/${name}.live.js`];
 const kit = kitSource.replace(/^export /gm, '');
 // Wrap the kit and the live code in a block so two figures on a page don't
 // redeclare each other's top-level names.
-const code = `{\n${kit}\n${script}\n}`;
+// The kit contains literal script tags (its page builder); escape them so the
+// inline script isn't cut short.
+const code = `{\n${kit}\n${script}\n}`.replace(/<\/(script)/gi, '<\\/$1');
 ---
 
 <div class:list={['iso', tone === 'sheet' ? 'iso-sheet' : 'iso-auto', className]} set:html={markup} />
