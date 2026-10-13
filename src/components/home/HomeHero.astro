@@ -44,7 +44,7 @@ const cards = [
         {badge}
       </p>
       <h1 class="mt-6 text-[2.6rem] leading-[0.98] font-semibold sm:text-6xl lg:text-[3.9rem] xl:text-[4.3rem]" data-hero-in>
-        <span class="block whitespace-nowrap">{lead}</span>
+        <span class="block sm:whitespace-nowrap">{lead}</span>
         <span class="block min-h-[1.05em]" data-typer={JSON.stringify(phrases)}>
           <span class="mark" data-typer-text>{phrases[0]}</span><span class="typer-caret" aria-hidden="true"></span>
         </span>
@@ -56,8 +56,8 @@ const cards = [
       </div>
     </div>
 
-    <div class="relative mx-auto aspect-[5/6] w-full max-w-[34rem]" data-stage>
-      <div class="phone absolute top-[6%] left-1/2 w-[58%] -translate-x-1/2" data-phone>
+    <div class="relative mx-auto aspect-[4/5] w-full max-w-[34rem] sm:aspect-[5/6]" data-stage>
+      <div class="phone absolute top-[4%] left-1/2 w-[52%] -translate-x-1/2 sm:w-[58%]" data-phone>
         <div class="rounded-[2.4rem] border border-white/15 bg-[#0f1115] p-2.5 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.8)]">
           <div class="overflow-hidden rounded-[1.9rem] bg-[#16181d] px-4 pt-3 pb-5">
             <div class="mx-auto h-5 w-24 rounded-full bg-black"></div>
