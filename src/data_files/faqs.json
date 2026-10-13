@@ -10,16 +10,8 @@
       "answer": "Yes, that is our core service. We set up a private L2 on Hyper 0X with your own rules, privacy and bridges, connect it to your existing systems, and support you from pilot to production."
     },
     {
-      "question": "Do you help companies launch tokenized assets?",
-      "answer": "Yes. We tokenize real-world assets such as gold, funds, bonds, invoices and property, with custody, compliance rules and a secondary market. Trades settle atomically: both legs or neither."
-    },
-    {
       "question": "Why is a blockchain more secure for my business?",
       "answer": "Records on Hyper 0X cannot be quietly edited or deleted, every connection is post-quantum-resistant, and compliance rules run before a transaction executes. That gives auditors and regulators one verifiable record."
-    },
-    {
-      "question": "What is Hyper 0X?",
-      "answer": "Hyper 0X is the enterprise blockchain Buckleson built from scratch: a permissioned L1 with deterministic finality, post-quantum-resistant encryption and a private L2 for every customer. Every Buckleson product runs on it."
     },
     {
       "question": "How do we get started?",

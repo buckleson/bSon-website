@@ -7,7 +7,7 @@ import { docsSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
 import { diagramNames } from './data_files/diagrams';
 
-const item = z.object({ title: z.string(), subTitle: z.string() });
+const item = z.object({ title: z.string(), subTitle: z.string(), icon: z.string().optional() });
 const faq = z.object({ question: z.string(), answer: z.string() });
 
 const productsCollection = defineCollection({

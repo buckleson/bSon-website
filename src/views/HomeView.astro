@@ -3,22 +3,20 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import HeroSection from '@components/sections/landing/HeroSection.astro';
 import HeroSectionAlt from '@components/sections/landing/HeroSectionAlt.astro';
 import PromptShieldAnimation from '@components/sections/landing/PromptShieldAnimation.astro';
+import LogoStrip from '@components/sections/landing/LogoStrip.astro';
 import DomainsSection from '@components/sections/landing/DomainsSection.astro';
+import HowItWorks from '@components/sections/landing/HowItWorks.astro';
 import ClientsSection from '@components/sections/landing/ClientsSection.astro';
-import GlanceSection from '@components/sections/landing/GlanceSection.astro';
+import ProofStrip from '@components/sections/landing/ProofStrip.astro';
 import LatestPosts from '@components/sections/landing/LatestPosts.astro';
-import FeaturesGeneral from '@components/sections/features/FeaturesGeneral.astro';
-import FeaturesNavs from '@components/sections/features/FeaturesNavs.astro';
-import TestimonialsSection from '@components/sections/testimonials/TestimonialsSection.astro';
-import PricingSection from '@components/sections/pricing/PricingSection.astro';
 import FAQ from '@components/sections/misc/FAQ.astro';
 import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
-import buckleson from '@images/brand/buckleson.png';
 import { BOOKING_URL, partnersData } from '@data/constants';
+import type { SystemName } from '@data/systems';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
-/** The home page in one locale. Copy comes from the locale's copy table. */
+/** The home page: who we are, what we build, how it works, proof. */
 interface Props {
   locale: MarketingLocale;
 }
@@ -26,11 +24,6 @@ interface Props {
 const { locale } = Astro.props;
 const t = getCopy(locale);
 const copy = t.home;
-
-const testimonials = copy.testimonials.quotes.map(quote => ({
-  ...quote,
-  avatarSrc: buckleson,
-}));
 ---
 
 <MainLayout seoTitle={copy.metaTitle} kind={{ type: 'Home' }} faqs={t.data.faqs.faqs}>
@@ -41,57 +34,35 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
   />
 
   <HeroSection
-    title={copy.hero.title}
-    subTitle={copy.hero.subTitle}
+    lead={copy.hero.lead}
+    phrases={copy.hero.phrases}
+    intro={copy.hero.intro}
     primaryBtn={copy.hero.primaryBtn}
     primaryBtnURL={BOOKING_URL}
     secondaryBtn={copy.hero.secondaryBtn}
     secondaryBtnURL={localePath(locale, '/products/hyper-0x/')}
+    proof={copy.hero.proof}
   >
     <PromptShieldAnimation slot="visual" />
   </HeroSection>
 
-  <DomainsSection title={copy.domains.title} items={copy.domains.items} />
+  <LogoStrip title={copy.logos} />
 
-  <ClientsSection
-    title={copy.clients.title}
-    subTitle={copy.clients.subTitle}
-    partners={partnersData}
+  <DomainsSection title={copy.domains.title} subTitle={copy.domains.subTitle} items={copy.domains.items} />
+
+  <HowItWorks
+    title={copy.how.title}
+    subTitle={copy.how.subTitle}
+    tabs={copy.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))}
   />
 
-  <FeaturesGeneral
-    title={copy.featuresGeneral.title}
-    subTitle={copy.featuresGeneral.subTitle}
-    features={t.data.features}
-  />
+  <ClientsSection title={copy.clients.title} subTitle={copy.clients.subTitle} partners={partnersData} />
 
-  <FeaturesNavs
-    title={copy.featuresNavs.title}
-    tabs={[
-      { ...copy.featuresNavs.tabs.tools, svg: 'frame', diagram: 'hyper0x', first: true },
-      { ...copy.featuresNavs.tabs.dashboard, svg: 'verified', diagram: 'pavii' },
-      { ...copy.featuresNavs.tabs.features, svg: 'dashboard', diagram: 'wallet' },
-    ]}
-  />
-
-  <TestimonialsSection
-    title={copy.testimonials.title}
-    subTitle={copy.testimonials.subTitle}
-    testimonials={testimonials}
-    statistics={copy.testimonials.statistics}
-  />
-
-  <GlanceSection title={copy.glance.title} facts={copy.glance.facts} />
-
-  <PricingSection pricing={t.data.pricing} />
+  <ProofStrip title={copy.proof.title} stats={copy.proof.stats} quote={copy.proof.quote} />
 
   <FAQ title={copy.faqTitle} faqs={t.data.faqs} />
 
   <LatestPosts title={copy.latestPosts.title} cta={copy.latestPosts.cta} />
 
-  <HeroSectionAlt
-    title={copy.heroAlt.title}
-    subTitle={copy.heroAlt.subTitle}
-    url={BOOKING_URL}
-  />
+  <HeroSectionAlt title={copy.heroAlt.title} subTitle={copy.heroAlt.subTitle} url={BOOKING_URL} />
 </MainLayout>

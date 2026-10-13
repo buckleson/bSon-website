@@ -1,6 +1,4 @@
 import faqs from '@data/faqs.json';
-import features from '@data/features.json';
-import pricing from '@data/pricing.json';
 
 /**
  * English copy table. `Copy` (see `./index.ts`) is the shape of this table.
@@ -92,100 +90,83 @@ export const en = {
     metaTitle: 'Buckleson: Blockchain Development & Infrastructure Company',
     banner: 'Coming soon: H0X Pay and HyperRun',
     hero: {
-      title: `We Build ${accent('Secure Blockchains')}`,
-      subTitle:
-        'Buckleson is a blockchain infrastructure company. We build custom blockchains, tokenize real-world assets, launch wallets and exchanges, and secure AI agents, all on Hyper 0X, our own post-quantum-resistant blockchain.',
+      lead: 'We help you',
+      phrases: [
+        'launch your own blockchain',
+        'tokenize real-world assets',
+        'build crypto wallets & exchanges',
+        'secure your AI agents',
+      ],
+      intro:
+        'Buckleson is a blockchain infrastructure company. Everything we build runs on Hyper 0X, our own post-quantum-resistant blockchain.',
       primaryBtn: 'Book a call',
       secondaryBtn: 'Explore Hyper 0X',
+      proof: [
+        { value: '2M+', label: 'transactions on Hyper Wallet' },
+        { value: '33K+', label: 'portfolios managed' },
+        { value: '100M+', label: 'AI tokens saved by Pavii' },
+      ],
     },
+    logos: 'Connects to',
     domains: {
       title: 'What we build',
+      subTitle: 'Four things we do every day, all on one secure chain.',
       items: [
         {
           title: 'Custom blockchains',
-          content: 'Your own private L2 on Hyper 0X, with your rules, privacy and bridges.',
+          content: 'Your own private L2 with your rules, privacy and bridges.',
           href: '/services/#custom-blockchains',
+          icon: 'blocks',
         },
         {
           title: 'Asset tokenization',
-          content: 'Put gold, funds, invoices or property on-chain, with compliance built in.',
+          content: 'Gold, funds, invoices or property on-chain, compliance built in.',
           href: '/services/#asset-tokenization',
+          icon: 'coins',
         },
         {
           title: 'Wallets & exchanges',
-          content: 'Launch a branded wallet, exchange or payment gateway with our SDKs.',
+          content: 'A branded wallet, exchange or payment gateway from our SDKs.',
           href: '/products/hyper-wallet/',
+          icon: 'wallet',
         },
         {
           title: 'AI-agent security',
-          content: 'Security gates and tamper-proof receipts for every AI agent call.',
+          content: 'Security gates and tamper-proof receipts for every agent call.',
           href: '/products/pavii/',
+          icon: 'shield-check',
         },
       ],
+    },
+    how: {
+      title: 'See how it works',
+      subTitle: 'Pick a flow and watch a transaction move through the system, step by step.',
+      tabs: [
+        { label: 'Payment', icon: 'blocks', system: 'hyper0x' },
+        { label: 'Tokenization', icon: 'coins', system: 'tokenization' },
+        { label: 'Wallet trade', icon: 'wallet', system: 'wallet' },
+        { label: 'AI agent call', icon: 'bot', system: 'pavii' },
+      ],
+    },
+    proof: {
+      title: 'Proven in production',
+      stats: [
+        { count: '2M+', description: 'transactions through Hyper Wallet', icon: 'activity' },
+        { count: '33K+', description: 'portfolios managed', icon: 'briefcase' },
+        { count: '$128K+', description: 'saved by users in wallet fees', icon: 'piggy-bank' },
+        { count: '100M+', description: 'AI tokens saved by Pavii', icon: 'sparkles' },
+      ],
+      quote: {
+        content:
+          '10x Technologies is running an enterprise pilot of the Hyper 0X blockchain-based AI training and inference module, validating our security architecture in a real-world environment.',
+        author: '10x Technologies',
+        role: 'Enterprise pilot, AI training & inference',
+      },
     },
     clients: {
       title: 'Products built on Hyper 0X',
       subTitle:
         'Every Buckleson product signs, settles and logs on the same chain, so they all write to one verifiable record.',
-    },
-    featuresGeneral: {
-      title: 'Why Hyper 0X is safer by design',
-      subTitle:
-        "We built our own blockchain instead of renting a public one. That means we control the fees, the roadmap and the security model, and nothing is inherited from someone else's chain.",
-    },
-    featuresNavs: {
-      title: `See how ${accent('it works')}`,
-      tabs: {
-        tools: {
-          heading: 'Hyper 0X',
-          content:
-            'Our own L1. Every customer gets a private L2, and every L2 settles to one shared, post-quantum-resistant record.',
-          alt: 'Hyper 0X architecture: customer L2s settle to the Hyper 0X L1 and connect to public chains through bridges',
-        },
-        dashboard: {
-          heading: 'Pavii',
-          content:
-            'Every AI agent call passes six security gates and leaves a tamper-proof receipt on Hyper 0X.',
-          alt: 'Pavii flow: AI agent calls pass six security gates before reaching your systems',
-        },
-        features: {
-          heading: 'Hyper Wallet & SDKs',
-          content:
-            'A wallet and an exchange in one app, with SDKs to launch your own neobank or payment gateway.',
-          alt: 'Hyper Wallet architecture: one wallet and order book with atomic settlement on Hyper 0X',
-        },
-      },
-    },
-    testimonials: {
-      title: 'Proven in production',
-      subTitle:
-        'Hyper 0X already powers live products and enterprise pilots. These numbers come from our own products.',
-      quotes: [
-        {
-          content:
-            '10x Technologies is running an enterprise pilot of the Hyper 0X blockchain-based AI training and inference module, validating our security architecture in a real-world environment.',
-          author: '10x Technologies',
-          role: 'Enterprise pilot | AI training & inference',
-        },
-      ],
-      statistics: [
-        {
-          count: '2M+',
-          description: 'transactions processed through Hyper Wallet',
-        },
-        {
-          count: '33K+',
-          description: 'portfolios managed on Hyper Wallet',
-        },
-        {
-          count: '$128K+',
-          description: 'saved by users in wallet fees',
-        },
-        {
-          count: '100M+',
-          description: 'AI tokens saved by Pavii across 82K+ queries',
-        },
-      ],
     },
     glance: {
       title: 'Buckleson at a glance',
@@ -355,6 +336,6 @@ export const en = {
     },
   },
 
-  /** JSON data for FAQs, features and pricing. */
-  data: { faqs, features, pricing },
+  /** JSON data for FAQs. */
+  data: { faqs },
 };

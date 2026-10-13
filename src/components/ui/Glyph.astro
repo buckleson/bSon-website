@@ -1,0 +1,29 @@
+---
+import { brand, lucide, type BrandKey } from '@utils/glyphs';
+
+/**
+ * An inline icon for HTML: a Lucide icon (`icon`) or a brand logo (`brand`).
+ * Decorative unless `title` is given.
+ */
+interface Props {
+  icon?: string;
+  brand?: BrandKey;
+  class?: string;
+  title?: string;
+}
+
+const { icon, brand: brandKey, class: className, title } = Astro.props;
+const logo = brandKey ? brand(brandKey) : undefined;
+const a11y = title ? { role: 'img' as const, 'aria-label': title } : { 'aria-hidden': 'true' as const };
+---
+
+{icon && (
+  <svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" {...a11y} set:html={lucide(icon)} />
+)}
+{logo && (logo.path ? (
+  <svg class={className} viewBox="0 0 24 24" fill="currentColor" {...a11y}><path d={logo.path} /></svg>
+) : (
+  <svg class={className} viewBox="0 0 24 24" {...a11y}>
+    <text x="12" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">{logo.monogram}</text>
+  </svg>
+))}

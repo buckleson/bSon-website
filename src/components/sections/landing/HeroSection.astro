@@ -2,39 +2,104 @@
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import SecondaryCTA from '@components/ui/buttons/SecondaryCTA.astro';
 
-/** Home hero: headline, one-line summary, two calls to action and a visual. */
+/**
+ * Home hero. The headline ends in a phrase that types itself, erases and
+ * moves on to the next thing we help with; the first phrase is server-rendered
+ * so the heading reads correctly without JavaScript.
+ */
 interface Props {
-  title: string;
-  subTitle?: string;
-  primaryBtn?: string;
-  primaryBtnURL?: string;
-  secondaryBtn?: string;
-  secondaryBtnURL?: string;
+  lead: string;
+  phrases: string[];
+  intro: string;
+  primaryBtn: string;
+  primaryBtnURL: string;
+  secondaryBtn: string;
+  secondaryBtnURL: string;
+  proof: { value: string; label: string }[];
 }
 
-const { title, subTitle, primaryBtn, primaryBtnURL, secondaryBtn, secondaryBtnURL } = Astro.props;
+const { lead, phrases, intro, primaryBtn, primaryBtnURL, secondaryBtn, secondaryBtnURL, proof } = Astro.props;
 ---
 
-<section class="relative mx-auto grid max-w-[85rem] items-center gap-12 px-4 pt-12 pb-14 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-10 lg:px-8 lg:pt-20 lg:pb-24">
+<section class="relative mx-auto grid max-w-[85rem] items-center gap-10 px-4 pt-10 pb-12 sm:px-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] lg:gap-12 lg:px-8 lg:pt-16 lg:pb-16">
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute inset-x-0 -top-24 -z-10 mx-auto h-[28rem] max-w-5xl rounded-full bg-orange-300/25 blur-3xl dark:bg-orange-900/25"
+    class="pointer-events-none absolute inset-x-0 -top-24 -z-10 mx-auto h-[26rem] max-w-5xl rounded-full bg-orange-300/25 blur-3xl dark:bg-orange-900/25"
   ></div>
-  <div data-hero-copy>
-    <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl lg:leading-[1.05] dark:text-neutral-100">
-      <Fragment set:html={title} />
+  <div>
+    <h1 class="text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05] dark:text-neutral-100">
+      {lead}
+      <span class="block min-h-[2.1em] text-orange-600 sm:min-h-[2.1em] dark:text-orange-400" data-typer={JSON.stringify(phrases)}>
+        <span data-typer-text>{phrases[0]}</span><span class="typer-caret" aria-hidden="true"></span>
+      </span>
     </h1>
-    {subTitle && (
-      <p class="mt-5 max-w-[34rem] text-lg leading-relaxed text-pretty text-neutral-700 dark:text-neutral-300">
-        {subTitle}
-      </p>
-    )}
-    <div class="mt-8 flex flex-wrap gap-3">
-      {primaryBtn && <PrimaryCTA title={primaryBtn} url={primaryBtnURL} />}
-      {secondaryBtn && <SecondaryCTA title={secondaryBtn} url={secondaryBtnURL} />}
+    <p class="mt-2 max-w-[32rem] text-base leading-relaxed text-pretty text-neutral-600 dark:text-neutral-400">
+      {intro}
+    </p>
+    <div class="mt-7 flex flex-wrap gap-3">
+      <PrimaryCTA title={primaryBtn} url={primaryBtnURL} />
+      <SecondaryCTA title={secondaryBtn} url={secondaryBtnURL} />
     </div>
+    <dl class="mt-9 grid max-w-md grid-cols-3 gap-4 border-t border-neutral-300 pt-5 dark:border-neutral-700">
+      {proof.map(item => (
+        <div>
+          <dt class="sr-only">{item.label}</dt>
+          <dd class="font-display text-2xl font-bold text-neutral-900 tabular-nums dark:text-neutral-100">{item.value}</dd>
+          <dd class="mt-0.5 text-xs leading-snug text-neutral-600 dark:text-neutral-400">{item.label}</dd>
+        </div>
+      ))}
+    </dl>
   </div>
-  <div class="w-full" data-hero-visual>
+  <div class="w-full">
     <slot name="visual" />
   </div>
 </section>
+
+<style>
+  .typer-caret {
+    display: inline-block;
+    width: 0.08em;
+    height: 0.9em;
+    margin-left: 0.06em;
+    vertical-align: -0.08em;
+    background: currentColor;
+    animation: typer-blink 1s steps(1) infinite;
+  }
+  @keyframes typer-blink {
+    50% { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .typer-caret { animation: none; }
+  }
+</style>
+
+<script>
+  // Type, pause, erase, next phrase. Off under reduced motion.
+  document.querySelectorAll<HTMLElement>('[data-typer]').forEach(root => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const phrases: string[] = JSON.parse(root.dataset.typer!);
+    const out = root.querySelector<HTMLElement>('[data-typer-text]')!;
+    let index = 0;
+    let shown = phrases[0].length;
+    let erasing = true;
+    const tick = () => {
+      if (erasing) {
+        shown--;
+        if (shown <= 0) {
+          erasing = false;
+          index = (index + 1) % phrases.length;
+        }
+      } else {
+        shown++;
+      }
+      out.textContent = phrases[index].slice(0, Math.max(shown, 0));
+      let delay = erasing ? 28 : 55;
+      if (!erasing && shown >= phrases[index].length) {
+        erasing = true;
+        delay = 2200;
+      }
+      window.setTimeout(tick, delay);
+    };
+    window.setTimeout(tick, 2600);
+  });
+</script>

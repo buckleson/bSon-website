@@ -1,0 +1,287 @@
+---
+import { systems, type SystemName, type SystemNode, type SystemSpec } from '@data/systems';
+import { brand, lucide } from '@utils/glyphs';
+
+/**
+ * Animated system diagram. The nodes, icons and connections are rendered
+ * here as static SVG (readable without JavaScript); a small script then
+ * sends labelled packets along the connections, one numbered step at a time,
+ * so visitors can follow a transaction through the system. Blocked steps turn
+ * red and break apart at their last node. Static under reduced motion,
+ * paused offscreen.
+ */
+interface Props {
+  name: SystemName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const spec: SystemSpec = systems[name];
+
+const W = 900;
+const H = 420;
+const NW = 176;
+const NH = 64;
+const box = (n: SystemNode) => ({ x: 24 + n.col * 222, y: 30 + n.row * 150 });
+const byId = new Map(spec.nodes.map(n => [n.id, n]));
+
+type Rect = { x: number; y: number; w: number; h: number };
+const rects = spec.nodes.map(n => ({ id: n.id, ...box(n), w: NW, h: NH }));
+const hits = (x1: number, y1: number, x2: number, y2: number, skip: string[]) =>
+  rects.some(r => {
+    if (skip.includes(r.id)) return false;
+    const [lx, hx] = [Math.min(x1, x2), Math.max(x1, x2)];
+    const [ly, hy] = [Math.min(y1, y2), Math.max(y1, y2)];
+    return lx < r.x + r.w && hx > r.x && ly < r.y + r.h && hy > r.y;
+  });
+
+/** Straight line in a row or column, otherwise an L that avoids other nodes. */
+function route(fromId: string, toId: string): string {
+  const a = { ...box(byId.get(fromId)!), w: NW, h: NH } as Rect;
+  const b = { ...box(byId.get(toId)!), w: NW, h: NH } as Rect;
+  const acx = a.x + NW / 2, acy = a.y + NH / 2, bcx = b.x + NW / 2, bcy = b.y + NH / 2;
+  if (a.y === b.y) {
+    const [x1, x2] = bcx > acx ? [a.x + NW, b.x] : [a.x, b.x + NW];
+    return `M${x1},${acy} H${x2}`;
+  }
+  if (a.x === b.x) {
+    const [y1, y2] = bcy > acy ? [a.y + NH, b.y] : [a.y, b.y + NH];
+    return `M${acx},${y1} V${y2}`;
+  }
+  const skip = [fromId, toId];
+  // Horizontal first: leave A from its side, enter B from top/bottom.
+  const hx1 = bcx > acx ? a.x + NW : a.x;
+  const hy2 = bcy > acy ? b.y : b.y + NH;
+  if (!hits(hx1, acy, bcx, acy, skip) && !hits(bcx, acy, bcx, hy2, skip)) {
+    return `M${hx1},${acy} H${bcx} V${hy2}`;
+  }
+  // Vertical first: leave A from top/bottom, enter B from its side.
+  const vy1 = bcy > acy ? a.y + NH : a.y;
+  const vx2 = bcx > acx ? b.x : b.x + NW;
+  return `M${acx},${vy1} V${bcy} H${vx2}`;
+}
+
+const edges = spec.edges.map(([id, from, to]) => ({ id, from, to, d: route(from, to) }));
+const iconOf = (n: SystemNode) => (n.brand ? brand(n.brand) : undefined);
+const story = spec.steps.map(step => ({
+  path: step.path,
+  packet: step.packet,
+  blocked: step.blocked ?? false,
+  ends: step.path.map(id => {
+    const edge = edges.find(e => e.id === id.replace(/^-/, ''))!;
+    return id.startsWith('-') ? edge.from : edge.to;
+  }),
+  start: (() => {
+    const first = step.path[0];
+    const edge = edges.find(e => e.id === first.replace(/^-/, ''))!;
+    return first.startsWith('-') ? edge.to : edge.from;
+  })(),
+}));
+---
+
+<figure class:list={['sd grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-center', className]} data-system data-story={JSON.stringify(story)}>
+  <div class="sd-stage overflow-x-auto rounded-3xl">
+    <svg viewBox={`0 0 ${W} ${H}`} class="block w-full min-w-[640px]" role="img" aria-label={spec.title}>
+      <defs>
+        <marker id={`sd-arrow-${name}`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="sd-arrow" />
+        </marker>
+      </defs>
+      <g>
+        {edges.map(edge => (
+          <path class="sd-edge" data-edge={edge.id} d={edge.d} marker-end={`url(#sd-arrow-${name})`} />
+        ))}
+      </g>
+      <g>
+        {spec.nodes.map(node => {
+          const { x, y } = box(node);
+          const logo = iconOf(node);
+          return (
+            <g class:list={['sd-node', `sd-node--${node.tone ?? 'external'}`]} data-node={node.id} transform={`translate(${x},${y})`}>
+              <rect class="sd-ring" x="-5" y="-5" width={NW + 10} height={NH + 10} rx="18" />
+              <rect class="sd-card" width={NW} height={NH} rx="14" />
+              <circle class="sd-icon-bg" cx="32" cy="32" r="19" />
+              {logo ? (
+                logo.path ? (
+                  <svg x="21" y="21" width="22" height="22" viewBox="0 0 24 24" style={`color:#${logo.hex}`} class="sd-brand"><path d={logo.path} fill="currentColor" /></svg>
+                ) : (
+                  <text x="32" y="37" text-anchor="middle" class="sd-mono">{logo.monogram}</text>
+                )
+              ) : (
+                <svg x="21" y="21" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="sd-icon" set:html={lucide(node.icon!)} />
+              )}
+              <text x="60" y="29" class="sd-label">{node.label}</text>
+              <text x="60" y="46" class="sd-sub">{node.sub}</text>
+            </g>
+          );
+        })}
+      </g>
+      <g class="sd-packets"></g>
+    </svg>
+  </div>
+  <figcaption>
+    <p class="font-display text-lg font-semibold text-neutral-900 dark:text-neutral-100">{spec.title}</p>
+    <ol class="sd-steps mt-4 space-y-1.5">
+      {spec.steps.map((step, index) => (
+        <li data-step={index} class:list={['sd-step', step.blocked && 'sd-step--blocked']}>
+          <span class="sd-num">{index + 1}</span>
+          <span>{step.caption}</span>
+        </li>
+      ))}
+    </ol>
+  </figcaption>
+</figure>
+
+<style is:global>
+  .sd {
+    --sd-bg: #f7f6fb;
+    --sd-dot: #dedbe9;
+    --sd-card: #ffffff;
+    --sd-line: #cfcbdc;
+    --sd-text: #1c1a26;
+    --sd-muted: #5f5a70;
+    --sd-guard: #b45309;
+    --sd-guard-bg: #fff7e6;
+    --sd-ok: #047857;
+    --sd-bad: #c81e1e;
+  }
+  .dark .sd {
+    --sd-bg: #0b0f1a;
+    --sd-dot: #1f2533;
+    --sd-card: #151a25;
+    --sd-line: #2e3546;
+    --sd-text: #eef0f6;
+    --sd-muted: #a1a7b6;
+    --sd-guard: #fbbf24;
+    --sd-guard-bg: #2a2113;
+    --sd-ok: #34d399;
+    --sd-bad: #f87171;
+  }
+  .sd-stage {
+    background-color: var(--sd-bg);
+    background-image: radial-gradient(var(--sd-dot) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    box-shadow: inset 0 0 0 1px var(--sd-line);
+  }
+  .sd-edge { fill: none; stroke: var(--sd-line); stroke-width: 2; transition: stroke 300ms; }
+  .sd-arrow { fill: var(--sd-line); }
+  .sd-edge.is-live { stroke: var(--accent-500); stroke-dasharray: 6 6; animation: sd-flow 0.6s linear infinite; }
+  @keyframes sd-flow { to { stroke-dashoffset: -12; } }
+  .sd-card { fill: var(--sd-card); stroke: var(--sd-line); stroke-width: 1.5; }
+  .sd-icon-bg { fill: color-mix(in oklab, var(--sd-muted) 12%, transparent); }
+  .sd-icon { color: var(--sd-muted); }
+  .sd-mono { fill: var(--sd-text); font-size: 13px; font-weight: 700; }
+  .sd-label { fill: var(--sd-text); font-size: 13.5px; font-weight: 650; font-family: var(--font-display); }
+  .sd-sub { fill: var(--sd-muted); font-size: 11px; }
+  .sd-node--chain .sd-card { stroke: var(--accent-500); fill: color-mix(in oklab, var(--accent-500) 8%, var(--sd-card)); }
+  .sd-node--chain .sd-icon-bg { fill: var(--accent-600); }
+  .sd-node--chain .sd-icon { color: #fff; }
+  .sd-node--guard .sd-card { stroke: var(--sd-guard); fill: var(--sd-guard-bg); }
+  .sd-node--guard .sd-icon-bg { fill: color-mix(in oklab, var(--sd-guard) 18%, transparent); }
+  .sd-node--guard .sd-icon { color: var(--sd-guard); }
+  .sd-ring { fill: none; stroke: var(--accent-500); stroke-width: 2; opacity: 0; transition: opacity 250ms; }
+  .sd-node.is-lit .sd-ring { opacity: 0.9; }
+  .sd-node.is-blocked .sd-ring { stroke: var(--sd-bad); opacity: 1; }
+  .sd-packet-pill { fill: var(--sd-ok); }
+  .sd-packet.is-bad .sd-packet-pill { fill: var(--sd-bad); }
+  .sd-packet-text { fill: #fff; font-size: 11.5px; font-weight: 700; }
+  .dark .sd-packet-text { fill: #06120d; }
+  .dark .sd-packet.is-bad .sd-packet-text { fill: #1a0606; }
+  .sd-step { display: flex; gap: 0.6rem; align-items: baseline; border-radius: 0.75rem; padding: 0.45rem 0.6rem; font-size: 0.875rem; line-height: 1.4; color: var(--sd-muted); transition: background-color 250ms, color 250ms; }
+  .sd-num { flex: none; display: inline-grid; place-items: center; width: 1.35rem; height: 1.35rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; background: color-mix(in oklab, var(--sd-muted) 14%, transparent); color: var(--sd-text); }
+  .sd-step.is-active { background: color-mix(in oklab, var(--accent-500) 12%, transparent); color: var(--sd-text); }
+  .sd-step.is-active .sd-num { background: var(--accent-600); color: #fff; }
+  .sd-step--blocked.is-active { background: color-mix(in oklab, var(--sd-bad) 12%, transparent); }
+  .sd-step--blocked.is-active .sd-num { background: var(--sd-bad); }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  type Step = { path: string[]; packet: string; blocked: boolean; ends: string[]; start: string };
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function init(root: HTMLElement) {
+    const story: Step[] = JSON.parse(root.dataset.story!);
+    const svg = root.querySelector('svg')!;
+    const layer = svg.querySelector('.sd-packets')!;
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const node = (id: string) => svg.querySelector<SVGGElement>(`[data-node="${id}"]`);
+    const edge = (id: string) => svg.querySelector<SVGPathElement>(`[data-edge="${id.replace(/^-/, '')}"]`)!;
+    const flash = (id: string, cls: string, ms = 900) => {
+      const el = node(id);
+      if (!el) return;
+      el.classList.add(cls);
+      window.setTimeout(() => el.classList.remove(cls), ms);
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const tl = gsap.timeline({ repeat: -1, paused: true });
+    story.forEach((step, index) => {
+      const at = tl.duration();
+      const g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'sd-packet');
+      g.setAttribute('opacity', '0');
+      const width = step.packet.length * 7 + 22;
+      const pill = document.createElementNS(NS, 'rect');
+      Object.entries({ class: 'sd-packet-pill', x: -width / 2, y: -12, width, height: 24, rx: 12 }).forEach(([k, v]) => pill.setAttribute(k, String(v)));
+      const text = document.createElementNS(NS, 'text');
+      Object.entries({ class: 'sd-packet-text', x: 0, y: 4, 'text-anchor': 'middle' }).forEach(([k, v]) => text.setAttribute(k, String(v)));
+      text.textContent = step.packet;
+      g.append(pill, text);
+      layer.append(g);
+
+      const place = (p: DOMPoint) => g.setAttribute('transform', `translate(${p.x},${p.y})`);
+      tl.call(() => {
+        steps.forEach((li, i) => li.classList.toggle('is-active', i === index));
+        g.classList.remove('is-bad');
+        text.textContent = step.packet;
+        flash(step.start, 'is-lit');
+      }, [], at);
+      tl.set(g, { opacity: 1, scale: 1, svgOrigin: '0 0' }, at);
+
+      let t = at;
+      step.path.forEach((id, leg) => {
+        const path = edge(id);
+        const length = path.getTotalLength();
+        const reverse = id.startsWith('-');
+        const progress = { v: 0 };
+        const duration = Math.max(0.7, length / 260);
+        tl.call(() => path.classList.add('is-live'), [], t);
+        tl.to(progress, {
+          v: 1,
+          duration,
+          ease: 'power1.inOut',
+          onUpdate: () => place(path.getPointAtLength((reverse ? 1 - progress.v : progress.v) * length)),
+        }, t);
+        t += duration;
+        tl.call(() => {
+          path.classList.remove('is-live');
+          if (!(step.blocked && leg === step.path.length - 1)) flash(step.ends[leg], 'is-lit');
+        }, [], t);
+      });
+
+      if (step.blocked) {
+        const last = step.ends[step.ends.length - 1];
+        tl.call(() => {
+          g.classList.add('is-bad');
+          text.textContent = 'Blocked';
+          flash(last, 'is-blocked', 1200);
+        }, [], t);
+        tl.to(g, { duration: 0.5 }, t);
+        tl.to(g, { opacity: 0, duration: 0.35, ease: 'power2.in', attr: {} }, t + 0.5);
+        tl.to(pill, { attr: { width: width * 1.6, x: (-width * 1.6) / 2 }, duration: 0.35 }, t + 0.5);
+        t += 0.9;
+      } else {
+        tl.to(g, { opacity: 0, duration: 0.3 }, t + 0.35);
+        t += 0.7;
+      }
+      tl.to({}, { duration: 0.35 }, t);
+    });
+
+    new IntersectionObserver(([entry]) => (entry.isIntersecting ? tl.play() : tl.pause()), { threshold: 0.2 }).observe(root);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-system]').forEach(init);
+</script>

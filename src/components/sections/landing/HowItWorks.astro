@@ -1,0 +1,70 @@
+---
+import Glyph from '@components/ui/Glyph.astro';
+import SystemDiagram from '@components/ui/SystemDiagram.astro';
+import type { SystemName } from '@data/systems';
+
+/** Tabbed animated system diagrams: pick a flow, watch it run. */
+interface Props {
+  title: string;
+  subTitle: string;
+  tabs: { label: string; icon: string; system: SystemName }[];
+}
+
+const { title, subTitle, tabs } = Astro.props;
+---
+
+<section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16" data-how>
+  <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+    <div class="max-w-2xl">
+      <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100">{title}</h2>
+      <p class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">{subTitle}</p>
+    </div>
+    <div role="tablist" aria-label={title} class="flex flex-wrap gap-2 rounded-2xl bg-neutral-200/70 p-1.5 dark:bg-neutral-900">
+      {tabs.map((tab, index) => (
+        <button
+          type="button"
+          role="tab"
+          id={`how-tab-${tab.system}`}
+          aria-controls={`how-panel-${tab.system}`}
+          aria-selected={index === 0 ? 'true' : 'false'}
+          class="how-tab inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold text-neutral-600 transition aria-selected:bg-white aria-selected:text-neutral-900 aria-selected:shadow-sm dark:text-neutral-400 dark:aria-selected:bg-neutral-800 dark:aria-selected:text-neutral-100"
+        >
+          <Glyph icon={tab.icon} class="size-4" />
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  </div>
+  <div class="mt-8" data-reveal>
+    {tabs.map((tab, index) => (
+      <div role="tabpanel" id={`how-panel-${tab.system}`} aria-labelledby={`how-tab-${tab.system}`} hidden={index !== 0}>
+        <SystemDiagram name={tab.system} />
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-how]').forEach(root => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (tab: HTMLButtonElement) => {
+      tabs.forEach(other => {
+        const on = other === tab;
+        other.setAttribute('aria-selected', String(on));
+        other.tabIndex = on ? 0 : -1;
+        root.querySelector<HTMLElement>(`#${other.getAttribute('aria-controls')}`)!.hidden = !on;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.tabIndex = index === 0 ? 0 : -1;
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', event => {
+        const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+        if (!step) return;
+        const next = tabs[(index + step + tabs.length) % tabs.length];
+        select(next);
+        next.focus();
+      });
+    });
+  });
+</script>

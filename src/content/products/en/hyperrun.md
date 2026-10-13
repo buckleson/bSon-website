@@ -10,10 +10,13 @@ summary: |
 diagram: 'hyperrun'
 features:
   - title: 'Earn by playing'
+    icon: 'gamepad-2'
     subTitle: 'Players earn through gameplay and wins.'
   - title: 'In-game predictions'
+    icon: 'trending-up'
     subTitle: 'Predict matches and players, and earn when you are right.'
   - title: 'Player sponsorship'
+    icon: 'handshake'
     subTitle: 'Skilled gamers get sponsored through other players'' predictions on them.'
 details:
   title: 'How it stays fair'

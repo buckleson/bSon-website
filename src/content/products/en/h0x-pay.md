@@ -10,10 +10,13 @@ summary: |
 diagram: 'h0xpay'
 features:
   - title: 'Investment plans'
+    icon: 'piggy-bank'
     subTitle: 'Set a plan once, for example a small percentage of every payment, and your portfolio grows as you spend.'
   - title: 'Tokenized assets'
+    icon: 'gem'
     subTitle: 'Start with tokenized gold, then index funds, tokenized stocks and bonds.'
   - title: 'Crypto payments'
+    icon: 'qr-code'
     subTitle: 'Pay and get paid with links, QR codes and invoices, settled on Hyper 0X.'
 details:
   title: 'Roadmap'

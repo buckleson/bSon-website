@@ -2,7 +2,10 @@
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import SecondaryCTA from '@components/ui/buttons/SecondaryCTA.astro';
 import Diagram from '@components/ui/Diagram.astro';
+import SystemDiagram from '@components/ui/SystemDiagram.astro';
+import type { SystemName } from '@data/systems';
 import Icon from '@components/ui/icons/Icon.astro';
+import Glyph from '@components/ui/Glyph.astro';
 import PromptShieldAnimation from '@components/sections/landing/PromptShieldAnimation.astro';
 import type { CollectionEntry } from 'astro:content';
 import { localePath } from '@utils/locale';
@@ -24,7 +27,7 @@ const href = (url: string) => localePath('en', url);
 
 <section class="mx-auto max-w-[85rem] px-4 pt-12 pb-10 sm:px-6 lg:px-8 lg:pt-20">
   <div class="max-w-3xl" data-reveal>
-    <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
+    <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl dark:text-neutral-100">
       {data.title}
       {soon && (
         <span class="ms-2 inline-block translate-y-[-0.4em] rounded-full bg-orange-100 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-orange-800 dark:bg-orange-950 dark:text-orange-200">
@@ -32,10 +35,10 @@ const href = (url: string) => localePath('en', url);
         </span>
       )}
     </h1>
-    <p class="mt-4 text-xl font-medium text-pretty text-neutral-700 dark:text-neutral-300">
+    <p class="mt-3 text-lg font-medium text-pretty text-neutral-700 dark:text-neutral-300">
       {data.tagline}
     </p>
-    <p class="mt-4 max-w-[65ch] text-lg leading-relaxed text-pretty text-neutral-600 dark:text-neutral-400">
+    <p class="mt-3 max-w-[62ch] text-base leading-relaxed text-pretty text-neutral-600 dark:text-neutral-400">
       {data.summary}
     </p>
     <div class="mt-8 flex flex-wrap gap-3">
@@ -44,8 +47,15 @@ const href = (url: string) => localePath('en', url);
     </div>
   </div>
 
-  <div id="architecture" class="mt-14 scroll-mt-28" data-reveal>
-    <Diagram name={data.diagram} eager caption={`How ${data.title} works. Select the diagram to open it full size.`} />
+  <div id="architecture" class="mt-12 scroll-mt-28" data-reveal>
+    <SystemDiagram name={data.diagram as SystemName} />
+    <details class="group mt-6">
+      <summary class="inline-flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-orange-700 dark:text-orange-300">
+        <Icon name="chevronDown" class="size-4 transition group-open:rotate-180" />
+        Full architecture diagram
+      </summary>
+      <Diagram name={data.diagram} class="mt-4" caption={`${data.title} architecture. Select the diagram to open it full size.`} />
+    </details>
   </div>
 </section>
 
@@ -67,11 +77,18 @@ const href = (url: string) => localePath('en', url);
   <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 lg:text-4xl dark:text-neutral-100" data-reveal>
     {soon ? 'What it will do' : 'What you get'}
   </h2>
-  <dl class="mt-10 grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+  <dl class="mt-8 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
     {data.features.map(feature => (
-      <div class="border-t-2 border-orange-500/70 pt-5" data-reveal-item>
-        <dt class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{feature.title}</dt>
-        <dd class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">{feature.subTitle}</dd>
+      <div class="flex gap-4" data-reveal-item>
+        {feature.icon && (
+          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+            <Glyph icon={feature.icon} class="size-5" />
+          </span>
+        )}
+        <div>
+          <dt class="font-semibold text-neutral-900 dark:text-neutral-100">{feature.title}</dt>
+          <dd class="mt-1 text-sm text-pretty text-neutral-600 dark:text-neutral-400">{feature.subTitle}</dd>
+        </div>
       </div>
     ))}
   </dl>
