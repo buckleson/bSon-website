@@ -304,7 +304,7 @@ export const en = {
         content:
           'We do not just hand over software. Our engineers work inside your stack to connect Hyper 0X with your systems, public chains, bank DLTs and APIs, from pilot to production.',
         points: ['Scoped pilot first', 'Success metrics agreed up front', 'Support through production'],
-        diagram: 'platform',
+        diagram: 'hyper0x',
       },
     ],
   },

@@ -13,14 +13,16 @@ import { glyph } from '@utils/glyphs';
 interface Props {
   product: 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
   class?: string;
+  /** Fill a positioned parent instead of sizing itself. */
+  fill?: boolean;
 }
 
-const { product, class: className } = Astro.props;
+const { product, class: className, fill = false } = Astro.props;
 const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =>
   `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 256 256" class="${cls}">${glyph(name)}</svg>`;
 ---
 
-<div class:list={['pa relative overflow-hidden rounded-[inherit] bg-[#0e1014]', className]} role="img" aria-label={`${product} animation`}>
+<div class:list={['pa overflow-hidden rounded-[inherit] bg-[#0e1014]', fill ? 'absolute inset-0' : 'relative', className]} role="img" aria-label={`${product} animation`}>
   <svg viewBox="0 0 400 260" class="block h-full w-full" preserveAspectRatio="xMidYMid slice">
     <defs>
       <pattern id={`pa-grid-${product}`} width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#23272f" /></pattern>

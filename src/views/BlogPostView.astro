@@ -74,7 +74,7 @@ const related = others
     {data.diagram ? (
       <Diagram name={data.diagram} class="mt-10" />
     ) : (
-      <div class="relative mt-10 overflow-hidden rounded-[1.6rem] pt-[52%] ring-1 ring-line"><BlogCover seed={slugOf(post)} label={data.tags[0] ?? ''} fill /></div>
+      <div class="relative mt-10 overflow-hidden rounded-[1.6rem] pt-[52%] ring-1 ring-line"><BlogCover seed={slugOf(post)} label="" fill /></div>
     )}
 
     <div class="prose prose-lg prose-neutral dark:prose-invert prose-headings:font-semibold mt-10 max-w-none text-pretty prose-headings:tracking-tight prose-a:text-orange-700 prose-a:decoration-orange-300 prose-a:underline-offset-4 dark:prose-a:text-orange-300 dark:prose-a:decoration-orange-700">
