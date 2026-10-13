@@ -343,9 +343,11 @@ const shield = lucide('shield-check');
         const target = goodCount++ % dstRoutes.length;
         const d = dstRoutes[target];
         const mid = { t: 0 }, leg2 = { t: 0 };
+        // Stop just short of the card so the pill stays visible.
+        const stop = L.dir === 'h' ? { x: d.b.x - 32, y: d.b.y } : { x: d.b.x, y: d.b.y - 14 };
         tl.call(() => { text.textContent = 'Clean'; }, [], s + 1.5)
           .fromTo(mid, { t: 0 }, { t: 1, duration: 0.35, ease: 'none', onUpdate: () => place({ x: r.e.x + (d.x.x - r.e.x) * mid.t, y: r.e.y + (d.x.y - r.e.y) * mid.t }) }, s + 1.5)
-          .fromTo(leg2, { t: 0 }, { t: 1, duration: 1.1, ease: 'power1.out', onUpdate: () => place(quad(d.x, d.k, d.b, leg2.t)) }, s + 1.85)
+          .fromTo(leg2, { t: 0 }, { t: 1, duration: 1.1, ease: 'power1.out', onUpdate: () => place(quad(d.x, d.k, stop, leg2.t)) }, s + 1.85)
           .to(pkt, { opacity: 0, duration: 0.2 }, s + 2.95)
           .fromTo(pulses[target], { opacity: 0.9 }, { opacity: 0, duration: 0.8, ease: 'expo.out' }, s + 2.95)
           .call(log, [item], s + 2.95);

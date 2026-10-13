@@ -13,7 +13,7 @@ interface Props {
   [attribute: string]: unknown;
 }
 
-const { title, url, noArrow, ...rest } = Astro.props;
+const { title, url, noArrow, class: extraClass, ...rest } = Astro.props;
 
 
 const classes = [
@@ -28,7 +28,7 @@ const classes = [
 const Element = url ? 'a' : 'button';
 ---
 
-<Element class={classes} href={url} {...rest}>
+<Element class:list={[classes, extraClass as string | undefined]} href={url} {...rest}>
   {title}
   {noArrow ? null : (
     <Icon
