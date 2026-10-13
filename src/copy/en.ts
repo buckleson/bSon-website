@@ -299,6 +299,37 @@ export const en = {
     ],
   },
 
+  about: {
+    title: 'About',
+    seoTitle: 'About Buckleson: Our Vision and Story',
+    metaDescription:
+      'Buckleson is a blockchain infrastructure company. Read our story, why we built our own blockchain, Hyper 0X, and the vision behind our products and services.',
+    label: 'About Buckleson',
+    claim: 'We build the infrastructure',
+    payoff: 'money and AI can trust.',
+    story: {
+      label: 'Our story',
+      title: 'Why we own the whole stack, from consensus to the app in your hand.',
+      paragraphs: [
+        'Buckleson builds blockchain infrastructure and the products that run on it. We believe that if banks, fintechs and AI teams are going to trust a blockchain with real money and real decisions, someone has to own the whole stack.',
+        'So we built Hyper 0X, our own permissioned L1. Every customer gets a private L2, every transaction is final in one pass, and every connection is post-quantum-resistant.',
+        'Then we built on it ourselves. Hyper Wallet has processed more than 2 million transactions, and Pavii secures AI agents and has saved more than 100 million tokens.',
+        'Today we use the same foundation to build custom blockchains, tokenized assets, wallets and AI-agent security for our clients, with H0X Pay and HyperRun coming next.',
+      ],
+    },
+    stats: [
+      { value: '2M+', label: 'transactions through Hyper Wallet' },
+      { value: '33K+', label: 'portfolios managed' },
+      { value: '$128K+', label: 'saved by users in wallet fees' },
+      { value: '100M+', label: 'AI tokens saved by Pavii' },
+    ],
+    team: {
+      label: 'Team',
+      claim: 'Engineers, not',
+      payoff: 'generalists.',
+    },
+  },
+
   contact: {
     title: 'Contact',
     seoTitle: 'Contact Buckleson: Talk to a Blockchain Engineer',
