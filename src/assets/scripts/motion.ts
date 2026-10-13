@@ -16,10 +16,10 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 if (!reduced) {
   document.querySelectorAll<HTMLElement>('[data-words]').forEach(el => {
-    const split = SplitText.create(el, { type: 'words', wordsClass: 'word' });
+    const split = SplitText.create(el, { type: 'words', wordsClass: 'word', aria: 'none' });
     gsap.fromTo(
       split.words,
-      { opacity: 0.16 },
+      { opacity: 0.35 },
       {
         opacity: 1,
         ease: 'none',

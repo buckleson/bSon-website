@@ -1,0 +1,59 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import Glyph from '@components/ui/Glyph.astro';
+
+/**
+ * "How we work": four steps in a row, joined by a line that fills once as the
+ * row comes into view. Each step names its stage, what happens and the
+ * artifact the client gets.
+ */
+interface Props {
+  index: string;
+  label: string;
+  claim: string;
+  payoff: string;
+  body: string;
+  steps: { title: string; text: string; stage: string; artifact: string }[];
+}
+
+const { index, label, claim, payoff, body, steps } = Astro.props;
+const icons = ['chats-circle', 'flask', 'shield-check', 'rocket-launch'];
+---
+
+<section class="mx-auto max-w-[85rem] px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-28">
+  <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} />
+  <div class="relative mt-14" data-steps>
+    <span aria-hidden="true" class="absolute top-6 right-[12%] left-[12%] hidden h-0.5 rounded-full bg-line lg:block"></span>
+    <span aria-hidden="true" class="steps-fill absolute top-6 left-[12%] hidden h-0.5 w-[76%] origin-left rounded-full bg-orange-500 lg:block"></span>
+    <ol class="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+      {steps.map((step, i) => (
+        <li class="flex flex-col" data-reveal-item>
+          <span class="mx-auto grid size-12 place-items-center rounded-full bg-sheet text-white ring-8 ring-ground lg:mx-0"><Glyph icon={icons[i]} class="size-6" /></span>
+          <div class="mt-5 flex flex-1 flex-col rounded-[1.6rem] bg-card p-5 ring-1 ring-line">
+            <p class="text-sm font-medium text-orange-700 dark:text-orange-300">{step.stage}</p>
+            <h3 class="mt-1 text-xl font-semibold text-ink">{step.title}</h3>
+            <p class="mt-2 text-pretty text-muted">{step.text}</p>
+            <p class="mt-auto flex items-center gap-2 pt-5 text-sm font-medium text-ink"><Glyph icon="file-text" class="size-4 text-orange-600 dark:text-orange-400" />{step.artifact}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps-fill { transform: scaleX(0); transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s; }
+  .steps-fill.is-on { transform: scaleX(1); }
+  @media (prefers-reduced-motion: reduce) { .steps-fill { transition: none; transform: scaleX(1); } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-steps]').forEach(root => {
+    const fill = root.querySelector<HTMLElement>('.steps-fill')!;
+    new IntersectionObserver(([entry], observer) => {
+      if (!entry.isIntersecting) return;
+      fill.classList.add('is-on');
+      observer.disconnect();
+    }, { threshold: 0.35 }).observe(root);
+  });
+</script>

@@ -94,7 +94,7 @@ export const en = {
       lead: 'We build blockchains',
       phrases: ['for banks.', 'for asset issuers.', 'for fintechs.', 'for AI teams.'],
       intro:
-        'Buckleson is a blockchain infrastructure company. We built our own chain, Hyper 0X, and use it to launch custom blockchains, tokenized assets, wallets and AI-agent security.',
+        'Buckleson is a blockchain infrastructure company. On Hyper 0X, our own post-quantum-resistant chain, we build private blockchains, tokenized assets, wallets and security for AI agents.',
       primaryBtn: 'Book a call',
       secondaryBtn: 'See our products',
       counterLabel: 'transactions settled through Hyper Wallet',
@@ -103,15 +103,13 @@ export const en = {
     glanceIntro: {
       label: 'At a glance',
       statement:
-        'We own the chain we build on. So every product we ship and every client we serve gets the same foundation: final in one pass, private by default and built to last.',
-      quote: {
-        content:
-          '10x Technologies is running an enterprise pilot of the Hyper 0X blockchain-based AI training and inference module, validating our security architecture in a real-world environment.',
-        author: '10x Technologies',
-        role: 'Enterprise pilot',
+        'We own the chain we build on. Every product we ship and every client we serve gets the same base: settled once and never reversed, private by default, post-quantum-resistant.',
+      pilot: {
+        company: '10x Technologies',
+        text: 'Piloting the Hyper 0X blockchain-based AI training and inference module in a real enterprise environment.',
       },
     },
-    logos: 'Connects to',
+    logos: 'Works with',
     why: {
       label: 'Why Hyper 0X',
       claim: "Public chains don't fit banks.",
@@ -131,7 +129,7 @@ export const en = {
       label: 'Services',
       claim: 'Tell us what to put on-chain.',
       payoff: 'We build it with you.',
-      body: 'Four things we build for clients, each on its own private L2. Scroll to switch.',
+      body: 'Four things we build for clients, each on its own private L2.',
       items: [
         {
           id: 'custom-blockchains',
@@ -153,7 +151,7 @@ export const en = {
           id: 'wallets-exchanges',
           title: 'Wallets & exchanges',
           line: 'A branded wallet or exchange on rails already in production.',
-          included: ['20+ chains, non-custodial', 'Order book in consensus', 'Payments and gateway SDKs'],
+          included: ['BTC, ETH, SOL and more, non-custodial', 'Order book in consensus', 'Payments and gateway SDKs'],
           outcome: 'Built on 2M+ live transactions',
           mock: 'wallet',
         },
@@ -173,10 +171,10 @@ export const en = {
       payoff: 'to a live chain.',
       body: 'Small first, then production. You see results before you commit.',
       steps: [
-        { title: 'Discovery call', text: 'We learn your use case, your data and your rules.', stage: 'Scope' },
-        { title: 'Pilot on your L2', text: 'One use case, one engineer, success metrics agreed up front.', stage: 'Prove' },
-        { title: 'Security review', text: 'Compliance rules, keys and bridges are reviewed before launch.', stage: 'Harden' },
-        { title: 'Production', text: 'Your chain goes live, and we stay on to run and grow it.', stage: 'Run' },
+        { title: 'Discovery call', text: 'We learn your use case, your data and your rules.', stage: 'Scope', artifact: 'A one-page pilot scope' },
+        { title: 'Pilot on your L2', text: 'One use case, one engineer, success metrics agreed up front.', stage: 'Prove', artifact: 'A working L2 and explorer' },
+        { title: 'Security review', text: 'Compliance rules, keys and bridges are reviewed before launch.', stage: 'Harden', artifact: 'A signed-off review checklist' },
+        { title: 'Production', text: 'Your chain goes live, and we stay on to run and grow it.', stage: 'Run', artifact: 'A live chain with support' },
       ],
     },
     how: {
@@ -194,7 +192,12 @@ export const en = {
     vision: {
       label: 'Our vision',
       statement:
-        'Money, assets and AI decisions should run on infrastructure you can verify, not just trust. We are building that infrastructure, one chain and one product at a time.',
+        'Money, assets and AI decisions should run on records you can check for yourself. That is what we build.',
+      story: [
+        'We built our own blockchain, Hyper 0X, so we control its fees, roadmap and security model.',
+        'Then we built on it ourselves: Hyper Wallet has processed more than 2 million transactions, and Pavii secures AI agents in production.',
+        'Today the same foundation runs the private chains we build for banks, fintechs and asset issuers.',
+      ],
       cta: { title: 'Read our story', url: '/about/' },
     },
     glance: {

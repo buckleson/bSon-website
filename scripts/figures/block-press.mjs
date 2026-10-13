@@ -375,14 +375,14 @@ const plateBody = () =>
   k.plateHtml({
     fig: 'Fig 1',
     title: 'Hyper 0X block press',
-    hint: 'One stroke per block. It never comes back.',
+    hint: 'Each L2 sends one state root',
     readout: `block #${(FIRST_BLOCK).toLocaleString('en-US')} · L2 roots arriving`,
     keys: [
-      { mark: 'lit', label: 'Platen: one stroke seals the block, final in one pass' },
-      { mark: 'raised', label: 'Tokens: one state root from each private L2' },
+      { mark: 'lit', label: 'The press: seals each block once' },
+      { mark: 'raised', label: 'Tokens: one state root per private L2' },
     ],
     caption:
-      'Three private L2s (bank, fintech, AI) each hand over a state root. The press seals them into one block in a single stroke, and the block joins the shared ledger. Nothing is pressed twice and nothing is reordered.',
+      'Each private L2 (bank, fintech, AI) sends one state root. Hyper 0X seals them into one block that is never reordered or undone, and the block joins the shared ledger.',
     body: `<div class="iso-stage" data-figure="block-press" role="img" aria-label="Animated block press">${svg}</div>`,
   });
 

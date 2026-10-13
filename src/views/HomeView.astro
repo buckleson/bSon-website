@@ -2,11 +2,11 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import HomeHero from '@components/home/HomeHero.astro';
 import GlanceBento from '@components/home/GlanceBento.astro';
-import WhySection from '@components/home/WhySection.astro';
 import ProductsAccordion from '@components/home/ProductsAccordion.astro';
-import ServicesScroll from '@components/home/ServicesScroll.astro';
-import ProcessSticky from '@components/home/ProcessSticky.astro';
+import ServicesBento from '@components/home/ServicesBento.astro';
 import HowItWorks from '@components/sections/landing/HowItWorks.astro';
+import WhySection from '@components/home/WhySection.astro';
+import ProcessSteps from '@components/home/ProcessSteps.astro';
 import VisionSection from '@components/home/VisionSection.astro';
 import FaqTimeline from '@components/home/FaqTimeline.astro';
 import InsightsSection from '@components/home/InsightsSection.astro';
@@ -17,9 +17,9 @@ import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
 /**
- * Home: who we are (hero), proof at a glance, why we built our own chain,
- * products, services, how we work, a live system view, vision, FAQ,
- * insights and a closing call to action. One idea per section.
+ * Home, one idea per section: who we are (hero), proof at a glance, products,
+ * services, a live transaction, why we built our own chain, how we work,
+ * vision, FAQ, insights and a closing call to action.
  */
 interface Props {
   locale: MarketingLocale;
@@ -39,30 +39,25 @@ const over = 'relative z-[1] -mt-8 rounded-t-[2rem] bg-ground';
     intro={c.hero.intro}
     primary={{ title: c.hero.primaryBtn, url: BOOKING_URL }}
     secondary={{ title: c.hero.secondaryBtn, url: localePath(locale, '/products/') }}
-    counter={{ value: 2000000, label: c.hero.counterLabel }}
     chips={c.hero.chips}
   />
 
-  <GlanceBento label={c.glanceIntro.label} statement={c.glanceIntro.statement} quote={c.glanceIntro.quote} logosTitle={c.logos} />
+  <GlanceBento label={c.glanceIntro.label} statement={c.glanceIntro.statement} pilot={c.glanceIntro.pilot} logosTitle={c.logos} />
+  <ProductsAccordion index="01" {...c.products} />
+  <ServicesBento index="02" {...c.services} />
+  <HowItWorks index="03" {...c.how} tabs={c.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))} />
 
-  <WhySection {...c.why} />
+  <WhySection index="04" {...c.why} />
 
   <div class={over}>
-    <ProductsAccordion {...c.products} />
-    <ServicesScroll {...c.services} />
+    <ProcessSteps index="05" {...c.process} />
   </div>
 
-  <ProcessSticky {...c.process} />
+  <VisionSection index="06" {...c.vision} />
 
   <div class={over}>
-    <HowItWorks index="05" {...c.how} tabs={c.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))} />
-  </div>
-
-  <VisionSection {...c.vision} />
-
-  <div class={over}>
-    <FaqTimeline {...c.faq} faqs={t.data.faqs.faqs} />
-    <InsightsSection {...c.latestPosts} />
+    <FaqTimeline index="07" {...c.faq} faqs={t.data.faqs.faqs} />
+    <InsightsSection index="08" {...c.latestPosts} />
   </div>
 
   <FinalCta {...c.finalCta} />

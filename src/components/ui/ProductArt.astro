@@ -23,7 +23,7 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
 ---
 
 <div class:list={['pa overflow-hidden rounded-[inherit] bg-[#0e1014]', fill ? 'absolute inset-0' : 'relative', className]} role="img" aria-label={`${product} animation`}>
-  <svg viewBox="0 0 400 260" class="block h-full w-full" preserveAspectRatio="xMidYMid slice">
+  <svg viewBox="0 0 400 260" class="block h-full w-full" preserveAspectRatio={fill ? 'xMidYMid meet' : 'xMidYMid slice'}>
     <defs>
       <pattern id={`pa-grid-${product}`} width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#23272f" /></pattern>
     </defs>
@@ -73,7 +73,7 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
         <g class="pa-swap-a"><rect x="154" y="66" width="92" height="40" rx="10" class="pa-node" /><Fragment set:html={icon('currency-eth', 162, 76, 20)} /><text x="190" y="91" class="pa-t">0.5 ETH</text></g>
         <g class="pa-swap-b"><rect x="154" y="122" width="92" height="40" rx="10" class="pa-node" /><Fragment set:html={icon('currency-circle-dollar', 162, 132, 20)} /><text x="190" y="147" class="pa-t">1,250 USDC</text></g>
         <g class="pa-settled"><rect x="154" y="184" width="92" height="32" rx="10" class="pa-ok-bg" /><text x="200" y="204" text-anchor="middle" class="pa-t-ok">Settled · both legs</text></g>
-        <rect x="24" y="92" width="96" height="40" rx="12" class="pa-node" /><text x="72" y="117" text-anchor="middle" class="pa-t">20+ chains</text>
+        <rect x="24" y="92" width="96" height="40" rx="12" class="pa-node" /><text x="72" y="117" text-anchor="middle" class="pa-t">Many chains</text>
         <rect x="280" y="92" width="96" height="40" rx="12" class="pa-chain" /><text x="328" y="117" text-anchor="middle" class="pa-t-w">Hyper 0X</text>
       </g>
     )}

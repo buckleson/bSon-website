@@ -147,9 +147,9 @@
   --accent-200: oklch(0.894 0.057 293.283);
   --accent-300: oklch(0.811 0.111 293.571);
   --accent-400: oklch(0.702 0.183 293.541);
-  --accent-500: oklch(0.606 0.25 292.717);
-  --accent-600: oklch(0.541 0.281 293.009);
-  --accent-700: oklch(0.491 0.27 292.581);
+  --accent-500: oklch(0.6 0.21 292.717);
+  --accent-600: oklch(0.53 0.235 293.009);
+  --accent-700: oklch(0.48 0.22 292.581);
   --accent-800: oklch(0.432 0.232 292.759);
   --accent-900: oklch(0.38 0.189 293.745);
   --accent-950: oklch(0.283 0.141 291.089);
@@ -204,15 +204,13 @@
 .reveal-ready [data-reveal]:not(.is-revealed),
 .reveal-ready [data-reveal-item]:not(.is-revealed) {
   opacity: 0;
-  transform: translateY(18px);
-  filter: blur(6px);
+  transform: translateY(12px);
 }
 .reveal-ready [data-reveal],
 .reveal-ready [data-reveal-item] {
   transition:
-    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
-    filter 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
