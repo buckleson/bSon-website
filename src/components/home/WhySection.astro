@@ -1,0 +1,38 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import IsoFigure from '@components/ui/IsoFigure.astro';
+
+/**
+ * "Why Hyper 0X" on a dark sheet, explained by Fig 1, the block press: three
+ * private L2s hand over a state root each, the press seals them into one
+ * block in a single stroke, and the block joins the shared ledger.
+ */
+interface Props {
+  label: string;
+  claim: string;
+  payoff: string;
+  body: string;
+  facts: string[];
+}
+
+const { label, claim, payoff, body, facts } = Astro.props;
+---
+
+<section class="on-sheet relative rounded-t-[2rem] bg-sheet text-white">
+  <div class="mx-auto max-w-[85rem] px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-28">
+    <SectionHead index="01" label={label} claim={claim} payoff={payoff} body={body} tone="sheet" />
+
+    <div class="mx-auto mt-12 max-w-5xl" data-reveal>
+      <IsoFigure name="block-press" tone="sheet" />
+    </div>
+
+    <ul class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-sheet-line lg:grid-cols-4">
+      {facts.map(fact => (
+        <li class="flex items-center gap-3 bg-sheet px-5 py-4 text-sm font-medium text-white/85">
+          <Glyph icon="check-circle" class="size-5 shrink-0 text-orange-300" />{fact}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

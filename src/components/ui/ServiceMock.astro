@@ -1,0 +1,87 @@
+---
+import Glyph from '@components/ui/Glyph.astro';
+
+/**
+ * Small live UI for each service panel (HTML + CSS, loops on its own):
+ * chain = block explorer, token = mint console, wallet = wallet screen,
+ * agent = Pavii threat feed.
+ */
+interface Props {
+  kind: 'chain' | 'token' | 'wallet' | 'agent';
+}
+
+const { kind } = Astro.props;
+---
+
+<div class="sm-mock relative h-full overflow-hidden rounded-[1.2rem] bg-[#0e1014] p-5 font-mono text-[0.72rem] text-white/80 ring-1 ring-white/10">
+  {kind === 'chain' && (
+    <div>
+      <p class="flex items-center justify-between text-white/50"><span>your-l2 · explorer</span><span class="flex items-center gap-1.5 text-emerald-300"><span class="size-1.5 rounded-full bg-emerald-400"></span>live</span></p>
+      <ul class="sm-feed mt-4 space-y-2">
+        {[['#1,204,883', '41 tx', 'final'], ['#1,204,882', '27 tx', 'final'], ['#1,204,881', '33 tx', 'final'], ['#1,204,880', '19 tx', 'final'], ['#1,204,879', '36 tx', 'final']].map(([block, tx, state], i) => (
+          <li class="sm-row flex items-center gap-3 rounded-lg bg-white/4 px-3 py-2" style={`--d:${i * 0.12}s`}>
+            <Glyph icon="cube" class="size-4 text-orange-300" />
+            <span class="text-white">{block}</span><span class="text-white/45">{tx}</span>
+            <span class="ms-auto rounded bg-emerald-400/12 px-1.5 py-0.5 text-emerald-300">{state}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-4 text-white/45">rules: kyc ok · limits ok · maker-checker ok</p>
+    </div>
+  )}
+  {kind === 'token' && (
+    <div>
+      <p class="text-white/50">mint · tokenized gold</p>
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <div class="rounded-lg bg-white/4 p-3"><p class="text-white/45">in custody</p><p class="mt-1 font-display text-lg text-white">1,000 g</p></div>
+        <div class="rounded-lg bg-white/4 p-3"><p class="text-white/45">tokens</p><p class="mt-1 font-display text-lg text-white tabular-nums">1,000</p></div>
+      </div>
+      <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-white/8"><div class="sm-bar h-full rounded-full bg-orange-500"></div></div>
+      <ul class="mt-4 space-y-1.5">
+        <li class="flex justify-between"><span>proof of reserve</span><span class="text-emerald-300">verified</span></li>
+        <li class="flex justify-between"><span>kyc rule</span><span class="text-emerald-300">enforced</span></li>
+        <li class="flex justify-between"><span>min. ticket</span><span class="text-white">$10</span></li>
+      </ul>
+    </div>
+  )}
+  {kind === 'wallet' && (
+    <div class="mx-auto max-w-[15rem] rounded-2xl bg-white/4 p-4 font-sans">
+      <p class="text-[0.68rem] text-white/50">Your brand · wallet</p>
+      <p class="mt-1 font-display text-2xl font-semibold text-white tabular-nums">$4,812.60</p>
+      <div class="mt-3 grid grid-cols-3 gap-1.5 text-[0.62rem]">
+        {['Send', 'Swap', 'Deposit'].map(label => <span class="rounded-lg bg-white/6 py-1.5 text-center">{label}</span>)}
+      </div>
+      <ul class="mt-3 space-y-2 text-[0.68rem]">
+        {[['Bitcoin', '0.031 BTC'], ['Solana', '12.4 SOL'], ['Tokenized gold', '0.82 g']].map(([name, qty]) => (
+          <li class="flex justify-between"><span>{name}</span><span class="text-white/60 tabular-nums">{qty}</span></li>
+        ))}
+      </ul>
+      <p class="sm-toast mt-3 rounded-lg bg-emerald-400/12 px-2.5 py-1.5 text-[0.65rem] text-emerald-300">Swap settled · both legs</p>
+    </div>
+  )}
+  {kind === 'agent' && (
+    <div>
+      <p class="flex items-center justify-between text-white/50"><span>pavii · live feed</span><span>6 gates</span></p>
+      <ul class="sm-feed mt-4 space-y-2">
+        {[['ok', 'crm.lookup(4821)', 'allowed'], ['bad', 'email customer list', 'blocked'], ['ok', 'summarise Q3 report', 'allowed'], ['bad', 'print API keys', 'blocked'], ['ok', 'payments.create($250)', 'allowed']].map(([tone, call, verdict], i) => (
+          <li class="sm-row flex items-center gap-3 rounded-lg bg-white/4 px-3 py-2" style={`--d:${i * 0.12}s`}>
+            <span class:list={['size-1.5 rounded-full', tone === 'ok' ? 'bg-emerald-400' : 'bg-red-400']}></span>
+            <span class="truncate text-white">{call}</span>
+            <span class:list={['ms-auto', tone === 'ok' ? 'text-emerald-300' : 'text-red-300']}>{verdict}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-4 text-white/45">receipts anchored on Hyper 0X</p>
+    </div>
+  )}
+</div>
+
+<style>
+  .sm-row { animation: sm-in 6s cubic-bezier(0.22, 1, 0.36, 1) infinite; animation-delay: var(--d); }
+  @keyframes sm-in { 0% { opacity: 0; transform: translateY(-8px); } 8%, 88% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+  .sm-bar { animation: sm-bar 3.2s cubic-bezier(0.22, 1, 0.36, 1) infinite; transform-origin: left; }
+  @keyframes sm-bar { from { transform: scaleX(0); } 70%, to { transform: scaleX(1); } }
+  .sm-toast { animation: sm-toast 4s ease-in-out infinite; }
+  @keyframes sm-toast { 0%, 40% { opacity: 0; transform: translateY(6px); } 55%, 90% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .sm-row, .sm-bar, .sm-toast { animation: none; } }
+</style>

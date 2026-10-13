@@ -1,43 +1,70 @@
 ---
 import BrandLogo from '@components/BrandLogo.astro';
-import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import Glyph from '@components/ui/Glyph.astro';
 import { BOOKING_URL, SITE } from '@data/constants';
 import { footerColumns } from '@data/navigation';
 import { localePath } from '@utils/locale';
 
+/** Footer: who we are, link columns, and a giant wordmark lit by the cursor. */
 const { locale, copy: t } = Astro.locals;
 const year = new Date().getFullYear();
 ---
 
-<footer class="w-full border-t border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-  <div class="mx-auto w-full max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:pt-20">
-    <div class="grid gap-10 lg:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))]">
+<footer class="mt-auto px-2 pb-2 sm:px-3 sm:pb-3">
+  <div class="overflow-hidden rounded-[2rem] bg-card ring-1 ring-line">
+    <div class="mx-auto grid max-w-[85rem] gap-12 px-5 pt-14 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
       <div class="max-w-sm">
         <BrandLogo />
-        <p class="mt-4 text-pretty text-neutral-600 dark:text-neutral-400">{t.site.description}</p>
-        <div class="mt-6"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
+        <p class="mt-4 text-pretty text-muted">{t.site.description}</p>
+        <a href={BOOKING_URL} class="cta-pill mt-6"><span>Book a call</span><span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span></a>
       </div>
-      {footerColumns.map(column => (
-        <div>
-          <h2 class="font-semibold text-neutral-900 dark:text-neutral-100">{column.title}</h2>
-          <ul class="mt-4 space-y-3">
-            {column.links.map(link => (
-              <li>
-                <a
-                  href={localePath(locale, link.path)}
-                  class="text-neutral-600 transition hover:text-orange-700 dark:text-neutral-400 dark:hover:text-orange-300"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        {footerColumns.map(column => (
+          <div>
+            <p class="font-mono text-xs tracking-wide text-muted uppercase">{column.title}</p>
+            <ul class="mt-4 space-y-2.5">
+              {column.links.map(link => (
+                <li><a href={localePath(locale, link.path)} class="text-ink/80 transition hover:text-orange-700 dark:hover:text-orange-300">{link.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
-    <div class="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-neutral-200 pt-6 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-      <p>© {year} {SITE.title}. All rights reserved.</p>
-      <a href="mailto:vijay@buckleson.com" class="hover:text-orange-700 dark:hover:text-orange-300">vijay@buckleson.com</a>
+
+    <div class="wordmark relative mt-10 select-none px-3" data-wordmark aria-hidden="true">
+      <p class="font-display text-[clamp(4rem,19vw,17rem)] leading-[0.8] font-semibold tracking-[-0.06em] text-ink/9">Buckleson</p>
+      <p class="wordmark-lit absolute inset-x-3 top-0 font-display text-[clamp(4rem,19vw,17rem)] leading-[0.8] font-semibold tracking-[-0.06em] text-orange-500">Buckleson</p>
+    </div>
+
+    <div class="mx-auto flex max-w-[85rem] flex-wrap items-center justify-between gap-3 border-t border-line px-5 py-5 text-sm text-muted sm:px-8">
+      <p>© {year} {SITE.title}. Blockchain infrastructure, built on Hyper 0X.</p>
+      <span class="flex gap-5">
+        <a href="mailto:vijay@buckleson.com" class="hover:text-ink">vijay@buckleson.com</a>
+        <a href={localePath(locale, '/rss.xml')} class="hover:text-ink">RSS</a>
+      </span>
     </div>
   </div>
 </footer>
+
+<style>
+  /* A solid accent copy of the wordmark, revealed around the cursor. */
+  .wordmark-lit {
+    -webkit-mask-image: radial-gradient(circle 14rem at var(--x, 50%) var(--y, 160%), #000, transparent 70%);
+    mask-image: radial-gradient(circle 14rem at var(--x, 50%) var(--y, 160%), #000, transparent 70%);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-wordmark]').forEach(mark => {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    mark.addEventListener('pointermove', event => {
+      const r = mark.getBoundingClientRect();
+      mark.style.setProperty('--x', `${event.clientX - r.left}px`);
+      mark.style.setProperty('--y', `${event.clientY - r.top}px`);
+    });
+    mark.addEventListener('pointerleave', () => {
+      mark.style.setProperty('--y', '160%');
+    });
+  });
+</script>

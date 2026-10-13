@@ -1,0 +1,41 @@
+---
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import { localePath } from '@utils/locale';
+
+/**
+ * Section opener, after the reference grammar: a mono "(01) Label" tag, a
+ * two-line headline whose second line is the payoff (highlighted), and a
+ * short paragraph with an optional call to action beside it.
+ */
+interface Props {
+  index?: string;
+  label: string;
+  claim: string;
+  payoff: string;
+  body?: string;
+  cta?: { title: string; url: string };
+  tone?: 'ground' | 'sheet';
+  id?: string;
+}
+
+const { index, label, claim, payoff, body, cta, tone = 'ground', id } = Astro.props;
+const onSheet = tone === 'sheet';
+---
+
+<div class="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end">
+  <div>
+    <p class:list={['font-mono text-xs tracking-wide uppercase', onSheet ? 'text-white/60' : 'text-muted']} data-reveal>
+      {index && <span>({index}) </span>}{label}
+    </p>
+    <h2 id={id} class:list={['mt-4 text-4xl leading-[1.02] font-semibold sm:text-5xl lg:text-[3.3rem]', onSheet ? 'text-white' : 'text-ink']} data-reveal>
+      <span class="block">{claim}</span>
+      <span class="mark block w-fit">{payoff}</span>
+    </h2>
+  </div>
+  {(body || cta) && (
+    <div class="lg:pb-2" data-reveal>
+      {body && <p class:list={['max-w-[44ch] text-pretty', onSheet ? 'text-white/70' : 'text-muted']}>{body}</p>}
+      {cta && <div class="mt-5"><PrimaryCTA title={cta.title} url={localePath('en', cta.url)} /></div>}
+    </div>
+  )}
+</div>

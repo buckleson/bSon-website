@@ -1,0 +1,32 @@
+---
+import '@styles/iso.css';
+import kitSource from '../../../scripts/figures/kit/iso-kit.mjs?raw';
+
+/**
+ * An Anatomy isometric figure (built by scripts/figures/*.mjs). The figure's
+ * markup and its live script are generated files; the kit runtime is inlined
+ * once per figure so the live script can call `translateAlong`, `cylinder`
+ * and `solidSvg` while animating.
+ * `tone="sheet"` blends the card into a dark section; `auto` follows the theme.
+ */
+interface Props {
+  name: 'block-press';
+  tone?: 'sheet' | 'auto';
+  class?: string;
+}
+
+const { name, tone = 'auto', class: className } = Astro.props;
+const html = import.meta.glob('../home/figures/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const live = import.meta.glob('../home/figures/*.live.js', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const markup = html[`../home/figures/${name}.html`];
+const script = live[`../home/figures/${name}.live.js`];
+const kit = kitSource.replace(/^export /gm, '');
+// Wrap the kit and the live code in a block so two figures on a page don't
+// redeclare each other's top-level names.
+// The kit contains literal script tags (its page builder); escape them so the
+// inline script isn't cut short.
+const code = `{\n${kit}\n${script}\n}`.replace(/<\/(script)/gi, '<\\/$1');
+---
+
+<div class:list={['iso', tone === 'sheet' ? 'iso-sheet' : 'iso-auto', className]} set:html={markup} />
+<script type="module" is:inline set:html={code} />

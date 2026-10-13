@@ -1,0 +1,110 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import Glyph from '@components/ui/Glyph.astro';
+
+/**
+ * "How we work" on a dark sheet. Desktop pins the section while the four
+ * steps activate one by one; the pipeline on the right fills stage by stage.
+ * Phones get a plain numbered list.
+ */
+interface Props {
+  label: string;
+  claim: string;
+  payoff: string;
+  body: string;
+  steps: { title: string; text: string; stage: string }[];
+}
+
+const { label, claim, payoff, body, steps } = Astro.props;
+const icons = ['chats-circle', 'flask', 'shield-check', 'rocket-launch'];
+---
+
+<section class="on-sheet relative rounded-t-[2rem] bg-sheet text-white" data-process style={`--count:${steps.length}`}>
+  <div class="mx-auto max-w-[85rem] px-4 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+    <SectionHead index="04" label={label} claim={claim} payoff={payoff} body={body} tone="sheet" />
+  </div>
+
+  <div class="proc-track hidden lg:block">
+    <div class="sticky top-20 mx-auto grid h-[calc(100dvh-6rem)] max-h-[40rem] max-w-[85rem] grid-cols-2 items-center gap-12 px-4 sm:px-6 lg:px-8">
+      <ol class="space-y-2">
+        {steps.map((step, index) => (
+          <li class="proc-step rounded-2xl border border-transparent p-5 transition" data-step={index}>
+            <p class="flex items-baseline gap-4">
+              <span class="proc-num font-mono text-sm text-white/40">0{index + 1}</span>
+              <span class="text-2xl font-semibold">{step.title}</span>
+            </p>
+            <p class="proc-text mt-2 ps-9 text-white/60">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="rounded-[1.6rem] bg-sheet-card p-7 ring-1 ring-sheet-line">
+        <p class="flex items-center justify-between font-mono text-xs text-white/50 uppercase">
+          <span>Your chain</span><span data-proc-status>Scope</span>
+        </p>
+        <ul class="mt-6 space-y-3">
+          {steps.map((step, index) => (
+            <li class="proc-stage relative overflow-hidden rounded-2xl bg-white/4 ring-1 ring-white/8" data-stage={index}>
+              <span class="proc-fill absolute inset-0 origin-left bg-orange-600/90 dark:bg-orange-700/90"></span>
+              <span class="relative flex items-center gap-4 px-5 py-4">
+                <span class="grid size-10 place-items-center rounded-xl bg-white/10"><Glyph icon={icons[index]} class="size-5" /></span>
+                <span class="flex-1">
+                  <span class="block font-semibold">{step.stage}</span>
+                  <span class="block text-sm text-white/60">{step.title}</span>
+                </span>
+                <Glyph icon="check-circle" class="proc-check size-6" />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <ol class="mx-auto grid max-w-[85rem] gap-3 px-4 pt-10 pb-20 sm:px-6 lg:hidden">
+    {steps.map((step, index) => (
+      <li class="flex gap-4 rounded-2xl bg-sheet-card p-5 ring-1 ring-sheet-line" data-reveal>
+        <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-orange-600 text-white dark:bg-orange-700"><Glyph icon={icons[index]} class="size-5" /></span>
+        <span><span class="block font-semibold">{step.title}</span><span class="mt-1 block text-sm text-white/65">{step.text}</span></span>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .proc-track { height: calc(var(--count) * 40vh + 40vh); }
+  .proc-step.is-on { border-color: rgb(255 255 255 / 0.12); background: rgb(255 255 255 / 0.04); }
+  .proc-step.is-on .proc-num { color: var(--accent-300); }
+  .proc-text { opacity: 0.5; transition: opacity 300ms ease; }
+  .proc-step.is-on .proc-text { opacity: 1; }
+  .proc-fill { transform: scaleX(0); transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .proc-stage.is-done .proc-fill { transform: scaleX(1); }
+  .proc-check { opacity: 0; transition: opacity 300ms ease 300ms; }
+  .proc-stage.is-done .proc-check { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .proc-fill, .proc-text, .proc-check { transition: none; } }
+</style>
+
+<script>
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { gsap } from 'gsap';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll<HTMLElement>('[data-process]').forEach(root => {
+    const track = root.querySelector<HTMLElement>('.proc-track')!;
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const stages = [...root.querySelectorAll<HTMLElement>('[data-stage]')];
+    const status = root.querySelector<HTMLElement>('[data-proc-status]')!;
+    const set = (index: number) => {
+      steps.forEach((s, i) => s.classList.toggle('is-on', i === index));
+      stages.forEach((s, i) => s.classList.toggle('is-done', i <= index));
+      status.textContent = stages[index].querySelector('.font-semibold')?.textContent ?? '';
+    };
+    set(0);
+    ScrollTrigger.create({
+      trigger: track,
+      start: 'top top+=80',
+      end: 'bottom bottom',
+      onUpdate: self => set(Math.min(steps.length - 1, Math.floor(self.progress * steps.length))),
+    });
+  });
+</script>

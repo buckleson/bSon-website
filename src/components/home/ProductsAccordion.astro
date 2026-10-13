@@ -1,0 +1,105 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import ProductArt from '@components/ui/ProductArt.astro';
+import { entriesFor, pathFor, slugOf } from '@utils/content';
+
+/**
+ * Products as a horizontal accordion (desktop): hover, focus or click a
+ * collapsed tab to open it. The open panel shows what the product is, its
+ * top features and its animated scene. Phones get stacked cards.
+ */
+interface Props {
+  label: string;
+  claim: string;
+  payoff: string;
+  body: string;
+  cta: { title: string; url: string };
+}
+
+const { label, claim, payoff, body, cta } = Astro.props;
+const products = await entriesFor('products', 'en');
+type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
+const fills = ['bg-sheet text-white', 'bg-card text-ink ring-1 ring-line', 'bg-orange-600 text-white dark:bg-orange-700', 'bg-card text-ink ring-1 ring-line', 'bg-sheet text-white'];
+---
+
+<section class="mx-auto max-w-[85rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28" id="products">
+  <SectionHead index="02" label={label} claim={claim} payoff={payoff} body={body} cta={cta} />
+
+  <div class="mt-12 hidden h-[31rem] gap-3 lg:flex" data-accordion>
+    {products.map((product, index) => {
+      const soon = product.data.status === 'coming-soon';
+      return (
+        <article class:list={['acc-panel relative overflow-hidden rounded-[1.6rem]', index === 0 && 'is-open', soon ? 'border border-dashed border-ink/25 bg-transparent text-ink' : fills[index]]} data-panel>
+          <button type="button" class="acc-tab absolute inset-0 z-10 flex flex-col items-center justify-between py-6" aria-expanded={index === 0 ? 'true' : 'false'} aria-label={`Show ${product.data.title}`} data-tab>
+            <span class="font-mono text-xs opacity-70">0{index + 1}</span>
+            <span class="acc-vertical font-display text-lg font-semibold whitespace-nowrap">{product.data.title}</span>
+            <span class="grid size-8 place-items-center rounded-full bg-current/10"><Glyph icon="plus" class="size-4" /></span>
+          </button>
+          <div class="acc-body grid h-full grid-cols-[minmax(0,5fr)_minmax(0,6fr)] gap-6 p-7">
+            <div class="flex flex-col">
+              <p class="font-mono text-xs opacity-70">0{index + 1} {soon && '· Coming soon'}</p>
+              <h3 class="mt-3 text-3xl font-semibold">{product.data.title}</h3>
+              <p class="mt-2 font-medium opacity-90">{product.data.tagline}</p>
+              <ul class="mt-6 space-y-2.5 text-sm">
+                {product.data.features.slice(0, 3).map(feature => (
+                  <li class="flex items-center gap-2.5">
+                    <span class="grid size-7 shrink-0 place-items-center rounded-lg bg-current/10">{feature.icon ? <Glyph icon={feature.icon} class="size-4" /> : <Glyph icon="check" class="size-4" />}</span>
+                    {feature.title}
+                  </li>
+                ))}
+              </ul>
+              <a href={pathFor(product)} class="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-current/10 px-4 py-2 text-sm font-semibold hover:bg-current/15">
+                Explore {product.data.title}<Glyph icon="arrow-right" class="size-4" />
+              </a>
+            </div>
+            <div class="self-center overflow-hidden rounded-[1.2rem] ring-1 ring-white/10">
+              <ProductArt product={slugOf(product) as Art} class="aspect-[400/260]" />
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+  <div class="mt-10 grid gap-4 lg:hidden">
+    {products.map(product => (
+      <a href={pathFor(product)} class="overflow-hidden rounded-[1.6rem] bg-card ring-1 ring-line" data-reveal>
+        <ProductArt product={slugOf(product) as Art} class="aspect-[400/220]" />
+        <div class="p-5">
+          <p class="flex items-center gap-2 text-xl font-semibold text-ink">{product.data.title}{product.data.status === 'coming-soon' && <span class="rounded-md bg-orange-100 px-1.5 py-0.5 text-xs font-semibold text-orange-800 dark:bg-orange-950 dark:text-orange-200">Soon</span>}</p>
+          <p class="mt-1 text-sm text-muted">{product.data.tagline}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .acc-panel { flex: 0 0 5.5rem; transition: flex-grow 600ms cubic-bezier(0.22, 1, 0.36, 1), flex-basis 600ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .acc-panel.is-open { flex: 1 1 0; }
+  .acc-panel.is-open .acc-tab { opacity: 0; pointer-events: none; }
+  .acc-body { opacity: 0; visibility: hidden; transform: translateY(10px); min-width: 44rem; transition: opacity 300ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .acc-panel.is-open .acc-body { opacity: 1; visibility: visible; transform: none; transition-delay: 200ms; }
+  .acc-vertical { writing-mode: vertical-rl; transform: rotate(180deg); }
+  @media (prefers-reduced-motion: reduce) { .acc-panel, .acc-body { transition: none; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-accordion]').forEach(root => {
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const open = (panel: HTMLElement) => {
+      panels.forEach(p => {
+        const on = p === panel;
+        p.classList.toggle('is-open', on);
+        p.querySelector('[data-tab]')!.setAttribute('aria-expanded', String(on));
+      });
+    };
+    panels.forEach(panel => {
+      const tab = panel.querySelector<HTMLElement>('[data-tab]')!;
+      tab.addEventListener('click', () => open(panel));
+      tab.addEventListener('focus', () => open(panel));
+      panel.addEventListener('mouseenter', () => open(panel));
+    });
+  });
+</script>

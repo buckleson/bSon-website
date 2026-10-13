@@ -1,0 +1,127 @@
+---
+import Glyph from '@components/ui/Glyph.astro';
+import { brand, type BrandKey } from '@utils/glyphs';
+
+/**
+ * "At a glance": a statement that reveals word by word on scroll, a bento
+ * grid of real proof (transactions, AI models secured, portfolios,
+ * post-quantum gauge, enterprise pilot) and a logo marquee.
+ */
+interface Props {
+  label: string;
+  statement: string;
+  quote: { content: string; author: string; role: string };
+  logosTitle: string;
+}
+
+const { label, statement, quote, logosTitle } = Astro.props;
+const models = (['claude', 'gemini', 'openai', 'grok'] as const).map(key => brand(key));
+const marquee: BrandKey[] = ['ethereum', 'bitcoin', 'solana', 'sui', 'tether', 'binance', 'coinbase', 'claude', 'gemini'];
+const ticks = Array.from({ length: 48 }, (_, i) => i);
+---
+
+<section class="mx-auto max-w-[85rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+  <div class="rounded-[2rem] bg-card p-6 ring-1 ring-line sm:p-10">
+    <p class="font-mono text-xs tracking-wide text-muted uppercase">(00) {label}</p>
+    <p class="mt-5 max-w-[30ch] text-3xl leading-[1.12] font-semibold text-balance text-ink sm:text-4xl lg:text-[2.9rem]" data-words>{statement}</p>
+
+    <div class="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-[auto_auto]">
+      <div class="bento flex min-h-72 flex-col justify-between rounded-[1.6rem] bg-sheet p-6 text-white lg:row-span-2" data-reveal>
+        <span class="grid size-12 place-items-center rounded-2xl bg-white text-sheet"><Glyph icon="trend-up" class="size-6" /></span>
+        <div>
+          <p class="font-display text-5xl font-semibold tabular-nums" data-count="2000000" data-suffix="+">2,000,000+</p>
+          <p class="mt-3 max-w-[22ch] text-sm font-medium text-white/80">transactions settled through Hyper Wallet</p>
+        </div>
+      </div>
+
+      <div class="bento flex flex-col items-center justify-center gap-4 rounded-[1.6rem] border border-dashed border-ink/25 p-6 text-center" data-reveal>
+        <div class="flex -space-x-2.5">
+          {models.map(model => (
+            <span class="grid size-12 place-items-center rounded-full bg-card ring-4 ring-card" title={model.title}>
+              <span class="grid size-11 place-items-center rounded-full bg-ground">
+                {model.path ? (
+                  <svg viewBox="0 0 24 24" class="size-6" style={`color:#${model.hex}`} aria-hidden="true"><path d={model.path} fill="currentColor" /></svg>
+                ) : (
+                  <span class="text-sm font-extrabold" style={`color:#${model.hex}`}>{model.monogram}</span>
+                )}
+              </span>
+            </span>
+          ))}
+        </div>
+        <p class="text-sm text-ink"><span class="font-semibold">Any AI model</span>, secured by Pavii</p>
+      </div>
+
+      <div class="bento flex flex-col justify-center rounded-[1.6rem] bg-ground p-6 lg:row-span-2" data-reveal>
+        <div class="gauge relative mx-auto aspect-square w-44" data-gauge>
+          <svg viewBox="0 0 200 200" class="absolute inset-0" aria-hidden="true">
+            {ticks.map(i => {
+              const a = (i / ticks.length) * Math.PI * 2 - Math.PI / 2;
+              const r1 = 74, r2 = i % 4 === 0 ? 96 : 88;
+              return <line class="tick" x1={100 + Math.cos(a) * r1} y1={100 + Math.sin(a) * r1} x2={100 + Math.cos(a) * r2} y2={100 + Math.sin(a) * r2} style={`--i:${i}`} />;
+            })}
+          </svg>
+          <span class="absolute inset-0 m-auto grid size-16 place-items-center rounded-full bg-sheet text-white"><Glyph icon="lock-key" class="size-7" /></span>
+        </div>
+        <p class="mt-6 font-display text-xl font-semibold text-ink">Post-quantum-resistant</p>
+        <p class="mt-1 text-sm text-muted">Hybrid ML-KEM-768 + X25519 key exchange on every connection.</p>
+      </div>
+
+      <figure class="bento flex flex-col justify-between rounded-[1.6rem] bg-card p-6 ring-1 ring-line lg:row-span-2" data-reveal>
+        <div class="flex items-start justify-between">
+          <Glyph icon="quotes" class="size-9 text-ink" />
+          <span class="font-display text-sm font-bold tracking-tight text-ink">10x Technologies</span>
+        </div>
+        <blockquote class="mt-8 text-[1.05rem] leading-relaxed text-pretty text-ink">{quote.content}</blockquote>
+        <figcaption class="mt-5 text-sm text-muted">{quote.author} · {quote.role}</figcaption>
+      </figure>
+
+      <div class="bento flex items-center gap-5 rounded-[1.6rem] bg-ground p-6" data-reveal>
+        <p class="font-display text-5xl font-semibold tabular-nums text-ink" data-count="33000" data-suffix="+">33,000+</p>
+        <p class="text-sm text-muted">portfolios managed on Hyper Wallet</p>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center">
+      <p class="shrink-0 font-mono text-xs tracking-wide text-muted uppercase">{logosTitle}</p>
+      <div class="marquee relative flex-1 overflow-hidden" aria-label={logosTitle}>
+        <ul class="marquee-track flex w-max gap-10">
+          {[...marquee, ...marquee].map((key, index) => {
+            const logo = brand(key);
+            return (
+              <li class="flex items-center gap-2 text-muted" aria-hidden={index >= marquee.length ? 'true' : undefined}>
+                <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true"><path d={logo.path} fill="currentColor" /></svg>
+                <span class="text-sm font-medium whitespace-nowrap">{logo.title}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bento { transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1); }
+  @media (hover: hover) { .bento:hover { transform: translateY(-3px); } }
+  .tick { stroke: color-mix(in oklab, var(--ink) 18%, transparent); stroke-width: 2.5; stroke-linecap: round; }
+  .gauge.is-on .tick { animation: tick-on 2.4s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i) * 30ms); }
+  @keyframes tick-on { 0% { stroke: color-mix(in oklab, var(--ink) 18%, transparent); } 40%, 100% { stroke: var(--accent-500); } }
+  .marquee { mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); }
+  .marquee-track { animation: marquee 32s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+    .gauge .tick { stroke: var(--accent-500); }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gauge]').forEach(gauge => {
+    new IntersectionObserver(([entry], observer) => {
+      if (!entry.isIntersecting) return;
+      gauge.classList.add('is-on');
+      observer.disconnect();
+    }, { threshold: 0.4 }).observe(gauge);
+  });
+</script>

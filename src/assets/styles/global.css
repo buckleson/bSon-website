@@ -1,6 +1,7 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/inter';
-@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/funnel-display';
+@import '@fontsource-variable/funnel-sans';
+@import '@fontsource-variable/geist-mono';
 
 /* Preline UI */
 @source '../../../node_modules/preline/dist/*.js';
@@ -13,8 +14,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Funnel Sans Variable', ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Funnel Display Variable', 'Funnel Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   /* https://tailwindcss.com/docs/colors#customizing-your-colors */
   --color-*: initial;
   --color-transparent: transparent;
@@ -71,6 +73,12 @@
   --color-yellow-950: oklch(0.286 0.066 53.813);
 
 
+  --color-emerald-300: oklch(0.845 0.143 164.978);
+  --color-emerald-400: oklch(0.765 0.177 163.223);
+  --color-emerald-500: oklch(0.696 0.17 162.48);
+  --color-emerald-600: oklch(0.596 0.145 163.225);
+  --color-emerald-700: oklch(0.508 0.118 165.612);
+
   --color-red-50: oklch(0.971 0.013 17.38);
   --color-red-100: oklch(0.936 0.032 17.717);
   --color-red-200: oklch(0.885 0.062 18.334);
@@ -101,6 +109,14 @@
   which is violet in light mode and the original orange in dark mode.
 */
 @theme inline {
+  --color-ground: var(--ground);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-sheet: var(--sheet);
+  --color-sheet-card: var(--sheet-card);
+  --color-sheet-line: var(--sheet-line);
   --color-orange-50: var(--accent-50);
   --color-orange-100: var(--accent-100);
   --color-orange-200: var(--accent-200);
@@ -115,6 +131,17 @@
 }
 
 :root {
+  /* Surfaces: warm off-white ground, near-black sheets (sections that
+     overlap with a rounded top). Dark mode swaps the ground to near-black and
+     lifts the sheets one step. */
+  --ground: #f1f0eb;
+  --ink: #0e0f11;
+  --muted: #55565c;
+  --card: #ffffff;
+  --line: #dcdad2;
+  --sheet: #0c0d10;
+  --sheet-card: #17191d;
+  --sheet-line: #26292f;
   --accent-50: oklch(0.969 0.016 293.756);
   --accent-100: oklch(0.943 0.029 294.588);
   --accent-200: oklch(0.894 0.057 293.283);
@@ -129,6 +156,14 @@
 }
 
 .dark {
+  --ground: #0c0d10;
+  --ink: #eeeee8;
+  --muted: #a3a4aa;
+  --card: #15171b;
+  --line: #2a2d33;
+  --sheet: #131519;
+  --sheet-card: #1c1f24;
+  --sheet-line: #2c3037;
   --accent-50: oklch(0.98 0.016 73.684);
   --accent-100: oklch(0.954 0.038 75.164);
   --accent-200: oklch(0.901 0.076 70.697);
@@ -202,12 +237,84 @@ a {
 @layer base {
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
   }
   body {
-    font-feature-settings: 'cv11', 'ss01';
+    background-color: var(--ground);
+    color: var(--ink);
+  }
+  /* Fine grain so large flat surfaces don't feel sterile. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   .tabular-nums, [data-stat] {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Pill call to action with a round arrow chip (navbar, heroes, CTAs). */
+@layer components {
+  .cta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    background: var(--accent-600);
+    padding: 0.3rem 0.3rem 0.3rem 1.05rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    transition: background-color 180ms ease, transform 120ms ease;
+  }
+  .dark .cta-pill { background: var(--accent-700); }
+  .cta-pill:hover { background: var(--accent-700); }
+  .dark .cta-pill:hover { background: var(--accent-800); }
+  .cta-pill:active { transform: scale(0.98); }
+  .cta-chip {
+    display: grid;
+    place-items: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.18);
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cta-pill:hover .cta-chip { transform: rotate(45deg); }
+  .cta-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, currentColor 28%, transparent);
+    padding: 0.62rem 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: border-color 180ms ease, background-color 180ms ease, transform 120ms ease;
+  }
+  .cta-ghost:hover { border-color: currentColor; background: color-mix(in oklab, currentColor 6%, transparent); }
+  .cta-ghost:active { transform: scale(0.98); }
+}
+
+/* Headline payoff: a solid accent block behind the words (no gradient text). */
+@layer components {
+  .mark {
+    background: color-mix(in oklab, var(--accent-500) 24%, transparent);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 0 0.14em;
+    margin-inline-start: -0.14em;
+    border-radius: 0.14em;
+  }
+  .on-sheet .mark,
+  .dark .mark {
+    background: var(--accent-600);
+    color: #fff;
+  }
+  .word { will-change: opacity; }
 }

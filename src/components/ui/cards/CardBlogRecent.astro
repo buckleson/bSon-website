@@ -1,0 +1,39 @@
+---
+import BlogCover from '@components/ui/BlogCover.astro';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import { Image } from 'astro:assets';
+import { formatDate } from '@utils/utils';
+import { localeOf, pathFor, slugOf } from '@utils/content';
+import type { CollectionEntry } from 'astro:content';
+
+/** The newest post as a large two-column card (original layout). */
+interface Props {
+  blogEntry: CollectionEntry<'blog'>;
+}
+
+const { blogEntry } = Astro.props;
+const data = blogEntry.data;
+---
+
+<div class="grid gap-8 rounded-[2rem] bg-card p-5 ring-1 ring-line sm:grid-cols-2 sm:items-center sm:p-8" data-reveal>
+  <div class="sm:order-2">
+    <div class="relative overflow-hidden rounded-[1.4rem] pt-[60%] sm:pt-[90%]">
+      <BlogCover seed={slugOf(blogEntry)} label="" fill />
+    </div>
+  </div>
+  <div class="sm:order-1">
+    <p class="font-mono text-xs tracking-wide text-muted uppercase">Latest · {formatDate(data.pubDate, localeOf(blogEntry))}</p>
+    <h2 class="mt-3 text-3xl leading-tight font-semibold text-balance text-ink lg:text-4xl xl:text-5xl">
+      <a href={pathFor(blogEntry)} class="transition hover:text-orange-700 dark:hover:text-orange-300">{data.title}</a>
+    </h2>
+    <p class="mt-4 text-pretty text-muted">{data.description}</p>
+    <div class="mt-6 flex items-center gap-3">
+      <Image src={data.authorImage} alt={data.authorImageAlt} width={44} height={44} densities={[1, 2]} class="size-11 rounded-full" />
+      <div>
+        <p class="font-semibold text-ink">{data.author}</p>
+        <p class="text-xs text-muted">{data.readTime} min read</p>
+      </div>
+    </div>
+    <div class="mt-6"><PrimaryCTA url={pathFor(blogEntry)} title="Read the article" data-astro-prefetch /></div>
+  </div>
+</div>

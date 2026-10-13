@@ -1,6 +1,7 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import PostCard from '@components/ui/cards/PostCard.astro';
+import CardBlog from '@components/ui/cards/CardBlog.astro';
+import BlogCover from '@components/ui/BlogCover.astro';
 import Diagram from '@components/ui/Diagram.astro';
 import Icon from '@components/ui/icons/Icon.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
@@ -46,18 +47,18 @@ const related = others
   faqs={data.faqs}
 >
   <article class="mx-auto max-w-3xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-16">
-    <nav aria-label="Breadcrumb" class="text-sm text-neutral-500 dark:text-neutral-400">
+    <nav aria-label="Breadcrumb" class="text-sm text-muted">
       <a href={localePath('en', '/blog/')} class="hover:text-orange-700 dark:hover:text-orange-300">Blog</a>
       {data.tags[0] && <span aria-hidden="true"> / </span>}
       {data.tags[0]}
     </nav>
-    <h1 class="mt-4 text-3xl font-bold tracking-tight text-balance text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-100">
+    <h1 class="mt-4 text-4xl leading-[1.05] font-semibold text-balance text-ink sm:text-5xl">
       {data.title}
     </h1>
-    <div class="mt-6 flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
+    <div class="mt-6 flex items-center gap-3 text-sm text-muted">
       <Image src={data.authorImage} alt={data.authorImageAlt} width={40} height={40} class="size-10 rounded-full" />
       <div>
-        <p class="font-semibold text-neutral-900 dark:text-neutral-100">{data.author}</p>
+        <p class="font-semibold text-ink">{data.author}</p>
         <p>
           <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate, locale)}</time>
           {data.updatedDate && (
@@ -70,32 +71,36 @@ const related = others
       </div>
     </div>
 
-    {data.diagram && <Diagram name={data.diagram} class="mt-10" />}
+    {data.diagram ? (
+      <Diagram name={data.diagram} class="mt-10" />
+    ) : (
+      <div class="relative mt-10 overflow-hidden rounded-[1.6rem] pt-[52%] ring-1 ring-line"><BlogCover seed={slugOf(post)} label="" fill /></div>
+    )}
 
-    <div class="prose prose-lg prose-neutral dark:prose-invert mt-10 max-w-none text-pretty prose-headings:tracking-tight prose-a:text-orange-700 prose-a:decoration-orange-300 prose-a:underline-offset-4 dark:prose-a:text-orange-300 dark:prose-a:decoration-orange-700">
+    <div class="prose prose-lg prose-neutral dark:prose-invert prose-headings:font-semibold mt-10 max-w-none text-pretty prose-headings:tracking-tight prose-a:text-orange-700 prose-a:decoration-orange-300 prose-a:underline-offset-4 dark:prose-a:text-orange-300 dark:prose-a:decoration-orange-700">
       <Content />
     </div>
 
     {data.faqs.length > 0 && (
       <section class="mt-14" aria-labelledby="faq-title">
-        <h2 id="faq-title" class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Frequently asked questions</h2>
-        <div class="mt-4 divide-y divide-neutral-300 dark:divide-neutral-700">
+        <h2 id="faq-title" class="text-2xl font-semibold text-ink">Frequently asked questions</h2>
+        <div class="mt-4 divide-y divide-line">
           {data.faqs.map(faq => (
             <details class="group py-4">
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-semibold text-neutral-900 dark:text-neutral-100">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-semibold text-ink">
                 {faq.question}
                 <Icon name="chevronDown" class="size-5 shrink-0 text-orange-600 transition duration-300 group-open:rotate-180 dark:text-orange-400" />
               </summary>
-              <p class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">{faq.answer}</p>
+              <p class="mt-2 text-pretty text-muted">{faq.answer}</p>
             </details>
           ))}
         </div>
       </section>
     )}
 
-    <div class="mt-14 rounded-3xl bg-neutral-900 p-8 text-center dark:bg-neutral-950 dark:ring-1 dark:ring-white/10">
+    <div class="on-sheet mt-14 rounded-[2rem] bg-sheet p-8 text-center">
       <p class="text-2xl font-bold text-balance text-white">Building something like this?</p>
-      <p class="mx-auto mt-2 max-w-md text-pretty text-neutral-300">Talk to a Buckleson engineer for 30 minutes. No slides, just your use case.</p>
+      <p class="mx-auto mt-2 max-w-md text-pretty text-white/70">Talk to a Buckleson engineer for 30 minutes. No slides, just your use case.</p>
       <div class="mt-6"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
     </div>
 
@@ -106,9 +111,9 @@ const related = others
 
   {related.length > 0 && (
     <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8">
-      <h2 class="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl dark:text-neutral-100">Related articles</h2>
-      <div class="mt-6 grid gap-6 md:grid-cols-3">
-        {related.map(entry => <PostCard post={entry} />)}
+      <h2 class="text-3xl font-semibold text-ink">Related articles</h2>
+      <div class="mt-6 grid gap-5 lg:grid-cols-2">
+        {related.slice(0, 2).map(entry => <CardBlog blogEntry={entry} />)}
       </div>
     </section>
   )}

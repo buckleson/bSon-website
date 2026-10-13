@@ -1,0 +1,134 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import ServiceMock from '@components/ui/ServiceMock.astro';
+import { localePath } from '@utils/locale';
+
+/**
+ * Services as a horizontal accordion that switches with scroll (desktop):
+ * the section pins while you scroll through the four services, with a
+ * segmented progress bar. Each open panel shows a live UI, what's included
+ * and the outcome. Phones get stacked cards.
+ */
+interface Item {
+  id: string;
+  title: string;
+  line: string;
+  included: string[];
+  outcome: string;
+  mock: string;
+}
+interface Props {
+  label: string;
+  claim: string;
+  payoff: string;
+  body: string;
+  items: Item[];
+}
+
+const { label, claim, payoff, body, items } = Astro.props;
+type Mock = 'chain' | 'token' | 'wallet' | 'agent';
+---
+
+<section class="relative" data-services style={`--count:${items.length}`}>
+  <div class="mx-auto max-w-[85rem] px-4 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+    <SectionHead index="03" label={label} claim={claim} payoff={payoff} body={body} />
+  </div>
+
+  <div class="svc-track hidden lg:block">
+    <div class="sticky top-20 mx-auto flex h-[calc(100dvh-6rem)] max-h-[44rem] max-w-[85rem] flex-col justify-center px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between font-mono text-xs text-muted uppercase">
+        <span>Scroll to switch</span>
+        <span class="flex items-center gap-3">
+          <span class="flex gap-1">{items.map((_, i) => <span class="svc-seg h-1 w-8 rounded-full bg-ink/15" data-seg={i}></span>)}</span>
+          <span class="tabular-nums" data-count-label>01 / 0{items.length}</span>
+        </span>
+      </div>
+      <div class="mt-4 flex h-[30rem] gap-3">
+        {items.map((item, index) => (
+          <article class:list={['svc-panel relative overflow-hidden rounded-[1.6rem]', index === 0 && 'is-open', index % 2 ? 'bg-sheet text-white' : 'bg-card text-ink ring-1 ring-line']} data-svc={index}>
+            <div class="svc-tab absolute inset-0 flex flex-col items-center justify-between py-6">
+              <span class="font-mono text-xs opacity-70">0{index + 1}</span>
+              <span class="svc-vertical font-display text-lg font-semibold whitespace-nowrap">{item.title}</span>
+              <span class="grid size-8 place-items-center rounded-full bg-current/10"><Glyph icon="plus" class="size-4" /></span>
+            </div>
+            <div class="svc-body grid h-full grid-cols-[minmax(0,6fr)_minmax(0,5fr)] gap-7 p-7">
+              <ServiceMock kind={item.mock as Mock} />
+              <div class="flex flex-col">
+                <p class="font-mono text-xs opacity-70">0{index + 1} · Service</p>
+                <h3 class="mt-3 text-3xl font-semibold">{item.title}</h3>
+                <p class="mt-2 opacity-80">{item.line}</p>
+                <p class="mt-6 font-mono text-[0.7rem] tracking-wide uppercase opacity-60">What's included</p>
+                <ul class="mt-2 space-y-2 text-sm">
+                  {item.included.map(point => <li class="flex items-center gap-2"><Glyph icon="check-circle" class="size-4.5 text-orange-500" />{point}</li>)}
+                </ul>
+                <p class="mt-6 w-fit rounded-full bg-orange-600 px-3.5 py-1.5 text-sm font-semibold text-white dark:bg-orange-700">{item.outcome}</p>
+                <a href={localePath('en', `/services/#${item.id}`)} class="mt-auto inline-flex w-fit items-center gap-2 text-sm font-semibold underline-offset-4 hover:underline">Explore<Glyph icon="arrow-right" class="size-4" /></a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-auto mt-10 grid max-w-[85rem] gap-4 px-4 pb-20 sm:px-6 lg:hidden">
+    {items.map(item => (
+      <article class="overflow-hidden rounded-[1.6rem] bg-card p-4 ring-1 ring-line" data-reveal>
+        <div class="h-56"><ServiceMock kind={item.mock as Mock} /></div>
+        <h3 class="mt-4 text-xl font-semibold text-ink">{item.title}</h3>
+        <p class="mt-1 text-sm text-muted">{item.line}</p>
+        <p class="mt-3 w-fit rounded-full bg-orange-600 px-3 py-1 text-xs font-semibold text-white dark:bg-orange-700">{item.outcome}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .svc-track { height: calc(var(--count) * 50vh + 30vh); }
+  .svc-panel { flex: 0 0 5.5rem; transition: flex-grow 600ms cubic-bezier(0.22, 1, 0.36, 1), flex-basis 600ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .svc-panel.is-open { flex: 1 1 0; }
+  .svc-panel.is-open .svc-tab { opacity: 0; }
+  .svc-body { opacity: 0; visibility: hidden; min-width: 46rem; transition: opacity 300ms ease; }
+  .svc-panel.is-open .svc-body { opacity: 1; visibility: visible; transition-delay: 200ms; }
+  .svc-vertical { writing-mode: vertical-rl; transform: rotate(180deg); }
+  .svc-seg.is-on { background: var(--accent-500); }
+  @media (prefers-reduced-motion: reduce) { .svc-panel, .svc-body { transition: none; } }
+</style>
+
+<script>
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { gsap } from 'gsap';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll<HTMLElement>('[data-services]').forEach(root => {
+    const track = root.querySelector<HTMLElement>('.svc-track')!;
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-svc]')];
+    const segs = [...root.querySelectorAll<HTMLElement>('[data-seg]')];
+    const label = root.querySelector<HTMLElement>('[data-count-label]')!;
+    let current = -1;
+    const set = (index: number) => {
+      if (index === current) return;
+      current = index;
+      panels.forEach((p, i) => p.classList.toggle('is-open', i === index));
+      segs.forEach((s, i) => s.classList.toggle('is-on', i <= index));
+      label.textContent = `0${index + 1} / 0${panels.length}`;
+    };
+    set(0);
+    ScrollTrigger.create({
+      trigger: track,
+      start: 'top top+=80',
+      end: 'bottom bottom',
+      onUpdate: self => set(Math.min(panels.length - 1, Math.floor(self.progress * panels.length))),
+    });
+    // Clicking a collapsed panel scrolls to its point in the track.
+    panels.forEach((panel, i) =>
+      panel.addEventListener('click', () => {
+        if (panel.classList.contains('is-open')) return;
+        const top = track.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: top + (track.offsetHeight - window.innerHeight) * ((i + 0.5) / panels.length), behavior: 'smooth' });
+      })
+    );
+  });
+</script>

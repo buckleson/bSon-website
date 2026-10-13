@@ -1,7 +1,3 @@
-import hyper0xLogo from '@images/brand/hyper-0x.png';
-import paviiLogo from '@images/brand/pavii.png';
-import hyperWalletLogo from '@images/brand/hyper-wallet.png';
-import { localePath } from '@utils/locale';
 
 /** Every "book a call" button links here. */
 export const BOOKING_URL = 'https://cal.com/buckleson-group/30min';
@@ -40,35 +36,3 @@ export const ORGANIZATION = {
 };
 
 
-export const partnersData = [
-  {
-    logo: hyper0xLogo,
-    name: 'Hyper 0X',
-    tagline: 'Our own post-quantum-resistant L1',
-    href: localePath('en', '/products/hyper-0x/'),
-  },
-  {
-    logo: paviiLogo,
-    name: 'Pavii',
-    tagline: 'Security gates for AI agents',
-    href: localePath('en', '/products/pavii/'),
-  },
-  {
-    logo: hyperWalletLogo,
-    name: 'Hyper Wallet',
-    tagline: 'Exchange, wallet and SDKs in one',
-    href: localePath('en', '/products/hyper-wallet/'),
-  },
-  {
-    name: 'H0X Pay',
-    tagline: 'Payments on Hyper 0X',
-    href: localePath('en', '/products/h0x-pay/'),
-    soon: true,
-  },
-  {
-    name: 'HyperRun',
-    tagline: 'Play, predict and earn',
-    href: localePath('en', '/products/hyperrun/'),
-    soon: true,
-  },
-];

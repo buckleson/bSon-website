@@ -1,10 +1,9 @@
 ---
-import Icon from '@components/ui/icons/Icon.astro';
+import Glyph from '@components/ui/Glyph.astro';
 
 /**
- * The call-to-action button. Renders an `<a>` when given a `url`, otherwise a
- * `<button>` (give it an `id` to wire a script to it). Any other attribute
- * (`data-astro-prefetch`, `aria-*`, …) is forwarded to the element.
+ * The call-to-action pill with a round arrow chip. Renders an `<a>` when given
+ * a `url`, otherwise a `<button>`. Other attributes are forwarded.
  */
 interface Props {
   title?: string;
@@ -14,26 +13,10 @@ interface Props {
 }
 
 const { title, url, noArrow, class: extraClass, ...rest } = Astro.props;
-
-
-const classes = [
-  'group inline-flex items-center justify-center gap-x-2 rounded-lg px-4 py-3 text-sm font-bold ring-zinc-500 transition duration-300 focus-visible:ring-3 outline-hidden',
-  'border border-transparent',
-  'text-white bg-orange-600 hover:bg-orange-700 active:bg-orange-800 dark:bg-orange-700 dark:hover:bg-orange-800 shadow-[0_8px_20px_-10px_var(--accent-700)]',
-  'disabled:pointer-events-none disabled:opacity-50 dark:focus:outline-hidden',
-  '2xl:text-base',
-  'dark:ring-zinc-200',
-].join(' ');
-
 const Element = url ? 'a' : 'button';
 ---
 
-<Element class:list={[classes, extraClass as string | undefined]} href={url} {...rest}>
-  {title}
-  {noArrow ? null : (
-    <Icon
-      name="arrowRight"
-      class="h-4 w-4 shrink-0 transition duration-300 group-hover:translate-x-1"
-    />
-  )}
+<Element class:list={['cta-pill focus-visible:ring-3 focus-visible:ring-orange-500/50 focus-visible:outline-hidden', noArrow && 'pe-4', extraClass as string | undefined]} href={url} {...rest}>
+  <span>{title}</span>
+  {!noArrow && <span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span>}
 </Element>

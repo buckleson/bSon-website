@@ -1,19 +1,22 @@
 ---
+import ProductTabBtn from '@components/ui/buttons/ProductTabBtn.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import SecondaryCTA from '@components/ui/buttons/SecondaryCTA.astro';
+import ProductArt from '@components/ui/ProductArt.astro';
 import Diagram from '@components/ui/Diagram.astro';
 import SystemDiagram from '@components/ui/SystemDiagram.astro';
-import type { SystemName } from '@data/systems';
-import Icon from '@components/ui/icons/Icon.astro';
 import Glyph from '@components/ui/Glyph.astro';
 import PromptShieldAnimation from '@components/sections/landing/PromptShieldAnimation.astro';
 import type { CollectionEntry } from 'astro:content';
+import type { SystemName } from '@data/systems';
 import { localePath } from '@utils/locale';
+import { slugOf } from '@utils/content';
 
 /**
- * One product page: what it is in a few lines, the architecture diagram,
- * features, details, FAQ and a call to action. Everything is visible without
- * tabs so search engines and readers see the whole page.
+ * Product page in the original ScrewFast layout: a fading intro, the product
+ * name beside its animated scene, then Overview / Specifications /
+ * How it works tabs (the last runs the transaction animation), followed by
+ * FAQ and a call to action.
  */
 interface Props {
   product: CollectionEntry<'products'>;
@@ -23,138 +26,182 @@ const { product } = Astro.props;
 const data = product.data;
 const soon = data.status === 'coming-soon';
 const href = (url: string) => localePath('en', url);
+type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
+const half = Math.ceil(data.details.items.length / 2);
+const tabs = [
+  { id: 'tab-overview', panel: '#panel-overview', title: 'Overview', icon: 'squares-four' },
+  { id: 'tab-specs', panel: '#panel-specs', title: data.details.title, icon: 'list-checks' },
+  { id: 'tab-architecture', panel: '#panel-architecture', title: 'How it works', icon: 'flow-arrow' },
+];
 ---
 
-<section class="mx-auto max-w-[85rem] px-4 pt-12 pb-10 sm:px-6 lg:px-8 lg:pt-20">
-  <div class="max-w-3xl" data-reveal>
-    <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl dark:text-neutral-100">
-      {data.title}
-      {soon && (
-        <span class="ms-2 inline-block translate-y-[-0.4em] rounded-full bg-orange-100 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-orange-800 dark:bg-orange-950 dark:text-orange-200">
-          Coming soon
-        </span>
-      )}
-    </h1>
-    <p class="mt-3 text-lg font-medium text-pretty text-neutral-700 dark:text-neutral-300">
-      {data.tagline}
-    </p>
-    <p class="mt-3 max-w-[62ch] text-base leading-relaxed text-pretty text-neutral-600 dark:text-neutral-400">
-      {data.summary}
-    </p>
-    <div class="mt-8 flex flex-wrap gap-3">
-      <PrimaryCTA title={data.cta.title} url={href(data.cta.url)} />
-      <SecondaryCTA title="See how it works" url="#architecture" />
-    </div>
-  </div>
+<div id="overlay" class="pointer-events-none fixed inset-0 z-40 bg-ground"></div>
 
-  <div id="architecture" class="mt-12 scroll-mt-28" data-reveal>
-    <SystemDiagram name={data.diagram as SystemName} />
-    <details class="group mt-6">
-      <summary class="inline-flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-orange-700 dark:text-orange-300">
-        <Icon name="chevronDown" class="size-4 transition group-open:rotate-180" />
-        Full architecture diagram
-      </summary>
-      <Diagram name={data.diagram} class="mt-4" caption={`${data.title} architecture. Select the diagram to open it full size.`} />
-    </details>
-  </div>
-</section>
-
-{product.id.endsWith('pavii') && (
-  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8">
-    <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100" data-reveal>
-      Pavii in action
-    </h2>
-    <p class="mt-3 max-w-[60ch] text-neutral-600 dark:text-neutral-400" data-reveal>
-      Prompts from every AI model pass through Pavii, secured by Hyper 0X. Unsafe requests stop at the shield; clean ones reach your systems.
-    </p>
-    <div class="mt-8" data-reveal>
-      <PromptShieldAnimation centerLabel="Pavii" />
-    </div>
-  </section>
-)}
-
-<section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-  <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 lg:text-4xl dark:text-neutral-100" data-reveal>
-    {soon ? 'What it will do' : 'What you get'}
-  </h2>
-  <dl class="mt-8 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
-    {data.features.map(feature => (
-      <div class="flex gap-4" data-reveal-item>
-        {feature.icon && (
-          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
-            <Glyph icon={feature.icon} class="size-5" />
-          </span>
-        )}
-        <div>
-          <dt class="font-semibold text-neutral-900 dark:text-neutral-100">{feature.title}</dt>
-          <dd class="mt-1 text-sm text-pretty text-neutral-600 dark:text-neutral-400">{feature.subTitle}</dd>
-        </div>
+<section class="mx-auto flex max-w-[85rem] flex-col px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14">
+  <p id="fadeText" class="mb-8 max-w-[62ch] text-lg leading-relaxed text-pretty text-muted sm:text-xl">{data.summary}</p>
+  <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+    <div id="fadeInUp">
+      <h1 class="text-5xl leading-[0.98] font-semibold text-ink sm:text-6xl lg:text-7xl">{data.title}</h1>
+      {soon && <p class="mt-4 w-fit rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-800 dark:bg-orange-950 dark:text-orange-200">Coming soon</p>}
+      <p class="mt-4 max-w-md text-lg font-medium text-pretty text-ink/80">{data.tagline}</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <PrimaryCTA title={data.cta.title} url={href(data.cta.url)} />
+        <SecondaryCTA title="How it works" url="#product-detail-body" />
       </div>
-    ))}
-  </dl>
-</section>
-
-<section class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
-  <div class="grid gap-10 rounded-3xl bg-white px-6 py-12 ring-1 ring-neutral-900/5 sm:px-10 lg:grid-cols-3 lg:py-16 dark:bg-neutral-900 dark:ring-white/10">
-    <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 lg:text-4xl dark:text-neutral-100" data-reveal>
-      {data.details.title}
-    </h2>
-    <dl class="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:col-span-2" data-reveal-group>
-      {data.details.items.map(item => (
-        <div data-reveal-item>
-          <dt class="font-semibold text-neutral-900 dark:text-neutral-100">{item.title}</dt>
-          <dd class="mt-1 text-pretty text-neutral-600 dark:text-neutral-400">{item.subTitle}</dd>
-        </div>
-      ))}
-    </dl>
+    </div>
+    <div id="fadeInMoveRight" class="overflow-hidden rounded-[1.8rem] ring-1 ring-line will-change-transform">
+      <ProductArt product={slugOf(product) as Art} class="aspect-[400/260]" />
+    </div>
   </div>
 </section>
+
+<div id="product-detail-body" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 pt-6 sm:px-6 lg:px-8">
+  <nav class="mx-auto grid max-w-3xl gap-1.5 rounded-[1.6rem] bg-card p-1.5 ring-1 ring-line sm:grid-cols-3 sm:rounded-full" aria-label={`${data.title} details`} role="tablist">
+    {tabs.map((tab, index) => <ProductTabBtn id={tab.id} dataTab={tab.panel} title={tab.title} icon={tab.icon} first={index === 0} />)}
+  </nav>
+
+  <div class="relative mt-10 md:mt-14">
+    <div id="panel-overview" class="product-tab-panel" role="tabpanel" aria-labelledby="tab-overview">
+      <div class="grid gap-12 pb-14 md:grid-cols-2">
+        <div>
+          <h2 class="text-3xl leading-tight font-semibold text-balance text-ink lg:text-4xl">What {data.title} does</h2>
+          <p class="mt-4 text-pretty text-muted">{data.summary}</p>
+          <p class="mt-6"><PrimaryCTA title={data.cta.title} url={href(data.cta.url)} /></p>
+        </div>
+        <dl class="grid gap-6 sm:grid-cols-2">
+          {data.features.map(feature => (
+            <div class="flex gap-4">
+              {feature.icon && <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={feature.icon} class="size-5" /></span>}
+              <div>
+                <dt class="font-semibold text-ink">{feature.title}</dt>
+                <dd class="mt-1 text-sm text-pretty text-muted">{feature.subTitle}</dd>
+              </div>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+
+    <div id="panel-specs" class="product-tab-panel hidden" role="tabpanel" aria-labelledby="tab-specs">
+      <div class="grid w-full grid-cols-1 gap-x-16 gap-y-6 pb-14 md:grid-cols-2">
+        {[data.details.items.slice(0, half), data.details.items.slice(half)].map(group => (
+          <div class="space-y-6">
+            {group.map(item => (
+              <div class="border-t border-line pt-5">
+                <h3 class="font-semibold text-ink">{item.title}</h3>
+                <p class="mt-1 text-pretty text-muted">{item.subTitle}</p>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div id="panel-architecture" class="product-tab-panel hidden" role="tabpanel" aria-labelledby="tab-architecture">
+      <div class="space-y-10 pb-14">
+        <SystemDiagram name={data.diagram as SystemName} />
+        {product.id.endsWith('pavii') && (
+          <div>
+            <h3 class="text-2xl font-semibold text-ink">Pavii in action</h3>
+            <p class="mt-2 max-w-[60ch] text-muted">Prompts, agents, tool calls, SDKs and emails pass through Pavii, secured by Hyper 0X. Unsafe ones stop at the shield; clean ones reach your systems.</p>
+            <div class="mt-6"><PromptShieldAnimation centerLabel="Pavii" /></div>
+          </div>
+        )}
+        <details class="group">
+          <summary class="inline-flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-orange-700 dark:text-orange-300">
+            <Glyph icon="caret-down" class="size-4 transition group-open:rotate-180" />Full architecture diagram
+          </summary>
+          <Diagram name={data.diagram} class="mt-4" caption={`${data.title} architecture. Select the diagram to open it full size.`} />
+        </details>
+      </div>
+    </div>
+  </div>
+</div>
 
 {(data.faqs.length > 0 || data.learnMore.length > 0) && (
   <section class="mx-auto grid max-w-[85rem] gap-12 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-20">
     <div data-reveal>
-      <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100">
-        {data.title} questions
-      </h2>
+      <h2 class="text-3xl font-semibold text-balance text-ink">{data.title} questions</h2>
       {data.learnMore.length > 0 && (
         <ul class="mt-6 space-y-3">
           {data.learnMore.map(link => (
-            <li>
-              <a
-                href={href(link.url)}
-                class="font-medium text-orange-700 underline decoration-orange-300 underline-offset-4 hover:decoration-orange-600 dark:text-orange-300 dark:decoration-orange-700"
-              >
-                {link.title}
-              </a>
-            </li>
+            <li><a href={href(link.url)} class="inline-flex items-center gap-2 font-medium text-orange-700 hover:underline dark:text-orange-300"><Glyph icon="article" class="size-4" />{link.title}</a></li>
           ))}
         </ul>
       )}
     </div>
-    <div class="divide-y divide-neutral-300 lg:col-span-2 dark:divide-neutral-700" data-reveal>
+    <div class="divide-y divide-line lg:col-span-2" data-reveal>
       {data.faqs.map((faq, index) => (
         <details class="group py-5" open={index === 0}>
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-semibold text-ink">
             {faq.question}
-            <Icon name="chevronDown" class="size-5 shrink-0 text-orange-600 transition duration-300 group-open:rotate-180 dark:text-orange-400" />
+            <span class="grid size-8 shrink-0 place-items-center rounded-full bg-card ring-1 ring-line transition duration-300 group-open:rotate-45"><Glyph icon="plus" class="size-4" /></span>
           </summary>
-          <p class="mt-3 max-w-[65ch] text-pretty text-neutral-600 dark:text-neutral-400">{faq.answer}</p>
+          <p class="mt-3 max-w-[65ch] text-pretty text-muted">{faq.answer}</p>
         </details>
       ))}
     </div>
   </section>
 )}
 
-<section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8">
-  <div class="rounded-3xl bg-neutral-900 px-6 py-12 text-center sm:px-12 dark:bg-neutral-950 dark:ring-1 dark:ring-white/10" data-reveal>
-    <h2 class="text-3xl font-bold tracking-tight text-balance text-white">
-      {soon ? `Be first to use ${data.title}` : `Put ${data.title} to work`}
+<section class="px-2 pb-6 sm:px-3">
+  <div class="on-sheet rounded-[2rem] bg-sheet px-6 py-16 text-center text-white" data-reveal>
+    <h2 class="mx-auto max-w-2xl text-3xl font-semibold text-balance sm:text-5xl">
+      <span class="block">{soon ? 'Be first to use' : `Put ${data.title}`}</span>
+      <span class="mark">{soon ? data.title : 'to work.'}</span>
     </h2>
-    <p class="mx-auto mt-3 max-w-xl text-pretty text-neutral-300">
-      A 30-minute call with a Buckleson engineer. Tell us what you want to build; we will show you how it runs on Hyper 0X.
-    </p>
-    <div class="mt-8">
-      <PrimaryCTA title={data.cta.title} url={href(data.cta.url)} />
-    </div>
+    <p class="mx-auto mt-4 max-w-xl text-pretty text-white/70">A 30-minute call with a Buckleson engineer. Tell us what you want to build; we will show you how it runs on Hyper 0X.</p>
+    <div class="mt-8"><PrimaryCTA title={data.cta.title} url={href(data.cta.url)} /></div>
   </div>
 </section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const parts = ['#fadeText', '#fadeInUp', '#fadeInMoveRight', '#product-detail-body'];
+
+  if (reduced) {
+    gsap.set('#overlay', { autoAlpha: 0, display: 'none' });
+  } else {
+    gsap.set('#fadeText', { autoAlpha: 0, y: 20 });
+    gsap.set('#fadeInUp', { autoAlpha: 0, y: 28 });
+    gsap.set('#fadeInMoveRight', { autoAlpha: 0, x: 56, scale: 0.97 });
+    gsap.set('#product-detail-body', { autoAlpha: 0, y: 24 });
+    const reveal = () => {
+      gsap.set(parts, { autoAlpha: 1, x: 0, y: 0, scale: 1 });
+      gsap.set('#overlay', { autoAlpha: 0, display: 'none' });
+    };
+    const safety = window.setTimeout(reveal, 2200);
+    gsap
+      .timeline({ defaults: { ease: 'power3.out' }, onComplete: () => { window.clearTimeout(safety); gsap.set('#overlay', { display: 'none' }); } })
+      .to('#overlay', { autoAlpha: 0, duration: 0.65, ease: 'power2.inOut' }, 0.08)
+      .to('#fadeText', { autoAlpha: 1, y: 0, duration: 0.85 }, 0.12)
+      .to('#fadeInUp', { autoAlpha: 1, y: 0, duration: 0.95 }, 0.22)
+      .to('#fadeInMoveRight', { autoAlpha: 1, x: 0, scale: 1, duration: 1.05 }, 0.18)
+      .to('#product-detail-body', { autoAlpha: 1, y: 0, duration: 0.8 }, 0.42);
+  }
+
+  // Tabs with a short fade between panels; arrow keys move between tabs.
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.product-tab')];
+  let active = document.querySelector<HTMLElement>('.product-tab-panel:not(.hidden)');
+  const show = (button: HTMLButtonElement) => {
+    const next = document.querySelector<HTMLElement>(button.dataset.target!);
+    if (!next || next === active) return;
+    buttons.forEach(b => b.setAttribute('aria-selected', String(b === button)));
+    active?.classList.add('hidden');
+    next.classList.remove('hidden');
+    if (!reduced) gsap.fromTo(next, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out' });
+    active = next;
+  };
+  buttons.forEach((button, index) => {
+    button.addEventListener('click', () => show(button));
+    button.addEventListener('keydown', event => {
+      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+      if (!step) return;
+      const next = buttons[(index + step + buttons.length) % buttons.length];
+      next.focus();
+      show(next);
+    });
+  });
+</script>

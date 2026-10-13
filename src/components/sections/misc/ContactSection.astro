@@ -9,41 +9,41 @@ import { localePath } from '@utils/locale';
  */
 const copy = Astro.locals.copy.contact;
 const field =
-  'block w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 placeholder:text-neutral-500 focus:border-orange-500 focus:ring-orange-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100';
-const label = 'mb-2 block text-sm font-semibold text-neutral-800 dark:text-neutral-200';
+  'block w-full rounded-lg border border-line bg-card px-4 py-3 text-ink placeholder:text-muted focus:border-orange-500 focus:ring-orange-500';
+const label = 'mb-2 block text-sm font-semibold text-ink';
 const link =
   'text-orange-700 underline decoration-orange-300 underline-offset-4 dark:text-orange-300 dark:decoration-orange-700';
 ---
 
 <section class="mx-auto max-w-[85rem] px-4 pt-12 pb-20 sm:px-6 lg:px-8 lg:pt-20">
   <div class="max-w-3xl" data-reveal>
-    <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
+    <h1 class="text-5xl leading-[1] font-semibold text-balance text-ink sm:text-6xl">
       {copy.heading}
     </h1>
-    <p class="mt-5 max-w-[60ch] text-lg text-pretty text-neutral-600 dark:text-neutral-400">{copy.subTitle}</p>
+    <p class="mt-5 max-w-[60ch] text-lg text-pretty text-muted">{copy.subTitle}</p>
   </div>
 
   <div class="mt-12 grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
     <div class="space-y-8" data-reveal>
-      <div class="rounded-3xl bg-neutral-900 p-8 text-white dark:bg-neutral-950 dark:ring-1 dark:ring-white/10">
+      <div class="on-sheet rounded-[2rem] bg-sheet p-8 text-white">
         <h2 class="text-2xl font-bold">{copy.bookTitle}</h2>
-        <p class="mt-2 text-pretty text-neutral-300">{copy.bookContent}</p>
+        <p class="mt-2 text-pretty text-white/70">{copy.bookContent}</p>
         <div class="mt-6"><PrimaryCTA title={copy.bookBtn} url={BOOKING_URL} /></div>
       </div>
       <dl class="space-y-6">
         <div>
-          <dt class="font-semibold text-neutral-900 dark:text-neutral-100">{copy.emailHeading}</dt>
+          <dt class="font-semibold text-ink">{copy.emailHeading}</dt>
           <dd class="mt-1"><a href="mailto:vijay@buckleson.com" class={link}>vijay@buckleson.com</a></dd>
         </div>
         <div>
-          <dt class="font-semibold text-neutral-900 dark:text-neutral-100">{copy.docsHeading}</dt>
+          <dt class="font-semibold text-ink">{copy.docsHeading}</dt>
           <dd class="mt-1"><a href={localePath('en', '/guides/intro/')} class={link}>{copy.docsLink}</a></dd>
         </div>
       </dl>
     </div>
 
-    <form class="rounded-3xl bg-white p-6 ring-1 ring-neutral-900/10 sm:p-8 dark:bg-neutral-900 dark:ring-white/10" data-mail-form data-reveal novalidate>
-      <h2 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{copy.formTitle}</h2>
+    <form class="rounded-3xl bg-card p-6 ring-1 ring-line sm:p-8" data-mail-form data-reveal novalidate>
+      <h2 class="text-2xl font-bold text-ink">{copy.formTitle}</h2>
       <div class="mt-6 grid gap-5 sm:grid-cols-2">
         <div>
           <label for="contact-name" class={label}>{copy.name}</label>
@@ -68,7 +68,7 @@ const link =
           <textarea id="contact-details" name="details" rows="5" required class={field}></textarea>
         </div>
       </div>
-      <p class="mt-4 text-sm text-neutral-600 dark:text-neutral-400">{copy.formNote}</p>
+      <p class="mt-4 text-sm text-muted">{copy.formNote}</p>
       <p class="mt-2 hidden text-sm font-medium text-red-700 dark:text-red-400" data-mail-error role="alert"></p>
       <div class="mt-6"><PrimaryCTA title={copy.send} type="submit" /></div>
     </form>
