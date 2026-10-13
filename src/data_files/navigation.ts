@@ -1,48 +1,45 @@
 /**
- * Navigation structure shared by every locale: stable ids, unlocalised paths
- * and social URLs. The label for each id lives in the copy tables
- * (`copy.nav.labels`, `copy.nav.footer.sections`), so translators never touch
- * a path and code never keys on a translated label.
+ * Navigation structure: stable ids and unlocalised paths. Header labels live
+ * in the copy table (`copy.nav.labels`); footer columns carry their own
+ * labels because they name products and services, not UI chrome.
  */
 export type NavLinkId = 'home' | 'products' | 'services' | 'blog' | 'contact';
 
 export const navLinks: { id: NavLinkId; path: string }[] = [
   { id: 'home', path: '/' },
-  { id: 'products', path: '/products' },
-  { id: 'services', path: '/services' },
-  { id: 'blog', path: '/blog' },
-  { id: 'contact', path: '/contact' },
+  { id: 'products', path: '/products/' },
+  { id: 'services', path: '/services/' },
+  { id: 'blog', path: '/blog/' },
+  { id: 'contact', path: '/contact/' },
 ];
 
-export type FooterSectionId = 'ecosystem' | 'company';
-export type FooterLinkId =
-  | 'documentation'
-  | 'tools'
-  | 'services'
-  | 'blog'
-  | 'customers';
-
-export const footerSections: {
-  id: FooterSectionId;
-  links: { id: FooterLinkId; path: string; badge?: 'hiring' }[];
-}[] = [
+export const footerColumns: { title: string; links: { label: string; path: string }[] }[] = [
   {
-    id: 'ecosystem',
+    title: 'Products',
     links: [
-      { id: 'documentation', path: '/welcome-to-docs/' },
-      { id: 'tools', path: '/products' },
-      { id: 'services', path: '/services' },
+      { label: 'Hyper 0X', path: '/products/hyper-0x/' },
+      { label: 'Pavii', path: '/products/pavii/' },
+      { label: 'Hyper Wallet & SDKs', path: '/products/hyper-wallet/' },
+      { label: 'H0X Pay (soon)', path: '/products/h0x-pay/' },
+      { label: 'HyperRun (soon)', path: '/products/hyperrun/' },
     ],
   },
   {
-    id: 'company',
+    title: 'Services',
     links: [
-      { id: 'blog', path: '/blog' },
-      { id: 'customers', path: '/contact' },
+      { label: 'Custom blockchains', path: '/services/#custom-blockchains' },
+      { label: 'Asset tokenization', path: '/services/#asset-tokenization' },
+      { label: 'Wallets & exchanges', path: '/services/#wallets-exchanges' },
+      { label: 'AI-agent security', path: '/services/#ai-agent-security' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Blog', path: '/blog/' },
+      { label: 'Hyper 0X docs', path: '/guides/intro/' },
+      { label: 'RSS feed', path: '/rss.xml' },
+      { label: 'Contact', path: '/contact/' },
     ],
   },
 ];
-
-export const socialLinks = {
-  github: 'https://github.com/buckleson/bSon-website',
-};

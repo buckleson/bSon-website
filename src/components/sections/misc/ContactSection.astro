@@ -1,116 +1,107 @@
 ---
-import AuthBtn from '@components/ui/buttons/AuthBtn.astro';
-import ContactIconBlock from '@components/ui/blocks/ContactIconBlock.astro';
-import DemoForm from '@components/ui/forms/DemoForm.astro';
-import TextInput from '@components/ui/forms/input/TextInput.astro';
-import EmailContactInput from '@components/ui/forms/input/EmailContactInput.astro';
-import PhoneInput from '@components/ui/forms/input/PhoneInput.astro';
-import TextAreaInput from '@components/ui/forms/input/TextAreaInput.astro';
-import Icon from '@components/ui/icons/Icon.astro';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import { BOOKING_URL } from '@data/constants';
 import { localePath } from '@utils/locale';
 
+/**
+ * Contact page body. There is no backend: booking goes to Cal.com, and the
+ * form composes an email in the visitor's mail app.
+ */
 const copy = Astro.locals.copy.contact;
-const blockIconClass =
-  'mt-1.5 h-6 w-6 shrink-0 text-neutral-600 dark:text-neutral-400';
+const field =
+  'block w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-neutral-900 placeholder:text-neutral-500 focus:border-orange-500 focus:ring-orange-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100';
+const label = 'mb-2 block text-sm font-semibold text-neutral-800 dark:text-neutral-200';
+const link =
+  'text-orange-700 underline decoration-orange-300 underline-offset-4 dark:text-orange-300 dark:decoration-orange-700';
 ---
 
-<section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-  <div class="mx-auto max-w-2xl lg:max-w-5xl">
-    <div class="text-center">
-      <h1 class="text-2xl font-bold tracking-tight text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200">
-        {copy.heading}
-      </h1>
-      <p class="mt-1 text-pretty text-neutral-600 dark:text-neutral-400">
-        {copy.subTitle}
-      </p>
+<section class="mx-auto max-w-[85rem] px-4 pt-12 pb-20 sm:px-6 lg:px-8 lg:pt-20">
+  <div class="max-w-3xl" data-reveal>
+    <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
+      {copy.heading}
+    </h1>
+    <p class="mt-5 max-w-[60ch] text-lg text-pretty text-neutral-600 dark:text-neutral-400">{copy.subTitle}</p>
+  </div>
+
+  <div class="mt-12 grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+    <div class="space-y-8" data-reveal>
+      <div class="rounded-3xl bg-neutral-900 p-8 text-white dark:bg-neutral-950 dark:ring-1 dark:ring-white/10">
+        <h2 class="text-2xl font-bold">{copy.bookTitle}</h2>
+        <p class="mt-2 text-pretty text-neutral-300">{copy.bookContent}</p>
+        <div class="mt-6"><PrimaryCTA title={copy.bookBtn} url={BOOKING_URL} /></div>
+      </div>
+      <dl class="space-y-6">
+        <div>
+          <dt class="font-semibold text-neutral-900 dark:text-neutral-100">{copy.emailHeading}</dt>
+          <dd class="mt-1"><a href="mailto:vijay@buckleson.com" class={link}>vijay@buckleson.com</a></dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-neutral-900 dark:text-neutral-100">{copy.docsHeading}</dt>
+          <dd class="mt-1"><a href={localePath('en', '/guides/intro/')} class={link}>{copy.docsLink}</a></dd>
+        </div>
+      </dl>
     </div>
 
-    <div class="mt-12 grid items-center gap-6 lg:grid-cols-2 lg:gap-16">
-      <div class="flex flex-col rounded-xl p-4 sm:p-6 lg:p-8">
-        <h2 class="mb-8 text-xl font-bold text-neutral-700 dark:text-neutral-300">
-          {copy.formTitle}
-        </h2>
-        <DemoForm
-          successMessage={copy.demoMessage}
-          statusClass="mt-2 text-center text-sm text-orange-500 dark:text-orange-400"
-        >
-          <div class="grid gap-4">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <TextInput
-                id="hs-firstname-contacts"
-                label={copy.firstName}
-                name="hs-firstname-contacts"
-              />
-              <TextInput
-                id="hs-lastname-contacts"
-                label={copy.lastName}
-                name="hs-lastname-contacts"
-              />
-            </div>
-            <EmailContactInput id="hs-email-contacts" />
-            <PhoneInput id="hs-phone-number" />
-            <TextAreaInput
-              id="hs-about-contacts"
-              label={copy.details}
-              name="hs-about-contacts"
-            />
-          </div>
-
-          <div class="mt-4 grid">
-            <AuthBtn title={copy.send} />
-          </div>
-
-          <div class="mt-3 text-center">
-            <p class="text-sm text-neutral-600 dark:text-neutral-400">
-              {copy.formSubTitle}
-            </p>
-          </div>
-        </DemoForm>
+    <form class="rounded-3xl bg-white p-6 ring-1 ring-neutral-900/10 sm:p-8 dark:bg-neutral-900 dark:ring-white/10" data-mail-form data-reveal novalidate>
+      <h2 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">{copy.formTitle}</h2>
+      <div class="mt-6 grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="contact-name" class={label}>{copy.name}</label>
+          <input id="contact-name" name="name" autocomplete="name" required class={field} />
+        </div>
+        <div>
+          <label for="contact-company" class={label}>{copy.company}</label>
+          <input id="contact-company" name="company" autocomplete="organization" class={field} />
+        </div>
+        <div class="sm:col-span-2">
+          <label for="contact-email" class={label}>{copy.email}</label>
+          <input id="contact-email" name="email" type="email" autocomplete="email" required class={field} />
+        </div>
+        <div class="sm:col-span-2">
+          <label for="contact-topic" class={label}>{copy.topic}</label>
+          <select id="contact-topic" name="topic" class={field}>
+            {copy.topics.map(topic => <option>{topic}</option>)}
+          </select>
+        </div>
+        <div class="sm:col-span-2">
+          <label for="contact-details" class={label}>{copy.details}</label>
+          <textarea id="contact-details" name="details" rows="5" required class={field}></textarea>
+        </div>
       </div>
-
-      <div class="divide-y divide-neutral-300 dark:divide-neutral-700">
-        <ContactIconBlock
-          heading={copy.knowledgeHeading}
-          content={copy.knowledgeContent}
-          isLinkVisible={true}
-          linkTitle={copy.knowledgeLink}
-          linkURL={localePath('en', '/welcome-to-docs/')}
-          isArrowVisible={true}
-        >
-          <Icon name="question" class={blockIconClass} />
-        </ContactIconBlock>
-
-        <ContactIconBlock
-          heading={copy.faqHeading}
-          content={copy.faqContent}
-          isLinkVisible={true}
-          linkTitle={copy.faqLink}
-          linkURL={localePath('en', '/#faq')}
-          isArrowVisible={true}
-        >
-          <Icon name="chatBubble" class={blockIconClass} />
-        </ContactIconBlock>
-
-        <ContactIconBlock
-          heading={copy.websiteHeading}
-          content={copy.websiteContent}
-          isLinkVisible={true}
-          linkTitle="www.buckleson.com"
-          linkURL="https://www.buckleson.com"
-        >
-          <Icon name="earth" class={blockIconClass} />
-        </ContactIconBlock>
-
-        <ContactIconBlock
-          heading={copy.emailHeading}
-          content={copy.emailContent}
-          isLinkVisible={true}
-          linkTitle="vijay@buckleson.com"
-          linkURL="mailto:vijay@buckleson.com"
-        >
-          <Icon name="envelopeOpen" class={blockIconClass} />
-        </ContactIconBlock>
-      </div>
-    </div>
+      <p class="mt-4 text-sm text-neutral-600 dark:text-neutral-400">{copy.formNote}</p>
+      <p class="mt-2 hidden text-sm font-medium text-red-700 dark:text-red-400" data-mail-error role="alert"></p>
+      <div class="mt-6"><PrimaryCTA title={copy.send} type="submit" /></div>
+    </form>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-mail-form]').forEach(form => {
+    const error = form.querySelector<HTMLElement>('[data-mail-error]')!;
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const invalid = form.querySelector<HTMLInputElement>(':invalid');
+      if (invalid) {
+        const name = form.querySelector(`label[for="${invalid.id}"]`)?.textContent ?? 'This field';
+        error.textContent = invalid.validity.typeMismatch
+          ? 'Please enter a valid email address.'
+          : `${name} is required.`;
+        error.classList.remove('hidden');
+        invalid.focus();
+        return;
+      }
+      error.classList.add('hidden');
+      const data = new FormData(form);
+      const value = (key: string) => String(data.get(key) ?? '').trim();
+      const subject = `${value('topic')}: ${value('company') || value('name')}`;
+      const body = [
+        value('details'),
+        '',
+        `Name: ${value('name')}`,
+        `Company: ${value('company')}`,
+        `Email: ${value('email')}`,
+      ].join('\n');
+      window.location.href = `mailto:vijay@buckleson.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  });
+</script>

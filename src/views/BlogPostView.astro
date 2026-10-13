@@ -1,124 +1,115 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import AvatarBlogLarge from '@components/ui/avatars/AvatarBlogLarge.astro';
-import CardRelated from '@components/ui/cards/CardRelated.astro';
-import Bookmark from '@components/ui/buttons/Bookmark.astro';
+import PostCard from '@components/ui/cards/PostCard.astro';
+import Diagram from '@components/ui/Diagram.astro';
+import Icon from '@components/ui/icons/Icon.astro';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import SocialShare from '@components/ui/buttons/SocialShare.astro';
-import PostFeedback from '@components/ui/feedback/PostFeedback.astro';
 import { Image } from 'astro:assets';
 import { render, type CollectionEntry } from 'astro:content';
-import { capitalize, formatDate } from '@utils/utils';
-import { entriesFor, localeOf } from '@utils/content';
-import { getCopy } from '@/copy';
+import { formatDate } from '@utils/utils';
+import { entriesFor, localeOf, slugOf } from '@utils/content';
+import { BOOKING_URL } from '@data/constants';
+import { localePath } from '@utils/locale';
 
-/** One blog post. The locale is the entry's own. */
+/** One blog post: answer-first intro, optional diagram, body, FAQ, CTA. */
 interface Props {
   post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
+const data = post.data;
 const locale = localeOf(post);
-const t = getCopy(locale);
 const { Content } = await render(post);
 
-// Related posts: every other post in this locale.
-// Note: This is a very basic way of choosing related posts, just for the purpose of the example.
-// In a production site, you might want to implement a more robust algorithm, choosing related posts based on tags, categories, dates, authors, or keywords.
-// See example: https://blog.codybrunner.com/2024/adding-related-articles-with-astro-content-collections/
-const relatedPosts = (await entriesFor('blog', locale)).filter(
-  blogEntry => blogEntry.id !== post.id
-);
+// Related: posts sharing the most tags, newest first.
+const others = (await entriesFor('blog', locale)).filter(entry => entry.id !== post.id);
+const related = others
+  .map(entry => ({ entry, score: entry.data.tags.filter(tag => data.tags.includes(tag)).length }))
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map(({ entry }) => entry);
 ---
 
 <MainLayout
-  title={post.data.title}
-  description={post.data.description}
-  section={t.blog.ogSection}
+  title={data.title}
+  seoTitle={data.title.length > 52 ? data.title : `${data.title} | Buckleson`}
+  description={data.description}
+  ogImage={`/og/blog-${slugOf(post)}.png`}
   kind={{
     type: 'BlogPosting',
-    image: post.data.cardImage.src,
-    datePublished: post.data.pubDate,
-    author: post.data.author,
+    datePublished: data.pubDate,
+    dateModified: data.updatedDate,
+    author: data.author,
+    tags: data.tags,
   }}
+  faqs={data.faqs}
 >
-  <section class="mx-auto max-w-3xl px-4 pt-6 pb-12 sm:px-6 lg:px-8 lg:pt-10">
-    <div class="max-w-2xl">
-      <div class="mb-6 flex items-center justify-between">
-        <div class="flex w-full gap-x-5 sm:items-center sm:gap-x-3">
-          <AvatarBlogLarge blogEntry={post} />
-          <div class="grow">
-            <div class="flex items-center justify-between gap-x-2">
-              <div>
-                {/* Post metadata and author info */}
-                <span class="font-bold text-neutral-700 dark:text-neutral-300">
-                  {post.data.author}
-                </span>
-                <ul class="text-xs text-neutral-500">
-                  <li class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600">
-                    {formatDate(post.data.pubDate, locale)}
-                  </li>
-                  <li class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600">
-                    {t.blog.minRead(post.data.readTime)}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+  <article class="mx-auto max-w-3xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-16">
+    <nav aria-label="Breadcrumb" class="text-sm text-neutral-500 dark:text-neutral-400">
+      <a href={localePath('en', '/blog/')} class="hover:text-orange-700 dark:hover:text-orange-300">Blog</a>
+      {data.tags[0] && <span aria-hidden="true"> / </span>}
+      {data.tags[0]}
+    </nav>
+    <h1 class="mt-4 text-3xl font-bold tracking-tight text-balance text-neutral-900 sm:text-4xl lg:text-5xl dark:text-neutral-100">
+      {data.title}
+    </h1>
+    <div class="mt-6 flex items-center gap-3 text-sm text-neutral-600 dark:text-neutral-400">
+      <Image src={data.authorImage} alt={data.authorImageAlt} width={40} height={40} class="size-10 rounded-full" />
+      <div>
+        <p class="font-semibold text-neutral-900 dark:text-neutral-100">{data.author}</p>
+        <p>
+          <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate, locale)}</time>
+          {data.updatedDate && (
+            <>
+              <span aria-hidden="true"> · </span>Updated <time datetime={data.updatedDate.toISOString()}>{formatDate(data.updatedDate, locale)}</time>
+            </>
+          )}
+          <span aria-hidden="true"> · </span>{data.readTime} min read
+        </p>
       </div>
-      {/* Blog post title */}
-      <h2 class="mb-3 text-2xl font-bold text-neutral-800 md:text-3xl dark:text-neutral-200">
-        {post.data.title}
-      </h2>
-      <Image
-        class="mb-5 w-full rounded-xl object-cover md:mb-8"
-        src={post.data.cardImage}
-        alt={post.data.cardImageAlt}
-        draggable={'false'}
-        format={'avif'}
-      />
-      {/* Blog post contents */}
-      <article class="prose prose-lg prose-neutral dark:prose-invert mb-5 max-w-none text-pretty md:mb-8">
-        <Content />
-      </article>
-      <div class="mx-auto grid max-w-(--breakpoint-lg) gap-y-5 sm:flex sm:items-center sm:justify-between sm:gap-y-0">
-        {/* Blog post tags */}
-        <div class="flex flex-wrap gap-x-2 gap-y-1 sm:flex-nowrap sm:items-center sm:gap-y-0">
-          {post.data.tags?.map((tag: string) => (
-            <span class="inline-flex items-center gap-x-1.5 rounded-lg bg-neutral-400/30 px-3 py-1.5 text-xs font-medium text-neutral-700 outline-hidden focus:outline-hidden focus-visible:ring-3 focus-visible:outline-hidden dark:bg-neutral-700/60 dark:text-neutral-300">
-              {capitalize(tag)}
-            </span>
+    </div>
+
+    {data.diagram && <Diagram name={data.diagram} class="mt-10" />}
+
+    <div class="prose prose-lg prose-neutral dark:prose-invert mt-10 max-w-none text-pretty prose-headings:tracking-tight prose-a:text-orange-700 prose-a:decoration-orange-300 prose-a:underline-offset-4 dark:prose-a:text-orange-300 dark:prose-a:decoration-orange-700">
+      <Content />
+    </div>
+
+    {data.faqs.length > 0 && (
+      <section class="mt-14" aria-labelledby="faq-title">
+        <h2 id="faq-title" class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Frequently asked questions</h2>
+        <div class="mt-4 divide-y divide-neutral-300 dark:divide-neutral-700">
+          {data.faqs.map(faq => (
+            <details class="group py-4">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-semibold text-neutral-900 dark:text-neutral-100">
+                {faq.question}
+                <Icon name="chevronDown" class="size-5 shrink-0 text-orange-600 transition duration-300 group-open:rotate-180 dark:text-orange-400" />
+              </summary>
+              <p class="mt-2 text-pretty text-neutral-600 dark:text-neutral-400">{faq.answer}</p>
+            </details>
           ))}
         </div>
-        {/* Bookmark and Share buttons */}
-        <div class="flex items-center justify-end gap-x-1.5">
-          <Bookmark />
-          <div class="mx-3 block h-4 border-e border-neutral-400 dark:border-neutral-500"></div>
-          <div class="inline-flex">
-            <SocialShare pageTitle={post.data.title} />
-          </div>
-        </div>
+      </section>
+    )}
+
+    <div class="mt-14 rounded-3xl bg-neutral-900 p-8 text-center dark:bg-neutral-950 dark:ring-1 dark:ring-white/10">
+      <p class="text-2xl font-bold text-balance text-white">Building something like this?</p>
+      <p class="mx-auto mt-2 max-w-md text-pretty text-neutral-300">Talk to a Buckleson engineer for 30 minutes. No slides, just your use case.</p>
+      <div class="mt-6"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
+    </div>
+
+    <div class="mt-10 flex justify-end">
+      <SocialShare pageTitle={data.title} />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl dark:text-neutral-100">Related articles</h2>
+      <div class="mt-6 grid gap-6 md:grid-cols-3">
+        {related.map(entry => <PostCard post={entry} />)}
       </div>
-    </div>
-    <PostFeedback
-      title={t.blog.wasHelpful}
-      firstChoice={t.blog.yes}
-      secondChoice={t.blog.no}
-    />
-  </section>
-
-  {/* Related articles section */}
-  <section class="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-    <div class="mb-10 max-w-2xl">
-      <h2 class="text-2xl font-bold text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200">
-        {t.blog.relatedArticles}
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-2 gap-6">
-      {relatedPosts.map(entry => (
-        <CardRelated blogEntry={entry} />
-      ))}
-    </div>
-  </section>
+    </section>
+  )}
 </MainLayout>

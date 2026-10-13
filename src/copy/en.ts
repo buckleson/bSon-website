@@ -15,10 +15,10 @@ export const en = {
   site: {
     /** Default `<meta name="description">` when a page sets none. */
     description:
-      'Buckleson builds custom blockchains for enterprises. Hyper 0X, our own post-quantum-resistant L1, powers Pavii AI-agent security, Hyper Wallet and every solution we ship.',
+      'Buckleson is a blockchain infrastructure company. We build custom blockchains, tokenize real-world assets, launch crypto wallets and secure AI agents.',
     /** schema.org `WebSite.description` in every page's `isPartOf`. */
-    descriptionShort: 'Custom blockchain solutions, powered by Hyper 0X.',
-    ogTitle: 'Buckleson: Custom Blockchains, Powered by Hyper 0X',
+    descriptionShort: 'Blockchain infrastructure company: custom blockchains, asset tokenization, wallets and AI-agent security on Hyper 0X.',
+    ogTitle: 'Buckleson: Blockchain Development & Infrastructure Company',
     ogDescription:
       'We build custom blockchains, wallets, exchanges and AI-agent security for enterprises, all running on Hyper 0X: our own L1 with an L2 for every customer.',
   },
@@ -40,26 +40,6 @@ export const en = {
       blog: 'Blog',
       contact: 'Contact',
     },
-    footer: {
-      /** Section titles and link labels for `footerSections` in `@data/navigation`, keyed by id. */
-      sectionTitles: {
-        ecosystem: 'Ecosystem',
-        company: 'Company',
-      },
-      links: {
-        documentation: 'Hyper 0X Docs',
-        tools: 'Products',
-        services: 'Services',
-        blog: 'Blog',
-        customers: 'Contact',
-      },
-      hiringBadge: "We're hiring!",
-      stayUpToDate: 'Stay up to date',
-      stayUpToDateContent:
-        'Product launches, Hyper 0X updates and engineering notes. No spam.',
-      newsletterDemoMessage:
-        'Thanks! (Demo only — wire an email service to collect real subscribers.)',
-    },
   },
 
   forms: {
@@ -70,7 +50,6 @@ export const en = {
       'Please include a valid email address so we can get back to you',
     subscribe: 'Subscribe',
     phone: 'Phone Number',
-    demoFallbackMessage: 'Demo only — this form is not connected to a backend.',
   },
 
   share: {
@@ -95,12 +74,6 @@ export const en = {
     ogSection: 'Blog',
   },
 
-  insights: {
-    readMore: 'Read more',
-    tableOfContents: 'Table of Contents:',
-    ogSection: 'Insights',
-  },
-
   products: {
     ogSection: 'Products',
     tabs: 'Tabs',
@@ -116,53 +89,77 @@ export const en = {
   },
 
   home: {
+    metaTitle: 'Buckleson: Blockchain Development & Infrastructure Company',
     banner: 'Coming soon: H0X Pay and HyperRun',
     hero: {
-      eyebrow: 'Built on Hyper 0X · post-quantum-resistant',
-      title: `We Build ${accent('Custom Blockchains')}`,
+      title: `We Build ${accent('Secure Blockchains')}`,
       subTitle:
-        'Buckleson engineers private, post-quantum-resistant blockchains for enterprises. Every solution runs on Hyper 0X, our own L1, with a dedicated L2 for each customer.',
-      primaryBtn: 'Explore Products',
-      secondaryBtn: 'Talk to Our Team',
-      imageAlt: 'Buckleson products running on the Hyper 0X blockchain',
+        'Buckleson is a blockchain infrastructure company. We build custom blockchains, tokenize real-world assets, launch wallets and exchanges, and secure AI agents, all on Hyper 0X, our own post-quantum-resistant blockchain.',
+      primaryBtn: 'Book a call',
+      secondaryBtn: 'Explore Hyper 0X',
+    },
+    domains: {
+      title: 'What we build',
+      items: [
+        {
+          title: 'Custom blockchains',
+          content: 'Your own private L2 on Hyper 0X, with your rules, privacy and bridges.',
+          href: '/services/#custom-blockchains',
+        },
+        {
+          title: 'Asset tokenization',
+          content: 'Put gold, funds, invoices or property on-chain, with compliance built in.',
+          href: '/services/#asset-tokenization',
+        },
+        {
+          title: 'Wallets & exchanges',
+          content: 'Launch a branded wallet, exchange or payment gateway with our SDKs.',
+          href: '/products/hyper-wallet/',
+        },
+        {
+          title: 'AI-agent security',
+          content: 'Security gates and tamper-proof receipts for every AI agent call.',
+          href: '/products/pavii/',
+        },
+      ],
     },
     clients: {
-      title: 'One Chain, Many Products',
+      title: 'Products built on Hyper 0X',
       subTitle:
-        'Every Buckleson product signs, settles and logs on Hyper 0X, so all of them write to the same record.',
+        'Every Buckleson product signs, settles and logs on the same chain, so they all write to one verifiable record.',
     },
     featuresGeneral: {
-      title: 'Why Hyper 0X Is Hard to Copy',
+      title: 'Why Hyper 0X is safer by design',
       subTitle:
-        "Hyper 0X is our own permissioned L1, engineered from scratch. We control the fees, the roadmap and the security model, so we can build what enterprises actually need instead of inheriting a public chain's limits.",
+        "We built our own blockchain instead of renting a public one. That means we control the fees, the roadmap and the security model, and nothing is inherited from someone else's chain.",
     },
     featuresNavs: {
-      title: `Products built on ${accent('Hyper 0X')}, live today.`,
+      title: `See how ${accent('it works')}`,
       tabs: {
         tools: {
           heading: 'Hyper 0X',
           content:
-            'Our own L1 with deterministic aBFT finality, hybrid post-quantum encryption and an L2 for every customer. Compliance rules run as code before any transaction executes.',
-          alt: 'Hyper 0X blockchain architecture',
+            'Our own L1. Every customer gets a private L2, and every L2 settles to one shared, post-quantum-resistant record.',
+          alt: 'Hyper 0X architecture: customer L2s settle to the Hyper 0X L1 and connect to public chains through bridges',
         },
         dashboard: {
           heading: 'Pavii',
           content:
-            'Connect Claude, Codex, ChatGPT, Grok, OpenCode or your own agents. Every call passes six security gates, uses fewer tokens and leaves a tamper-proof receipt on Hyper 0X.',
-          alt: 'Pavii AI-agent security flow',
+            'Every AI agent call passes six security gates and leaves a tamper-proof receipt on Hyper 0X.',
+          alt: 'Pavii flow: AI agent calls pass six security gates before reaching your systems',
         },
         features: {
           heading: 'Hyper Wallet & SDKs',
           content:
-            'An exchange and a wallet in one app, with no double commissions. Our SDKs let you launch your own neobank or payment gateway on the same rails.',
-          alt: 'Hyper Wallet architecture',
+            'A wallet and an exchange in one app, with SDKs to launch your own neobank or payment gateway.',
+          alt: 'Hyper Wallet architecture: one wallet and order book with atomic settlement on Hyper 0X',
         },
       },
     },
     testimonials: {
-      title: 'Proven in Production',
+      title: 'Proven in production',
       subTitle:
-        'Hyper 0X already powers live products and enterprise pilots. The numbers below come from our own products.',
+        'Hyper 0X already powers live products and enterprise pilots. These numbers come from our own products.',
       quotes: [
         {
           content:
@@ -190,170 +187,170 @@ export const en = {
         },
       ],
     },
+    glance: {
+      title: 'Buckleson at a glance',
+      facts: [
+        { term: 'Who we are', detail: 'A blockchain infrastructure company that builds its own blockchain and the products that run on it.' },
+        { term: 'What we build', detail: 'Custom blockchains, asset tokenization, crypto wallets and exchanges, and security for AI agents.' },
+        { term: 'Hero product', detail: 'Hyper 0X: a permissioned, post-quantum-resistant L1 with a private L2 for every customer.' },
+        { term: 'Live products', detail: 'Hyper 0X, Pavii and Hyper Wallet & SDKs. H0X Pay and HyperRun are coming soon.' },
+        { term: 'Who it is for', detail: 'Banks, fintechs, asset issuers and teams running AI agents.' },
+        { term: 'How to start', detail: 'Book a 30-minute call; we scope a pilot on your own L2.' },
+      ],
+    },
+    latestPosts: {
+      title: 'From the blog',
+      cta: 'All articles',
+    },
     faqTitle: 'Frequently<br />asked questions',
     heroAlt: {
       title: "Let's Build Your Chain",
       subTitle:
-        'Tell us what you need to put on-chain. Our forward-deployed engineers will design your L2 on Hyper 0X with you, from pilot to production.',
-      btn: 'Contact Us',
+        'Tell us what you want to put on-chain. Our engineers will design your L2 on Hyper 0X with you, from pilot to production.',
+      btn: 'Book a call',
     },
   },
 
   services: {
     title: 'Services',
+    seoTitle: 'Blockchain Development Services | Buckleson',
     metaDescription:
-      'Buckleson builds custom blockchain solutions: asset tokenization, private L1/L2 networks, custom wallets and exchanges, wallet SDKs and blockchain-based security for AI agents.',
-    ogTitle: 'Custom Blockchain Services | Buckleson',
+      'Blockchain development services from Buckleson: custom blockchains and private L2s, asset tokenization, wallets and exchanges, wallet SDKs and AI-agent security.',
     intro: {
-      title: 'We Build Custom Blockchain Solutions',
+      title: 'Blockchain Development Services',
       subTitle:
-        'From bringing your assets on-chain to securing your AI agents, we design, build and run blockchain systems on Hyper 0X for enterprises and end users. You get your own L2 with your own rules, settled on one shared, verifiable record.',
-      cta: 'Book a Consultation',
+        'We design, build and run blockchain systems for banks, fintechs, asset issuers and AI teams. Everything runs on Hyper 0X, the blockchain we built, so you get your own L2 with your own rules on one verifiable record.',
+      cta: 'Book a call',
     },
-    articles: {
-      guidance: {
-        title: 'Custom Blockchains & Asset Tokenization',
-        subTitle:
-          'We help you bring your assets on-chain, from gold and funds to invoices and other real-world assets, and give enterprises and end users secure access to blockchain. We build your own private L2 on Hyper 0X with its own policies, privacy and bridges, so your AI and other applications get the confidentiality they need.',
-        imageAlts: [
-          'Custom L2 networks settling on Hyper 0X',
-          'Asset tokenization on Hyper 0X',
-        ],
+    items: [
+      {
+        id: 'custom-blockchains',
+        title: 'Custom blockchains and private L2s',
+        content:
+          'Your own blockchain without building one from zero. We set up a private L2 on Hyper 0X with your sequencer, policies, privacy model and bridges, and connect it to your core systems.',
+        points: ['Your rules, enforced as code', 'Per-party encrypted records', 'Bridges to EVM chains, Solana and Sui'],
+        diagram: 'hyper0x',
       },
-      craftsmanship: {
-        title: 'Custom Wallets, Exchanges & Compliance',
-        subTitle:
-          'We build custom wallets and exchanges for your business, the same way we built Hyper Wallet. Atomic settlement, on-chain order books and account abstraction come standard. We also manage your existing crypto compliance, with limits, KYC and maker-checker approvals enforced as code before any transaction runs.',
-        imageAlts: ['Custom wallet and exchange architecture'],
-        cta: 'See Hyper Wallet',
+      {
+        id: 'asset-tokenization',
+        title: 'Asset tokenization',
+        content:
+          'Put gold, funds, bonds, invoices or property on-chain. We handle the token, the compliance rules, the investor wallet and the secondary market, with atomic settlement on every trade.',
+        points: ['Minted 1:1 with assets in custody', 'KYC and investor limits checked before each trade', 'Branded investor app'],
+        diagram: 'tokenization',
+        link: { title: 'Read the tokenization guide', url: '/blog/asset-tokenization-guide/' },
       },
-      oversight: {
-        title: 'Wallet SDKs for Your Internal Apps',
-        subTitle:
-          'We build custom wallet SDK support into your internal applications, so day-to-day activity is secured and closely monitored. Every transfer is signed, policy-checked and recorded on Hyper 0X, giving your team one audit trail across every app.',
-        imageAlts: [
-          'Wallet SDK embedded into internal apps',
-          'Monitoring internal wallet activity',
-        ],
+      {
+        id: 'wallets-exchanges',
+        title: 'Custom wallets, exchanges and compliance',
+        content:
+          'We build wallets and exchanges the way we built Hyper Wallet: on-chain order books, atomic settlement and no seed phrases. We can also run your existing crypto compliance as code.',
+        points: ['Central limit order book in consensus', 'Maker-checker approvals', 'Account abstraction for users'],
+        diagram: 'wallet',
+        link: { title: 'See Hyper Wallet', url: '/products/hyper-wallet/' },
       },
-      maintenance: {
-        title: 'Agentic Security on the Blockchain',
-        subTitle:
-          'We secure how your AI agents run, not what they think. Built on Pavii and Hyper 0X, our agentic security solutions stop prompt injection, data leaks, rogue agents and log tampering, and every action leaves a signed, verifiable receipt on-chain.',
-        imageAlts: ['Pavii six-gate security flow for AI agents'],
+      {
+        id: 'wallet-sdks',
+        title: 'Wallet SDKs for your apps',
+        content:
+          'Embed secure wallets, payments and a payment gateway in your internal tools and customer apps. Every transfer is signed, policy-checked and recorded, giving you one audit trail across every app.',
+        points: ['Launch a neobank or payment gateway', 'In-app wallets for games', 'One audit trail'],
+        diagram: 'platform',
       },
-      bespoke: {
-        title: 'Forward-Deployed Engineering',
-        subTitle:
-          "We don't just hand over software. Our engineers work inside your stack to connect Hyper 0X with your existing systems, public chains, bank DLTs and APIs, and stay with you from pilot to production-grade rollout.",
-        imageAlts: [
-          'Hyper 0X integrations with existing systems',
-          'Engineers integrating Hyper 0X',
-        ],
-        cta: 'Start a Pilot',
+      {
+        id: 'ai-agent-security',
+        title: 'AI-agent security',
+        content:
+          'We secure how your AI agents run, not what they think. With Pavii and Hyper 0X we stop prompt injection, data leaks and rogue agents, and every action leaves a signed receipt on-chain.',
+        points: ['Six security gates per call', 'Tamper-proof logs', '30 to 60 percent fewer tokens'],
+        diagram: 'pavii',
+        link: { title: 'See Pavii', url: '/products/pavii/' },
       },
-    },
-    stats: {
-      title: 'Built for Institutional Scale',
-      subTitle:
-        'We own the chain, we ship the products that run on it, and we engineer both for data-intensive work where the record has to be right the first time.',
-      mainStatTitle: '4',
-      mainStatSubTitle:
-        'products in production on Hyper 0X: Hyper 0X, Hyper Wallet, Wallet SDKs and Pavii',
-      stats: [
-        { stat: '1', description: 'dedicated L2 for each institution' },
-        { stat: '4', description: 'layers of encryption' },
-        { stat: '2M+', description: 'transactions processed' },
-      ],
-    },
+      {
+        id: 'forward-deployed-engineering',
+        title: 'Forward-deployed engineering',
+        content:
+          'We do not just hand over software. Our engineers work inside your stack to connect Hyper 0X with your systems, public chains, bank DLTs and APIs, from pilot to production.',
+        points: ['Scoped pilot first', 'Success metrics agreed up front', 'Support through production'],
+        diagram: 'platform',
+      },
+    ],
   },
 
   contact: {
     title: 'Contact',
+    seoTitle: 'Contact Buckleson: Talk to a Blockchain Engineer',
     metaDescription:
-      'Talk to Buckleson about custom blockchains, asset tokenization, wallets, exchanges or AI-agent security.',
-    ogTitle: 'Contact Us | Buckleson',
-    heading: 'Contact us',
+      'Talk to Buckleson about a custom blockchain, asset tokenization, a crypto wallet or AI-agent security. Book a 30-minute call or email our team directly.',
+    heading: 'Talk to a blockchain engineer',
     subTitle:
-      "Want to put your assets on-chain, launch your own L2 or secure your AI agents? Tell us about it and we'll get back to you.",
-    formTitle: 'Fill in the form below',
-    formSubTitle: "We'll get back to you in 1-2 business days.",
-    firstName: 'First Name',
-    lastName: 'Last Name',
+      'Tell us what you want to put on-chain. A Buckleson engineer will reply, usually within one to two business days.',
+    bookTitle: 'Book a 30-minute call',
+    bookContent: 'Pick a time that suits you. We will learn your use case and suggest a first pilot.',
+    bookBtn: 'Choose a time',
+    formTitle: 'Or send us the details',
+    formNote: 'Sending opens your email app with the message filled in, addressed to vijay@buckleson.com.',
+    name: 'Your name',
+    company: 'Company',
+    email: 'Work email',
+    topic: 'What do you want to build?',
+    topics: ['Custom blockchain or private L2', 'Asset tokenization', 'Wallet, exchange or SDKs', 'AI-agent security (Pavii)', 'Something else'],
     details: 'Details',
-    send: 'Send Message',
-    demoMessage:
-      'Thanks! (Demo only — wire a form endpoint to receive real messages.)',
-    knowledgeHeading: 'Documentation',
-    knowledgeContent: 'Learn how Hyper 0X works under the hood.',
-    knowledgeLink: 'Read the Hyper 0X docs',
-    faqHeading: 'FAQ',
-    faqContent: 'Explore our FAQ for quick, clear answers to common queries.',
-    faqLink: 'Visit FAQ',
-    websiteHeading: 'Website',
-    websiteContent: 'Learn more about Buckleson at',
-    emailHeading: 'Contact us by email',
-    emailContent: 'Prefer the written word? Drop us an email at',
+    send: 'Write the email',
+    emailHeading: 'Email',
+    docsHeading: 'Documentation',
+    docsLink: 'Read the Hyper 0X docs',
   },
 
   blogIndex: {
     title: 'Blog',
+    seoTitle: 'Blockchain Development & Security Blog | Buckleson',
     metaDescription:
-      'Engineering notes from Buckleson on Hyper 0X, post-quantum security, AI-agent security and on-chain finance.',
-    ogTitle: 'Blog | Buckleson',
-    heading: 'Notes from the Chain',
+      'Guides on custom blockchain development, asset tokenization, private L2s, post-quantum security, AI-agent security and crypto wallet SDKs, from Buckleson.',
+    heading: 'Notes from the chain',
     subTitle:
-      'Engineering deep-dives, product updates and security research from the team building Hyper 0X.',
-    insightsHeading: 'Insights',
-    insightsSubTitle:
-      'Short explainers on the ideas behind Hyper 0X and the products that run on it.',
-    noPosts: 'No blog posts yet. Check back soon.',
-    noInsights: 'No insights yet. Check back soon.',
+      'Plain-language guides on building with blockchain: custom chains, tokenized assets, wallets and AI-agent security, from the team that built Hyper 0X.',
+    noPosts: 'No posts yet. Check back soon.',
   },
 
   productsIndex: {
     title: 'Products',
+    seoTitle: 'Blockchain Products: Hyper 0X, Pavii, Hyper Wallet | Buckleson',
     metaDescription:
-      'Hyper 0X, Pavii, Hyper Wallet & SDKs, H0X Pay and HyperRun: the Buckleson products built on our own blockchain.',
-    ogTitle: 'Products | Buckleson',
-    heading: 'Products',
+      "Buckleson's blockchain products: the Hyper 0X enterprise blockchain, Pavii AI-agent security and Hyper Wallet & SDKs, with H0X Pay and HyperRun coming soon.",
+    heading: 'Blockchain products built on Hyper 0X',
     subTitle:
-      'Everything we ship runs on Hyper 0X, our own L1. Start with the chain itself, secure your AI agents with Pavii, move money with Hyper Wallet, and watch for H0X Pay and HyperRun, both coming soon.',
-    customerStories: 'Proof Points',
+      'Every product we ship runs on Hyper 0X, our own blockchain. Start with the chain itself, secure your AI agents with Pavii, or launch a wallet with Hyper Wallet & SDKs.',
+    soonHeading: 'Coming soon',
+    cta: {
+      title: 'Not sure where to start?',
+      subTitle: 'Book a 30-minute call. We will map your use case to the right product or a custom chain.',
+      btn: 'Book a call',
+    },
     testimonials: {
-      title: 'Proof Points',
+      title: 'Proof points',
       quotes: [
         {
           content:
-            '"10x Technologies is piloting the Hyper 0X blockchain-based AI training and inference module in a live enterprise environment."',
+            '10x Technologies is piloting the Hyper 0X blockchain-based AI training and inference module in a live enterprise environment.',
           author: '10x Technologies',
           role: 'Enterprise pilot | Hyper 0X',
           avatarAlt: 'Buckleson logo',
         },
         {
           content:
-            '"Hyper Wallet has processed over 2 million transactions across 33,000+ portfolios, and saved users more than $128K in fees."',
+            'Hyper Wallet has processed over 2 million transactions across 33,000+ portfolios, and saved users more than $128K in fees.',
           author: 'Hyper Wallet',
           role: 'Live product | Hyper 0X',
           avatarAlt: 'Hyper Wallet logo',
         },
         {
           content:
-            '"Pavii cut token usage by 30–60% on a real Claude Code task, and has saved over 100 million tokens across 82,000+ queries."',
+            'Pavii cut token usage by 30–60% on a real Claude Code task, and has saved over 100 million tokens across 82,000+ queries.',
           author: 'Pavii',
           role: 'Live product | AI-agent security',
           avatarAlt: 'Pavii logo',
         },
-      ],
-    },
-    stats: {
-      title: 'Why Build on Hyper 0X?',
-      subTitle:
-        "Most blockchains make you inherit someone else's fees, roadmap and outages. Hyper 0X is ours, so every product we build, and every chain we build for you, gets the same enterprise-grade foundation.",
-      benefits: [
-        'Deterministic finality: no reorgs, no front-running.',
-        'Post-quantum-resistant encryption on every connection, plus four layers of data protection.',
-        'An L2 for every customer, with its own rules and bridges, on one shared record.',
       ],
     },
   },

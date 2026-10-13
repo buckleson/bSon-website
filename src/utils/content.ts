@@ -7,8 +7,7 @@ import {
 } from '@utils/locale';
 
 /**
- * Content module for the localised collections (`blog`, `insights`,
- * `products`).
+ * Content module for the localised collections (`blog`, `products`).
  *
  * Entries live under `src/content/<collection>/<locale>/<slug>.md`, so an
  * entry's id is `<locale>/<slug>`. This module is the only place that knows
@@ -16,7 +15,7 @@ import {
  * take an entry and ask here for its locale, slug, path and siblings.
  */
 
-export type LocalisedCollection = 'blog' | 'insights' | 'products';
+export type LocalisedCollection = 'blog' | 'products';
 export type LocalisedEntry<
   C extends LocalisedCollection = LocalisedCollection,
 > = CollectionEntry<C>;
@@ -24,7 +23,6 @@ export type LocalisedEntry<
 /** Unlocalised route prefix of each collection. */
 const ROUTES: Record<LocalisedCollection, string> = {
   blog: '/blog',
-  insights: '/insights',
   products: '/products',
 };
 
@@ -36,8 +34,7 @@ const SORTERS: {
   ) => number;
 } = {
   blog: (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-  products: (a, b) => a.data.main.id - b.data.main.id,
-  insights: () => 0,
+  products: (a, b) => a.data.order - b.data.order,
 };
 
 /** The locale an entry was authored in, from its id prefix. */

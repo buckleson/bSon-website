@@ -15,8 +15,22 @@ export default defineConfig({
     domains: ['images.unsplash.com'],
   },
   prefetch: true,
+  // Old URLs from the first site version; Astro emits a redirect page for each.
+  redirects: {
+    '/blog/post-1': '/bSon-website/blog/post-quantum-resistant-blockchain/',
+    '/blog/post-2': '/bSon-website/blog/how-to-secure-ai-agents/',
+    '/blog/post-3': '/bSon-website/blog/atomic-settlement/',
+    '/insights/insight-1': '/bSon-website/blog/dynamic-blocks/',
+    '/insights/insight-2': '/bSon-website/blog/proof-of-execution-ai/',
+    '/insights/insight-3': '/bSon-website/blog/account-abstraction-no-seed-phrases/',
+  },
   integrations: [
-    sitemap(),
+    sitemap({
+      // Keep error and redirect pages out of the sitemap.
+      filter: page => !/\/(404|blog\/post-\d|insights)/.test(page),
+      changefreq: 'weekly',
+      lastmod: new Date(),
+    }),
     starlight({
       title: 'Hyper 0X Docs',
       sidebar: [

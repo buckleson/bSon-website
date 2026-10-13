@@ -1,33 +1,33 @@
 {
-  "subTitle": "Answers to the questions we hear most about Hyper 0X and our products.",
+  "subTitle": "Short answers about Buckleson, Hyper 0X and how we work.",
   "faqs": [
     {
-      "question": "What is Hyper 0X?",
-      "answer": "Hyper 0X is Buckleson's own permissioned L1 blockchain, engineered from scratch. It uses leaderless aBFT consensus for deterministic finality, hybrid post-quantum encryption on every connection, and gives every customer their own L2. All Buckleson products run on it."
+      "question": "What does Buckleson do?",
+      "answer": "Buckleson is a blockchain infrastructure company. We build our own blockchain, Hyper 0X, and use it to deliver custom blockchains, asset tokenization, crypto wallets and exchanges, and security for AI agents."
     },
     {
       "question": "Can you build a custom blockchain for my company?",
-      "answer": "Yes. That is our core service. We design a dedicated L2 on Hyper 0X with your own policies, privacy model and bridges, integrate it with your existing systems, and support you from pilot to production."
+      "answer": "Yes, that is our core service. We set up a private L2 on Hyper 0X with your own rules, privacy and bridges, connect it to your existing systems, and support you from pilot to production."
     },
     {
-      "question": "What does asset tokenization involve?",
-      "answer": "We help you represent real-world assets such as gold, funds, bonds or invoices on-chain, with compliance rules like limits, KYC and approvals enforced as code before any transaction executes. Trades settle atomically: both legs or neither."
+      "question": "Do you help companies launch tokenized assets?",
+      "answer": "Yes. We tokenize real-world assets such as gold, funds, bonds, invoices and property, with custody, compliance rules and a secondary market. Trades settle atomically: both legs or neither."
     },
     {
-      "question": "How does Pavii protect AI agents?",
-      "answer": "Pavii connects to Claude, Claude Code, Codex, ChatGPT, Grok, OpenCode or your own agents. Every agent call passes six security gates that stop prompt injection, data leaks, excessive agency, runaway costs, rogue agents, supply-chain attacks, unsafe output and log tampering, and every action is recorded on Hyper 0X."
+      "question": "Why is a blockchain more secure for my business?",
+      "answer": "Records on Hyper 0X cannot be quietly edited or deleted, every connection is post-quantum-resistant, and compliance rules run before a transaction executes. That gives auditors and regulators one verifiable record."
     },
     {
-      "question": "Is Hyper 0X quantum-safe?",
-      "answer": "Hyper 0X is post-quantum-resistant under known attacks. Every connection uses hybrid ML-KEM-768 + X25519 key exchange, so an attacker would have to break both the lattice and the elliptic-curve scheme."
+      "question": "What is Hyper 0X?",
+      "answer": "Hyper 0X is the enterprise blockchain Buckleson built from scratch: a permissioned L1 with deterministic finality, post-quantum-resistant encryption and a private L2 for every customer. Every Buckleson product runs on it."
     },
     {
-      "question": "Can I connect Hyper 0X to other blockchains?",
-      "answer": "Yes. Bridge adapters connect Hyper 0X to EVM chains, Solana and Sui, and our SDKs reach bank DLTs and APIs. Any L2 can also run its own bridge."
+      "question": "How do we get started?",
+      "answer": "Book a 30-minute call. We learn what you want to put on-chain, then propose a scoped pilot on your own L2 with clear success metrics."
     },
     {
       "question": "When do H0X Pay and HyperRun launch?",
-      "answer": "Both are coming soon. Contact us to join the early-access list and we'll let you know as soon as they launch."
+      "answer": "Both are coming soon. Book a call or contact us to join the early-access list."
     }
   ]
 }

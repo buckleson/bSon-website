@@ -1,6 +1,7 @@
-import { SITE } from '@data/constants';
+import { SITE, ORGANIZATION } from '@data/constants';
 import { getCopy } from '@/copy';
 import {
+  BASE,
   LOCALE_INFO,
   localePath,
   type MarketingLocale,
@@ -9,43 +10,51 @@ import {
 /**
  * Page-metadata module.
  *
- * Turns the five things a page knows about itself (locale, path, title,
- * description, kind) into everything the `<head>` needs: title, description,
- * Open Graph fields, canonical and schema.org JSON-LD
- * with the site boilerplate filled in. Pages never hand-write schema.org
+ * Turns what a page knows about itself (locale, path, title, description,
+ * kind) into everything the `<head>` needs: title, description, Open Graph
+ * fields, canonical and one schema.org JSON-LD graph (Organization, WebSite,
+ * the page itself, breadcrumbs and FAQs). Pages never hand-write schema.org
  * objects or the site URL.
  *
  * Pure: takes plain values, returns plain values, so it can be snapshot-tested.
  */
 
-/** What kind of thing the page is, for JSON-LD. */
+export interface Faq {
+  question: string;
+  answer: string;
+}
+
+/** What kind of thing the page is, for JSON-LD and Open Graph. */
 export type PageKind =
-  | { type: 'WebPage' }
+  | { type: 'WebPage' | 'CollectionPage' | 'ContactPage' | 'AboutPage' }
+  | { type: 'Home' }
+  | { type: 'Service'; services: { name: string; description: string }[] }
   | {
       type: 'BlogPosting';
-      image: string;
       datePublished: Date;
+      dateModified?: Date;
       author: string;
+      tags?: string[];
     }
-  | { type: 'Article'; image: string }
-  | { type: 'Product' };
+  | { type: 'Product'; status: 'live' | 'coming-soon' };
 
 export interface PageMetadataInput {
   locale: MarketingLocale;
   /** Site-relative pathname of the page (`Astro.url.pathname`). */
   pathname: string;
-  /** Page title without the site suffix. Omit on the home page. */
+  /** Short page name, used for breadcrumbs and as the default title. */
   title?: string;
+  /** Full `<title>`; when set it replaces `<title> | Buckleson`. */
+  seoTitle?: string;
   /** `<meta name="description">`; falls back to the site description. */
   description?: string;
-  /** Open Graph / Twitter title; falls back to the site OG title. */
+  /** Open Graph / Twitter title; falls back to the page title. */
   ogTitle?: string;
-  /**
-   * Site section the page belongs to (e.g. "Blog"). When given and no
-   * `ogTitle` is set, the OG title becomes `<title> | <section> | <site>`.
-   */
-  section?: string;
+  /** Site-relative path of the page's social image (`/og/<key>.png`). */
+  ogImage?: string;
   kind?: PageKind;
+  faqs?: Faq[];
+  noindex?: boolean;
 }
 
 export interface PageMetadata {
@@ -54,84 +63,160 @@ export interface PageMetadata {
   description: string;
   ogTitle: string;
   ogDescription: string;
+  ogType: 'website' | 'article';
+  ogImage: string;
   ogLocale: string;
   canonical: string;
+  noindex: boolean;
+  articleDates?: { published: string; modified: string };
   jsonLd: Record<string, unknown>;
 }
 
 /** Absolute URL for a site-relative path (which already includes the base). */
 export function absoluteUrl(path: string): string {
-  return new URL(path, SITE.url).href;
+  return new URL(path, `${SITE.origin}/`).href;
+}
+
+const ORG_ID = `${SITE.url}/#organization`;
+const SITE_ID = `${SITE.url}/#website`;
+
+/** Section names for breadcrumb levels, keyed by the first path segment. */
+const SECTIONS: Record<string, string> = {
+  products: 'Products',
+  services: 'Services',
+  blog: 'Blog',
+  contact: 'Contact',
+};
+
+function breadcrumbs(pathname: string, title: string | undefined) {
+  const path = pathname.startsWith(BASE) ? pathname.slice(BASE.length) : pathname;
+  const segments = path.split('/').filter(Boolean);
+  if (segments.length === 0) return null;
+  const items = [{ name: 'Home', path: '/' }];
+  const section = SECTIONS[segments[0]];
+  if (section) items.push({ name: section, path: `/${segments[0]}/` });
+  if (segments.length > 1 && title) items.push({ name: title, path });
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(localePath('en', item.path)),
+    })),
+  };
 }
 
 export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
-  const { locale, pathname, kind = { type: 'WebPage' } } = input;
+  const { locale, pathname, kind = { type: 'WebPage' }, faqs = [] } = input;
   const copy = getCopy(locale);
   const info = LOCALE_INFO[locale];
 
-  const title = input.title ? `${input.title} | ${SITE.title}` : SITE.title;
+  const title =
+    input.seoTitle ?? (input.title ? `${input.title} | ${SITE.title}` : copy.site.ogTitle);
   const description = input.description ?? copy.site.description;
-  const ogTitle =
-    input.ogTitle ??
-    (input.title && input.section
-      ? `${input.title} | ${input.section} | ${SITE.title}`
-      : copy.site.ogTitle);
-  const ogDescription = input.description ?? copy.site.ogDescription;
+  const ogTitle = input.ogTitle ?? title;
   const canonical = absoluteUrl(pathname);
+  const ogImage = absoluteUrl(`${BASE}${input.ogImage ?? '/og/default.png'}`);
 
-  const publisher = {
+  const organization = {
     '@type': 'Organization',
+    '@id': ORG_ID,
     name: SITE.title,
-    logo: { '@type': 'ImageObject', url: `${SITE.url}/favicon.ico` },
+    url: `${SITE.url}/`,
+    logo: { '@type': 'ImageObject', url: absoluteUrl(`${BASE}/brand/buckleson-logo.png`) },
+    description: copy.site.description,
+    email: ORGANIZATION.email,
+    knowsAbout: ORGANIZATION.knowsAbout,
+    ...(ORGANIZATION.sameAs.length > 0 && { sameAs: ORGANIZATION.sameAs }),
+  };
+  const website = {
+    '@type': 'WebSite',
+    '@id': SITE_ID,
+    url: `${SITE.url}/`,
+    name: SITE.title,
+    description: copy.site.descriptionShort,
+    publisher: { '@id': ORG_ID },
+    inLanguage: info.inLanguage,
   };
 
-  let jsonLd: Record<string, unknown>;
+  const page: Record<string, unknown> = {
+    '@id': `${canonical}#page`,
+    url: canonical,
+    name: title,
+    description,
+    isPartOf: { '@id': SITE_ID },
+    inLanguage: info.inLanguage,
+    primaryImageOfPage: { '@type': 'ImageObject', url: ogImage },
+  };
+  let articleDates: PageMetadata['articleDates'];
+
   switch (kind.type) {
-    case 'BlogPosting':
-      jsonLd = {
+    case 'Home':
+      Object.assign(page, { '@type': 'WebPage', about: { '@id': ORG_ID } });
+      break;
+    case 'BlogPosting': {
+      const published = kind.datePublished.toISOString();
+      const modified = (kind.dateModified ?? kind.datePublished).toISOString();
+      articleDates = { published, modified };
+      Object.assign(page, {
         '@type': 'BlogPosting',
         headline: input.title,
-        image: kind.image,
-        datePublished: kind.datePublished.toISOString(),
-        author: { '@type': 'Person', name: kind.author },
-        publisher,
-        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-      };
+        image: ogImage,
+        datePublished: published,
+        dateModified: modified,
+        author: { '@type': 'Organization', name: kind.author, url: `${SITE.url}/` },
+        publisher: { '@id': ORG_ID },
+        mainEntityOfPage: canonical,
+        ...(kind.tags?.length && { keywords: kind.tags.join(', ') }),
+      });
       break;
-    case 'Article':
-      jsonLd = {
-        '@type': 'Article',
-        headline: input.title,
-        description,
-        image: kind.image,
-        author: { '@type': 'Organization', name: SITE.title },
-        publisher,
-        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-      };
-      break;
+    }
     case 'Product':
-      jsonLd = {
-        '@type': 'Product',
-        '@id': canonical,
-        name: input.title,
-        description,
-        brand: { '@type': 'Brand', name: SITE.title },
-      };
+      Object.assign(page, {
+        '@type': 'WebPage',
+        mainEntity: {
+          '@type': 'SoftwareApplication',
+          name: input.title,
+          description,
+          applicationCategory: 'BusinessApplication',
+          operatingSystem: 'Web',
+          image: ogImage,
+          url: canonical,
+          publisher: { '@id': ORG_ID },
+          ...(kind.status === 'coming-soon' && { releaseNotes: 'Coming soon' }),
+        },
+      });
+      break;
+    case 'Service':
+      Object.assign(page, {
+        '@type': 'WebPage',
+        mainEntity: kind.services.map(service => ({
+          '@type': 'Service',
+          name: service.name,
+          description: service.description,
+          provider: { '@id': ORG_ID },
+          areaServed: 'Worldwide',
+        })),
+      });
       break;
     default:
-      jsonLd = {
-        '@type': 'WebPage',
-        '@id': canonical,
-        url: canonical,
-        name: ogTitle,
-        description,
-        isPartOf: {
-          '@type': 'WebSite',
-          url: absoluteUrl(localePath(locale)),
-          name: SITE.title,
-          description: copy.site.descriptionShort,
-        },
-      };
+      page['@type'] = kind.type;
+  }
+
+  const graph: Record<string, unknown>[] = [organization, website, page];
+  const crumbs = breadcrumbs(pathname, input.title);
+  if (crumbs) graph.push(crumbs);
+  if (faqs.length > 0) {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${canonical}#faq`,
+      mainEntity: faqs.map(faq => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+      })),
+    });
   }
 
   return {
@@ -139,13 +224,13 @@ export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
     title,
     description,
     ogTitle,
-    ogDescription,
+    ogDescription: description,
+    ogType: kind.type === 'BlogPosting' ? 'article' : 'website',
+    ogImage,
     ogLocale: info.ogLocale,
     canonical,
-    jsonLd: {
-      '@context': 'https://schema.org',
-      ...jsonLd,
-      inLanguage: info.inLanguage,
-    },
+    noindex: input.noindex ?? false,
+    articleDates,
+    jsonLd: { '@context': 'https://schema.org', '@graph': graph },
   };
 }

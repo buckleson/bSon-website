@@ -79,13 +79,13 @@ interface PricingSectionProps {
       {/* CTA for purchasing the product */}
       <a
         href={localePath('en', pricing.starterKit.purchaseLink)}
-        class="block rounded-lg bg-orange-600 px-8 py-3 text-center text-sm font-bold text-neutral-50 ring-orange-300 outline-hidden transition duration-100 hover:bg-orange-700 focus-visible:ring-3 active:bg-orange-700 md:text-base"
+        class="block rounded-lg bg-orange-600 dark:bg-orange-700 px-8 py-3 text-center text-sm font-bold text-neutral-50 ring-orange-300 outline-hidden transition duration-100 hover:bg-orange-700 focus-visible:ring-3 active:bg-orange-700 md:text-base"
       >
         {pricing.starterKit.purchaseBtnTitle}
       </a>
     </div>
     {/* Professional Toolbox product details */}
-    <div class="w-full rounded-xl bg-linear-to-tr from-orange-700 to-indigo-700 p-6 shadow-xl sm:w-1/2 sm:p-8">
+    <div class="w-full rounded-xl bg-linear-to-tr from-orange-700 to-indigo-700 dark:from-[#FF512F] dark:to-[#F09819] p-6 shadow-xl sm:w-1/2 sm:p-8">
       <div class="mb-4 flex flex-col items-start justify-between gap-4 lg:flex-row">
         <div>
           <h3 class="text-2xl font-bold text-neutral-100 sm:text-3xl">

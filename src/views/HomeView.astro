@@ -2,19 +2,19 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import HeroSection from '@components/sections/landing/HeroSection.astro';
 import HeroSectionAlt from '@components/sections/landing/HeroSectionAlt.astro';
+import PromptShieldAnimation from '@components/sections/landing/PromptShieldAnimation.astro';
+import DomainsSection from '@components/sections/landing/DomainsSection.astro';
 import ClientsSection from '@components/sections/landing/ClientsSection.astro';
+import GlanceSection from '@components/sections/landing/GlanceSection.astro';
+import LatestPosts from '@components/sections/landing/LatestPosts.astro';
 import FeaturesGeneral from '@components/sections/features/FeaturesGeneral.astro';
 import FeaturesNavs from '@components/sections/features/FeaturesNavs.astro';
 import TestimonialsSection from '@components/sections/testimonials/TestimonialsSection.astro';
 import PricingSection from '@components/sections/pricing/PricingSection.astro';
 import FAQ from '@components/sections/misc/FAQ.astro';
 import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
-import heroImage from '@images/diagrams/platform-architecture.png';
-import hyper0xDiagram from '@images/diagrams/hyper0x-architecture.png';
-import paviiDiagram from '@images/diagrams/pavii-architecture.png';
-import walletDiagram from '@images/diagrams/wallet-architecture.png';
 import buckleson from '@images/brand/buckleson.png';
-import { partnersData } from '@data/constants';
+import { BOOKING_URL, partnersData } from '@data/constants';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
@@ -33,24 +33,25 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
 }));
 ---
 
-<MainLayout>
+<MainLayout seoTitle={copy.metaTitle} kind={{ type: 'Home' }} faqs={t.data.faqs.faqs}>
   <AnnouncementBanner
     btnId="dismiss-button"
     btnTitle={copy.banner}
-    url={localePath(locale, '/products')}
+    url={localePath(locale, '/products/h0x-pay/')}
   />
 
   <HeroSection
     title={copy.hero.title}
-    eyebrow={copy.hero.eyebrow}
     subTitle={copy.hero.subTitle}
     primaryBtn={copy.hero.primaryBtn}
-    primaryBtnURL={localePath(locale, '/products')}
+    primaryBtnURL={BOOKING_URL}
     secondaryBtn={copy.hero.secondaryBtn}
-    secondaryBtnURL={localePath(locale, '/contact')}
-    src={heroImage}
-    alt={copy.hero.imageAlt}
-  />
+    secondaryBtnURL={localePath(locale, '/products/hyper-0x/')}
+  >
+    <PromptShieldAnimation slot="visual" />
+  </HeroSection>
+
+  <DomainsSection title={copy.domains.title} items={copy.domains.items} />
 
   <ClientsSection
     title={copy.clients.title}
@@ -67,23 +68,9 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
   <FeaturesNavs
     title={copy.featuresNavs.title}
     tabs={[
-      {
-        ...copy.featuresNavs.tabs.tools,
-        svg: 'frame',
-        src: hyper0xDiagram,
-        first: true,
-      },
-      {
-        ...copy.featuresNavs.tabs.dashboard,
-        svg: 'verified',
-        src: paviiDiagram,
-        second: true,
-      },
-      {
-        ...copy.featuresNavs.tabs.features,
-        svg: 'dashboard',
-        src: walletDiagram,
-      },
+      { ...copy.featuresNavs.tabs.tools, svg: 'frame', diagram: 'hyper0x', first: true },
+      { ...copy.featuresNavs.tabs.dashboard, svg: 'verified', diagram: 'pavii' },
+      { ...copy.featuresNavs.tabs.features, svg: 'dashboard', diagram: 'wallet' },
     ]}
   />
 
@@ -94,13 +81,17 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
     statistics={copy.testimonials.statistics}
   />
 
+  <GlanceSection title={copy.glance.title} facts={copy.glance.facts} />
+
   <PricingSection pricing={t.data.pricing} />
 
   <FAQ title={copy.faqTitle} faqs={t.data.faqs} />
 
+  <LatestPosts title={copy.latestPosts.title} cta={copy.latestPosts.cta} />
+
   <HeroSectionAlt
     title={copy.heroAlt.title}
     subTitle={copy.heroAlt.subTitle}
-    url={localePath(locale, '/contact')}
+    url={BOOKING_URL}
   />
 </MainLayout>

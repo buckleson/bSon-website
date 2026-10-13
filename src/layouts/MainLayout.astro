@@ -2,7 +2,7 @@
 import Meta from '@components/Meta.astro';
 import Navbar from '@components/sections/navbar&footer/Navbar.astro';
 import FooterSection from '@components/sections/navbar&footer/FooterSection.astro';
-import { buildPageMetadata, type PageKind } from '@utils/metadata';
+import { buildPageMetadata, type Faq, type PageKind } from '@utils/metadata';
 import '@styles/global.css';
 
 /**
@@ -13,22 +13,29 @@ import '@styles/global.css';
  * middleware (`Astro.locals.locale`), the single source for the whole tree.
  */
 interface Props {
-  /** Page title without the site suffix. Omit on the home page. */
+  /** Short page name (breadcrumbs, default title). Omit on the home page. */
   title?: string;
+  /** Full `<title>` when it should differ from `<title> | Buckleson`. */
+  seoTitle?: string;
   description?: string;
   ogTitle?: string;
-  /** Site section for the OG title, e.g. `copy.blog.ogSection`. */
-  section?: string;
+  /** Social image path, e.g. `/og/products-pavii.png`. */
+  ogImage?: string;
   kind?: PageKind;
+  faqs?: Faq[];
+  noindex?: boolean;
   hideFooter?: boolean;
 }
 
 const {
   title,
+  seoTitle,
   description,
   ogTitle,
-  section,
+  ogImage,
   kind,
+  faqs,
+  noindex,
   hideFooter = false,
 } = Astro.props;
 const { locale, copy: t } = Astro.locals;
@@ -37,16 +44,19 @@ const metadata = buildPageMetadata({
   locale,
   pathname: Astro.url.pathname,
   title,
+  seoTitle,
   description,
   ogTitle,
-  section,
+  ogImage,
   kind,
+  faqs,
+  noindex,
 });
 ---
 
 <html
   lang={metadata.lang}
-  class="scrollbar-hide lenis lenis-smooth scroll-pt-16"
+  class="lenis lenis-smooth scroll-pt-24"
 >
   <head>
     <Meta metadata={metadata} />
@@ -64,6 +74,7 @@ const metadata = buildPageMetadata({
     </script>
     <script>
       import '@scripts/lenisSmoothScroll.js';
+      import '@scripts/reveal.ts';
     </script>
   </head>
   <body class="flex min-h-screen flex-col bg-neutral-100 selection:bg-orange-200 selection:text-neutral-900 dark:bg-neutral-800">
@@ -95,16 +106,5 @@ const metadata = buildPageMetadata({
         document.addEventListener('DOMContentLoaded', init);
       else init();
     </script>
-    <style>
-      /* CSS rules for the page scrollbar */
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
-
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    </style>
   </body>
 </html>

@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
 
 /* Preline UI */
 @source '../../../node_modules/preline/dist/*.js';
@@ -11,6 +13,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   /* https://tailwindcss.com/docs/colors#customizing-your-colors */
   --color-*: initial;
   --color-transparent: transparent;
@@ -66,18 +70,6 @@
   --color-yellow-900: oklch(0.421 0.095 57.708);
   --color-yellow-950: oklch(0.286 0.066 53.813);
 
-  /* Brand accent: the template's orange-* utilities are remapped to violet. */
-  --color-orange-50: oklch(0.969 0.016 293.756);
-  --color-orange-100: oklch(0.943 0.029 294.588);
-  --color-orange-200: oklch(0.894 0.057 293.283);
-  --color-orange-300: oklch(0.811 0.111 293.571);
-  --color-orange-400: oklch(0.702 0.183 293.541);
-  --color-orange-500: oklch(0.606 0.25 292.717);
-  --color-orange-600: oklch(0.541 0.281 293.009);
-  --color-orange-700: oklch(0.491 0.27 292.581);
-  --color-orange-800: oklch(0.432 0.232 292.759);
-  --color-orange-900: oklch(0.38 0.189 293.745);
-  --color-orange-950: oklch(0.283 0.141 291.089);
 
   --color-red-50: oklch(0.971 0.013 17.38);
   --color-red-100: oklch(0.936 0.032 17.717);
@@ -105,6 +97,52 @@
 }
 
 /*
+  Brand accent. The template's orange-* utilities read from --accent-*,
+  which is violet in light mode and the original orange in dark mode.
+*/
+@theme inline {
+  --color-orange-50: var(--accent-50);
+  --color-orange-100: var(--accent-100);
+  --color-orange-200: var(--accent-200);
+  --color-orange-300: var(--accent-300);
+  --color-orange-400: var(--accent-400);
+  --color-orange-500: var(--accent-500);
+  --color-orange-600: var(--accent-600);
+  --color-orange-700: var(--accent-700);
+  --color-orange-800: var(--accent-800);
+  --color-orange-900: var(--accent-900);
+  --color-orange-950: var(--accent-950);
+}
+
+:root {
+  --accent-50: oklch(0.969 0.016 293.756);
+  --accent-100: oklch(0.943 0.029 294.588);
+  --accent-200: oklch(0.894 0.057 293.283);
+  --accent-300: oklch(0.811 0.111 293.571);
+  --accent-400: oklch(0.702 0.183 293.541);
+  --accent-500: oklch(0.606 0.25 292.717);
+  --accent-600: oklch(0.541 0.281 293.009);
+  --accent-700: oklch(0.491 0.27 292.581);
+  --accent-800: oklch(0.432 0.232 292.759);
+  --accent-900: oklch(0.38 0.189 293.745);
+  --accent-950: oklch(0.283 0.141 291.089);
+}
+
+.dark {
+  --accent-50: oklch(0.98 0.016 73.684);
+  --accent-100: oklch(0.954 0.038 75.164);
+  --accent-200: oklch(0.901 0.076 70.697);
+  --accent-300: oklch(70.72% 0.182 40.56);
+  --accent-400: oklch(67.4% 0.2072 39.23);
+  --accent-500: oklch(61.86% 0.1946 38.88);
+  --accent-600: oklch(0.646 0.222 41.116);
+  --accent-700: oklch(0.553 0.195 38.402);
+  --accent-800: oklch(0.47 0.157 37.304);
+  --accent-900: oklch(0.408 0.123 38.172);
+  --accent-950: oklch(0.266 0.079 36.259);
+}
+
+/*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
@@ -124,5 +162,52 @@
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+/* Scroll reveal (see src/assets/scripts/reveal.ts). */
+.reveal-ready [data-reveal]:not(.is-revealed),
+.reveal-ready [data-reveal-item]:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(6px);
+}
+.reveal-ready [data-reveal],
+.reveal-ready [data-reveal-item] {
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Browser surfaces follow the palette. */
+:root {
+  accent-color: var(--accent-600);
+  caret-color: var(--accent-600);
+  scrollbar-color: var(--color-neutral-400) transparent;
+  scrollbar-width: thin;
+}
+.dark {
+  scrollbar-color: var(--color-neutral-600) transparent;
+}
+:focus-visible {
+  outline-color: var(--accent-500);
+}
+a {
+  text-underline-offset: 0.2em;
+}
+
+/* Display face for headings; body stays on Inter. */
+@layer base {
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  body {
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  .tabular-nums, [data-stat] {
+    font-variant-numeric: tabular-nums;
   }
 }

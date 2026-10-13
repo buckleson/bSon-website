@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import { diagrams, type DiagramName } from '@data/diagrams';
+
+/**
+ * A framed architecture diagram that follows the site theme. Clicking it
+ * opens the full-size file for zooming.
+ */
+interface Props {
+  name: DiagramName;
+  alt?: string;
+  caption?: string;
+  eager?: boolean;
+  class?: string;
+}
+
+const { name, alt, caption, eager = false, class: className } = Astro.props;
+const diagram = diagrams[name];
+const label = alt ?? diagram.alt;
+const loading = eager ? 'eager' : 'lazy';
+---
+
+<figure class:list={['diagram', className]}>
+  <div class="overflow-hidden rounded-2xl bg-white shadow-[0_24px_60px_-28px_rgb(30_16_60/0.35)] ring-1 ring-neutral-900/10 dark:bg-[#0b0f1a] dark:shadow-[0_24px_60px_-28px_rgb(0_0_0/0.8)] dark:ring-white/10">
+    <a href={diagram.light.src} class="block dark:hidden" aria-label={`Open full-size diagram: ${label}`}>
+      <Image src={diagram.light} alt={label} loading={loading} class="h-auto w-full" widths={[640, 1024, diagram.light.width]} sizes="(min-width: 1280px) 1200px, 100vw" />
+    </a>
+    <a href={diagram.dark.src} class="hidden dark:block" aria-label={`Open full-size diagram: ${label}`}>
+      <Image src={diagram.dark} alt="" loading={loading} class="h-auto w-full" widths={[640, 1024, diagram.dark.width]} sizes="(min-width: 1280px) 1200px, 100vw" />
+    </a>
+  </div>
+  {caption && (
+    <figcaption class="mt-3 text-center text-sm text-neutral-600 dark:text-neutral-400">
+      {caption}
+    </figcaption>
+  )}
+</figure>

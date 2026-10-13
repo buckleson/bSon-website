@@ -17,7 +17,7 @@
       "Success metrics agreed up front"
     ],
     "purchaseBtnTitle": "Start a Pilot",
-    "purchaseLink": "/contact"
+    "purchaseLink": "https://cal.com/buckleson-group/30min"
   },
 
   "professionalToolbox": {
@@ -33,6 +33,6 @@
       "Wallet SDKs for your apps"
     ],
     "purchaseBtnTitle": "Request a Proposal",
-    "purchaseLink": "/contact"
+    "purchaseLink": "https://cal.com/buckleson-group/30min"
   }
 }

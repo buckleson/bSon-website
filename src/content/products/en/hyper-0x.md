@@ -1,54 +1,56 @@
 ---
 title: 'Hyper 0X'
-description: 'Our own L1 blockchain, with an L2 for every customer'
-main:
-  id: 1
-  content: |
-    Hyper 0X is the custom blockchain that powers everything Buckleson builds. It is our own permissioned L1, engineered from scratch, so there are no public-chain fees, roadmaps or outages to inherit. Enterprises and builders use Hyper 0X to launch their own products: each customer gets a dedicated L2 with its own rules, settled on one shared, verifiable record. Hyper Wallet, Pavii and every custom chain we deliver run on it.
-  imgCard: '@/images/product-image-1.avif'
-  imgMain: '@/images/product-image-main-1.avif'
-  imgAlt: 'The Hyper 0X blockchain'
-tabs:
-  - id: 'tabs-with-card-item-1'
-    dataTab: '#tabs-with-card-1'
-    title: 'Overview'
-  - id: 'tabs-with-card-item-2'
-    dataTab: '#tabs-with-card-2'
-    title: 'Specifications'
-  - id: 'tabs-with-card-item-3'
-    dataTab: '#tabs-with-card-3'
-    title: 'Architecture'
-longDescription:
-  title: 'A Modular Blockchain Built for Enterprises'
-  subTitle: |
-    The core of Hyper 0X never depends on the products built on top of it. Encryption layers, L2 types, bridges and policy rules plug in through their own interfaces, so we can add capabilities without a fork. Compliance runs as code: limits, KYC and maker-checker approvals are checked before a transaction executes. Hyper 0X is also the trust layer for AI. Every AI decision and action is recorded as a signed, chained transaction, turning "black box" AI operations into verifiable records for audit, billing and disputes.
-  btnTitle: 'Build on Hyper 0X'
-  btnURL: '/contact'
-descriptionList:
-  - title: 'Final in One Pass'
-    subTitle: 'Leaderless aBFT consensus with virtual voting gives deterministic finality. No reorgs, no front-running, no leader to attack.'
-  - title: 'Post-Quantum-Resistant'
-    subTitle: 'Hybrid ML-KEM-768 + X25519 key exchange on every connection, plus four layers of encryption for data in transit, in computation, on the ledger and at rest.'
-  - title: 'An L2 for Every Customer'
-    subTitle: 'Each institution gets its own sequencer, policies and bridge. Blocks resize with load: fast when quiet, no backlog at peaks.'
-specificationsLeft:
-  - title: 'Consensus'
-    subTitle: 'Hashgraph-based asynchronous BFT with a permissioned, PKI-bound validator set. Stays safe while fewer than 1/3 of validators are faulty.'
-  - title: 'Encryption'
-    subTitle: 'TLS 1.3 with hybrid X25519 + ML-KEM-768, AES-256-GCM, per-party encrypted payloads and HSM-held master keys.'
-  - title: 'Smart Contracts'
-    subTitle: 'Rust today, with a TypeScript framework in development. Deploy to the L1 or any L2, with governed, approval-based upgrades.'
-  - title: 'Interoperability'
-    subTitle: 'Bridge adapters for EVM chains, Solana and Sui, plus SDKs for bank DLTs and APIs. Account abstraction means no seed phrases or gas tokens for users.'
-tableData:
-  - feature: ['Capability', 'Hyper 0X']
-    description:
-      - ['Network type', 'Permissioned L1 + per-customer L2s']
-      - ['Finality', 'Deterministic, no reorgs']
-      - ['Transaction ordering', 'Median receive time, no single orderer']
-      - ['Key exchange', 'Hybrid ML-KEM-768 + X25519']
-      - ['Encryption layers', '4 (transit, compute, ledger, rest)']
-      - ['Bridges', 'EVM, Solana, Sui']
-blueprints:
-  first: '@/images/diagrams/hyper0x-architecture.png'
+seoTitle: 'Hyper 0X Enterprise Blockchain Platform | Buckleson'
+description: 'Hyper 0X is a post-quantum-resistant enterprise blockchain: a permissioned L1 with instant finality and a private L2 for every customer, built by Buckleson.'
+order: 1
+status: 'live'
+tagline: 'Our own L1 blockchain, with a private L2 for every customer'
+summary: |
+  Hyper 0X is the blockchain Buckleson built from scratch. Each customer gets a private L2 with its own rules, and every L2 settles on one shared L1. Transactions are final in one pass, every connection is post-quantum-resistant, and compliance rules run before anything executes.
+diagram: 'hyper0x'
+features:
+  - title: 'Final in one pass'
+    subTitle: 'Leaderless aBFT consensus gives deterministic finality. No reorgs, no front-running, no single leader to attack.'
+  - title: 'Post-quantum-resistant'
+    subTitle: 'Hybrid ML-KEM-768 + X25519 key exchange on every connection, plus encryption in transit, in computation, on the ledger and at rest.'
+  - title: 'A private L2 for every customer'
+    subTitle: 'Your own sequencer, policies, privacy and bridge. Blocks resize with load: fast when quiet, no backlog at peaks.'
+  - title: 'Compliance as code'
+    subTitle: 'Limits, KYC and maker-checker approvals are checked before a transaction executes, not after.'
+  - title: 'No seed phrases'
+    subTitle: 'Account abstraction lets users sign in with a face scan or passkey. Apps can pay the fees for them.'
+  - title: 'Connects to other chains'
+    subTitle: 'Bridge adapters for EVM chains, Solana and Sui, plus SDKs for bank DLTs and core banking APIs.'
+details:
+  title: 'Technical specifications'
+  items:
+    - title: 'Consensus'
+      subTitle: 'Hashgraph-based asynchronous BFT with a permissioned, PKI-bound validator set. Safe while fewer than one third of validators are faulty.'
+    - title: 'Transaction ordering'
+      subTitle: 'Median receive time across validators, so no single node decides the order.'
+    - title: 'Encryption'
+      subTitle: 'TLS 1.3 with hybrid X25519 + ML-KEM-768, AES-256-GCM, per-party encrypted payloads and HSM-held master keys.'
+    - title: 'Smart contracts'
+      subTitle: 'Rust today, TypeScript framework in development. Deploy to the L1 or any L2, with governed, approval-based upgrades.'
+    - title: 'AI audit trail'
+      subTitle: 'AI decisions and actions can be written as signed, chained transactions for audit, billing and disputes.'
+    - title: 'Network type'
+      subTitle: 'Permissioned L1 with per-customer L2s that post state roots to the L1.'
+cta:
+  title: 'Book a call with an engineer'
+  url: 'https://cal.com/buckleson-group/30min'
+learnMore:
+  - title: 'Read the Hyper 0X docs'
+    url: '/guides/intro/'
+  - title: 'Private L2 vs public blockchain'
+    url: '/blog/private-l2-vs-public-blockchain/'
+  - title: 'What makes a blockchain post-quantum-resistant'
+    url: '/blog/post-quantum-resistant-blockchain/'
+faqs:
+  - question: 'What is Hyper 0X?'
+    answer: 'Hyper 0X is an enterprise blockchain built by Buckleson. It is a permissioned L1 with deterministic aBFT finality and post-quantum-resistant encryption, and every customer runs on their own private L2.'
+  - question: 'Is Hyper 0X a public or private blockchain?'
+    answer: 'The L1 is permissioned: validators are known and bound to PKI. Each customer L2 is private, with its own rules and privacy, and settles to the shared L1. Bridges connect it to public chains such as Ethereum, Solana and Sui.'
+  - question: 'Can I launch my own chain on Hyper 0X?'
+    answer: 'Yes. Buckleson sets up a dedicated L2 for you with your own sequencer, compliance rules, privacy settings and bridges, then helps you go from pilot to production.'
 ---

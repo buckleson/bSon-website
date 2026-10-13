@@ -1,17 +1,20 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
-import CardProduct from '@components/ui/cards/CardProduct.astro';
-import FeaturesStatsAlt from '@components/sections/features/FeaturesStatsAlt.astro';
+import Diagram from '@components/ui/Diagram.astro';
 import TestimonialsSectionAlt from '@components/sections/testimonials/TestimonialsSectionAlt.astro';
 import buckleson from '@images/brand/buckleson.png';
 import hyperWallet from '@images/brand/hyper-wallet.png';
 import pavii from '@images/brand/pavii.png';
-import { entriesFor } from '@utils/content';
+import { BOOKING_URL } from '@data/constants';
+import { entriesFor, pathFor } from '@utils/content';
 import { getCopy } from '@/copy';
 import type { MarketingLocale } from '@utils/locale';
 
-/** The products index in one locale. */
+/**
+ * The products index: each product shown with its architecture diagram and
+ * a few plain lines, Hyper 0X first. Coming-soon products sit together.
+ */
 interface Props {
   locale: MarketingLocale;
 }
@@ -20,9 +23,10 @@ const { locale } = Astro.props;
 const copy = getCopy(locale).productsIndex;
 
 const products = await entriesFor('products', locale);
+const live = products.filter(product => product.data.status === 'live');
+const soon = products.filter(product => product.data.status === 'coming-soon');
 
 const avatarSrcs = [buckleson.src, hyperWallet.src, pavii.src];
-
 const testimonials = copy.testimonials.quotes.map((quote, index) => ({
   ...quote,
   avatarSrc: avatarSrcs[index],
@@ -31,46 +35,86 @@ const testimonials = copy.testimonials.quotes.map((quote, index) => ({
 
 <MainLayout
   title={copy.title}
+  seoTitle={copy.seoTitle}
   description={copy.metaDescription}
-  ogTitle={copy.ogTitle}
+  ogImage="/og/products.png"
+  kind={{ type: 'CollectionPage' }}
 >
-  <div class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
-    <div class="mb-4 flex items-center justify-between gap-8 sm:mb-8 md:mb-12">
-      <div class="flex items-center gap-12">
-        <h1 class="text-2xl font-bold tracking-tight text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200">
-          {copy.heading}
-        </h1>
-        {copy.subTitle && (
-          <p class="hidden max-w-(--breakpoint-sm) text-pretty text-neutral-600 md:block dark:text-neutral-400">
-            {copy.subTitle}
-          </p>
-        )}
-      </div>
-      <PrimaryCTA
-        title={copy.customerStories}
-        url="#testimonials"
-        noArrow={true}
-      />
+  <section class="mx-auto max-w-[85rem] px-4 pt-12 pb-6 sm:px-6 lg:px-8 lg:pt-20">
+    <div class="max-w-3xl" data-reveal>
+      <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
+        {copy.heading}
+      </h1>
+      <p class="mt-5 max-w-[60ch] text-lg leading-relaxed text-pretty text-neutral-600 dark:text-neutral-400">
+        {copy.subTitle}
+      </p>
     </div>
-    {/* Products alternate small / wide / wide / small so every row fills the 3-column grid. */}
-    <section class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
-      {products.map((product, index) => (
-        <CardProduct
-          product={product}
-          wide={index % 4 === 1 || index % 4 === 2}
-        />
-      ))}
+  </section>
+
+  {live.map((product, index) => (
+    <section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <div
+        class:list={[
+          'grid items-center gap-10',
+          index === 0 ? 'lg:grid-cols-1' : 'lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]',
+        ]}
+      >
+        <div class:list={[index % 2 === 0 && index > 0 && 'lg:order-2']} data-reveal>
+          <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 lg:text-4xl dark:text-neutral-100">
+            <a href={pathFor(product)} class="hover:text-orange-700 dark:hover:text-orange-300">{product.data.title}</a>
+          </h2>
+          <p class="mt-2 text-lg font-medium text-neutral-700 dark:text-neutral-300">{product.data.tagline}</p>
+          <p class="mt-4 max-w-[62ch] text-pretty text-neutral-600 dark:text-neutral-400">{product.data.summary}</p>
+          <ul class:list={['mt-6 grid gap-3 text-neutral-700 dark:text-neutral-300', index === 0 && 'sm:grid-cols-3']}>
+            {product.data.features.slice(0, 3).map(feature => (
+              <li class="border-t-2 border-orange-500/70 pt-3">
+                <span class="font-semibold text-neutral-900 dark:text-neutral-100">{feature.title}</span>
+              </li>
+            ))}
+          </ul>
+          <div class="mt-7">
+            <PrimaryCTA title={`Explore ${product.data.title}`} url={pathFor(product)} />
+          </div>
+        </div>
+        <div data-reveal>
+          <Diagram name={product.data.diagram} eager={index === 0} />
+        </div>
+      </div>
     </section>
-  </div>
-  {/* Features statistics section */}
-  <FeaturesStatsAlt
-    title={copy.stats.title}
-    subTitle={copy.stats.subTitle}
-    benefits={copy.stats.benefits}
-  />
-  {/* Testimonials section */}
-  <TestimonialsSectionAlt
-    title={copy.testimonials.title}
-    testimonials={testimonials}
-  />
+  ))}
+
+  <section class="mx-auto max-w-[85rem] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+    <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 lg:text-4xl dark:text-neutral-100" data-reveal>
+      {copy.soonHeading}
+    </h2>
+    <div class="mt-8 grid gap-8 lg:grid-cols-2" data-reveal-group>
+      {soon.map(product => (
+        <article class="rounded-3xl border border-dashed border-neutral-300 p-6 sm:p-8 dark:border-neutral-700" data-reveal-item>
+          <div class="flex flex-wrap items-baseline gap-3">
+            <h3 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+              <a href={pathFor(product)} class="hover:text-orange-700 dark:hover:text-orange-300">{product.data.title}</a>
+            </h3>
+            <span class="rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-semibold text-orange-800 dark:bg-orange-950 dark:text-orange-200">Coming soon</span>
+          </div>
+          <p class="mt-3 text-pretty text-neutral-600 dark:text-neutral-400">{product.data.summary}</p>
+          <div class="mt-6">
+            <Diagram name={product.data.diagram} />
+          </div>
+          <a href={pathFor(product)} class="mt-5 inline-block font-semibold text-orange-700 underline decoration-orange-300 underline-offset-4 dark:text-orange-300 dark:decoration-orange-700">
+            Read about {product.data.title}
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <TestimonialsSectionAlt title={copy.testimonials.title} testimonials={testimonials} />
+
+  <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="rounded-3xl bg-neutral-900 px-6 py-12 text-center sm:px-12 dark:bg-neutral-950 dark:ring-1 dark:ring-white/10" data-reveal>
+      <h2 class="text-3xl font-bold tracking-tight text-balance text-white">{copy.cta.title}</h2>
+      <p class="mx-auto mt-3 max-w-xl text-pretty text-neutral-300">{copy.cta.subTitle}</p>
+      <div class="mt-8"><PrimaryCTA title={copy.cta.btn} url={BOOKING_URL} /></div>
+    </div>
+  </section>
 </MainLayout>

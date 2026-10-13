@@ -5,69 +5,35 @@ import { z } from 'astro/zod';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 import { glob } from 'astro/loaders';
+import { diagramNames } from './data_files/diagrams';
+
+const item = z.object({ title: z.string(), subTitle: z.string() });
+const faq = z.object({ question: z.string(), answer: z.string() });
 
 const productsCollection = defineCollection({
   loader: glob({
     pattern: '**/[^_]*.{md,mdx}',
     base: './src/content/products',
   }),
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      description: z.string(),
-      main: z.object({
-        id: z.number(),
-        content: z.string(),
-        imgCard: image(),
-        imgMain: image(),
-        imgAlt: z.string(),
-      }),
-      tabs: z.array(
-        z.object({
-          id: z.string(),
-          dataTab: z.string(),
-          title: z.string(),
-        })
-      ),
-      longDescription: z.object({
-        title: z.string(),
-        subTitle: z.string(),
-        btnTitle: z.string(),
-        btnURL: z.string(),
-      }),
-      descriptionList: z.array(
-        z.object({
-          title: z.string(),
-          subTitle: z.string(),
-        })
-      ),
-      specificationsLeft: z.array(
-        z.object({
-          title: z.string(),
-          subTitle: z.string(),
-        })
-      ),
-      specificationsRight: z
-        .array(
-          z.object({
-            title: z.string(),
-            subTitle: z.string(),
-          })
-        )
-        .optional(),
-      tableData: z
-        .array(
-          z.object({
-            feature: z.array(z.string()),
-            description: z.array(z.array(z.string())),
-          })
-        )
-        .optional(),
-      blueprints: z.object({
-        first: image().optional(),
-        second: image().optional(),
-      }),
-    }),
+  schema: z.object({
+    title: z.string(),
+    /** Full `<title>`, under 60 characters, with the page keyword. */
+    seoTitle: z.string(),
+    /** Meta description, 140-160 characters. */
+    description: z.string(),
+    order: z.number(),
+    status: z.enum(['live', 'coming-soon']),
+    /** One line under the product name. */
+    tagline: z.string(),
+    /** Two or three plain sentences: what it is. */
+    summary: z.string(),
+    diagram: z.enum(diagramNames),
+    features: z.array(item),
+    details: z.object({ title: z.string(), items: z.array(item) }),
+    cta: z.object({ title: z.string(), url: z.string() }),
+    learnMore: z.array(z.object({ title: z.string(), url: z.string() })).default([]),
+    faqs: z.array(faq).default([]),
+  }),
 });
 
 const blogCollection = defineCollection({
@@ -75,31 +41,19 @@ const blogCollection = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      /** Meta description, 140-160 characters. */
       description: z.string(),
       author: z.string(),
       role: z.string().optional(),
       authorImage: image(),
       authorImageAlt: z.string(),
       pubDate: z.date(),
-      cardImage: image(),
-      cardImageAlt: z.string(),
+      updatedDate: z.date().optional(),
       readTime: z.number(),
-      tags: z.array(z.string()).optional(),
-    }),
-});
-
-const insightsCollection = defineCollection({
-  loader: glob({
-    pattern: '**/[^_]*.{md,mdx}',
-    base: './src/content/insights',
-  }),
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      description: z.string(),
-      // contents: z.array(z.string()),
-      cardImage: image(),
-      cardImageAlt: z.string(),
+      tags: z.array(z.string()).default([]),
+      /** Optional architecture diagram shown under the intro. */
+      diagram: z.enum(diagramNames).optional(),
+      faqs: z.array(faq).default([]),
     }),
 });
 
@@ -107,5 +61,4 @@ export const collections = {
   docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
   products: productsCollection,
   blog: blogCollection,
-  insights: insightsCollection,
 };

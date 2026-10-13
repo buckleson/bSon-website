@@ -15,8 +15,10 @@ const copy = getCopy(locale).contact;
 
 <MainLayout
   title={copy.title}
+  seoTitle={copy.seoTitle}
   description={copy.metaDescription}
-  ogTitle={copy.ogTitle}
+  ogImage="/og/contact.png"
+  kind={{ type: 'ContactPage' }}
 >
   <ContactSection />
 </MainLayout>

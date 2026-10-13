@@ -11,9 +11,9 @@
 :root {
   --border: hsla(var(--border-neutral), 0.4);
   --backdrop-color: #272727cc;
-  --sl-color-accent: #8b5cf6;
-  --sl-color-accent-high: #c4b5fd;
-  --sl-color-accent-low: #2e1065;
+  --sl-color-accent: #ff801f;
+  --sl-color-accent-high: #ffa057;
+  --sl-color-accent-low: #562800;
   --sl-color-black: #181818;
   --sl-color-gray-1: #eee;
   --sl-color-gray-2: #c2c2c2;
@@ -22,7 +22,7 @@
   --sl-color-gray-5: #383838;
   --sl-color-gray-6: #272727;
   --sl-color-white: #fff;
-  --list-marker-color: #a78bfa;
+  --list-marker-color: #fb923c;
   --border-neutral: 0, 0%, 25.1%;
 }
 
@@ -120,7 +120,7 @@ article.card {
   background: linear-gradient(45deg, #6d28d9, #4f46e5);
   border: none;
   border-radius: 0.5rem;
-  color: #66350c;
+  color: #f5f3ff;
 }
 
 .starlight-aside--note {

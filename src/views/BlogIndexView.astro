@@ -1,84 +1,46 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import CardBlog from '@components/ui/cards/CardBlog.astro';
-import CardBlogRecent from '@components/ui/cards/CardBlogRecent.astro';
-import CardInsight from '@components/ui/cards/CardInsight.astro';
+import PostCard from '@components/ui/cards/PostCard.astro';
 import { entriesFor } from '@utils/content';
 import { getCopy } from '@/copy';
 import type { MarketingLocale } from '@utils/locale';
 
-/** The blog index (posts + insights) in one locale. */
+/** The blog index: newest post featured, the rest in a grid. */
 interface Props {
   locale: MarketingLocale;
 }
 
 const { locale } = Astro.props;
 const copy = getCopy(locale).blogIndex;
-
-const blogPosts = await entriesFor('blog', locale);
-const insightPosts = await entriesFor('insights', locale);
-
-// Separate the most recent post from others
-const [mostRecentPost, ...otherPosts] = blogPosts;
+const [featured, ...others] = await entriesFor('blog', locale);
 ---
 
 <MainLayout
   title={copy.title}
+  seoTitle={copy.seoTitle}
   description={copy.metaDescription}
-  ogTitle={copy.ogTitle}
+  ogImage="/og/blog.png"
+  kind={{ type: 'CollectionPage' }}
 >
-  <section class="mx-auto max-w-[85rem] space-y-8 px-4 pt-16 sm:px-6 lg:px-8 2xl:max-w-full">
-    {/* Page header */}
-    <div class="mx-auto max-w-3xl text-left sm:text-center">
-      <h1 class="block text-4xl font-bold tracking-tight text-balance text-neutral-800 md:text-5xl lg:text-6xl dark:text-neutral-200">
+  <section class="mx-auto max-w-[85rem] px-4 pt-12 pb-8 sm:px-6 lg:px-8 lg:pt-20">
+    <div class="max-w-3xl" data-reveal>
+      <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
         {copy.heading}
       </h1>
-
-      <p class="mt-4 text-lg text-pretty text-neutral-600 dark:text-neutral-400">
-        {copy.subTitle}
-      </p>
+      <p class="mt-5 max-w-[60ch] text-lg text-pretty text-neutral-600 dark:text-neutral-400">{copy.subTitle}</p>
     </div>
   </section>
 
-  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
-    {blogPosts.length === 0 ? (
-      <p class="text-center text-neutral-600 dark:text-neutral-400">
-        {copy.noPosts}
-      </p>
-    ) : (
-      <div class="grid gap-6 lg:grid-cols-2">
-        {otherPosts.map(blogEntry => (
-          <CardBlog blogEntry={blogEntry} />
+  {featured ? (
+    <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8">
+      <div data-reveal><PostCard post={featured} featured headingLevel="h2" /></div>
+      <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+        {others.map(post => (
+          <div data-reveal-item><PostCard post={post} headingLevel="h2" /></div>
         ))}
       </div>
-    )}
-  </section>
-  {/* Most recent blog post */}
-  {mostRecentPost && (
-    <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
-      <CardBlogRecent blogEntry={mostRecentPost} />
     </section>
+  ) : (
+    <p class="px-4 pb-20 text-neutral-600 dark:text-neutral-400">{copy.noPosts}</p>
   )}
-  {/* Insights section */}
-  <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
-    <div class="mx-auto mb-10 max-w-2xl text-center lg:mb-14">
-      <h2 class="text-2xl font-bold text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200">
-        {copy.insightsHeading}
-      </h2>
-      <p class="mt-1 text-pretty text-neutral-600 dark:text-neutral-400">
-        {copy.insightsSubTitle}
-      </p>
-    </div>
-    {insightPosts.length === 0 ? (
-      <p class="text-center text-neutral-600 dark:text-neutral-400">
-        {copy.noInsights}
-      </p>
-    ) : (
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {insightPosts.map(insightEntry => (
-          <CardInsight insightEntry={insightEntry} />
-        ))}
-      </div>
-    )}
-  </section>
 </MainLayout>

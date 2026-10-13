@@ -4,6 +4,7 @@ import TabNav from '@components/ui/blocks/TabNav.astro';
 import TabContent from '@components/ui/blocks/TabContent.astro';
 import Icon from '@components/ui/icons/Icon.astro';
 import type { IconName } from '@components/ui/icons/icons';
+import type { DiagramName } from '@data/diagrams';
 
 // Define props from Astro
 const { title, tabs } = Astro.props;
@@ -13,10 +14,9 @@ interface Tab {
   heading: string;
   content: string;
   svg: IconName;
-  src: any;
+  diagram: DiagramName;
   alt: string;
   first?: boolean;
-  second?: boolean;
 }
 
 // Define TypeScript interface for props
@@ -63,10 +63,9 @@ interface Props {
               <TabContent
                 id={`tabs-with-card-${index + 1}`}
                 aria={`tabs-with-card-item-${index + 1}`}
-                src={tab.src}
+                diagram={tab.diagram}
                 alt={tab.alt}
                 first={tab.first}
-                second={tab.second}
               />
             ))}
           </div>

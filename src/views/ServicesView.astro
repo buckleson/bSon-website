@@ -1,89 +1,74 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import MainSection from '@components/ui/blocks/MainSection.astro';
-import AlternatingSections, {
-  type Article,
-} from '@components/ui/blocks/AlternatingSections.astro';
-import FeaturesStats from '@components/sections/features/FeaturesStats.astro';
-import hyper0xDiagram from '@images/diagrams/hyper0x-architecture.png';
-import platformDiagram from '@images/diagrams/platform-architecture.png';
-import walletDiagram from '@images/diagrams/wallet-architecture.png';
-import paviiDiagram from '@images/diagrams/pavii-architecture.png';
-import personWorking from '@images/person-working.avif';
-import constructionWorkers from '@images/construction-workers.avif';
-import aerialView from '@images/aerial-view.avif';
-import underConstruction from '@images/under-construction.avif';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import Diagram from '@components/ui/Diagram.astro';
+import { BOOKING_URL } from '@data/constants';
+import type { DiagramName } from '@data/diagrams';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
-/** The services page in one locale. */
+/** The services page: one section per service, each with its diagram. */
 interface Props {
   locale: MarketingLocale;
 }
 
 const { locale } = Astro.props;
 const copy = getCopy(locale).services;
-const articleCopy = copy.articles;
-
-const articles: Article[] = [
-  {
-    title: articleCopy.guidance.title,
-    subTitle: articleCopy.guidance.subTitle,
-    images: [
-      { src: hyper0xDiagram, alt: articleCopy.guidance.imageAlts[0] },
-      { src: personWorking, alt: articleCopy.guidance.imageAlts[1] },
-    ],
-  },
-  {
-    title: articleCopy.craftsmanship.title,
-    subTitle: articleCopy.craftsmanship.subTitle,
-    images: [{ src: walletDiagram, alt: articleCopy.craftsmanship.imageAlts[0] }],
-    cta: {
-      title: articleCopy.craftsmanship.cta,
-      url: localePath(locale, '/products/hyper-wallet/'),
-    },
-  },
-  {
-    title: articleCopy.oversight.title,
-    subTitle: articleCopy.oversight.subTitle,
-    images: [
-      { src: constructionWorkers, alt: articleCopy.oversight.imageAlts[0] },
-      { src: aerialView, alt: articleCopy.oversight.imageAlts[1] },
-    ],
-  },
-  {
-    title: articleCopy.maintenance.title,
-    subTitle: articleCopy.maintenance.subTitle,
-    images: [{ src: paviiDiagram, alt: articleCopy.maintenance.imageAlts[0] }],
-  },
-  {
-    title: articleCopy.bespoke.title,
-    subTitle: articleCopy.bespoke.subTitle,
-    images: [
-      { src: platformDiagram, alt: articleCopy.bespoke.imageAlts[0] },
-      { src: underConstruction, alt: articleCopy.bespoke.imageAlts[1] },
-    ],
-    cta: { title: articleCopy.bespoke.cta, url: localePath(locale, '/contact') },
-  },
-];
 ---
 
 <MainLayout
   title={copy.title}
+  seoTitle={copy.seoTitle}
   description={copy.metaDescription}
-  ogTitle={copy.ogTitle}
+  ogImage="/og/services.png"
+  kind={{ type: 'Service', services: copy.items.map(item => ({ name: item.title, description: item.content })) }}
 >
-  <MainSection
-    title={copy.intro.title}
-    subTitle={copy.intro.subTitle}
-    cta={{ title: copy.intro.cta, url: localePath(locale, '/contact') }}
-  />
-  <AlternatingSections articles={articles} />
-  <FeaturesStats
-    title={copy.stats.title}
-    subTitle={copy.stats.subTitle}
-    mainStatTitle={copy.stats.mainStatTitle}
-    mainStatSubTitle={copy.stats.mainStatSubTitle}
-    stats={copy.stats.stats}
-  />
+  <section class="mx-auto max-w-[85rem] px-4 pt-12 pb-6 sm:px-6 lg:px-8 lg:pt-20">
+    <div class="max-w-3xl" data-reveal>
+      <h1 class="text-4xl font-bold tracking-tight text-balance text-neutral-900 sm:text-5xl lg:text-6xl dark:text-neutral-100">
+        {copy.intro.title}
+      </h1>
+      <p class="mt-5 max-w-[62ch] text-lg leading-relaxed text-pretty text-neutral-600 dark:text-neutral-400">{copy.intro.subTitle}</p>
+      <div class="mt-8"><PrimaryCTA title={copy.intro.cta} url={BOOKING_URL} /></div>
+    </div>
+    <nav aria-label="Services" class="mt-12 flex flex-wrap gap-2" data-reveal>
+      {copy.items.map(item => (
+        <a href={`#${item.id}`} class="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-orange-500 hover:text-orange-700 dark:border-neutral-700 dark:text-neutral-300 dark:hover:text-orange-300">
+          {item.title}
+        </a>
+      ))}
+    </nav>
+  </section>
+
+  {copy.items.map((item, index) => (
+    <section id={item.id} class="mx-auto max-w-[85rem] scroll-mt-28 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <div class:list={[index % 2 === 1 && 'lg:order-2']} data-reveal>
+          <h2 class="text-3xl font-bold tracking-tight text-balance text-neutral-900 lg:text-4xl dark:text-neutral-100">{item.title}</h2>
+          <p class="mt-4 max-w-[60ch] text-pretty text-neutral-600 dark:text-neutral-400">{item.content}</p>
+          <ul class="mt-6 space-y-3">
+            {item.points.map(point => (
+              <li class="border-t-2 border-orange-500/70 pt-3 font-semibold text-neutral-900 dark:text-neutral-100">{point}</li>
+            ))}
+          </ul>
+          {'link' in item && item.link && (
+            <a href={localePath(locale, item.link.url)} class="mt-6 inline-block font-semibold text-orange-700 underline decoration-orange-300 underline-offset-4 dark:text-orange-300 dark:decoration-orange-700">
+              {item.link.title}
+            </a>
+          )}
+        </div>
+        <div data-reveal>
+          <Diagram name={item.diagram as DiagramName} />
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="mx-auto max-w-[85rem] px-4 pt-8 pb-20 sm:px-6 lg:px-8">
+    <div class="rounded-3xl bg-neutral-900 px-6 py-12 text-center sm:px-12 dark:bg-neutral-950 dark:ring-1 dark:ring-white/10" data-reveal>
+      <h2 class="text-3xl font-bold tracking-tight text-balance text-white">Start with a pilot</h2>
+      <p class="mx-auto mt-3 max-w-xl text-pretty text-neutral-300">One use case, one forward-deployed engineer, success metrics agreed up front.</p>
+      <div class="mt-8"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
+    </div>
+  </section>
 </MainLayout>

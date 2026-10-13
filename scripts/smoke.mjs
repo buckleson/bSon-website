@@ -1,124 +1,126 @@
-import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { extname, isAbsolute, relative, resolve } from 'node:path';
+// Post-build checks over dist/: every page is reachable, carries unique SEO
+// metadata, has one H1 and valid JSON-LD, and every internal link resolves.
+// Run after `astro build`: `node scripts/smoke.mjs`.
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
-const ROUTES = [
-  '/',
-  '/products/',
-  '/products/hyper-0x/',
-  '/products/pavii/',
-  '/products/hyper-wallet/',
-  '/products/h0x-pay/',
-  '/products/hyperrun/',
-  '/services/',
-  '/blog/',
-  '/blog/post-1/',
-  '/insights/insight-1/',
-  '/contact/',
-  '/welcome-to-docs/',
-  '/404',
-];
+const BASE = '/bSon-website';
 
-// Cheap content assertions on top of the status check. Links carry the
-// GitHub Pages base path (/bSon-website).
+const REQUIRED_FILES = ['index.html', '404.html', 'robots.txt', 'llms.txt', 'llms-full.txt', 'rss.xml', 'sitemap-index.xml', 'og/default.png'];
+
+// Cheap content assertions for key pages (site-relative route -> needles).
 const EXPECTATIONS = {
-  '/': ['<html lang="en"', 'Hyper 0X', 'href="/bSon-website/products"'],
-  '/contact/': ['data-demo-form', 'data-demo-status', 'vijay@buckleson.com'],
-  '/blog/post-1/': ['"@type":"BlogPosting"'],
+  '/': ['<html lang="en"', 'blockchain infrastructure company', '"@type":"FAQPage"', 'data-prompt-shield'],
+  '/products/': ['Hyper 0X', 'Coming soon'],
+  '/products/pavii/': ['data-prompt-shield', '"@type":"SoftwareApplication"'],
   '/products/h0x-pay/': ['Coming soon'],
-  '/products/hyperrun/': ['Coming soon'],
+  '/contact/': ['data-mail-form', 'cal.com/buckleson-group/30min'],
+  '/blog/how-to-secure-ai-agents/': ['"@type":"BlogPosting"', '"@type":"BreadcrumbList"'],
 };
 
-const MIME = {
-  '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript',
-  '.css': 'text/css',
-  '.json': 'application/json',
-  '.txt': 'text/plain',
-  '.xml': 'application/xml',
-  '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon',
-  '.avif': 'image/avif',
-  '.webp': 'image/webp',
-  '.png': 'image/png',
-};
+// Words that must never ship (template leftovers and brand rules).
+const BANNED = [/screwfast/i, /construction/i, /quantum-proof/i, /Hyper[- ]?Tern/i, /Hyper-0x|Hyper-Ox/];
 
-function resolvePath(urlPath) {
-  let pathname = decodeURIComponent(urlPath.split('?')[0]);
-  if (pathname.includes('\0') || /(?:^|[/\\])\.\.(?:[/\\]|$)/.test(pathname)) {
-    throw Object.assign(new Error('Invalid path'), { code: 'EINVAL' });
+async function walk(dir) {
+  const out = [];
+  for (const name of await readdir(dir)) {
+    const path = join(dir, name);
+    if ((await stat(path)).isDirectory()) out.push(...(await walk(path)));
+    else out.push(path);
   }
-  if (pathname.endsWith('/')) pathname += 'index.html';
-  else if (!extname(pathname)) pathname += '/index.html';
-  if (pathname === '/404/index.html') pathname = '/404.html';
-
-  const filePath = resolve(DIST, pathname.replace(/^[/\\]+/, ''));
-  const rel = relative(DIST, filePath);
-  if (rel.startsWith('..') || isAbsolute(rel)) {
-    throw Object.assign(new Error('Path escapes dist'), { code: 'EACCES' });
-  }
-  return filePath;
+  return out;
 }
 
-async function run() {
-  const server = createServer(async (req, res) => {
-    try {
-      const filePath = resolvePath(req.url || '/');
-      const data = await readFile(filePath);
-      const type = MIME[extname(filePath)] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': type });
-      res.end(data);
-    } catch {
+const routeOf = file => {
+  const rel = '/' + relative(DIST, file).split(sep).join('/');
+  return rel.endsWith('/index.html') ? rel.slice(0, -'index.html'.length) : rel;
+};
+const decode = text => text.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+const first = (html, re) => {
+  const value = html.match(re)?.[1]?.trim();
+  return value && decode(value);
+};
+
+const errors = [];
+const fail = (route, message) => errors.push(`${route}: ${message}`);
+
+const files = await walk(DIST);
+const fileSet = new Set(files.map(file => '/' + relative(DIST, file).split(sep).join('/')));
+
+for (const required of REQUIRED_FILES) {
+  if (!fileSet.has('/' + required)) fail(required, 'missing');
+}
+
+const titles = new Map();
+const descriptions = new Map();
+const pages = files.filter(file => file.endsWith('.html'));
+
+for (const file of pages) {
+  const route = routeOf(file);
+  const html = await readFile(file, 'utf8');
+  if (html.includes('http-equiv="refresh"')) continue; // redirect page
+  const isDocs = html.includes('data-pagefind-body') || html.includes('sl-container');
+
+  const title = first(html, /<title>([^<]*)<\/title>/);
+  const description = first(html, /<meta name="description" content="([^"]*)"/);
+  const noindex = /<meta name="robots" content="noindex/.test(html);
+
+  if (!title) fail(route, 'no <title>');
+  if (!description) fail(route, 'no meta description');
+  if (!html.includes('rel="canonical"')) fail(route, 'no canonical');
+
+  if (!isDocs && !noindex) {
+    if (title && title.length > 65) fail(route, `title too long (${title.length}): ${title}`);
+    if (description && (description.length < 70 || description.length > 170)) {
+      fail(route, `description length ${description.length}`);
+    }
+    const h1s = (html.match(/<h1[\s>]/g) ?? []).length;
+    if (h1s !== 1) fail(route, `${h1s} <h1> elements`);
+    for (const block of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
       try {
-        const data = await readFile(resolve(DIST, '404.html'));
-        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.end(data);
+        JSON.parse(block[1]);
       } catch {
-        res.writeHead(404);
-        res.end('Not found');
+        fail(route, 'invalid JSON-LD');
       }
     }
-  });
-
-  await new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(0, '127.0.0.1', resolve);
-  });
-
-  const { port } = server.address();
-  const base = `http://127.0.0.1:${port}`;
-
-  let failed = false;
-  try {
-    for (const route of ROUTES) {
-      const res = await fetch(`${base}${route}`);
-      const ok = route === '/404' ? res.status === 404 || res.ok : res.ok;
-      if (!ok) {
-        console.error(`FAIL ${route} → ${res.status}`);
-        failed = true;
-        continue;
-      }
-      const html = await res.text();
-      const missing = (EXPECTATIONS[route] ?? []).filter(
-        needle => !html.includes(needle)
-      );
-      if (missing.length) {
-        console.error(`FAIL ${route} → missing ${missing.join(', ')}`);
-        failed = true;
-      } else {
-        console.log(`OK   ${route} → ${res.status}`);
-      }
-    }
-  } finally {
-    server.close();
   }
 
-  if (failed) process.exit(1);
+  if (!noindex && title) {
+    if (titles.has(title)) fail(route, `duplicate title with ${titles.get(title)}`);
+    titles.set(title, route);
+  }
+  if (!noindex && description && !isDocs) {
+    if (descriptions.has(description)) fail(route, `duplicate description with ${descriptions.get(description)}`);
+    descriptions.set(description, route);
+  }
+
+  const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+  for (const word of BANNED) if (word.test(text)) fail(route, `contains banned text ${word}`);
+
+  // Internal links must resolve to a built file.
+  for (const [, href] of html.matchAll(/href="(\/bSon-website[^"#?]*)/g)) {
+    let path = href.slice(BASE.length) || '/';
+    if (path.endsWith('/')) path += 'index.html';
+    else if (!/\.[a-z0-9]+$/i.test(path)) path += '/index.html';
+    if (!fileSet.has(path)) fail(route, `broken link ${href}`);
+  }
+
+  const site = route.startsWith(BASE) ? route.slice(BASE.length) : route;
+  for (const needle of EXPECTATIONS[site] ?? []) {
+    if (!html.includes(needle)) fail(route, `missing ${needle}`);
+  }
 }
 
-run().catch(err => {
-  console.error(err);
+for (const route of Object.keys(EXPECTATIONS)) {
+  const path = route === '/' ? '/index.html' : `${route}index.html`;
+  if (!fileSet.has(path)) fail(route, 'page not built');
+}
+
+if (errors.length) {
+  console.error(errors.map(error => `FAIL ${error}`).join('\n'));
+  console.error(`\n${errors.length} problem(s) in ${pages.length} pages.`);
   process.exit(1);
-});
+}
+console.log(`OK   ${pages.length} pages, ${titles.size} unique titles, all internal links resolve.`);

@@ -9,24 +9,17 @@ import Icon from '@components/ui/icons/Icon.astro';
 interface Props {
   title?: string;
   url?: string;
-  /** `orange` (default) or the yellow brand button. */
-  variant?: 'orange' | 'yellow';
   noArrow?: boolean;
   [attribute: string]: unknown;
 }
 
-const { title, url, variant = 'orange', noArrow, ...rest } = Astro.props;
+const { title, url, noArrow, ...rest } = Astro.props;
 
-const variants = {
-  orange:
-    'text-neutral-50 bg-orange-600 hover:bg-orange-700 active:bg-orange-700',
-  yellow: 'text-neutral-800 bg-yellow-400 hover:bg-yellow-500',
-};
 
 const classes = [
   'group inline-flex items-center justify-center gap-x-2 rounded-lg px-4 py-3 text-sm font-bold ring-zinc-500 transition duration-300 focus-visible:ring-3 outline-hidden',
   'border border-transparent',
-  variants[variant],
+  'text-white bg-orange-600 hover:bg-orange-700 active:bg-orange-800 dark:bg-orange-700 dark:hover:bg-orange-800 shadow-[0_8px_20px_-10px_var(--accent-700)]',
   'disabled:pointer-events-none disabled:opacity-50 dark:focus:outline-hidden',
   '2xl:text-base',
   'dark:ring-zinc-200',

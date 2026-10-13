@@ -1,6 +1,6 @@
 ---
 import { getImage } from 'astro:assets';
-import { OG, SITE } from '@data/constants';
+import { SITE } from '@data/constants';
 import faviconSrc from '@images/icon.png';
 import type { PageMetadata } from '@utils/metadata';
 import { BASE } from '@utils/locale';
@@ -16,13 +16,6 @@ interface Props {
 
 const { metadata } = Astro.props;
 
-const socialImageRes = await getImage({
-  src: OG.image,
-  width: 1200,
-  height: 600,
-});
-const socialImage = Astro.url.origin + socialImageRes.src;
-
 const appleTouchIcon = await getImage({
   src: faviconSrc,
   width: 180,
@@ -31,47 +24,52 @@ const appleTouchIcon = await getImage({
 });
 ---
 
-<title>{metadata.title}</title>
-{/* JSON-LD structured data: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data */}
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify(metadata.jsonLd)}
-></script>
 <meta charset="utf-8" />
-<meta content={metadata.description} name="description" />
-<meta name="web_author" content={SITE.author} />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<title>{metadata.title}</title>
+<meta name="description" content={metadata.description} />
 <link rel="canonical" href={metadata.canonical} />
+<meta
+  name="robots"
+  content={metadata.noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
+/>
+<meta name="author" content={SITE.author} />
 
-{/* Facebook Meta Tags */}
+{/* Open Graph */}
 <meta property="og:locale" content={metadata.ogLocale} />
 <meta property="og:url" content={metadata.canonical} />
-<meta property="og:type" content="website" />
+<meta property="og:type" content={metadata.ogType} />
 <meta property="og:title" content={metadata.ogTitle} />
 <meta property="og:site_name" content={SITE.title} />
 <meta property="og:description" content={metadata.ogDescription} />
-<meta property="og:image" content={socialImage} />
-<meta content="1200" property="og:image:width" />
-<meta content="600" property="og:image:height" />
-<meta content="image/png" property="og:image:type" />
+<meta property="og:image" content={metadata.ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content={metadata.ogTitle} />
+{metadata.articleDates && (
+  <>
+    <meta property="article:published_time" content={metadata.articleDates.published} />
+    <meta property="article:modified_time" content={metadata.articleDates.modified} />
+  </>
+)}
 
-{/* Twitter Meta Tags */}
+{/* Twitter / X */}
 <meta name="twitter:card" content="summary_large_image" />
-<meta
-  property="twitter:domain"
-  content={Astro.site?.hostname}
-/>
-<meta property="twitter:url" content={metadata.canonical} />
 <meta name="twitter:title" content={metadata.ogTitle} />
 <meta name="twitter:description" content={metadata.ogDescription} />
-<meta name="twitter:image" content={socialImage} />
+<meta name="twitter:image" content={metadata.ogImage} />
 
-{/* Site-wide head chrome: manifest, sitemap, favicons, theme colour */}
+{/* JSON-LD structured data: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data */}
+<script type="application/ld+json" set:html={JSON.stringify(metadata.jsonLd)} />
+
+{/* Site-wide head chrome: manifest, sitemap, LLM summary, favicons, theme colour */}
 <link rel="manifest" href={`${BASE}/manifest.json`} />
 <link rel="sitemap" href={`${BASE}/sitemap-index.xml`} />
+<link rel="alternate" type="text/plain" title="LLM summary" href={`${BASE}/llms.txt`} />
+<link rel="alternate" type="application/rss+xml" title="Buckleson blog" href={`${BASE}/rss.xml`} />
 <link href={`${BASE}/favicon.ico`} rel="icon" sizes="any" type="image/x-icon" />
-<meta name="mobile-web-app-capable" content="yes" />
 <link href={appleTouchIcon.src} rel="apple-touch-icon" />
-<link href={appleTouchIcon.src} rel="shortcut icon" />
-<meta name="theme-color" content="#7C3AED" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#7C3AED" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#262626" media="(prefers-color-scheme: dark)" />
