@@ -8,7 +8,7 @@ interface Props {
   content: string;
   author: string;
   role: string;
-  avatarSrc: string;
+  avatarSrc: ImageMetadata;
 }
 ---
 
@@ -32,7 +32,6 @@ interface Props {
           src={avatarSrc}
           alt={`${author} photo`}
           loading="lazy"
-          inferSize
         />
       </div>
       <div class="ms-4 grow">
