@@ -10,7 +10,6 @@ import PricingSection from '@components/sections/pricing/PricingSection.astro';
 import FAQ from '@components/sections/misc/FAQ.astro';
 import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
 import heroImage from '@images/diagrams/platform-architecture.png';
-import featureImage from '@images/diagrams/hyper0x-architecture.png';
 import hyper0xDiagram from '@images/diagrams/hyper0x-architecture.png';
 import paviiDiagram from '@images/diagrams/pavii-architecture.png';
 import walletDiagram from '@images/diagrams/wallet-architecture.png';
@@ -43,6 +42,7 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
 
   <HeroSection
     title={copy.hero.title}
+    eyebrow={copy.hero.eyebrow}
     subTitle={copy.hero.subTitle}
     primaryBtn={copy.hero.primaryBtn}
     primaryBtnURL={localePath(locale, '/products')}
@@ -61,8 +61,6 @@ const testimonials = copy.testimonials.quotes.map(quote => ({
   <FeaturesGeneral
     title={copy.featuresGeneral.title}
     subTitle={copy.featuresGeneral.subTitle}
-    src={featureImage}
-    alt={copy.featuresGeneral.imageAlt}
     features={t.data.features}
   />
 

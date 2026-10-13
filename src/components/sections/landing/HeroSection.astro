@@ -8,6 +8,7 @@ import ReviewComponent from '@components/ui/blocks/ReviewComponent.astro';
 // Define props from Astro
 const {
   title,
+  eyebrow,
   subTitle,
   primaryBtn,
   primaryBtnURL,
@@ -25,6 +26,7 @@ const {
 // Define TypeScript interface for props
 interface Props {
   title: string;
+  eyebrow?: string;
   subTitle?: string;
   primaryBtn?: string;
   primaryBtnURL?: string;
@@ -41,9 +43,20 @@ interface Props {
 ---
 
 {/* Defining a grid container that holds all the content */}
-<section class="mx-auto grid max-w-[85rem] gap-4 px-4 py-14 sm:px-6 md:grid-cols-2 md:items-center md:gap-8 lg:px-8 2xl:max-w-full">
+<section class="relative mx-auto grid max-w-[85rem] gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 md:items-center md:gap-8 lg:px-8 lg:py-20 2xl:max-w-full">
+  {/* Soft brand glow behind the hero */}
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 -top-24 -z-10 mx-auto h-[28rem] max-w-5xl rounded-full bg-orange-300/30 blur-3xl dark:bg-orange-900/30"
+  ></div>
   {/* Title and description */}
   <div>
+    {eyebrow && (
+      <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white/70 px-3 py-1 text-sm font-medium text-orange-700 dark:border-orange-900 dark:bg-neutral-900/60 dark:text-orange-300">
+        <span class="size-2 rounded-full bg-orange-500"></span>
+        {eyebrow}
+      </p>
+    )}
     {/* Each h1 and p tag renders a portion of the title and subTitle defined above */}
     <h1 class="block text-3xl font-bold tracking-tight text-balance text-neutral-800 sm:text-4xl lg:text-6xl lg:leading-tight dark:text-neutral-200">
       {/* About Fragment: https://docs.astro.build/en/basics/astro-syntax/#fragments */}
@@ -76,12 +89,12 @@ interface Props {
   </div>
   {/* Hero Image Section — aspect ratio reserves space before the AVIF loads */}
   <div class="flex w-full">
-    <div class="aspect-[4067/2576] w-full overflow-hidden">
+    <div class="aspect-[4067/2576] w-full overflow-hidden rounded-2xl shadow-2xl ring-1 shadow-orange-900/20 ring-neutral-900/10 dark:ring-white/10">
       {src && alt && (
         <Image
           src={src}
           alt={alt}
-          class="h-full w-full scale-110 object-cover object-center"
+          class="h-full w-full object-cover object-center"
           draggable={'false'}
           loading="eager"
           fetchpriority="high"

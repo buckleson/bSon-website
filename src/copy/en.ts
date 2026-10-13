@@ -9,7 +9,7 @@ import pricing from '@data/pricing.json';
  * `localePath()` from `@utils/locale`, which adds the deploy base path.
  */
 const accent = (text: string) =>
-  `<span class="text-violet-600 dark:text-violet-400">${text}</span>`;
+  `<span class="text-orange-600 dark:text-orange-400">${text}</span>`;
 
 export const en = {
   site: {
@@ -118,6 +118,7 @@ export const en = {
   home: {
     banner: 'Coming soon: H0X Pay and HyperRun',
     hero: {
+      eyebrow: 'Built on Hyper 0X · post-quantum-resistant',
       title: `We Build ${accent('Custom Blockchains')}`,
       subTitle:
         'Buckleson engineers private, post-quantum-resistant blockchains for enterprises. Every solution runs on Hyper 0X, our own L1, with a dedicated L2 for each customer.',
@@ -134,7 +135,6 @@ export const en = {
       title: 'Why Hyper 0X Is Hard to Copy',
       subTitle:
         "Hyper 0X is our own permissioned L1, engineered from scratch. We control the fees, the roadmap and the security model, so we can build what enterprises actually need instead of inheriting a public chain's limits.",
-      imageAlt: 'Hyper 0X architecture overview',
     },
     featuresNavs: {
       title: `Products built on ${accent('Hyper 0X')}, live today.`,
