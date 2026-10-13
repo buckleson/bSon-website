@@ -79,7 +79,7 @@ const story = spec.steps.map(step => ({
 }));
 ---
 
-<figure class:list={['sd grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-center', className]} data-system data-story={JSON.stringify(story)}>
+<figure class:list={['sd grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-center', className]} data-system data-story={JSON.stringify(story)}>
   <div class="sd-stage overflow-x-auto rounded-3xl">
     <svg viewBox={`0 0 ${W} ${H}`} class="block w-full min-w-[640px]" role="img" aria-label={spec.title}>
       <defs>
