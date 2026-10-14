@@ -114,3 +114,36 @@ export function uiSymbol(name: string): { body: string; size: number } {
   if (!icon) throw new Error(`Unknown UI icon "${name}" (MingCute "${key}")`);
   return { body: icon.body, size: icon.width ?? MINGCUTE.width ?? 24 };
 }
+
+/**
+ * Older icon names (Phosphor and Lucide-style) mapped to MingCute, so the
+ * whole site shares one bold, rounded icon style. Names MingCute already has
+ * map to themselves; anything without a good match stays on Phosphor.
+ */
+const TO_MINGCUTE: Record<string, string> = {
+  'chats-circle': 'chat-3', 'arrow-up-right': 'arrow-right-up', 'lock-key': 'lock', 'file-text': 'file', 'caret-down': 'down',
+  list: 'menu', x: 'close', 'caret-right': 'right', 'caret-left': 'left', article: 'news', linked: 'link', 'shield-check': 'safe-shield',
+  coins: 'coin', crosshair: 'aiming-2', 'credit-card': 'bank-card', robot: 'ai', bot: 'ai', 'plus-circle': 'add-circle', plugs: 'plugin-2',
+  database: 'server', users: 'group', 'chart-line-up': 'trending-up', 'trend-up': 'trending-up', buildings: 'building-4', 'chart-pie-slice': 'chart-pie',
+  user: 'user-3', 'user-round': 'user-3', 'users-three': 'group-3', handshake: 'hand-heart', scroll: 'document', 'seal-check': 'safety-certificate',
+  'badge-check': 'safety-certificate', prohibit: 'forbid-circle', 'octagon-x': 'forbid-circle', 'eye-slash': 'eye-close', 'eye-off': 'eye-close',
+  'link-simple': 'link', 'link-simple-break': 'unlink', path: 'route', coffee: 'teacup', 'magnifying-glass': 'search', 'approve-check': 'check-circle',
+  puzzle: 'plugin', 'piggy-bank': 'pig-money', gem: 'diamond', 'qr-code': 'qrcode', zap: 'flash', 'arrow-left-right': 'transfer-horizontal',
+  'arrows-left-right': 'transfer-horizontal', 'key-round': 'key-2', key: 'key-2', 'chart-candlestick': 'chart-bar', 'gamepad-2': 'game-2',
+  'game-controller': 'game-2', 'scan-search': 'scan', receipt: 'bill', gauge: 'dashboard-2', 'identification-card': 'idcard', syringe: 'bug',
+  'file-lock': 'file-locked', funnel: 'filter', 'hand-palm': 'hand', 'chat-text': 'chat-1', plug: 'plugin', 'paper-plane-tilt': 'send-plane',
+  'arrows-clockwise': 'refresh-2', 'device-mobile': 'cellphone', smartphone: 'cellphone', scales: 'balance', 'book-open-text': 'book-2',
+  swap: 'transfer-3', storefront: 'store', 'download-simple': 'download', 'shopping-cart': 'shopping-cart-1', 'tree-structure': 'sitemap',
+  stack: 'layers', vault: 'safe-box', 'plugs-connected': 'plugin-2', 'rocket-launch': 'rocket', lightbulb: 'bulb', 'envelope-simple': 'mail',
+  'git-diff': 'git-compare', 'calendar-blank': 'calendar', binoculars: 'search-3', 'lock-simple': 'lock', 'cloud-arrow-up': 'upload',
+  'terminal-window': 'terminal-box', 'shield-warning': 'safe-alert', calculator: 'currency-dollar', 'list-checks': 'list-check', 'text-aa': 'font',
+  'cube-transparent': 'box-2', 'list-dashes': 'list-check-2', wrench: 'tool', 'clipboard-text': 'clipboard', 'brackets-curly': 'code',
+  'hard-drives': 'server', 'chalkboard-teacher': 'presentation-1', blocks: 'cube', landmark: 'bank', 'git-fork': 'git-branch',
+  quotes: 'quote-left', 'linkedin-logo': 'linkedin', 'squares-four': 'grid',
+};
+
+/** The MingCute name for an older icon name, if there is a good match. */
+export function mingcuteFor(name: string): string | undefined {
+  const mapped = TO_MINGCUTE[name] ?? name;
+  return MINGCUTE.icons[`${mapped}-fill`] ? mapped : undefined;
+}
