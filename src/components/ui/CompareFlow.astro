@@ -142,6 +142,7 @@ const lanes = compare
     const breakAt = Number(lane.dataset.break);
     const stopAt = Number(lane.dataset.stop);
     const last = nodes.length - 1;
+    const good = lane.dataset.lane === 'with';
     // The request travels to the stop node (when it is stopped) or to the end.
     const target = stopAt >= 0 ? stopAt : last;
     const travel = START + target * (HOP + DWELL) + DWELL;
@@ -192,7 +193,7 @@ const lanes = compare
       const states = nodes.map((node, i) => {
         if (i === breakAt && reached >= breakAt) return 'bad';
         if (i === stopAt && reached >= stopAt) return 'stop';
-        if (ended && i === last && (stopAt < 0 || node.classList.contains('is-guard'))) return 'done';
+        if (ended && good && i === last && (stopAt < 0 || node.classList.contains('is-guard'))) return 'done';
         if (i === p.at && !ended) return 'active';
         if (i <= reached) return 'visited';
         return '';

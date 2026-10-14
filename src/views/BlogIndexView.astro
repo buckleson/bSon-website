@@ -70,7 +70,7 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
                   <span class="flex items-start gap-2 text-sm leading-snug text-ink/85"><span class="topic-bullet mt-1.5 size-1.5 shrink-0 rounded-full"></span>{post.data.title}</span>
                 ))}
               </span>
-              <span class="topic-more mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold">Show {c.label.toLowerCase()} articles<Glyph icon="arrow-right" class="size-4 transition group-hover:translate-x-1" /></span>
+              <span class="topic-more mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold">Show all {inTopic.length} articles<Glyph icon="arrow-right" class="size-4 transition group-hover:translate-x-1" /></span>
             </button>
           </li>
         );
