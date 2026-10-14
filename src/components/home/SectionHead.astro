@@ -25,7 +25,7 @@ const onSheet = tone === 'sheet';
 <div class="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end">
   <div>
     <p class:list={['font-mono text-xs tracking-wide uppercase', onSheet ? 'text-white/60' : 'text-muted']} data-reveal>
-      {index && <span>({index}) </span>}{label}
+      {index && <span class:list={[!onSheet && 'font-semibold text-violet-600 dark:text-orange-400']}>({index}) </span>}{label}
     </p>
     <h2 id={id} class:list={['mt-4 text-4xl leading-[1.02] font-semibold sm:text-5xl lg:text-[3.3rem]', onSheet ? 'text-white' : 'text-ink']} data-reveal>
       <span class="relative z-[1] block">{claim}</span>

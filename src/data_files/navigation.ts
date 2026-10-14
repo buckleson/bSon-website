@@ -8,6 +8,7 @@ export interface MenuItem {
   title: string;
   desc: string;
   href: string;
+  /** Fluent colour icon name (see colorIcon in utils/glyphs.ts). */
   icon: string;
   badge?: string;
 }
@@ -27,21 +28,21 @@ export const megaMenus: MegaMenu[] = [
       {
         heading: 'Platform',
         items: [
-          { title: 'Hyper 0X', desc: 'Our own L1, a private L2 for you', href: '/products/hyper-0x/', icon: 'cube' },
+          { title: 'Hyper 0X', desc: 'Our own L1, a private L2 for you', href: '/products/hyper-0x/', icon: 'link-multiple' },
         ],
       },
       {
         heading: 'Products',
         items: [
-          { title: 'Pavii', desc: 'Security for every AI agent call', href: '/products/pavii/', icon: 'shield-check' },
-          { title: 'Hyper Wallet & SDKs', desc: 'Wallet, exchange and white-label SDKs', href: '/products/hyper-wallet/', icon: 'wallet' },
+          { title: 'Pavii', desc: 'Security for every AI agent call', href: '/products/pavii/', icon: 'shield-checkmark' },
+          { title: 'Hyper Wallet & SDKs', desc: 'Wallet, exchange and white-label SDKs', href: '/products/hyper-wallet/', icon: 'phone-laptop' },
         ],
       },
       {
         heading: 'Coming soon',
         items: [
-          { title: 'H0X Pay', desc: 'Invest a slice of every payment', href: '/products/h0x-pay/', icon: 'coins', badge: 'Soon' },
-          { title: 'HyperRun', desc: 'Play, predict and earn', href: '/products/hyperrun/', icon: 'game-controller', badge: 'Soon' },
+          { title: 'H0X Pay', desc: 'Invest a slice of every payment', href: '/products/h0x-pay/', icon: 'coin-multiple', badge: 'Soon' },
+          { title: 'HyperRun', desc: 'Play, predict and earn', href: '/products/hyperrun/', icon: 'trophy', badge: 'Soon' },
         ],
       },
     ],
@@ -60,17 +61,17 @@ export const megaMenus: MegaMenu[] = [
       {
         heading: 'Build',
         items: [
-          { title: 'Custom blockchains', desc: 'Your own private L2', href: '/services/custom-blockchains/', icon: 'stack' },
-          { title: 'Asset tokenization', desc: 'Real assets, on-chain', href: '/services/asset-tokenization/', icon: 'diamond' },
-          { title: 'Wallets & exchanges', desc: 'With your brand, on our technology', href: '/services/wallets-exchanges/', icon: 'device-mobile' },
+          { title: 'Custom blockchains', desc: 'Your own private L2', href: '/services/custom-blockchains/', icon: 'org' },
+          { title: 'Asset tokenization', desc: 'Real assets, on-chain', href: '/services/asset-tokenization/', icon: 'vault' },
+          { title: 'Wallets & exchanges', desc: 'With your brand, on our technology', href: '/services/wallets-exchanges/', icon: 'arrow-sync' },
         ],
       },
       {
         heading: 'Secure & integrate',
         items: [
-          { title: 'Wallet SDKs', desc: 'Wallets inside your own apps', href: '/services/wallet-sdks/', icon: 'code' },
-          { title: 'AI-agent security', desc: 'Gates and receipts for agents', href: '/services/ai-agent-security/', icon: 'robot' },
-          { title: 'Forward-deployed engineering', desc: 'Our engineers in your team', href: '/services/forward-deployed-engineering/', icon: 'handshake' },
+          { title: 'Wallet SDKs', desc: 'Wallets inside your own apps', href: '/services/wallet-sdks/', icon: 'code-block' },
+          { title: 'AI-agent security', desc: 'Gates and receipts for agents', href: '/services/ai-agent-security/', icon: 'bot' },
+          { title: 'Forward-deployed engineering', desc: 'Our engineers in your team', href: '/services/forward-deployed-engineering/', icon: 'people-team' },
         ],
       },
     ],
@@ -86,19 +87,19 @@ export const megaMenus: MegaMenu[] = [
       {
         heading: 'Learn',
         items: [
-          { title: 'Blog', desc: 'Guides from our engineers', href: '/blog/', icon: 'article' },
-          { title: 'FAQ', desc: 'Blockchain and AI security, answered', href: '/faq/', icon: 'question' },
-          { title: 'Hyper 0X docs', desc: 'How the chain works', href: '/guides/intro/', icon: 'book-open-text' },
-          { title: 'RSS feed', desc: 'Every new article', href: '/rss.xml', icon: 'rss' },
+          { title: 'Blog', desc: 'Guides from our engineers', href: '/blog/', icon: 'news' },
+          { title: 'FAQ', desc: 'Blockchain and AI security, answered', href: '/faq/', icon: 'chat-bubbles-question' },
+          { title: 'Hyper 0X docs', desc: 'How the chain works', href: '/guides/intro/', icon: 'book-open' },
+          { title: 'RSS feed', desc: 'Every new article', href: '/rss.xml', icon: 'megaphone-loud' },
         ],
       },
       {
         heading: 'Popular guides',
         items: [
-          { title: 'Asset tokenization', desc: 'Launch tokenized assets', href: '/blog/asset-tokenization-guide/', icon: 'diamond' },
-          { title: 'Secure AI agents', desc: '8 attacks and how to stop them', href: '/blog/how-to-secure-ai-agents/', icon: 'shield-warning' },
-          { title: 'Prompt injection', desc: 'How it works, how to stop it', href: '/blog/what-is-prompt-injection/', icon: 'warning-octagon' },
-          { title: 'Layer 1 vs layer 2', desc: 'One L1, many L2s', href: '/blog/layer-1-vs-layer-2-blockchain/', icon: 'stack' },
+          { title: 'Asset tokenization', desc: 'Launch tokenized assets', href: '/blog/asset-tokenization-guide/', icon: 'coin-multiple' },
+          { title: 'Secure AI agents', desc: '8 attacks and how to stop them', href: '/blog/how-to-secure-ai-agents/', icon: 'lock-shield' },
+          { title: 'Prompt injection', desc: 'How it works, how to stop it', href: '/blog/what-is-prompt-injection/', icon: 'warning' },
+          { title: 'Layer 1 vs layer 2', desc: 'One L1, many L2s', href: '/blog/layer-1-vs-layer-2-blockchain/', icon: 'database' },
         ],
       },
     ],
@@ -114,9 +115,9 @@ export const megaMenus: MegaMenu[] = [
       {
         heading: 'Buckleson',
         items: [
-          { title: 'About us', desc: 'Our vision and story', href: '/about/', icon: 'buildings' },
-          { title: 'Contact', desc: 'Talk to an engineer', href: '/contact/', icon: 'envelope-simple' },
-          { title: 'Book a call', desc: '30 minutes, your use case', href: 'https://cal.com/buckleson-group/30min', icon: 'calendar-check' },
+          { title: 'About us', desc: 'Our vision and story', href: '/about/', icon: 'building' },
+          { title: 'Contact', desc: 'Talk to an engineer', href: '/contact/', icon: 'mail' },
+          { title: 'Book a call', desc: '30 minutes, your use case', href: 'https://cal.com/buckleson-group/30min', icon: 'calendar-checkmark' },
         ],
       },
     ],

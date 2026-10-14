@@ -1,0 +1,100 @@
+---
+import Glyph from '@components/ui/Glyph.astro';
+import type { CollectionEntry } from 'astro:content';
+import { categoryOf, coverIcons } from '@utils/blog';
+
+/**
+ * Cover art for a blog post, drawn in code: the category's two colours as a
+ * soft gradient, a dot grid and two orbit rings, the post's topic as a large
+ * colour icon on a glass tile, and three related ideas on smaller tiles.
+ * It scales with its box (container units) and fills a positioned parent.
+ * `chip` shows the category name in the corner.
+ */
+interface Props {
+  post: CollectionEntry<'blog'>;
+  chip?: boolean;
+  class?: string;
+}
+
+const { post, chip = false, class: className } = Astro.props;
+const category = categoryOf(post);
+const [main, ...satellites] = coverIcons(post);
+---
+
+<div class:list={['blog-art absolute inset-0 overflow-hidden', className]} style={`--h1:${category.hues[0]};--h2:${category.hues[1]}`} aria-hidden="true">
+  <span class="ba-grid"></span>
+  <span class="ba-ring ba-ring-1"></span>
+  <span class="ba-ring ba-ring-2"></span>
+  {satellites.map((icon, i) => <span class:list={['ba-tile ba-sat', `ba-s${i + 1}`]}><Glyph color={icon} class="ba-icon" /></span>)}
+  <span class="ba-tile ba-main"><Glyph color={main} class="ba-icon" /></span>
+  {chip && <span class="ba-chip"><Glyph color={category.icon} class="ba-chip-icon" />{category.label}</span>}
+</div>
+
+<style>
+  .blog-art {
+    container-type: size;
+    background:
+      radial-gradient(70% 80% at 18% 12%, rgb(255 255 255 / 0.28), transparent 60%),
+      radial-gradient(60% 70% at 92% 96%, rgb(0 0 0 / 0.22), transparent 70%),
+      linear-gradient(135deg, var(--h1), var(--h2));
+  }
+  .ba-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgb(255 255 255 / 0.22) 1px, transparent 1.3px);
+    background-size: 18px 18px;
+    mask-image: radial-gradient(75% 75% at 50% 50%, #000, transparent);
+  }
+  .ba-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.28);
+    transform: translate(-50%, -50%);
+  }
+  .ba-ring-1 { width: 64cqmin; height: 64cqmin; }
+  .ba-ring-2 { width: 104cqmin; height: 104cqmin; border-style: dashed; border-color: rgb(255 255 255 / 0.18); }
+  .ba-tile {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    transform: translate(-50%, -50%) rotate(var(--r, 0deg));
+    border-radius: 26%;
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.16));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.35), 0 1.5cqmin 4cqmin -1cqmin rgb(0 0 0 / 0.35);
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ba-main {
+    left: 50%;
+    top: 50%;
+    width: 36cqmin;
+    height: 36cqmin;
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.96), rgb(255 255 255 / 0.78));
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(255 255 255 / 0.6), 0 3cqmin 7cqmin -2cqmin rgb(0 0 0 / 0.45);
+  }
+  .ba-sat { width: 17cqmin; height: 17cqmin; }
+  .ba-s1 { left: 19%; top: 28%; --r: -8deg; }
+  .ba-s2 { left: 24%; top: 76%; --r: 6deg; }
+  .ba-s3 { left: 81%; top: 34%; --r: 9deg; }
+  .ba-main :global(.ba-icon) { width: 62%; height: 62%; }
+  .ba-sat :global(.ba-icon) { width: 58%; height: 58%; }
+  :global(.group:hover) .ba-main { transform: translate(-50%, -54%) rotate(-3deg) scale(1.04); }
+  :global(.group:hover) .ba-sat { transform: translate(-50%, -50%) rotate(calc(var(--r) * -1)) scale(1.06); }
+  .ba-chip {
+    position: absolute;
+    left: 4cqmin;
+    bottom: 4cqmin;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.7rem 0.3rem 0.35rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.9);
+    color: #0b0b0c;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .ba-chip :global(.ba-chip-icon) { width: 1.1rem; height: 1.1rem; }
+  @media (prefers-reduced-motion: reduce) { .ba-tile { transition: none; } }
+</style>

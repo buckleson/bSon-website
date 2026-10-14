@@ -22,6 +22,19 @@
   --color-black: #000;
   --color-white: #fff;
 
+  /* Electric violet: the second light-theme accent, used sparingly. */
+  --color-violet-50: oklch(0.977 0.017 304);
+  --color-violet-100: oklch(0.943 0.04 304);
+  --color-violet-200: oklch(0.894 0.075 304);
+  --color-violet-300: oklch(0.811 0.13 304);
+  --color-violet-400: oklch(0.714 0.2 304);
+  --color-violet-500: oklch(0.627 0.262 303.9);
+  --color-violet-600: oklch(0.558 0.288 302.321);
+  --color-violet-700: oklch(0.496 0.265 301.924);
+  --color-violet-800: oklch(0.438 0.218 303.724);
+  --color-violet-900: oklch(0.381 0.176 304.987);
+  --color-violet-950: oklch(0.291 0.149 302.717);
+
   --color-gray-50: oklch(0.985 0.002 247.839);
   --color-gray-100: oklch(0.967 0.003 264.542);
   --color-gray-200: oklch(0.928 0.006 264.531);
@@ -119,6 +132,8 @@
   --color-muted: var(--muted);
   --color-card: var(--card);
   --color-line: var(--line);
+  --color-paper: var(--paper);
+  --color-paper-line: var(--paper-line);
   --color-sheet: var(--sheet);
   --color-sheet-card: var(--sheet-card);
   --color-sheet-line: var(--sheet-line);
@@ -136,14 +151,21 @@
 }
 
 :root {
-  /* Surfaces: warm off-white ground, white cards and deep neutral-black
-     sheets (dark boxes). Dark mode swaps the ground to near-black and lifts
+  /* Surfaces: a cool porcelain ground with soft blue and violet light
+     behind glass panels, white cards and deep neutral-black sheets (dark
+     boxes). --paper is the warm drafting paper, kept for the Anatomy figures
+     and a few sections. Dark mode swaps the ground to near-black and lifts
      the sheets one step. Blacks are neutral (no blue cast). */
-  --ground: #f1f0eb;
+  --ground: #f3f4fa;
   --ink: #0b0b0c;
-  --muted: #55555a;
+  --muted: #545566;
   --card: #ffffff;
-  --line: #dcdad2;
+  --line: #e0e2ee;
+  --paper: #f1f0eb;
+  --paper-line: #dcdad2;
+  --glow-1: rgb(79 70 229 / 0.16);
+  --glow-2: rgb(139 61 255 / 0.15);
+  --glow-3: rgb(56 189 248 / 0.12);
   --sheet: #0a0a0a;
   --sheet-card: #161616;
   --sheet-line: #262626;
@@ -167,6 +189,8 @@
   --muted: #a1a1a1;
   --card: #141414;
   --line: #272727;
+  --paper: #141414;
+  --paper-line: #272727;
   --sheet: #171717;
   --sheet-card: #1f1f1f;
   --sheet-line: #2e2e2e;
@@ -264,6 +288,19 @@ a {
     background-color: var(--ground);
     color: var(--ink);
   }
+  /* Light theme: soft blue and violet light, fixed behind the glass panels. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(42rem 32rem at 6% -6%, var(--glow-1), transparent 70%),
+      radial-gradient(40rem 34rem at 96% 8%, var(--glow-2), transparent 70%),
+      radial-gradient(56rem 40rem at 55% 108%, var(--glow-3), transparent 70%);
+  }
+  .dark body::before { display: none; }
   /* Fine grain so large flat surfaces don't feel sterile. */
   body::after {
     content: '';
@@ -329,7 +366,7 @@ a {
 /* Headline payoff: a solid accent block behind the words (no gradient text). */
 @layer components {
   .mark {
-    background: color-mix(in oklab, var(--accent-500) 24%, transparent);
+    background: linear-gradient(100deg, color-mix(in oklab, var(--accent-500) 24%, transparent), color-mix(in oklab, var(--color-violet-500) 24%, transparent));
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
     padding: 0 0.14em;
@@ -351,4 +388,26 @@ html { overflow-x: clip; }
 @media (max-width: 639px) {
   .prose table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .prose :where(th, td) { min-width: 8.5rem; }
+}
+
+/* Glass panels (light theme): translucent white over the soft background
+   light, with a bright top edge and a soft shadow. Large panels skip the
+   backdrop blur (the light behind them is already soft); small cards blur. */
+@layer components {
+  .glass {
+    background: color-mix(in oklab, var(--card) 70%, transparent);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px rgb(255 255 255 / 0.75), 0 0 0 1.5px color-mix(in oklab, var(--line) 60%, transparent), 0 30px 60px -44px rgb(36 34 110 / 0.28);
+  }
+  .glass-card {
+    background: color-mix(in oklab, var(--card) 62%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px color-mix(in oklab, var(--line) 85%, transparent), 0 16px 36px -26px rgb(36 34 110 / 0.3);
+  }
+  .glass-tint {
+    background: linear-gradient(150deg, color-mix(in oklab, var(--accent-100) 60%, #fff), color-mix(in oklab, var(--color-violet-100) 55%, #fff));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px color-mix(in oklab, var(--accent-200) 45%, transparent);
+  }
+  .dark .glass { background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+  .dark .glass-card { background: var(--card); backdrop-filter: none; box-shadow: 0 0 0 1px var(--line); }
+  .dark .glass-tint { background: #161616; box-shadow: 0 0 0 1px var(--line); }
 }

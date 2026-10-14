@@ -49,7 +49,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
         <div class="flex -space-x-2.5">
           {models.map(model => (
             <span class="grid size-12 place-items-center rounded-full bg-card ring-4 ring-card" title={model.title}>
-              <span class="grid size-11 place-items-center rounded-full bg-ground">
+              <span class="grid size-11 place-items-center rounded-full bg-card">
                 {model.path ? (
                   <svg viewBox="0 0 24 24" class="size-6" style={`color:#${model.hex}`} aria-hidden="true"><path d={model.path} fill="currentColor" fill-rule={model.rule} /></svg>
                 ) : (
@@ -62,7 +62,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
         <p class="text-sm text-ink"><span class="font-semibold">Any AI model</span>, protected by Pavii</p>
       </div>
 
-      <div class="bento flex flex-col justify-center rounded-[1.6rem] bg-ground p-6 lg:row-span-2" data-reveal>
+      <div class="bento glass-tint flex flex-col justify-center rounded-[1.6rem] p-6 lg:row-span-2" data-reveal>
         <div class="gauge relative mx-auto aspect-square w-40" data-gauge>
           <svg viewBox="0 0 200 200" class="absolute inset-0" aria-hidden="true">
             {ticks.map(i => {
@@ -77,7 +77,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
         <p class="mt-1 text-sm text-muted">Hybrid ML-KEM-768 + X25519 key exchange on every connection.</p>
       </div>
 
-      <div class="bento flex flex-col justify-between rounded-[1.6rem] bg-ground p-6" data-reveal>
+      <div class="bento glass-tint flex flex-col justify-between rounded-[1.6rem] p-6" data-reveal>
         <p class="font-mono text-xs tracking-wide text-muted uppercase">Enterprise pilot</p>
         <div class="mt-6">
           <p class="font-display text-xl font-semibold text-ink">{pilot.company}</p>

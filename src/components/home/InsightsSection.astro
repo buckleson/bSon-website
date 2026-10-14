@@ -1,8 +1,9 @@
 ---
 import SectionHead from '@components/home/SectionHead.astro';
-import BlogCover from '@components/ui/BlogCover.astro';
+import BlogArt from '@components/ui/BlogArt.astro';
 import Glyph from '@components/ui/Glyph.astro';
-import { entriesFor, pathFor, slugOf } from '@utils/content';
+import { entriesFor, pathFor } from '@utils/content';
+import { categoryOf } from '@utils/blog';
 import { formatDate } from '@utils/utils';
 
 /** Latest writing: one featured post with its cover, and a list with thumbnails. */
@@ -23,10 +24,10 @@ const list = rest.slice(0, 4);
   <SectionHead index={index} label={label} claim={claim} payoff={payoff} cta={{ title: cta, url: '/blog/' }} />
   <div class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,6fr)]">
     {featured && (
-      <a href={pathFor(featured)} class="group overflow-hidden rounded-[1.6rem] bg-ground" data-reveal>
-        <div class="overflow-hidden"><BlogCover seed={slugOf(featured)} label={featured.data.tags[0] ?? 'Hyper 0X'} class="transition duration-500 group-hover:scale-[1.03]" /></div>
+      <a href={pathFor(featured)} class="group glass-tint overflow-hidden rounded-[1.6rem]" data-reveal>
+        <div class="relative aspect-[16/9] overflow-hidden"><BlogArt post={featured} chip /></div>
         <div class="p-6">
-          <p class="font-mono text-xs text-muted uppercase">{featured.data.tags[0]} · {formatDate(featured.data.pubDate, 'en')}</p>
+          <p class="font-mono text-xs text-muted uppercase">{categoryOf(featured).label} · {formatDate(featured.data.pubDate, 'en')}</p>
           <h3 class="mt-2 text-2xl font-semibold text-balance text-ink">{featured.data.title}</h3>
           <p class="mt-2 text-muted">{featured.data.description}</p>
         </div>
@@ -36,9 +37,9 @@ const list = rest.slice(0, 4);
       {list.map(post => (
         <li data-reveal-item>
           <a href={pathFor(post)} class="group flex items-center gap-5 py-4">
-            <span class="relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-2xl ring-1 ring-line sm:w-32"><BlogCover seed={slugOf(post)} label="" fill class="transition duration-500 group-hover:scale-[1.06]" /></span>
+            <span class="relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-2xl sm:w-32"><BlogArt post={post} /></span>
             <span class="min-w-0 flex-1">
-              <span class="font-mono text-xs text-muted uppercase">{post.data.tags[0]} · {post.data.readTime} min read</span>
+              <span class="font-mono text-xs text-muted uppercase">{categoryOf(post).label} · {post.data.readTime} min read</span>
               <span class="mt-1.5 block text-lg font-semibold text-ink group-hover:text-orange-700 dark:group-hover:text-orange-300">{post.data.title}</span>
             </span>
             <span class="hidden size-9 shrink-0 place-items-center rounded-full ring-1 ring-line transition group-hover:bg-ink group-hover:text-ground sm:grid"><Glyph icon="arrow-up-right" class="size-4" /></span>

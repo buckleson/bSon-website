@@ -29,7 +29,7 @@ const icons = ['chats-circle', 'flask', 'shield-check', 'rocket-launch'];
       {steps.map((step, i) => (
         <li class="flex flex-col" data-reveal-item>
           <span class="mx-auto grid size-12 place-items-center rounded-full bg-sheet text-white ring-8 ring-card lg:mx-0"><Glyph icon={icons[i]} class="size-6" /></span>
-          <div class="mt-5 flex flex-1 flex-col rounded-[1.6rem] bg-ground p-5">
+          <div class="mt-5 flex flex-1 flex-col rounded-[1.6rem] bg-card p-5 ring-1 ring-paper-line">
             <p class="text-sm font-medium text-orange-700 dark:text-orange-300">{step.stage}</p>
             <h3 class="mt-1 text-xl font-semibold text-ink">{step.title}</h3>
             <p class="mt-2 text-pretty text-muted">{step.text}</p>

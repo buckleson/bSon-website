@@ -51,7 +51,7 @@ const [lead, ...rest] = items;
     </div>
   </article>
   {rest.map((item, i) => (
-    <article class:list={['bento-card group relative flex flex-col overflow-hidden rounded-[1.8rem] bg-card p-6 ring-1 ring-line transition duration-300 hover:-translate-y-0.5 hover:ring-orange-500/60 sm:p-7', layout[i + 1], rest.length % 2 === 1 && i === rest.length - 1 ? 'md:col-span-2' : '']} data-reveal-item>
+    <article class:list={['bento-card glass-card group relative flex flex-col overflow-hidden rounded-[1.8rem] p-6 transition duration-300 hover:-translate-y-0.5 sm:p-7', layout[i + 1], rest.length % 2 === 1 && i === rest.length - 1 ? 'md:col-span-2' : '']} data-reveal-item>
       <span class="bento-mark text-ink" aria-hidden="true">{item.icon && <Glyph icon={item.icon} class="size-full" />}</span>
       <span class="grid size-11 place-items-center rounded-xl bg-orange-100 text-orange-700 transition duration-300 group-hover:bg-orange-600 group-hover:text-white dark:bg-orange-950 dark:text-orange-300 dark:group-hover:bg-orange-700">{item.icon && <Glyph icon={item.icon} class="size-5" />}</span>
       <h3 class="mt-6 text-lg font-semibold text-balance text-ink">{item.title}</h3>

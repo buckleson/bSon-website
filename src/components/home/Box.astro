@@ -2,13 +2,14 @@
 /**
  * One home section as its own rounded box, edge to edge with a small gutter,
  * separated from its neighbours by a gap (no overlapping sheets).
- * `light` is the white card; `dark` is the sheet colour. Boxes skip
+ * `light` is a glass panel; `paper` is the warm drafting paper (kept for
+ * a few sections); `dark` is the sheet colour. Boxes skip
  * rendering until they scroll near (content-visibility), which keeps the
  * first load fast; pass `render` for a box that must always lay out (sticky
  * or scroll-driven content inside).
  */
 interface Props {
-  tone?: 'light' | 'dark';
+  tone?: 'light' | 'paper' | 'dark';
   render?: boolean;
   class?: string;
 }
@@ -16,7 +17,7 @@ interface Props {
 const { tone = 'light', render = false, class: className } = Astro.props;
 ---
 
-<div class:list={['mx-2 mt-3 rounded-[2rem] sm:mx-3', !render && 'box-lazy', tone === 'dark' ? 'on-sheet bg-sheet text-white' : 'bg-card ring-1 ring-line', className]}>
+<div class:list={['mx-2 mt-3 rounded-[2rem] sm:mx-3', !render && 'box-lazy', tone === 'dark' ? 'on-sheet bg-sheet text-white' : tone === 'paper' ? 'bg-paper ring-1 ring-paper-line' : 'glass', className]}>
   <slot />
 </div>
 

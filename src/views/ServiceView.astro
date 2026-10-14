@@ -86,11 +86,12 @@ const href = (url: string) => localePath('en', url);
     <FlowStack name={page.flow} class="mt-10" />
   </section>
 
-  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="process-title">
+  <section class="mx-auto max-w-[85rem] px-2 py-14 sm:px-3 lg:py-20" aria-labelledby="process-title">
+    <div class="rounded-[2rem] bg-paper px-4 py-12 ring-1 ring-paper-line sm:px-8 lg:px-10">
     <SectionHead index="04" label="How we work" claim="Small first," payoff="then production." id="process-title" />
     <ol class="process mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
       {page.steps.map((step, i) => (
-        <li class="relative rounded-[1.6rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
+        <li class="relative rounded-[1.6rem] bg-card p-6 ring-1 ring-paper-line" data-reveal-item>
           <div class="flex items-center justify-between">
             <span class="grid size-11 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={step.icon} class="size-5" /></span>
             <span class="font-mono text-xs text-muted">Step {i + 1}</span>
@@ -100,6 +101,7 @@ const href = (url: string) => localePath('en', url);
         </li>
       ))}
     </ol>
+    </div>
   </section>
 
   <section class="mx-auto grid max-w-[85rem] grid-cols-1 gap-12 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-20">

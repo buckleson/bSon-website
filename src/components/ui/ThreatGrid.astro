@@ -22,7 +22,7 @@ const badge = {
 
 <ol class:list={['grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3', className]} data-reveal-group>
   {threats.slice(0, limit).map((threat, i) => (
-    <li class="flex flex-col rounded-[1.6rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
+    <li class="glass-card flex flex-col rounded-[1.6rem] p-6" data-reveal-item>
       <div class="flex items-start justify-between gap-3">
         <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={threat.icon} class="size-5" /></span>
         <span class="font-mono text-xs text-muted">{String(i + 1).padStart(2, '0')}</span>

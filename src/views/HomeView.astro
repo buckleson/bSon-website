@@ -48,7 +48,7 @@ const c = t.home;
   <Box><ServicesBento index="02" {...c.services} /></Box>
   <Box><HowItWorks index="03" {...c.how} tabs={c.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))} /></Box>
   <Box render><WhySection index="04" {...c.why} /></Box>
-  <Box><ProcessSteps index="05" {...c.process} /></Box>
+  <Box tone="paper"><ProcessSteps index="05" {...c.process} /></Box>
   <Box tone="dark"><VisionSection index="06" {...c.vision} /></Box>
   <Box><FaqTimeline index="07" {...c.faq} faqs={t.data.faqs.faqs} /></Box>
   <Box><InsightsSection index="08" {...c.latestPosts} /></Box>

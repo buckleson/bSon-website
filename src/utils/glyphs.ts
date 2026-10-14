@@ -95,3 +95,28 @@ export type BrandKey = keyof typeof BRANDS;
 export function brand(key: BrandKey): Brand {
   return BRANDS[key];
 }
+
+// ---- Colour icons --------------------------------------------------------
+// Fluent UI System Color Icons (MIT, Microsoft), from @iconify-json/fluent-color.
+// Multi-colour icons for places where the icon must say what the item is at a
+// glance (the navigation). Gradient ids get a per-use suffix, so a copy inside
+// a hidden menu never breaks the colours of a visible copy.
+const FLUENT = JSON.parse(readFileSync(join(process.cwd(), 'node_modules', '@iconify-json', 'fluent-color', 'icons.json'), 'utf8')) as {
+  icons: Record<string, { body: string; width?: number; height?: number }>;
+  width?: number;
+  height?: number;
+};
+let colorUses = 0;
+
+export function colorIcon(name: string): { body: string; size: number } {
+  const key = [24, 20, 28, 32, 48, 16].map(size => `${name}-${size}`).find(k => FLUENT.icons[k]);
+  if (!key) throw new Error(`Unknown colour icon "${name}"`);
+  const icon = FLUENT.icons[key];
+  const size = icon.width ?? FLUENT.width ?? Number(key.split('-').pop());
+  const uid = ++colorUses;
+  const body = icon.body
+    .replace(/id="([^"]+)"/g, (_, id) => `id="${id}-${uid}"`)
+    .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${id}-${uid})`)
+    .replace(/href="#([^"]+)"/g, (_, id) => `href="#${id}-${uid}"`);
+  return { body, size };
+}

@@ -1,25 +1,30 @@
 ---
-import { brand, glyph, type BrandKey } from '@utils/glyphs';
+import { brand, colorIcon, glyph, type BrandKey } from '@utils/glyphs';
 
 /**
- * An inline icon for HTML: a Phosphor duotone icon (`icon`) or a brand logo
- * (`brand`).
+ * An inline icon for HTML: a Phosphor duotone icon (`icon`), a multi-colour
+ * Fluent icon (`color`) or a brand logo (`brand`).
  * Decorative unless `title` is given.
  */
 interface Props {
   icon?: string;
+  color?: string;
   brand?: BrandKey;
   class?: string;
   title?: string;
 }
 
-const { icon, brand: brandKey, class: className, title } = Astro.props;
+const { icon, color, brand: brandKey, class: className, title } = Astro.props;
+const tinted = color ? colorIcon(color) : undefined;
 const logo = brandKey ? brand(brandKey) : undefined;
 const a11y = title ? { role: 'img' as const, 'aria-label': title } : { 'aria-hidden': 'true' as const };
 ---
 
 {icon && (
   <svg class={className} viewBox="0 0 256 256" fill="currentColor" {...a11y} set:html={glyph(icon)} />
+)}
+{tinted && (
+  <svg class={className} viewBox={`0 0 ${tinted.size} ${tinted.size}`} fill="none" {...a11y} set:html={tinted.body} />
 )}
 {logo && (logo.path ? (
   <svg class={className} viewBox="0 0 24 24" fill="currentColor" {...a11y}><path d={logo.path} fill-rule={logo.rule} /></svg>

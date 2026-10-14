@@ -1,43 +1,59 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import CardBlog from '@components/ui/cards/CardBlog.astro';
-import BlogCover from '@components/ui/BlogCover.astro';
+import BlogArt from '@components/ui/BlogArt.astro';
+import CardPost from '@components/ui/cards/CardPost.astro';
+import CompareFlow from '@components/ui/CompareFlow.astro';
 import Diagram from '@components/ui/Diagram.astro';
 import IsoFigure from '@components/ui/IsoFigure.astro';
-import Icon from '@components/ui/icons/Icon.astro';
+import Glyph from '@components/ui/Glyph.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import SocialShare from '@components/ui/buttons/SocialShare.astro';
 import { Image } from 'astro:assets';
 import { render, type CollectionEntry } from 'astro:content';
 import { formatDate } from '@utils/utils';
-import { entriesFor, localeOf, slugOf } from '@utils/content';
+import { entriesFor, localeOf, pathFor, slugOf } from '@utils/content';
+import { categoryOf, pathOf } from '@utils/blog';
 import { BOOKING_URL } from '@data/constants';
 import { localePath } from '@utils/locale';
 
-/** One blog post: answer-first intro, an animated figure or diagram, body, FAQ, CTA. */
+/**
+ * One blog post. A header card (title, lead, author, cover art), then the
+ * "without / with Hyper 0X" diagram, then three columns on wide screens: the
+ * table of contents (it follows your place), the article, and a side rail
+ * with the reading path, a call to action and related posts.
+ */
 interface Props {
   post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
 const data = post.data;
+const slug = slugOf(post);
 const locale = localeOf(post);
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter(h => h.depth === 2);
+const category = categoryOf(post);
+const inPath = pathOf(slug);
 
-// Related: posts sharing the most tags, newest first.
-const others = (await entriesFor('blog', locale)).filter(entry => entry.id !== post.id);
-const related = others
-  .map(entry => ({ entry, score: entry.data.tags.filter(tag => data.tags.includes(tag)).length }))
+const all = await entriesFor('blog', locale);
+const bySlug = Object.fromEntries(all.map(entry => [slugOf(entry), entry]));
+// Related: same topic first, then shared tags, newest first.
+const related = all
+  .filter(entry => entry.id !== post.id)
+  .map(entry => ({ entry, score: (categoryOf(entry).id === category.id ? 2 : 0) + entry.data.tags.filter(tag => data.tags.includes(tag)).length }))
   .sort((a, b) => b.score - a.score)
   .slice(0, 3)
   .map(({ entry }) => entry);
+const pathPosts = inPath ? inPath.path.slugs.map(s => bySlug[s]).filter(Boolean) : [];
+const prev = inPath && inPath.index > 0 ? bySlug[inPath.path.slugs[inPath.index - 1]] : undefined;
+const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
 ---
 
 <MainLayout
   title={data.title}
   seoTitle={data.title.length > 52 ? data.title : `${data.title} | Buckleson`}
   description={data.description}
-  ogImage={`/og/blog-${slugOf(post)}.png`}
+  ogImage={`/og/blog-${slug}.png`}
   kind={{
     type: 'BlogPosting',
     datePublished: data.pubDate,
@@ -47,77 +63,174 @@ const related = others
   }}
   faqs={data.faqs}
 >
-  <article class="mx-auto max-w-3xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-16">
-    <nav aria-label="Breadcrumb" class="text-sm text-muted">
-      <a href={localePath('en', '/blog/')} class="hover:text-orange-700 dark:hover:text-orange-300">Blog</a>
-      {data.tags[0] && <span aria-hidden="true"> / </span>}
-      {data.tags[0]}
-    </nav>
-    <h1 class="mt-4 text-4xl leading-[1.05] font-semibold text-balance text-ink sm:text-5xl">
-      {data.title}
-    </h1>
-    <div class="mt-6 flex items-center gap-3 text-sm text-muted">
-      <Image src={data.authorImage} alt={data.authorImageAlt} width={40} height={40} densities={[1, 2]} class="size-10 rounded-full" />
-      <div>
-        <p class="font-semibold text-ink">{data.author}</p>
-        <p>
-          <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate, locale)}</time>
-          {data.updatedDate && (
-            <>
-              <span aria-hidden="true"> · </span>Updated <time datetime={data.updatedDate.toISOString()}>{formatDate(data.updatedDate, locale)}</time>
-            </>
-          )}
-          <span aria-hidden="true"> · </span>{data.readTime} min read
-        </p>
-      </div>
-    </div>
-
-    {data.figure ? (
-      <div class="mt-10"><IsoFigure name={data.figure} /></div>
-    ) : data.diagram ? (
-      <Diagram name={data.diagram} class="mt-10" />
-    ) : (
-      <div class="relative mt-10 overflow-hidden rounded-[1.6rem] pt-[52%] ring-1 ring-line"><BlogCover seed={slugOf(post)} label="" fill /></div>
-    )}
-
-    <div class="prose prose-lg prose-neutral dark:prose-invert prose-headings:font-semibold mt-10 max-w-none text-pretty prose-headings:tracking-tight prose-a:text-orange-700 prose-a:decoration-orange-300 prose-a:underline-offset-4 dark:prose-a:text-orange-300 dark:prose-a:decoration-orange-700">
-      <Content />
-    </div>
-
-    {data.faqs.length > 0 && (
-      <section class="mt-14" aria-labelledby="faq-title">
-        <h2 id="faq-title" class="text-2xl font-semibold text-ink">Frequently asked questions</h2>
-        <div class="mt-4 divide-y divide-line">
-          {data.faqs.map(faq => (
-            <details class="group py-4">
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-semibold text-ink">
-                {faq.question}
-                <Icon name="chevronDown" class="size-5 shrink-0 text-orange-600 transition duration-300 group-open:rotate-180 dark:text-orange-400" />
-              </summary>
-              <p class="mt-2 text-pretty text-muted">{faq.answer}</p>
-            </details>
-          ))}
+  <header class="mx-auto max-w-[85rem] px-4 pt-6 sm:px-6 lg:px-8 lg:pt-10">
+    <div class="glass grid grid-cols-1 overflow-hidden rounded-[2rem] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+      <div class="p-6 sm:p-10">
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-2 text-sm text-muted">
+          <a href={localePath('en', '/blog/')} class="hover:text-ink">Blog</a>
+          <span aria-hidden="true">/</span>
+          <a href={`${localePath('en', '/blog/')}#topic=${category.id}`} class="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-line hover:ring-orange-500"><Glyph color={category.icon} class="size-4" />{category.label}</a>
+        </nav>
+        <h1 class="mt-5 text-4xl leading-[1.04] font-semibold text-balance text-ink sm:text-5xl">{data.title}</h1>
+        <p class="mt-5 max-w-[60ch] text-lg leading-relaxed text-pretty text-muted">{data.description}</p>
+        <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted">
+          <span class="flex items-center gap-3">
+            <Image src={data.authorImage} alt={data.authorImageAlt} width={40} height={40} densities={[1, 2]} class="size-10 rounded-full" />
+            <span>
+              <span class="block font-semibold text-ink">{data.author}</span>
+              <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate, locale)}</time>
+              {data.updatedDate && <span> · Updated <time datetime={data.updatedDate.toISOString()}>{formatDate(data.updatedDate, locale)}</time></span>}
+            </span>
+          </span>
+          <span class="inline-flex items-center gap-1.5"><Glyph icon="clock" class="size-4" />{data.readTime} min read</span>
+          {inPath && <span class="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1 text-xs font-semibold text-ink ring-1 ring-line"><Glyph color={inPath.path.icon} class="size-4" />Part {inPath.index + 1} of {inPath.path.slugs.length} · {inPath.path.title}</span>}
         </div>
-      </section>
-    )}
-
-    <div class="on-sheet mt-14 rounded-[2rem] bg-sheet p-8 text-center">
-      <p class="text-2xl font-bold text-balance text-white">Building something like this?</p>
-      <p class="mx-auto mt-2 max-w-md text-pretty text-white/70">Talk to a Buckleson engineer for 30 minutes. No slides, only your use case.</p>
-      <div class="mt-6"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
+      </div>
+      <div class="relative min-h-[15rem] sm:min-h-[19rem] lg:min-h-full"><BlogArt post={post} chip /></div>
     </div>
+  </header>
 
-    <div class="mt-10 flex justify-end">
-      <SocialShare pageTitle={data.title} />
-    </div>
-  </article>
+  <CompareFlow slug={slug} class="mx-auto max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8" />
+
+  <div class="post-layout mx-auto grid max-w-[85rem] grid-cols-1 gap-10 px-4 pt-12 pb-16 sm:px-6 lg:px-8">
+    <aside class="post-toc">
+      {toc.length > 0 && (
+        <>
+          <details class="group glass-card rounded-[1.4rem] p-4 lg:hidden">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 font-mono text-xs tracking-wide text-muted uppercase">
+              On this page
+              <Glyph icon="caret-down" class="size-4 transition group-open:rotate-180" />
+            </summary>
+            <ol class="mt-3 grid gap-0.5">
+              {toc.map(heading => <li><a href={`#${heading.slug}`} class="block rounded-lg px-2.5 py-1.5 text-sm leading-snug text-muted hover:bg-card hover:text-ink">{heading.text}</a></li>)}
+            </ol>
+          </details>
+          <nav class="glass-card sticky top-24 hidden rounded-[1.4rem] p-4 lg:block" aria-label="On this page">
+            <p class="font-mono text-xs tracking-wide text-muted uppercase">On this page</p>
+            <ol class="mt-3 grid gap-0.5">
+              {toc.map(heading => (
+                <li><a href={`#${heading.slug}`} class="toc-link block rounded-lg px-2.5 py-1.5 text-sm leading-snug text-muted transition hover:bg-card hover:text-ink" data-toc-link={heading.slug}>{heading.text}</a></li>
+              ))}
+            </ol>
+          </nav>
+        </>
+      )}
+    </aside>
+
+    <article class="min-w-0">
+      {data.figure && <div class="mb-10"><IsoFigure name={data.figure} /></div>}
+      <div class="prose prose-lg prose-neutral dark:prose-invert prose-headings:font-semibold max-w-none text-pretty prose-headings:scroll-mt-28 prose-headings:tracking-tight prose-a:text-orange-700 prose-a:decoration-orange-300 prose-a:underline-offset-4 dark:prose-a:text-orange-300 dark:prose-a:decoration-orange-700">
+        <Content />
+      </div>
+
+      {data.diagram && (
+        <section class="mt-14" aria-labelledby="architecture-title">
+          <h2 id="architecture-title" class="text-2xl font-semibold text-ink">Architecture in detail</h2>
+          <Diagram name={data.diagram} class="mt-4" />
+        </section>
+      )}
+
+      {data.faqs.length > 0 && (
+        <section class="mt-14" aria-labelledby="faq-title">
+          <h2 id="faq-title" class="text-2xl font-semibold text-ink">Frequently asked questions</h2>
+          <div class="mt-4 divide-y divide-line">
+            {data.faqs.map(faq => (
+              <details class="group py-4">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-6 font-semibold text-ink">
+                  {faq.question}
+                  <Glyph icon="caret-down" class="size-5 shrink-0 text-orange-600 transition duration-300 group-open:rotate-180 dark:text-orange-400" />
+                </summary>
+                <p class="mt-2 text-pretty text-muted">{faq.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {inPath && (prev || next) && (
+        <nav class="mt-14 grid grid-cols-1 gap-3 sm:grid-cols-2" aria-label="Reading path">
+          {prev ? <a href={pathFor(prev)} class="glass-card rounded-[1.4rem] p-5 transition hover:-translate-y-0.5"><span class="flex items-center gap-1.5 text-xs font-semibold text-muted"><Glyph icon="arrow-left" class="size-3.5" />Previous in the path</span><span class="mt-2 block font-semibold text-ink">{prev.data.title}</span></a> : <span></span>}
+          {next && <a href={pathFor(next)} class="glass-card rounded-[1.4rem] p-5 text-right transition hover:-translate-y-0.5"><span class="flex items-center justify-end gap-1.5 text-xs font-semibold text-muted">Next in the path<Glyph icon="arrow-right" class="size-3.5" /></span><span class="mt-2 block font-semibold text-ink">{next.data.title}</span></a>}
+        </nav>
+      )}
+
+      <div class="mt-10 flex justify-end">
+        <SocialShare pageTitle={data.title} />
+      </div>
+    </article>
+
+    <aside class="post-rail grid content-start gap-4">
+      <div class="grid gap-4 xl:sticky xl:top-24">
+        {inPath && (
+          <div class="glass-card rounded-[1.4rem] p-5">
+            <p class="flex items-center gap-2 text-sm font-semibold text-ink"><Glyph color={inPath.path.icon} class="size-5" />{inPath.path.title}</p>
+            <ol class="mt-3 grid gap-1">
+              {pathPosts.map((entry, i) => (
+                <li>
+                  <a href={pathFor(entry)} class:list={['flex items-start gap-2.5 rounded-lg px-2 py-1.5 text-sm leading-snug transition hover:bg-card', i === inPath.index ? 'bg-card font-semibold text-ink ring-1 ring-line' : 'text-muted']} aria-current={i === inPath.index ? 'page' : undefined}>
+                    <span class:list={['mt-px grid size-5 shrink-0 place-items-center rounded-full font-mono text-[0.65rem] font-semibold', i <= inPath.index ? 'bg-orange-600 text-white' : 'bg-ground text-muted ring-1 ring-line']}>{i + 1}</span>
+                    {entry.data.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+        <div class="on-sheet rounded-[1.4rem] bg-sheet p-6 text-white">
+          <Glyph color="calendar-checkmark" class="size-8" />
+          <p class="mt-3 text-lg font-semibold text-balance">Building something like this?</p>
+          <p class="mt-1.5 text-sm text-pretty text-white/70">Talk to a Buckleson engineer for 30 minutes. No slides, only your use case.</p>
+          <div class="mt-5"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
+        </div>
+        {related.length > 0 && (
+          <div class="glass-card rounded-[1.4rem] p-5">
+            <p class="font-mono text-xs tracking-wide text-muted uppercase">Read next</p>
+            <ul class="mt-3 grid gap-3">
+              {related.map(entry => (
+                <li>
+                  <a href={pathFor(entry)} class="group flex items-center gap-3">
+                    <span class="relative aspect-square w-14 shrink-0 overflow-hidden rounded-xl"><BlogArt post={entry} /></span>
+                    <span class="text-sm leading-snug font-medium text-ink group-hover:underline">{entry.data.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </aside>
+  </div>
 
   {related.length > 0 && (
-    <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-semibold text-ink">Related articles</h2>
-      <div class="mt-6 grid gap-5 lg:grid-cols-2">
-        {related.slice(0, 2).map(entry => <CardBlog blogEntry={entry} />)}
-      </div>
+    <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8" aria-labelledby="related-title">
+      <h2 id="related-title" class="text-3xl font-semibold text-ink">More on {category.label.toLowerCase()}</h2>
+      <ul class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {related.map(entry => <li><CardPost post={entry} /></li>)}
+      </ul>
     </section>
   )}
 </MainLayout>
+
+<style>
+  @media (min-width: 1024px) { .post-layout { grid-template-columns: 14rem minmax(0, 1fr); } .post-rail { grid-column: 2; } }
+  @media (min-width: 1280px) { .post-layout { grid-template-columns: 15rem minmax(0, 46rem) 18rem; justify-content: space-between; } .post-rail { grid-column: auto; } }
+  .toc-link[aria-current='true'] { background: var(--card); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line); }
+</style>
+
+<script>
+  // The table of contents follows your place in the article.
+  const links = new Map([...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')].map(link => [link.dataset.tocLink!, link]));
+  if (links.size) {
+    const headings = [...links.keys()].map(id => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+    const visible = new Set<string>();
+    const mark = () => {
+      const current = headings.find(h => visible.has(h.id))?.id ?? [...headings].reverse().find(h => h.getBoundingClientRect().top < 120)?.id;
+      links.forEach((link, id) => link.setAttribute('aria-current', String(id === current)));
+    };
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => (entry.isIntersecting ? visible.add(entry.target.id) : visible.delete(entry.target.id)));
+      mark();
+    }, { rootMargin: '-90px 0px -55% 0px' });
+    headings.forEach(h => observer.observe(h));
+  }
+</script>

@@ -1,0 +1,65 @@
+---
+import BlogArt from '@components/ui/BlogArt.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import type { CollectionEntry } from 'astro:content';
+import { categoryOf } from '@utils/blog';
+import { formatDate } from '@utils/utils';
+import { localeOf, pathFor } from '@utils/content';
+
+/**
+ * A blog post card for the bento grids: cover art, category, title, summary
+ * and reading time on a glass card. The card reads its own width: a wide card
+ * (a bento cell that spans two columns) puts the art beside the text.
+ * `data-category` and `data-search` let the blog index filter cards.
+ */
+interface Props {
+  post: CollectionEntry<'blog'>;
+  size?: 'std' | 'wide';
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { post, size = 'std', headingLevel: Heading = 'h3' } = Astro.props;
+const data = post.data;
+const category = categoryOf(post);
+const search = [data.title, data.description, ...data.tags, category.label].join(' ').toLowerCase();
+---
+
+<a href={pathFor(post)} class="post-card glass-card group" data-post data-size={size} data-category={category.id} data-search={search} data-astro-prefetch>
+  <div class="pc-inner">
+    <div class="pc-art"><BlogArt post={post} /></div>
+    <div class="pc-body">
+      <p class="inline-flex w-fit items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-line"><Glyph color={category.icon} class="size-4" />{category.label}</p>
+      <Heading class="pc-title mt-4 font-semibold text-balance text-ink">{data.title}</Heading>
+      <p class="pc-text mt-2 text-sm leading-relaxed text-pretty text-muted">{data.description}</p>
+      <p class="mt-auto flex items-center gap-3 pt-5 text-xs text-muted">
+        <span class="inline-flex items-center gap-1"><Glyph icon="clock" class="size-3.5" />{data.readTime} min read</span>
+        <span>{formatDate(data.pubDate, localeOf(post))}</span>
+        <span class="ms-auto inline-flex items-center gap-1 font-semibold text-orange-700 opacity-0 transition group-hover:opacity-100 dark:text-orange-300">Read<Glyph icon="arrow-right" class="size-3.5" /></span>
+      </p>
+    </div>
+  </div>
+</a>
+
+<style>
+  .post-card {
+    display: block;
+    container-type: inline-size;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms ease;
+  }
+  .post-card:hover { transform: translateY(-3px); }
+  .post-card:focus-visible { outline: 3px solid var(--accent-500); outline-offset: 2px; }
+  .pc-inner { display: flex; flex-direction: column; height: 100%; }
+  .pc-art { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+  .pc-body { display: flex; flex: 1; flex-direction: column; padding: 1.25rem 1.4rem 1.4rem; }
+  .pc-title { font-size: 1.2rem; line-height: 1.25; }
+  .pc-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  @container (min-width: 40rem) {
+    .pc-inner { flex-direction: row; }
+    .pc-art { width: 52%; aspect-ratio: auto; min-height: 18rem; }
+    .pc-body { width: 48%; padding: 1.8rem; }
+    .pc-title { font-size: 1.6rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .post-card { transition: none; } .post-card:hover { transform: none; } }
+</style>
