@@ -67,6 +67,23 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
       radial-gradient(70% 70% at 78% 40%, color-mix(in oklab, var(--accent-500) 7%, transparent), transparent 70%);
     mask-image: linear-gradient(100deg, rgb(0 0 0 / 0.35) 10%, #000 55%);
   }
+  /* Each typed word gets its underline once the whole word is written. */
+  :global(.typer-word) { position: relative; }
+  :global(.typer-word)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.04em;
+    height: 0.075em;
+    border-radius: 999px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1), opacity 250ms ease;
+  }
+  :global(.typer-word.is-done)::after { transform: scaleX(1); }
+  [data-typer].is-erasing :global(.typer-word)::after { opacity: 0; }
   .typer-caret {
     display: inline-block;
     width: 0.06em;
@@ -87,7 +104,9 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   document.querySelectorAll<HTMLElement>('[data-hero]').forEach(hero => {
-    // Rotating last line: type, pause, erase, next.
+    // Rotating last line: type, pause, erase, next. While a phrase types,
+    // each word gets an underline as soon as that whole word is written; the
+    // underlines fade when the phrase starts to erase.
     const typer = hero.querySelector<HTMLElement>('[data-typer]');
     if (typer && !reduced) {
       const phrases: string[] = JSON.parse(typer.dataset.typer!);
@@ -95,16 +114,44 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
       let index = 0;
       let shown = phrases[0].length;
       let erasing = true;
+      let parts: { el: HTMLElement; start: number; end: number; gap: Text | null }[] = [];
+      // One span per word (for its underline), with the spaces between them.
+      const build = (phrase: string) => {
+        out.textContent = '';
+        parts = [];
+        let at = 0;
+        phrase.split(' ').forEach((word, i, all) => {
+          const el = document.createElement('span');
+          el.className = 'typer-word';
+          out.append(el);
+          const gap = i < all.length - 1 ? document.createTextNode('') : null;
+          if (gap) out.append(gap);
+          parts.push({ el, start: at, end: at + word.length, gap });
+          at += word.length + 1;
+        });
+      };
+      const paint = (phrase: string) => {
+        for (const part of parts) {
+          part.el.textContent = phrase.slice(part.start, Math.min(part.end, Math.max(shown, part.start)));
+          part.el.classList.toggle('is-done', !erasing && shown >= part.end);
+          if (part.gap) part.gap.textContent = shown > part.end ? ' ' : '';
+        }
+      };
+      build(phrases[0]);
+      paint(phrases[0]);
+      for (const part of parts) part.el.classList.remove('is-done');
       const tick = () => {
         if (erasing) {
           shown--;
-          if (shown <= 0) { erasing = false; index = (index + 1) % phrases.length; }
+          if (shown <= 0) { erasing = false; index = (index + 1) % phrases.length; build(phrases[index]); }
         } else shown++;
-        out.textContent = phrases[index].slice(0, Math.max(shown, 0)) || ' ';
+        typer.classList.toggle('is-erasing', erasing);
+        paint(phrases[index]);
         let delay = erasing ? 30 : 60;
         if (!erasing && shown >= phrases[index].length) { erasing = true; delay = 2000; }
         window.setTimeout(tick, delay);
       };
+      typer.classList.add('is-erasing');
       window.setTimeout(tick, 2400);
     }
     if (reduced) return;
