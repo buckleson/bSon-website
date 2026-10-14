@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (!reduced) {
+const setup = () => {
   document.querySelectorAll<HTMLElement>('[data-words]').forEach(el => {
     const split = SplitText.create(el, { type: 'words', wordsClass: 'word', aria: 'none' });
     gsap.fromTo(
@@ -44,12 +44,27 @@ if (!reduced) {
         gsap.to(state, { n: target, duration: 1.6, ease: 'expo.out', onUpdate: () => (el.textContent = format(state.n)) }),
     });
   });
+};
+
+// Set up after the page has loaded and the browser is idle, so none of this
+// competes with the first paint.
+if (!reduced) {
+  const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
+  if (document.readyState === 'complete') idle(setup);
+  else window.addEventListener('load', () => idle(setup), { once: true });
 }
 
 // Sections that skip rendering until near (content-visibility) change height
 // when they first lay out; keep every scroll trigger's positions in step.
 let refreshTimer = 0;
-new ResizeObserver(() => {
+let lastHeight = 0;
+new ResizeObserver(([entry]) => {
+  const height = Math.round(entry.contentRect.height);
+  if (!lastHeight || Math.abs(height - lastHeight) < 40) {
+    lastHeight = lastHeight || height;
+    return;
+  }
+  lastHeight = height;
   window.clearTimeout(refreshTimer);
-  refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+  refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 300);
 }).observe(document.body);

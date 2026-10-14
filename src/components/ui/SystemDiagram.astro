@@ -283,5 +283,19 @@ const story = spec.steps.map(step => ({
     new IntersectionObserver(([entry]) => (entry.isIntersecting ? tl.play() : tl.pause()), { threshold: 0.2 }).observe(root);
   }
 
-  document.querySelectorAll<HTMLElement>('[data-system]').forEach(init);
+  // Build each diagram's timeline only when it comes near (hidden tabs wait
+  // until shown), after the page has loaded.
+  const start = () => {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        init(entry.target as HTMLElement);
+      }
+    }, { rootMargin: '300px 0px' });
+    document.querySelectorAll<HTMLElement>('[data-system]').forEach(el => observer.observe(el));
+  };
+  const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
+  if (document.readyState === 'complete') idle(start);
+  else window.addEventListener('load', () => idle(start), { once: true });
 </script>
