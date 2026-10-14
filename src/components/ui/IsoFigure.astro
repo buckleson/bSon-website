@@ -1,60 +1,38 @@
 ---
 import '@styles/iso.css';
-import * as kitModule from '../../../scripts/figures/kit/iso-kit.mjs';
+import { figureParts, figureScript, type FigureName } from '@utils/figures';
 
 /**
- * An Anatomy isometric figure (built by scripts/figures/*.mjs). The figure's
- * markup and live script are generated files. The kit itself is bundled once
- * per page (iso-kit.ts puts it on window.IsoKit); each live script runs in
- * its own block with the kit's functions in scope.
+ * An Anatomy isometric figure (built by scripts/figures/*.mjs). The kit is
+ * bundled once per page (iso-kit.ts puts it on window.IsoKit).
  * `tone`: `sheet` blends the card into a dark section, `hero` lays it on the
  * hero's paper, `card` drops the frame and step list (inside a stacking card)
  * and fits the drawing to its box, `auto` follows the theme.
- * `lazy`: leave the markup out of the page and fetch it (from
- * /figures/<name>.txt) when the figure scrolls near, to keep pages light.
+ * `lazy` (default): the frame, labels and steps are in the page, but the
+ * drawing and its script load from /figures/<name>.txt and .js once the
+ * figure is near, into a box already the right size, so nothing shifts.
+ * `lazy={false}` puts everything inline.
  */
-type Name = 'data-vault' | 'chain-rack' | 'pavii-gates' | 'cipher-tower';
 interface Props {
-  name: Name;
+  name: FigureName;
   tone?: 'sheet' | 'hero' | 'card' | 'auto';
   lazy?: boolean;
   class?: string;
 }
 
-const { name, tone = 'auto', lazy = false, class: className } = Astro.props;
-const html = import.meta.glob('../home/figures/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-const live = import.meta.glob('../home/figures/*.live.js', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-const markup = html[`../home/figures/${name}.html`];
-// Each figure's stage is set up once, however often its script runs.
-const script = live[`../home/figures/${name}.live.js`].replace(
-  /for \(const stage of document\.querySelectorAll\('(\[data-figure="[a-z-]+"\])'\)\) \{/,
-  "for (const stage of document.querySelectorAll('$1:not([data-iso-ready])')) { stage.setAttribute('data-iso-ready', '');"
-);
-const names = Object.keys(kitModule).join(', ');
-// Width:height of the drawing, so `card` can fit it inside a fixed box and a
-// lazy figure can hold its space.
-const [, vw, vh] = markup.match(/viewBox="0 0 (\d+) (\d+)"/) ?? [];
-const ratio = vw && vh ? (Number(vw) / Number(vh)).toFixed(4) : '1.7';
-const src = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/figures/${name}.txt`;
-const code = `{
-const run = () => {
-const { ${names} } = window.IsoKit;
-${script}
-};
-(window.__isoRun ||= {})[${JSON.stringify(name)}] = run;
-window.IsoKit ? run() : window.addEventListener('isokit', run, { once: true });
-}`.replace(/<\/(script)/gi, '<\\/$1');
+const { name, tone = 'auto', lazy = true, class: className } = Astro.props;
+const parts = figureParts(name);
+const base = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/figures/${name}`;
 const classes = ['iso', tone === 'sheet' ? 'iso-sheet' : 'iso-auto', tone === 'hero' && 'iso-hero', tone === 'card' && 'iso-card', className];
+const style = `--fig-ar:${parts.ratio.toFixed(4)}`;
 ---
 
 {lazy ? (
-  <div class:list={classes} style={`--fig-ar:${ratio}`} data-iso-lazy={name} data-iso-src={src}>
-    <div class="iso-placeholder" style={`aspect-ratio:${ratio}`}></div>
-  </div>
+  <div class:list={classes} style={style} data-iso-lazy={name} data-iso-src={`${base}.txt`} data-iso-js={`${base}.js`} set:html={parts.shell} />
 ) : (
-  <div class:list={classes} style={`--fig-ar:${ratio}`} set:html={markup} />
+  <div class:list={classes} style={style} set:html={parts.markup} />
 )}
 <script>
   import '@scripts/iso-kit';
 </script>
-<script type="module" is:inline set:html={code} />
+{!lazy && <script type="module" is:inline set:html={figureScript(name).replace(/<\/(script)/gi, '<\\/$1')} />}

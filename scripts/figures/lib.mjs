@@ -178,8 +178,7 @@ const SITE_CSS = `
 .fig-bad .iso-top{fill:color-mix(in oklab,#e5484d 38%,var(--anatomy-top))}
 .fig-bad .iso-shade{fill:color-mix(in oklab,#e5484d 30%,var(--anatomy-shade-2))}
 .fig-bad .iso-edge{stroke:#e5484d}
-.iso-placeholder{width:100%;border-radius:1.6rem;background:color-mix(in oklab,var(--anatomy-mid) 10%,transparent)}
-.iso-card .iso-placeholder{background:transparent}
+.iso-placeholder{width:100%}
 .iso-card{--anatomy-card:transparent}
 .iso-card .iso-plate{background:transparent;box-shadow:none;padding:10px 6px 30px}
 .iso-card .iso-plate-corner:not([data-corner="readout"]){display:none}

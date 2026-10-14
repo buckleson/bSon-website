@@ -1,6 +1,7 @@
-// Exposes the Anatomy kit (MIT, scripts/figures/kit) to the figures' inline
-// live scripts, and loads lazy figures when they scroll near. Bundled once
-// per page however many figures it has.
+// Exposes the Anatomy kit (MIT, scripts/figures/kit) to the figures' live
+// scripts, and loads lazy figures when they come near: the drawing goes into
+// its already-sized box, then the figure's script is imported and runs.
+// Bundled once per page however many figures it has.
 import * as kit from '../../../scripts/figures/kit/iso-kit.mjs';
 
 type Runner = () => void;
@@ -10,16 +11,18 @@ w.IsoKit = kit;
 window.dispatchEvent(new Event('isokit'));
 
 async function load(el: HTMLElement) {
-  const src = el.dataset.isoSrc;
-  if (!src) return;
+  const { isoSrc: src, isoJs: js, isoLazy: name = '' } = el.dataset;
+  if (!src || !js) return;
   el.removeAttribute('data-iso-src');
   try {
     const response = await fetch(src);
     if (!response.ok) return;
-    el.innerHTML = await response.text();
-    w.__isoRun?.[el.dataset.isoLazy ?? '']?.();
+    const box = el.querySelector<HTMLElement>(`[data-figure="${name}"]`) ?? el;
+    box.innerHTML = await response.text();
+    if (w.__isoRun?.[name]) w.__isoRun[name]();
+    else await import(/* @vite-ignore */ js);
   } catch {
-    // Offline or blocked: the placeholder stays; the page still reads fine.
+    // Offline or blocked: the frame and steps still read fine without it.
   }
 }
 

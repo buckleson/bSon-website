@@ -42,7 +42,7 @@ const { index, label, claim, payoff, body, cards } = Astro.props;
       <li class="stack-item" data-stack-card>
         <article class="stack-card grid overflow-hidden rounded-[2rem] ring-1 ring-line lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <div class="stack-visual relative min-h-0 px-2 pt-4 sm:px-4">
-            <IsoFigure name={card.figure as FigureName} tone="card" lazy />
+            <IsoFigure name={card.figure as FigureName} tone="card" />
           </div>
           <div class="m-3 flex flex-col rounded-[1.6rem] bg-[#0b0c0e] p-7 text-white sm:p-8">
             <ul class="flex flex-wrap gap-2">
