@@ -69,7 +69,7 @@ const { index, label, claim, payoff, body, cards } = Astro.props;
 </section>
 
 <style>
-  .stack-card { background: #f4f3ef; }
+  .stack-card { background: var(--paper); }
   :global(.dark) .stack-card { background: #121212; }
   @media (min-width: 1024px) {
     .stack-item { position: sticky; top: 6rem; margin-bottom: 2.5rem; }

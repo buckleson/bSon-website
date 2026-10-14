@@ -38,7 +38,7 @@ export function categoryOf(post: CollectionEntry<'blog'>): Category {
   return categoryById('infrastructure');
 }
 
-/** Cover icons per post: the main topic and three related ideas (Fluent colour icons). */
+/** Cover icons per post: the main topic and three related ideas (MingCute icons, drawn in black). */
 const COVERS: Record<string, [string, string, string, string]> = {
   'account-abstraction-no-seed-phrases': ['cellphone', 'key-2', 'safe-lock', 'check-circle'],
   'ai-agent-hallucination-risk': ['sparkles', 'warning', 'search-ai', 'check-circle'],
@@ -74,11 +74,17 @@ const COVERS: Record<string, [string, string, string, string]> = {
   'what-is-a-wallet-sdk': ['terminal-box', 'laptop', 'plugin', 'coin'],
   'what-is-micro-investing': ['chart-bar', 'coin', 'pig-money', 'calendar'],
   'what-is-prompt-injection': ['warning', 'ai', 'document-2', 'safe-shield'],
+  'compliance-as-code-blockchain': ['file-code', 'scale', 'list-check', 'safe-shield'],
+  'proof-of-reserve-explained': ['safe-box', 'certificate', 'balance', 'coin'],
+  'tokenized-deposits-vs-stablecoins': ['bank', 'currency-dollar', 'transfer-3', 'coin'],
+  'mev-protection-explained': ['transfer-3', 'wallet-4', 'list-ordered', 'safe-shield'],
+  'signed-match-results-gaming': ['game-2', 'quill-pen', 'trophy', 'file-locked'],
+  'system-prompt-leakage': ['ai', 'eye', 'key-2', 'safe-shield'],
 };
 
 export function coverIcons(post: CollectionEntry<'blog'>): [string, string, string, string] {
   const category = categoryOf(post);
-  return COVERS[slugOf(post)] ?? [category.icon, 'link-multiple', 'lock-closed', 'checkmark-circle'];
+  return COVERS[slugOf(post)] ?? [category.icon, 'link-2', 'lock', 'check-circle'];
 }
 
 /** Reading paths: short, ordered catalogues for a goal. */
@@ -105,7 +111,7 @@ export const readingPaths: { id: string; title: string; text: string; icon: stri
     text: 'What it takes to put gold, funds or bonds on a chain.',
     icon: 'coin',
     category: 'tokenization',
-    slugs: ['asset-tokenization-guide', 'tokenized-gold-explained', 'atomic-settlement', 'what-is-micro-investing'],
+    slugs: ['asset-tokenization-guide', 'proof-of-reserve-explained', 'tokenized-gold-explained', 'atomic-settlement', 'what-is-micro-investing'],
   },
   {
     id: 'wallet',

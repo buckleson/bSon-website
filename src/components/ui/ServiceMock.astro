@@ -20,7 +20,7 @@ const { kind } = Astro.props;
       <ul class="sm-feed mt-4 space-y-2">
         {[['#1,204,883', '41 tx', 'final'], ['#1,204,882', '27 tx', 'final'], ['#1,204,881', '33 tx', 'final'], ['#1,204,880', '19 tx', 'final'], ['#1,204,879', '36 tx', 'final']].map(([block, tx, state], i) => (
           <li class="sm-row flex items-center gap-3 rounded-lg bg-white/4 px-3 py-2" style={`--d:${i * 0.12}s`}>
-            <Glyph icon="cube" class="size-4 text-orange-300" />
+            <Glyph icon="cube" class="size-4 text-white" />
             <span class="text-white">{block}</span><span class="text-white/60">{tx}</span>
             <span class="ms-auto rounded bg-emerald-400/12 px-1.5 py-0.5 text-emerald-300">{state}</span>
           </li>

@@ -49,7 +49,7 @@ const href = (url: string) => localePath('en', url);
       <p class="mt-6 max-w-[54ch] text-lg leading-relaxed text-pretty text-muted">{page.intro}</p>
       <ul class="mt-6 flex flex-wrap gap-2">
         {page.outcomes.map(outcome => (
-          <li class="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-sm font-medium text-ink ring-1 ring-line"><Glyph icon="check-circle" class="size-4 text-orange-600 dark:text-orange-400" />{outcome}</li>
+          <li class="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-sm font-medium text-ink ring-1 ring-line"><Glyph icon="check-circle" class="size-4 text-ink" />{outcome}</li>
         ))}
       </ul>
       <div class="mt-8 flex flex-wrap gap-3">
@@ -93,7 +93,7 @@ const href = (url: string) => localePath('en', url);
       {page.steps.map((step, i) => (
         <li class="relative rounded-[1.6rem] bg-card p-6 ring-1 ring-paper-line" data-reveal-item>
           <div class="flex items-center justify-between">
-            <span class="grid size-11 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={step.icon} class="size-5" /></span>
+            <span class="grid size-11 place-items-center rounded-xl bg-card text-ink ring-1 ring-line"><Glyph icon={step.icon} class="size-5" /></span>
             <span class="font-mono text-xs text-muted">Step {i + 1}</span>
           </div>
           <h3 class="mt-5 text-lg font-semibold text-ink">{step.title}</h3>

@@ -64,7 +64,7 @@ const testimonials = copy.testimonials.quotes.map((quote, index) => ({ ...quote,
         <p class="mt-3 text-pretty text-muted">{copy.why.subTitle}</p>
         <ul class="mt-6 space-y-3">
           {copy.why.benefits.map(benefit => (
-            <li class="flex gap-3 text-ink"><Glyph icon="check-circle" class="mt-0.5 size-5 shrink-0 text-orange-600 dark:text-orange-400" />{benefit}</li>
+            <li class="flex gap-3 text-ink"><Glyph icon="check-circle" class="mt-0.5 size-5 shrink-0 text-ink" />{benefit}</li>
           ))}
         </ul>
         <div class="mt-7"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>

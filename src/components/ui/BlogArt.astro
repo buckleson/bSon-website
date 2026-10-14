@@ -5,8 +5,8 @@ import { categoryOf, coverIcons } from '@utils/blog';
 
 /**
  * Cover art for a blog post, drawn in code as a clean schematic: a light
- * dot grid, the topic's soft tint behind a white tile with the post's main
- * icon in the topic colour, three smaller tiles for related ideas joined by
+ * dot grid, a soft gray halo behind a white tile with the post's main
+ * icon in black (one colour, like every icon outside the navbar), three smaller tiles for related ideas joined by
  * dashed lines, and numbered callout dots. It scales with its box (container
  * units) and fills a positioned parent. `chip` adds the topic in a corner.
  */
@@ -28,7 +28,7 @@ const spots = [
 ];
 ---
 
-<div class:list={['blog-art absolute inset-0 overflow-hidden', className]} style={`--a:${category.accent};--t:${category.tint}`} aria-hidden="true">
+<div class:list={['blog-art absolute inset-0 overflow-hidden', className]} aria-hidden="true">
   <span class="ba-grid"></span>
   <span class="ba-halo"></span>
   <svg class="ba-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -48,13 +48,13 @@ const spots = [
 <style>
   .blog-art {
     container-type: size;
-    background: #f5f7fb;
+    background: #f6f6f7;
   }
   :global(.dark) .blog-art { background: #121212; }
   .ba-grid {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(#cfd5e3 1px, transparent 1.3px);
+    background-image: radial-gradient(#d4d4d8 1px, transparent 1.3px);
     background-size: 16px 16px;
     mask-image: radial-gradient(80% 80% at 50% 50%, #000 40%, transparent);
   }
@@ -66,10 +66,10 @@ const spots = [
     width: 78cqmin;
     height: 78cqmin;
     border-radius: 999px;
-    background: var(--t);
+    background: #ececee;
     transform: translate(-50%, -50%);
   }
-  :global(.dark) .ba-halo { background: color-mix(in oklab, var(--a) 22%, #121212); }
+  :global(.dark) .ba-halo { background: #1b1b1b; }
   .ba-ring {
     position: absolute;
     left: 50%;
@@ -77,11 +77,11 @@ const spots = [
     width: 112cqmin;
     height: 112cqmin;
     border-radius: 999px;
-    border: 1.5px dashed color-mix(in oklab, var(--a) 28%, transparent);
+    border: 1.5px dashed #d4d4d8;
     transform: translate(-50%, -50%);
   }
   .ba-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .ba-lines line { stroke: color-mix(in oklab, var(--a) 45%, #9aa3b5); stroke-width: 1.5; stroke-dasharray: 4 5; vector-effect: non-scaling-stroke; }
+  .ba-lines line { stroke: #a1a1aa; stroke-width: 1.5; stroke-dasharray: 4 5; vector-effect: non-scaling-stroke; }
   .ba-tile {
     position: absolute;
     display: grid;
@@ -89,13 +89,13 @@ const spots = [
     transform: translate(-50%, -50%);
     border-radius: 28%;
     background: #fff;
-    box-shadow: 0 0 0 1px #e1e5ee, 0 1cqmin 3cqmin -1cqmin rgb(30 40 80 / 0.25);
+    box-shadow: 0 0 0 1px #e4e4e7, 0 1cqmin 3cqmin -1cqmin rgb(0 0 0 / 0.2);
     transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   :global(.dark) .ba-tile { background: #1c1c1c; box-shadow: 0 0 0 1px #2c2c2c; }
-  .ba-main { width: 34cqmin; height: 34cqmin; color: var(--a); box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--a) 35%, #e1e5ee), 0 2.5cqmin 6cqmin -2cqmin color-mix(in oklab, var(--a) 45%, transparent); }
-  :global(.dark) .ba-main { color: color-mix(in oklab, var(--a) 70%, #fff); }
-  .ba-sat { width: 16cqmin; height: 16cqmin; color: #1f2430; }
+  .ba-main { width: 34cqmin; height: 34cqmin; color: #0b0b0c; box-shadow: 0 0 0 1.5px #d4d4d8, 0 2.5cqmin 6cqmin -2cqmin rgb(0 0 0 / 0.28); }
+  :global(.dark) .ba-main { color: #f4f4f5; box-shadow: 0 0 0 1.5px #333; }
+  .ba-sat { width: 16cqmin; height: 16cqmin; color: #0b0b0c; }
   :global(.dark) .ba-sat { color: #e6e6e6; }
   .ba-main :global(.ba-icon) { width: 54%; height: 54%; }
   .ba-sat :global(.ba-icon) { width: 52%; height: 52%; }
@@ -128,8 +128,8 @@ const spots = [
     color: #0b0b0c;
     font-size: 0.72rem;
     font-weight: 600;
-    box-shadow: 0 0 0 1px #e1e5ee;
+    box-shadow: 0 0 0 1px #e4e4e7;
   }
-  .ba-chip :global(.ba-chip-icon) { width: 1rem; height: 1rem; color: var(--a); }
+  .ba-chip :global(.ba-chip-icon) { width: 1rem; height: 1rem; color: #0b0b0c; }
   @media (prefers-reduced-motion: reduce) { .ba-tile { transition: none; } }
 </style>

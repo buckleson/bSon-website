@@ -165,7 +165,8 @@ html:not(.dark) .iso.iso-auto{
 .iso-card .fig-steps{display:none}
 @container figbox (min-height:10rem){.iso-card .iso-stage{width:min(100cqw - 1rem,(100cqh - 3.5rem) * var(--fig-ar,1.7));margin-inline:auto}}
 html.dark .iso,.iso-sheet{--fig-tag:#1c1c1c}
-html:not(.dark) .iso{--fig-accent:var(--accent-600,#7c3aed)}
+html:not(.dark) .iso{--fig-accent:oklch(0.511 0.262 276.966)}
+html:not(.dark) .iso.iso-auto,html:not(.dark) .iso-hero{--anatomy-card:#f3f3f4}
 html.dark .iso{--fig-accent:var(--accent-400,#fb923c)}
 @media (max-width:520px){.fig-steps{grid-template-columns:1fr 1fr;gap:6px}.fig-step{padding:9px;gap:8px;border-radius:14px}.fig-step-icon{width:26px;height:26px;border-radius:8px}.fig-step-icon svg{width:15px;height:15px}.fig-step-text b{font-size:12px}.fig-step-text small{font-size:11px}}
 @media (max-width:640px){.fig-pin:not([data-on]) .fig-pin-text small{display:none}.fig-pin-text small{max-width:21ch}.fig-pin-tag{gap:5px;padding:3px 7px 3px 3px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10px}.fig-pin[data-dim]{visibility:hidden}}

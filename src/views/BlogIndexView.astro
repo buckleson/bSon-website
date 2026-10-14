@@ -39,6 +39,8 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
 ---
 
 <MainLayout title={copy.title} seoTitle={copy.seoTitle} description={copy.metaDescription} ogImage="/og/blog.png" kind={{ type: 'CollectionPage' }}>
+  <div class="relative isolate">
+  <div class="blog-backdrop" aria-hidden="true"><span></span><span></span></div>
   <section class="mx-auto grid max-w-[85rem] grid-cols-1 gap-8 px-4 pt-12 sm:px-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end lg:px-8 lg:pt-16">
     <div>
       <p class="font-mono text-xs tracking-wide text-muted uppercase">Blog</p>
@@ -46,8 +48,8 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
       <p class="mt-5 max-w-[60ch] text-lg text-pretty text-muted">{copy.subTitle}</p>
     </div>
     <div class="flex flex-wrap items-center gap-3 lg:justify-end">
-      <p class="glass-tint inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-ink"><Glyph ui="news" class="size-5 text-orange-600 dark:text-orange-400" />{posts.length} guides · {categories.length} topics</p>
-      <a href={localePath(locale, '/rss.xml')} class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-ink ring-1 ring-line transition hover:ring-orange-500"><Glyph ui="announcement" class="size-5 text-violet-600 dark:text-orange-400" />RSS feed</a>
+      <p class="glass-tint inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-ink"><Glyph ui="news" class="size-5 text-ink" />{posts.length} guides · {categories.length} topics</p>
+      <a href={localePath(locale, '/rss.xml')} class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-ink ring-1 ring-line transition hover:ring-orange-500"><Glyph ui="announcement" class="size-5 text-ink" />RSS feed</a>
     </div>
   </section>
 
@@ -56,15 +58,23 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
     <ul class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((c, i) => {
         const inTopic = posts.filter(post => categoryOf(post).id === c.id);
+        const minutes = inTopic.reduce((sum, post) => sum + post.data.readTime, 0);
+        // The subjects a topic covers: its most used tags, minus the topic itself.
+        const tagCount = new Map<string, number>();
+        inTopic.flatMap(post => post.data.tags).forEach(tag => tagCount.set(tag, (tagCount.get(tag) ?? 0) + 1));
+        const subjects = [...tagCount.entries()].filter(([tag]) => tag !== c.label).sort((a, b) => b[1] - a[1]).slice(0, i === 0 ? 6 : 4).map(([tag]) => tag);
         return (
           <li class:list={[i === 0 && 'sm:col-span-2']}>
-            <button type="button" class="topic-tile glass-card group flex h-full w-full flex-col rounded-[1.8rem] p-6 text-left" style={`--a:${c.accent};--t:${c.tint}`} data-topic-tile={c.id}>
+            <button type="button" class="topic-tile glass-card group flex h-full w-full flex-col rounded-[1.8rem] p-6 text-left" data-topic-tile={c.id}>
               <span class="flex w-full items-start justify-between gap-4">
                 <span class="topic-icon grid size-14 place-items-center rounded-2xl"><Glyph ui={c.icon} class="size-7" /></span>
-                <span class="rounded-full bg-card px-3 py-1 font-mono text-xs font-semibold text-ink ring-1 ring-line">{inTopic.length} articles</span>
+                <span class="rounded-full bg-white/60 px-3 py-1 font-mono text-xs font-semibold text-ink ring-1 ring-line dark:bg-card">{inTopic.length} articles · {minutes} min</span>
               </span>
               <span class="mt-5 text-xl font-semibold text-ink">{c.label}</span>
               <span class="mt-1.5 text-sm text-pretty text-muted">{c.blurb}</span>
+              <span class="mt-4 flex flex-wrap gap-1.5">
+                {subjects.map(tag => <span class="rounded-full bg-white/55 px-2.5 py-0.5 text-xs font-medium text-ink/75 ring-1 ring-line dark:bg-white/5">{tag}</span>)}
+              </span>
               <span class:list={['mt-5 grid gap-2', i === 0 && 'sm:grid-cols-2']}>
                 {inTopic.slice(0, i === 0 ? 4 : 2).map(post => (
                   <span class="flex items-start gap-2 text-sm leading-snug text-ink/85"><span class="topic-bullet mt-1.5 size-1.5 shrink-0 rounded-full"></span>{post.data.title}</span>
@@ -77,13 +87,14 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
       })}
     </ul>
   </section>
+  </div>
 
   <section class="mx-auto max-w-[85rem] scroll-mt-24 px-4 pt-10 pb-16 sm:px-6 lg:px-8" aria-label="All articles" data-blog id="articles">
     <div class="blog-filter glass-card sticky top-[4.75rem] z-20 flex flex-col gap-3 rounded-[1.6rem] p-2.5 sm:rounded-full lg:flex-row lg:items-center">
       <div class="flex gap-1.5 overflow-x-auto [scrollbar-width:none]" role="group" aria-label="Topics">
         <button type="button" class="topic-chip" aria-pressed="true" data-topic="all"><Glyph ui="grid" class="size-[1.15rem]" />All<span class="topic-count">{posts.length}</span></button>
         {categories.map(c => (
-          <button type="button" class="topic-chip" aria-pressed="false" data-topic={c.id} style={`--a:${c.accent}`}><Glyph ui={c.icon} class="chip-icon size-[1.15rem]" />{c.label}<span class="topic-count">{counts[c.id]}</span></button>
+          <button type="button" class="topic-chip" aria-pressed="false" data-topic={c.id}><Glyph ui={c.icon} class="size-[1.15rem]" />{c.label}<span class="topic-count">{counts[c.id]}</span></button>
         ))}
       </div>
       <label class="relative flex min-w-0 items-center lg:ms-auto lg:w-56 lg:shrink-0">
@@ -118,7 +129,7 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
         return (
           <li class="glass-card flex flex-col rounded-[1.8rem] p-6 sm:p-7" data-reveal-item>
             <div class="flex items-start justify-between gap-4">
-              <span class="topic-icon grid size-14 place-items-center rounded-2xl" style={`--a:${category.accent};--t:${category.tint}`}><Glyph ui={path.icon} class="size-7" /></span>
+              <span class="topic-icon grid size-14 place-items-center rounded-2xl"><Glyph ui={path.icon} class="size-7" /></span>
               <span class="rounded-full bg-card px-3 py-1 text-xs font-semibold text-muted ring-1 ring-line">{items.length} articles · {minutes} min</span>
             </div>
             <h3 class="mt-5 text-2xl font-semibold text-balance text-ink">{path.title}</h3>
@@ -166,15 +177,23 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
   .topic-chip[aria-pressed='true'] { background: var(--card); box-shadow: 0 0 0 1.5px var(--accent-500), 0 6px 16px -10px rgb(40 40 110 / 0.5); }
   .topic-count { border-radius: 999px; padding: 0 0.45rem; font: 600 0.7rem/1.6 var(--font-mono, ui-monospace, monospace); color: var(--muted); background: color-mix(in oklab, var(--ink) 6%, transparent); }
   .post-grid { grid-auto-flow: dense; }
-  .chip-icon { color: var(--a); }
-  .topic-icon { background: var(--t); color: var(--a); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--a) 18%, transparent); }
-  :global(.dark) .topic-icon { background: color-mix(in oklab, var(--a) 22%, #141414); color: color-mix(in oklab, var(--a) 70%, #fff); }
+  /* Behind the header and topic bento: a faint dot grid and two soft gray
+     shapes, so the frosted glass cards have something to blur. */
+  .blog-backdrop { position: absolute; inset: 0 0 -4rem; z-index: -1; overflow: hidden; pointer-events: none; background-image: radial-gradient(#d4d4d8 1px, transparent 1.3px); background-size: 18px 18px; mask-image: linear-gradient(#000 55%, transparent); }
+  .blog-backdrop span { position: absolute; border-radius: 999px; filter: blur(40px); background: #e4e4e7; }
+  .blog-backdrop span:first-child { width: 34rem; height: 22rem; left: -6rem; top: 14rem; }
+  .blog-backdrop span:last-child { width: 30rem; height: 26rem; right: -4rem; top: 26rem; background: #ececf0; }
+  :global(.dark) .blog-backdrop { background-image: radial-gradient(#262626 1px, transparent 1.3px); }
+  :global(.dark) .blog-backdrop span { background: #161616; }
+  /* Topic icons: one colour (black, white in dark mode) on a frosted tile. */
+  .topic-icon { background: rgb(255 255 255 / 0.7); color: var(--ink); box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(0 0 0 / 0.07), 0 8px 18px -12px rgb(0 0 0 / 0.3); }
+  :global(.dark) .topic-icon { background: #1b1b1b; box-shadow: 0 0 0 1px #2c2c2c; }
   .topic-tile { transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms ease; }
   .topic-tile:hover { transform: translateY(-3px); }
-  .topic-tile[aria-pressed='true'] { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 2px var(--a), 0 18px 36px -24px var(--a); }
-  .topic-bullet { background: var(--a); }
-  .topic-more { color: var(--a); }
-  :global(.dark) .topic-more { color: color-mix(in oklab, var(--a) 65%, #fff); }
+  .topic-tile[aria-pressed='true'] { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 2px var(--accent-500), 0 18px 36px -24px var(--accent-600); }
+  .topic-bullet { background: var(--ink); opacity: 0.55; }
+  .topic-more { color: var(--accent-700); }
+  :global(.dark) .topic-more { color: var(--accent-300); }
   @media (prefers-reduced-motion: reduce) { .topic-tile { transition: none; } .topic-tile:hover { transform: none; } }
   .post-cell > :global(*) { height: 100%; }
   @media (min-width: 768px) { .post-cell.is-wide { grid-column: span 2; } }

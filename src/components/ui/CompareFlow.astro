@@ -85,12 +85,12 @@ const lanes = compare
   .cmp-nodes::before { content: ''; position: absolute; left: 10%; right: 10%; top: 1.75rem; height: 2px; background: repeating-linear-gradient(90deg, color-mix(in oklab, var(--muted) 45%, transparent) 0 6px, transparent 6px 11px); }
   .cmp-node { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
   /* Clean schematic tiles: white with a thin border and a bold dark icon;
-     Hyper 0X and Pavii parts (guards) sit on a soft blue tile in blue. */
-  .cmp-tile { position: relative; display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: 1.1rem; background: var(--card); color: #1f2430; box-shadow: 0 0 0 1px #dfe3ec, 0 8px 18px -14px rgb(30 40 80 / 0.4); transition: box-shadow 250ms ease, transform 250ms ease, background-color 250ms ease, color 250ms ease; }
+     Hyper 0X and Pavii parts (guards) get a violet ring and dot; icons stay black. */
+  .cmp-tile { position: relative; display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: 1.1rem; background: var(--card); color: #0b0b0c; box-shadow: 0 0 0 1px #e4e4e7, 0 8px 18px -14px rgb(0 0 0 / 0.35); transition: box-shadow 250ms ease, transform 250ms ease, background-color 250ms ease, color 250ms ease; }
   :global(.dark) .cmp-tile { color: #e6e6e6; box-shadow: 0 0 0 1px #2c2c2c; }
-  .is-guard .cmp-tile { background: #e8efff; color: #2453d4; box-shadow: 0 0 0 1.5px #b9cbff, 0 10px 22px -14px rgb(36 83 212 / 0.5); }
-  :global(.dark) .is-guard .cmp-tile { background: color-mix(in oklab, var(--accent-500) 22%, #161616); color: var(--accent-300); box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--accent-500) 45%, transparent); }
-  .cmp-guard-dot { position: absolute; right: -0.25rem; top: -0.25rem; width: 0.75rem; height: 0.75rem; border-radius: 999px; background: #2453d4; box-shadow: 0 0 0 2px var(--card); }
+  .is-guard .cmp-tile { background: var(--card); color: #0b0b0c; box-shadow: 0 0 0 1.5px var(--accent-300), 0 10px 22px -14px color-mix(in oklab, var(--accent-600) 50%, transparent); }
+  :global(.dark) .is-guard .cmp-tile { background: #161616; color: #f4f4f5; box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--accent-500) 45%, transparent); }
+  .cmp-guard-dot { position: absolute; right: -0.25rem; top: -0.25rem; width: 0.75rem; height: 0.75rem; border-radius: 999px; background: var(--accent-600); box-shadow: 0 0 0 2px var(--card); }
   :global(.dark) .cmp-guard-dot { background: var(--accent-500); }
   .cmp-tile :global(.cmp-icon) { width: 1.65rem; height: 1.65rem; }
   .cmp-label { margin-top: 0.6rem; font-size: 0.82rem; font-weight: 650; line-height: 1.2; color: var(--ink); }

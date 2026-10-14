@@ -176,15 +176,15 @@ const widths: Record<string, string> = {
   /* A frosted pill: translucent over the page, a hairline ring, a soft
      shadow once the page scrolls under it. */
   .header-bar {
-    background-color: color-mix(in oklab, var(--card) 62%, transparent);
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--line) 85%, transparent);
-    backdrop-filter: blur(18px) saturate(1.5);
+    background-color: color-mix(in oklab, var(--card) 45%, transparent);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 0 0 1px rgb(0 0 0 / 0.06);
+    backdrop-filter: blur(22px) saturate(1.8);
     transition: background-color 300ms ease, box-shadow 300ms ease;
   }
   .site-header.is-scrolled .header-bar,
   .site-header.has-menu .header-bar {
-    background-color: color-mix(in oklab, var(--card) 74%, transparent);
-    box-shadow: 0 0 0 1px var(--line), 0 18px 40px -24px rgb(10 10 10 / 0.35);
+    background-color: color-mix(in oklab, var(--card) 58%, transparent);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 0 0 1px rgb(0 0 0 / 0.07), 0 18px 40px -24px rgb(10 10 10 / 0.3);
   }
   /* Bold icons on a soft tinted tile; each menu column has its own colour. */
   [data-tone] { --a: #2563eb; --t: #e7eeff; }
@@ -192,7 +192,10 @@ const widths: Record<string, string> = {
   [data-tone='2'] { --a: #059669; --t: #def6ec; }
   .nav-icon { background: var(--t); color: var(--a); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--a) 16%, transparent); }
   :global(.dark) .nav-icon { background: color-mix(in oklab, var(--a) 20%, #161616); color: color-mix(in oklab, var(--a) 65%, #fff); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--a) 30%, transparent); }
-  .nav-links { background: color-mix(in oklab, var(--ink) 4%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--line) 80%, transparent); }
+  :global(.dark) .header-bar { box-shadow: 0 0 0 1px #2a2a2a; }
+  :global(.dark) .site-header.is-scrolled .header-bar { box-shadow: 0 0 0 1px #2e2e2e, 0 18px 40px -24px rgb(0 0 0 / 0.6); }
+  .nav-links { background: rgb(255 255 255 / 0.35); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.05); }
+  :global(.dark) .nav-links { background: rgb(255 255 255 / 0.04); box-shadow: inset 0 0 0 1px #2a2a2a; }
   .mega-panel { opacity: 0; transform: translate(-50%, -6px) scale(0.98); transform-origin: top center; transition: opacity 180ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1); }
   .mega-panel.is-open { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; }
   .mega-card { transition: width 220ms cubic-bezier(0.22, 1, 0.36, 1), height 220ms cubic-bezier(0.22, 1, 0.36, 1); }

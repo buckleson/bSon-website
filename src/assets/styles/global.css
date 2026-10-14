@@ -123,7 +123,7 @@
 
 /*
   Brand accent. The template's orange-* utilities read from --accent-*,
-  which is indigo blue in light mode and the original orange in dark mode
+  which is electric violet in light mode and the original orange in dark mode
   (and on every dark surface, via .on-sheet / .accent-warm).
 */
 @theme inline {
@@ -151,36 +151,33 @@
 }
 
 :root {
-  /* Surfaces: a cool porcelain ground with soft blue and violet light
-     behind glass panels, white cards and deep neutral-black sheets (dark
-     boxes). --paper is the warm drafting paper, kept for the Anatomy figures
-     and a few sections. Dark mode swaps the ground to near-black and lifts
-     the sheets one step. Blacks are neutral (no blue cast). */
-  --ground: #f3f4fa;
+  /* Surfaces: a white ground, very light gray glass panels, frosted white
+     cards and deep neutral-black sheets (dark boxes). --paper is a light
+     neutral gray for the figures and a few sections. Dark mode swaps the
+     ground to near-black and lifts the sheets one step. */
+  --ground: #ffffff;
   --ink: #0b0b0c;
-  --muted: #545566;
+  --muted: #55555c;
   --card: #ffffff;
-  --line: #e0e2ee;
-  --paper: #f1f0eb;
-  --paper-line: #dcdad2;
-  --glow-1: rgb(79 70 229 / 0.16);
-  --glow-2: rgb(139 61 255 / 0.15);
-  --glow-3: rgb(56 189 248 / 0.12);
+  --line: #e6e6ea;
+  --paper: #f4f4f5;
+  --paper-line: #e4e4e7;
+  --panel: #f6f6f8;
   --sheet: #0a0a0a;
   --sheet-card: #161616;
   --sheet-line: #262626;
-  /* Light-mode accent: indigo blue. */
-  --accent-50: oklch(0.962 0.018 272.314);
-  --accent-100: oklch(0.93 0.034 272.788);
-  --accent-200: oklch(0.87 0.065 274.039);
-  --accent-300: oklch(0.785 0.115 274.713);
-  --accent-400: oklch(0.673 0.182 276.935);
-  --accent-500: oklch(0.585 0.233 277.117);
-  --accent-600: oklch(0.511 0.262 276.966);
-  --accent-700: oklch(0.457 0.24 277.023);
-  --accent-800: oklch(0.398 0.195 277.366);
-  --accent-900: oklch(0.359 0.144 278.697);
-  --accent-950: oklch(0.257 0.09 281.288);
+  /* Light-mode accent: electric violet (text, links and buttons). */
+  --accent-50: oklch(0.977 0.014 308.299);
+  --accent-100: oklch(0.946 0.033 307.174);
+  --accent-200: oklch(0.902 0.063 306.703);
+  --accent-300: oklch(0.827 0.119 306.383);
+  --accent-400: oklch(0.714 0.203 305.504);
+  --accent-500: oklch(0.627 0.265 303.9);
+  --accent-600: oklch(0.558 0.288 302.321);
+  --accent-700: oklch(0.496 0.265 301.924);
+  --accent-800: oklch(0.438 0.218 303.724);
+  --accent-900: oklch(0.381 0.176 304.987);
+  --accent-950: oklch(0.291 0.149 302.717);
 }
 
 .dark {
@@ -191,6 +188,7 @@
   --line: #272727;
   --paper: #141414;
   --paper-line: #272727;
+  --panel: #141414;
   --sheet: #171717;
   --sheet-card: #1f1f1f;
   --sheet-line: #2e2e2e;
@@ -288,19 +286,6 @@ a {
     background-color: var(--ground);
     color: var(--ink);
   }
-  /* Light theme: soft blue and violet light, fixed behind the glass panels. */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(42rem 32rem at 6% -6%, var(--glow-1), transparent 70%),
-      radial-gradient(40rem 34rem at 96% 8%, var(--glow-2), transparent 70%),
-      radial-gradient(56rem 40rem at 55% 108%, var(--glow-3), transparent 70%);
-  }
-  .dark body::before { display: none; }
   /* Fine grain so large flat surfaces don't feel sterile. */
   body::after {
     content: '';
@@ -381,24 +366,25 @@ html { overflow-x: clip; }
   .prose :where(th, td) { min-width: 8.5rem; }
 }
 
-/* Glass panels (light theme): translucent white over the soft background
-   light, with a bright top edge and a soft shadow. Large panels skip the
-   backdrop blur (the light behind them is already soft); small cards blur. */
+/* Glass (light theme): section panels in a translucent light gray, cards
+   and tiles in frosted, translucent white with a bright edge and a soft
+   neutral shadow. Large panels skip the backdrop blur; cards blur. */
 @layer components {
   .glass {
-    background: color-mix(in oklab, var(--card) 70%, transparent);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px rgb(255 255 255 / 0.75), 0 0 0 1.5px color-mix(in oklab, var(--line) 60%, transparent), 0 30px 60px -44px rgb(36 34 110 / 0.28);
+    background: color-mix(in oklab, var(--panel) 78%, transparent);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px rgb(0 0 0 / 0.05), 0 24px 50px -40px rgb(0 0 0 / 0.18);
   }
   .glass-card {
-    background: color-mix(in oklab, var(--card) 62%, transparent);
-    backdrop-filter: blur(14px) saturate(1.4);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px color-mix(in oklab, var(--line) 85%, transparent), 0 16px 36px -26px rgb(36 34 110 / 0.3);
+    background: rgb(255 255 255 / 0.5);
+    backdrop-filter: blur(18px) saturate(1.6);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), inset 0 0 0 1px rgb(255 255 255 / 0.6), 0 0 0 1px rgb(0 0 0 / 0.06), 0 18px 38px -28px rgb(0 0 0 / 0.22);
   }
   .glass-tint {
-    background: linear-gradient(150deg, color-mix(in oklab, var(--accent-100) 60%, #fff), color-mix(in oklab, var(--color-violet-100) 55%, #fff));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px color-mix(in oklab, var(--accent-200) 45%, transparent);
+    background: rgb(255 255 255 / 0.42);
+    backdrop-filter: blur(14px) saturate(1.5);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 0 0 1px rgb(0 0 0 / 0.06);
   }
   .dark .glass { background: var(--card); box-shadow: 0 0 0 1px var(--line); }
   .dark .glass-card { background: var(--card); backdrop-filter: none; box-shadow: 0 0 0 1px var(--line); }
-  .dark .glass-tint { background: #161616; box-shadow: 0 0 0 1px var(--line); }
+  .dark .glass-tint { background: #161616; backdrop-filter: none; box-shadow: 0 0 0 1px var(--line); }
 }

@@ -66,7 +66,7 @@ const steps = servicePages[0].steps;
                 <p class:list={['mt-2 leading-relaxed text-pretty', look.dark ? 'text-white/70' : 'text-muted']}>{page.intro}</p>
                 <ul class="mt-5 flex flex-wrap gap-2">
                   {item.points.map(point => (
-                    <li class:list={['inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold', look.dark ? 'bg-white/10 text-white/85' : 'bg-ground text-ink/80 ring-1 ring-line']}><Glyph icon="check" class="size-3.5 text-orange-500" />{point}</li>
+                    <li class:list={['inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold', look.dark ? 'bg-white/10 text-white/85' : 'bg-ground text-ink/80 ring-1 ring-line']}><Glyph icon="check" class="size-3.5 text-ink" />{point}</li>
                   ))}
                 </ul>
                 <span class:list={['mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold', look.dark ? 'text-orange-300' : 'text-orange-700 dark:text-orange-300']}>
@@ -92,7 +92,7 @@ const steps = servicePages[0].steps;
       {steps.map((step, i) => (
         <li class="rounded-[1.6rem] bg-card p-6 ring-1 ring-paper-line" data-reveal-item>
           <div class="flex items-center justify-between">
-            <span class="grid size-11 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={step.icon} class="size-5" /></span>
+            <span class="grid size-11 place-items-center rounded-xl bg-card text-ink ring-1 ring-line"><Glyph icon={step.icon} class="size-5" /></span>
             <span class="font-mono text-xs text-muted">Step {i + 1}</span>
           </div>
           <h3 class="mt-5 text-lg font-semibold text-ink">{step.title}</h3>
@@ -113,7 +113,7 @@ const steps = servicePages[0].steps;
         <dl class="grid grid-cols-2 gap-6 sm:grid-cols-4" data-reveal-group>
           {copy.stats.items.map((stat, i) => (
             <div data-reveal-item>
-              <Glyph icon={icons[i]} class="size-6 text-orange-300" />
+              <Glyph icon={icons[i]} class="size-6 text-white" />
               <dt class="sr-only">{stat.label}</dt>
               <dd class="mt-3 font-display text-3xl font-semibold tabular-nums">{stat.value}</dd>
               <dd class="mt-1 text-sm text-white/65">{stat.label}</dd>

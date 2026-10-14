@@ -87,7 +87,7 @@ const runs = flow.runs.map(run => ({ label: run.label, stopAt: 'stopAt' in run ?
   .flow-end .flow-lane::before { bottom: 50%; }
   .flow-node { position: relative; display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 999px; background: #1b1b1b; box-shadow: 0 0 0 2px rgb(255 255 255 / 0.18); color: #0a0a0a; transition: background-color 250ms ease, box-shadow 250ms ease; }
   .flow-node :global(svg) { display: none; }
-  .flow-icon { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 0.8rem; background: rgb(255 255 255 / 0.07); color: var(--accent-300); transition: background-color 300ms ease, color 300ms ease; }
+  .flow-icon { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 0.8rem; background: rgb(255 255 255 / 0.07); color: #fff; transition: background-color 300ms ease, color 300ms ease; }
   .flow-chips { display: none; flex-wrap: wrap; justify-content: flex-end; gap: 0.35rem; max-width: 15rem; }
   @media (min-width: 1024px) { .flow-chips { display: flex; } }
   .flow-chips span { border-radius: 999px; padding: 0.15rem 0.55rem; font: 500 0.7rem/1.4 var(--font-mono, ui-monospace, monospace); color: rgb(255 255 255 / 0.7); background: rgb(255 255 255 / 0.07); }

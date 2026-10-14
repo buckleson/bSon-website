@@ -27,7 +27,7 @@ const { index, label, claim, payoff, stillUnsure, stillUnsureText, faqs } = Astr
   <SectionHead index={index} label={label} claim={claim} payoff={payoff} cta={{ title: 'All questions', url: '/faq/' }} body="About Buckleson and our products here; blockchain, AI-agent security, tokenization, wallets and post-quantum questions on the FAQ page." />
   <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
     <div class="on-sheet h-fit rounded-[1.6rem] bg-sheet p-7 text-white lg:sticky lg:top-24" data-reveal>
-      <Glyph icon="chats-circle" class="size-9 text-orange-300" />
+      <Glyph icon="chats-circle" class="size-9 text-white" />
       <p class="mt-5 text-2xl font-semibold">{stillUnsure}</p>
       <p class="mt-2 text-white/70">{stillUnsureText}</p>
       <div class="mt-6"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>

@@ -35,7 +35,7 @@ const [lead, ...rest] = items;
 <div class:list={['grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-12', className]} data-bento data-reveal-group>
   <article class:list={['bento-card bento-lead accent-warm relative flex flex-col overflow-hidden rounded-[1.8rem] bg-sheet p-7 text-white sm:p-8 md:col-span-2', layout[0]]} data-reveal-item>
     <span class="bento-mark" aria-hidden="true">{lead.icon && <Glyph icon={lead.icon} class="size-full" />}</span>
-    <span class="grid size-12 place-items-center rounded-2xl bg-white/10 text-orange-300">{lead.icon && <Glyph icon={lead.icon} class="size-6" />}</span>
+    <span class="grid size-12 place-items-center rounded-2xl bg-white/10 text-white">{lead.icon && <Glyph icon={lead.icon} class="size-6" />}</span>
     {highlight && (
       <p class="mt-8 font-display text-[clamp(3rem,7vw,5.5rem)] leading-[0.9] font-semibold tracking-tight text-orange-300 tabular-nums">{highlight.value}</p>
     )}
@@ -53,7 +53,7 @@ const [lead, ...rest] = items;
   {rest.map((item, i) => (
     <article class:list={['bento-card glass-card group relative flex flex-col overflow-hidden rounded-[1.8rem] p-6 transition duration-300 hover:-translate-y-0.5 sm:p-7', layout[i + 1], rest.length % 2 === 1 && i === rest.length - 1 ? 'md:col-span-2' : '']} data-reveal-item>
       <span class="bento-mark text-ink" aria-hidden="true">{item.icon && <Glyph icon={item.icon} class="size-full" />}</span>
-      <span class="grid size-11 place-items-center rounded-xl bg-orange-100 text-orange-700 transition duration-300 group-hover:bg-orange-600 group-hover:text-white dark:bg-orange-950 dark:text-orange-300 dark:group-hover:bg-orange-700">{item.icon && <Glyph icon={item.icon} class="size-6" />}</span>
+      <span class="grid size-11 place-items-center rounded-xl bg-card text-ink ring-1 ring-line transition duration-300 group-hover:bg-ink group-hover:text-ground group-hover:ring-ink">{item.icon && <Glyph icon={item.icon} class="size-6" />}</span>
       <h3 class="mt-6 text-lg font-semibold text-balance text-ink">{item.title}</h3>
       <p class="mt-2 max-w-[52ch] text-sm leading-relaxed text-pretty text-muted">{item.text}</p>
     </article>
