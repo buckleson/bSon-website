@@ -33,7 +33,7 @@ const W = 440;
 const H = 360;
 
 const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =>
-  `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 256 256" class="${cls}">${glyph(name)}</svg>`;
+  `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 256 256" fill="currentColor" class="${cls}">${glyph(name)}</svg>`;
 const logo = (key: BrandKey, x: number, y: number, size: number, white = false) => {
   const b = brand(key);
   return `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 24 24"><path d="${b.path}"${b.rule ? ` fill-rule="${b.rule}"` : ''} fill="${white ? '#ffffff' : `#${b.hex}`}"/></svg>`;
@@ -365,7 +365,6 @@ const hrBuilt = [
         <text x="228" y="129" text-anchor="middle" class="pa-t">2% of each</text>
         <line x1="170" y1="118" x2="180" y2="118" class="pa-line" />
         <line x1="276" y1="118" x2="284" y2="118" class="pa-line" />
-        <g class="hp-slice"><rect x="-22" y="-10" width="44" height="20" rx="10" class="pa-accent-bg" /><text y="4" text-anchor="middle" class="pa-t-w">$0.80</text></g>
 
         <rect x="284" y="54" width="142" height="152" rx="16" class="pa-node" />
         <Fragment set:html={icon('diamond', 296, 66, 18, 'hp-gold-ic')} />
@@ -376,6 +375,7 @@ const hrBuilt = [
         <text x="296" y="136" class="pa-t-xs">≈ $71.40 · +1 SLICE</text>
         <polyline points="296,192 314,186 332,188 350,178 368,180 386,170 404,164 414,158" class="hp-spark" />
         <circle cx="414" cy="158" r="3" class="hp-spark-dot" />
+        <g class="hp-slice"><rect x="-22" y="-10" width="44" height="20" rx="10" class="pa-accent-bg" /><text y="4" text-anchor="middle" class="pa-t-w">$0.80</text></g>
 
         <text x="16" y="230" class="pa-t-xs">ROADMAP</text>
         {hpPhases.map((phase, i) => (
@@ -424,6 +424,11 @@ const hrBuilt = [
 
         <rect x="272" y="54" width="154" height="152" rx="16" class="pa-node" />
         <text x="284" y="74" class="pa-t-xs">PAYOUTS</text>
+        <g class="hr-wait">
+          <Fragment set:html={icon('clock', 333, 112, 22, 'pa-ic-dim')} />
+          <text x="344" y="150" text-anchor="middle" class="pa-t-sm">Waiting for the</text>
+          <text x="344" y="162" text-anchor="middle" class="pa-t-sm">signed result</text>
+        </g>
         {hrRows.map((row, i) => (
           <g class="hr-row" style={`animation-delay:${i * 0.45}s`}>
             <rect x="282" y={84 + i * 38} width="134" height="30" rx="9" fill="#1f1f1f" />
@@ -622,6 +627,8 @@ const hrBuilt = [
   .hr-seal { opacity: 0; animation: hr-seal 9s ease-out infinite; }
   @keyframes hr-seal { 0%, 34% { opacity: 0; } 40%, 95% { opacity: 1; } 100% { opacity: 0; } }
   .hr-row { opacity: 0; animation: hr-row 9s ease-out infinite; }
+  .hr-wait { animation: hr-wait 9s ease-out infinite; }
+  @keyframes hr-wait { 0%, 50% { opacity: 1; } 56%, 96% { opacity: 0; } 100% { opacity: 1; } }
   @keyframes hr-row { 0%, 55% { opacity: 0; transform: translateX(6px); } 62%, 95% { opacity: 1; transform: none; } 100% { opacity: 0; } }
 
   @media (prefers-reduced-motion: reduce) {
@@ -629,6 +636,7 @@ const hrBuilt = [
     .pa [class*='pv-'] { animation-delay: var(--still, -8s) !important; animation-play-state: paused !important; }
     .pa-block, .pa-dot, .pa-coin { display: none; }
     .hw-done, .hr-win, .hr-seal, .hr-row, .h0-check, .hr-score-b, .hp-bal-b { opacity: 1; }
+    .hr-wait { opacity: 0; }
     .hw-swap, .hr-score-a, .hp-bal-a, .h0-count { opacity: 0; }
     .h0-first { opacity: 1; }
   }

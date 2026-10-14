@@ -57,7 +57,7 @@ const explain: Record<string, { text: string; stat: string; statLabel: string }>
 <section class="mx-auto max-w-[85rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28" id="products">
   <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} cta={cta} />
 
-  <div class="mt-12 flex flex-col gap-3 xl:h-[36rem] xl:flex-row" data-accordion>
+  <div class="mt-12 flex flex-col gap-3 xl:h-[34rem] xl:flex-row" data-accordion>
     {products.map((product, index) => {
       const soon = product.data.status === 'coming-soon';
       const id = `product-${slugOf(product)}`;
