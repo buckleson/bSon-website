@@ -73,9 +73,10 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
     height: 0.82em;
     margin-left: 0.08em;
     vertical-align: -0.06em;
-    background: currentColor;
+    background: oklch(0.55 0.245 266);
     animation: typer-blink 1s steps(1) infinite;
   }
+  :global(.dark) .typer-caret { background: var(--accent-400); }
   @keyframes typer-blink { 50% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .typer-caret { animation: none; } }
 </style>

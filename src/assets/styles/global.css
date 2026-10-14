@@ -363,21 +363,12 @@ a {
   .cta-ghost:active { transform: scale(0.98); }
 }
 
-/* Headline payoff: a solid accent block behind the words (no gradient text). */
 @layer components {
-  .mark {
-    background: color-mix(in oklab, var(--accent-500) 24%, transparent);
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
-    padding: 0 0.14em;
-    margin-inline-start: -0.14em;
-    border-radius: 0.14em;
-  }
+  /* Headline payoff: the words themselves in a vivid blue (orange on dark
+     surfaces), no highlight box. */
+  .mark { color: oklch(0.55 0.245 266); }
   .on-sheet .mark,
-  .dark .mark {
-    background: var(--accent-600);
-    color: #fff;
-  }
+  .dark .mark { color: var(--accent-400); }
   .word { will-change: opacity; }
 }
 
