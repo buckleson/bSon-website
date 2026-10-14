@@ -59,7 +59,7 @@ const hash = (n: number) => `0x${((n * 2654435761) >>> 0).toString(16).padStart(
               {line.kind === 'cmd' ? <span class="text-orange-300">$ </span> : <span class="text-white/30">→ </span>}{line.text}
             </li>
           ))}
-          <li class="nf-line nf-caret text-white" style={`--d:${copy.terminal.length}`} aria-hidden="true">$ <span class="nf-cursor"></span></li>
+          <li class="nf-line nf-caret text-white" style={`--d:${copy.terminal.length}`} aria-hidden="true" data-caret>$ <span class="nf-cursor"></span></li>
         </ol>
       </div>
     </div>
@@ -67,8 +67,8 @@ const hash = (n: number) => `0x${((n * 2654435761) >>> 0).toString(16).padStart(
     <div class="relative mx-auto max-w-[85rem] px-5 pb-16 sm:px-8 lg:pb-20">
       <p class="font-mono text-xs tracking-wide text-muted uppercase">{copy.chainLabel}</p>
       <ol class="nf-chain mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7" data-chain>
-        {blocks.map(block => block.path ? (
-          <li>
+        {blocks.map((block, i) => block.path ? (
+          <li class:list={[i === blocks.length - 1 && 'col-span-2 sm:col-span-1']}>
             <a href={href(block.path)} class="nf-block group flex h-full flex-col justify-between rounded-2xl bg-ground p-4 ring-1 ring-line transition hover:-translate-y-1 hover:ring-orange-500">
               <span class="flex items-center justify-between font-mono text-[0.7rem] text-muted"><span>#{block.n}</span><Glyph icon="check-circle" class="size-4 text-emerald-600 dark:text-emerald-400" /></span>
               <span class="mt-6 flex items-center gap-2 font-semibold text-ink"><Glyph icon={block.icon} class="size-5 text-orange-600 dark:text-orange-400" />{block.label}</span>
@@ -79,7 +79,7 @@ const hash = (n: number) => `0x${((n * 2654435761) >>> 0).toString(16).padStart(
           <li>
             <button type="button" class="nf-gap flex h-full w-full flex-col justify-between rounded-2xl border-2 border-dashed border-orange-500/60 p-4 text-left" data-mint>
               <span class="font-mono text-[0.7rem] text-orange-700 dark:text-orange-300">#404</span>
-              <span class="nf-gap-label mt-6 flex items-center gap-2 font-semibold text-ink"><Glyph icon="plus-circle" class="size-5 text-orange-600 dark:text-orange-400" /><span data-mint-label>{copy.mint}</span></span>
+              <span class="nf-gap-label mt-6 flex items-center gap-2 font-semibold text-ink"><Glyph icon="plus-circle" class="nf-plus size-5 text-orange-600 dark:text-orange-400" /><Glyph icon="check-circle" class="nf-check hidden size-5 text-emerald-600 dark:text-emerald-400" /><span data-mint-label>{copy.mint}</span></span>
               <span class="mt-1 font-mono text-[0.65rem] text-muted" data-mint-hash>{copy.missing}</span>
             </button>
           </li>
@@ -100,12 +100,22 @@ const hash = (n: number) => `0x${((n * 2654435761) >>> 0).toString(16).padStart(
   @keyframes nf-in { to { opacity: 1; transform: none; } }
   .nf-cursor { display: inline-block; width: 0.55em; height: 1em; vertical-align: -0.15em; background: currentColor; animation: nf-blink 1s steps(1) infinite; }
   @keyframes nf-blink { 50% { opacity: 0; } }
+  @media (min-width: 1024px) {
+    .nf-chain > li { position: relative; }
+    .nf-chain > li + li::before {
+      content: ''; position: absolute; top: 50%; right: 100%; width: 0.75rem; height: 2px;
+      background: color-mix(in oklab, var(--accent-500) 55%, transparent);
+    }
+  }
+  .nf-gap.is-minted :global(.nf-plus) { display: none; }
+  .nf-gap.is-minted :global(.nf-check) { display: block; }
+  :global(.nf-new) { opacity: 0; transform: translateY(4px); animation: nf-in 0.35s ease-out forwards; }
   .nf-gap { animation: nf-pulse 1.8s ease-in-out infinite; }
   @keyframes nf-pulse { 50% { border-color: color-mix(in oklab, var(--accent-500) 25%, transparent); } }
   .nf-gap.is-minted { animation: nf-drop 0.6s cubic-bezier(0.22, 1, 0.36, 1); border-style: solid; background: color-mix(in oklab, var(--accent-500) 12%, transparent); }
   @keyframes nf-drop { from { transform: translateY(-28px); opacity: 0.2; } to { transform: none; opacity: 1; } }
   @media (prefers-reduced-motion: reduce) {
-    .nf-line { opacity: 1; transform: none; animation: none; }
+    .nf-line, :global(.nf-new) { opacity: 1; transform: none; animation: none; }
     .nf-gap, .nf-cursor { animation: none; }
   }
 </style>
@@ -128,5 +138,17 @@ const hash = (n: number) => `0x${((n * 2654435761) >>> 0).toString(16).padStart(
     if (label) label.textContent = 'Minted';
     if (hash) hash.textContent = '0x404…f1 · final ✓';
     if (note) note.textContent = 'Block #404 is now final in one pass. The page is still not here, but every other block is live.';
+    // The terminal logs the mint above the caret.
+    const caret = document.querySelector('[data-caret]');
+    [
+      ['text-white', '<span class="text-orange-300">$ </span>hyper0x block mint 404'],
+      ['text-orange-300', '<span class="text-white/30">→ </span>block #404: final ✓'],
+    ].forEach(([tone, html], i) => {
+      const li = document.createElement('li');
+      li.className = `nf-new ${tone}`;
+      li.style.animationDelay = `${i * 0.35}s`;
+      li.innerHTML = html;
+      caret?.before(li);
+    });
   });
 </script>

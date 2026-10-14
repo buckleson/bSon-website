@@ -337,3 +337,10 @@ a {
   }
   .word { will-change: opacity; }
 }
+
+/* Wide comparison tables scroll inside their own box on phones, so the page
+   itself never scrolls sideways. */
+@media (max-width: 639px) {
+  .prose table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .prose :where(th, td) { min-width: 8.5rem; }
+}
