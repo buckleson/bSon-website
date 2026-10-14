@@ -287,9 +287,13 @@ a {
     color: #fff;
     transition: background-color 180ms ease, transform 120ms ease;
   }
-  .dark .cta-pill { background: var(--accent-700); }
+  .dark .cta-pill,
+  .on-sheet .cta-pill,
+  .accent-warm .cta-pill { background: var(--accent-700); }
   .cta-pill:hover { background: var(--accent-700); }
-  .dark .cta-pill:hover { background: var(--accent-800); }
+  .dark .cta-pill:hover,
+  .on-sheet .cta-pill:hover,
+  .accent-warm .cta-pill:hover { background: var(--accent-800); }
   .cta-pill:active { transform: scale(0.98); }
   .cta-chip {
     display: grid;
