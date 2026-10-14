@@ -31,13 +31,13 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
         <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500/60"></span><span class="relative inline-flex size-2 rounded-full bg-emerald-500"></span></span>
         {badge}
       </p>
-      <h1 class="mt-6 text-[2.6rem] leading-[0.98] font-semibold text-ink sm:text-6xl lg:text-[3.6rem] xl:text-[4.1rem]" data-hero-in>
+      <h1 class="mt-6 text-[2.6rem] leading-[0.98] font-semibold text-ink sm:text-6xl lg:text-[3.6rem] xl:text-[4.1rem]">
         <span class="block">{lead}</span>
         <span class="block min-h-[1.05em]" data-typer={JSON.stringify(phrases)}>
           <span class="mark" data-typer-text>{phrases[0]}</span><span class="typer-caret" aria-hidden="true"></span>
         </span>
       </h1>
-      <p class="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-muted" data-hero-in>{intro}</p>
+      <p class="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-muted">{intro}</p>
       <div class="mt-8 flex flex-wrap gap-3" data-hero-in>
         <a href={primary.url} class="cta-pill"><span>{primary.title}</span><span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span></a>
         <a href={secondary.url} class="cta-ghost text-ink">{secondary.title}</a>
@@ -108,7 +108,9 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
     }
     if (reduced) return;
 
-    // On load: copy rises in, then the figure settles onto the paper.
+    // On load: the badge, buttons and chips rise in and the figure settles
+    // onto the paper. The headline and intro are visible from the first
+    // paint (they are the page's largest text).
     const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
     intro.from(hero.querySelectorAll('[data-hero-in]'), { y: 24, opacity: 0, duration: 0.9, stagger: 0.08 });
     intro.from(hero.querySelector('[data-hero-figure]'), { y: 40, opacity: 0, duration: 1.2 }, 0.15);
