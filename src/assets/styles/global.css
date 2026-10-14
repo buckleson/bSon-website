@@ -364,9 +364,9 @@ a {
 }
 
 @layer components {
-  /* Headline payoff: the words themselves in a vivid blue (orange on dark
-     surfaces), no highlight box. */
-  .mark { color: oklch(0.55 0.245 266); }
+  /* Headline payoff: the words themselves in the "Book a call" blue (orange
+     on dark surfaces), never a highlight box. */
+  .mark { color: var(--accent-600); background: none; padding: 0; margin: 0; border-radius: 0; }
   .on-sheet .mark,
   .dark .mark { color: var(--accent-400); }
   .word { will-change: opacity; }
