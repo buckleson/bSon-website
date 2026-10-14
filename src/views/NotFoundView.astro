@@ -93,8 +93,7 @@ const hash = (n: number) => `0x${((n * 2654435761) >>> 0).toString(16).padStart(
 <style>
   .nf-paper {
     background:
-      radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--ink) 12%, transparent) 1px, transparent 1.2px) 0 0 / 22px 22px,
-      radial-gradient(60% 60% at 80% 30%, color-mix(in oklab, var(--accent-500) 8%, transparent), transparent 70%);
+      radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--ink) 12%, transparent) 1px, transparent 1.2px) 0 0 / 22px 22px;
   }
   .nf-line { opacity: 0; transform: translateY(4px); animation: nf-in 0.35s ease-out forwards; animation-delay: calc(var(--d) * 0.55s + 0.3s); }
   @keyframes nf-in { to { opacity: 1; transform: none; } }

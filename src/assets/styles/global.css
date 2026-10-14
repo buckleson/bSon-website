@@ -349,13 +349,16 @@ a {
 }
 
 @layer components {
-  /* Headline payoff: the words themselves in the "Book a call" blue (orange
-     on dark surfaces), never a highlight box. */
+  /* Headline payoff: the words themselves in the "Book a call" violet
+     (orange on dark surfaces), never a highlight box. */
   .mark { color: var(--accent-600); background: none; padding: 0; margin: 0; border-radius: 0; }
   .on-sheet .mark,
   .dark .mark { color: var(--accent-400); }
   .word { will-change: opacity; }
 }
+
+/* One-colour icons: black on light surfaces, white on dark panels. */
+.on-sheet svg.text-ink { color: #fff; }
 
 html { overflow-x: clip; }
 

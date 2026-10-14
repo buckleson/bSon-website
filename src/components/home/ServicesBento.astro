@@ -39,7 +39,7 @@ type Mock = 'chain' | 'token' | 'wallet' | 'agent';
           <h3 class="text-2xl font-semibold">{item.title}</h3>
           <p class="mt-2 opacity-80">{item.line}</p>
           <ul class="mt-5 space-y-2 text-sm">
-            {item.included.map(point => <li class="flex items-start gap-2"><Glyph icon="check-circle" class="mt-px size-4.5 shrink-0 text-ink" />{point}</li>)}
+            {item.included.map(point => <li class="flex items-start gap-2"><Glyph icon="check-circle" class="mt-px size-4.5 shrink-0 text-current" />{point}</li>)}
           </ul>
           <p class="mt-5 w-fit rounded-full bg-orange-600 px-3.5 py-1.5 text-sm font-semibold text-white dark:bg-orange-700">{item.outcome}</p>
           <a href={localePath('en', `/services/${item.id}/`)} class="mt-5 inline-flex w-fit items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">
