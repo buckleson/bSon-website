@@ -26,8 +26,11 @@ async function load(el: HTMLElement) {
   }
 }
 
-const lazy = [...document.querySelectorAll<HTMLElement>('[data-iso-src]')];
-if (lazy.length) {
+// Start once the page has loaded and the browser is idle, so the drawings
+// never compete with the page's first paint.
+const start = () => {
+  const lazy = [...document.querySelectorAll<HTMLElement>('[data-iso-src]')];
+  if (!lazy.length) return;
   const observer = new IntersectionObserver(
     entries => {
       for (const entry of entries) {
@@ -39,4 +42,7 @@ if (lazy.length) {
     { rootMargin: '900px 0px' }
   );
   lazy.forEach(el => observer.observe(el));
-}
+};
+const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
+if (document.readyState === 'complete') idle(start);
+else window.addEventListener('load', () => idle(start), { once: true });

@@ -66,17 +66,17 @@ const tabs = [
           <p class="mt-4 text-pretty text-muted">{data.summary}</p>
           <p class="mt-6"><PrimaryCTA title={data.cta.title} url={href(data.cta.url)} /></p>
         </div>
-        <dl class="grid gap-6 sm:grid-cols-2">
+        <ul class="grid gap-6 sm:grid-cols-2">
           {data.features.map(feature => (
-            <div class="flex gap-4">
+            <li class="flex gap-4">
               {feature.icon && <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={feature.icon} class="size-5" /></span>}
               <div>
-                <dt class="font-semibold text-ink">{feature.title}</dt>
-                <dd class="mt-1 text-sm text-pretty text-muted">{feature.subTitle}</dd>
+                <p class="font-semibold text-ink">{feature.title}</p>
+                <p class="mt-1 text-sm text-pretty text-muted">{feature.subTitle}</p>
               </div>
-            </div>
+            </li>
           ))}
-        </dl>
+        </ul>
       </div>
     </div>
 

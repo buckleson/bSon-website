@@ -57,7 +57,7 @@ const related = others
       {data.title}
     </h1>
     <div class="mt-6 flex items-center gap-3 text-sm text-muted">
-      <Image src={data.authorImage} alt={data.authorImageAlt} width={40} height={40} class="size-10 rounded-full" />
+      <Image src={data.authorImage} alt={data.authorImageAlt} width={40} height={40} densities={[1, 2]} class="size-10 rounded-full" />
       <div>
         <p class="font-semibold text-ink">{data.author}</p>
         <p>
