@@ -208,7 +208,8 @@ const SITE_CSS = `
 .fig-pin[data-dim] .fig-pin-tag{box-shadow:0 0 0 1px color-mix(in oklab,var(--anatomy-mid) 22%,transparent)}
 .fig-pin[data-on] .fig-pin-tag{box-shadow:0 0 0 1.5px var(--fig-accent,#7c3aed),0 10px 22px -10px color-mix(in oklab,var(--fig-accent,#7c3aed) 60%,transparent)}
 .fig-pin[data-hidden]{opacity:0}
-.fig-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr));gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.iso{container:figure / inline-size}
+.fig-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 0;padding:0;list-style:none}
 .fig-step{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border-radius:16px;background:var(--fig-tag,#fff);box-shadow:0 0 0 1px color-mix(in oklab,var(--anatomy-mid) 30%,transparent);transition:box-shadow .45s ease,opacity .45s ease}
 .fig-step-icon{display:grid;flex:none;place-items:center;width:30px;height:30px;border-radius:10px;color:var(--fig-accent,#7c3aed);background:color-mix(in oklab,var(--fig-accent,#7c3aed) 12%,transparent)}
 .fig-step-icon svg{width:18px;height:18px}
@@ -242,6 +243,7 @@ html:not(.dark) .iso{--fig-accent:var(--accent-600,#7c3aed)}
 html.dark .iso{--fig-accent:var(--accent-400,#fb923c)}
 @media (max-width:520px){.fig-steps{grid-template-columns:1fr 1fr;gap:6px}.fig-step{padding:9px;gap:8px;border-radius:14px}.fig-step-icon{width:26px;height:26px;border-radius:8px}.fig-step-icon svg{width:15px;height:15px}.fig-step-text b{font-size:12px}.fig-step-text small{font-size:11px}}
 @media (max-width:640px){.fig-pin:not([data-on]) .fig-pin-text small{display:none}.fig-pin-text small{max-width:21ch}.fig-pin-tag{gap:5px;padding:3px 7px 3px 3px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10px}.fig-pin[data-dim]{visibility:hidden}}
+@container figure (min-width:44rem){.fig-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @container (max-width:700px){.fig-pin:not([data-on]) .fig-pin-text small{display:none}.fig-pin-text small{max-width:22ch}.fig-pin-tag{gap:5px;padding:3px 8px 3px 4px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10.5px}.fig-pin-num{min-width:14px;height:14px;font-size:8.5px}}
 @media (prefers-reduced-motion:reduce){.fig-pin{transition:none}}
 `;

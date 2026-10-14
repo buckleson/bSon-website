@@ -57,8 +57,8 @@ const widths: Record<string, string> = {
       </ul>
       <div class="flex items-center gap-2 justify-self-end">
         <ThemeIcon />
-        <a href={href('/contact/')} class="hidden rounded-full border border-ink/20 px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/60 sm:inline-flex">Contact</a>
-        <a href={BOOKING_URL} class="cta-pill hidden sm:inline-flex">
+        <a href={href('/contact/')} class="hidden rounded-full border border-ink/20 px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/60 sm:inline-flex lg:hidden xl:inline-flex">Contact</a>
+        <a href={BOOKING_URL} class="cta-pill hidden whitespace-nowrap sm:inline-flex">
           <span>Book a call</span>
           <span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span>
         </a>
