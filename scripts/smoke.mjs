@@ -16,7 +16,7 @@ const EXPECTATIONS = {
   '/about/': ['"@type":"AboutPage"', 'Our story'],
   '/faq/': ['"@type":"FAQPage"', 'id="ai-agent-security"', 'ML-KEM'],
   '/products/': ['Hyper 0X', 'Coming soon'],
-  '/products/pavii/': ['data-prompt-shield', '"@type":"SoftwareApplication"'],
+  '/products/pavii/': ['data-flow', 'data-pm="pavii"', '"@type":"SoftwareApplication"'],
   '/products/h0x-pay/': ['Coming soon'],
   '/contact/': ['data-mail-form', 'cal.com/buckleson-group/30min'],
   '/blog/how-to-secure-ai-agents/': ['"@type":"BlogPosting"', '"@type":"BreadcrumbList"'],

@@ -1,22 +1,26 @@
 ---
-import ProductTabBtn from '@components/ui/buttons/ProductTabBtn.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import SecondaryCTA from '@components/ui/buttons/SecondaryCTA.astro';
+import SectionHead from '@components/home/SectionHead.astro';
 import ProductArt from '@components/ui/ProductArt.astro';
+import ProductMock from '@components/ui/ProductMock.astro';
+import FeatureBento from '@components/ui/FeatureBento.astro';
+import FlowStack from '@components/ui/FlowStack.astro';
+import ThreatGrid from '@components/ui/ThreatGrid.astro';
+import IsoFigure from '@components/ui/IsoFigure.astro';
 import Diagram from '@components/ui/Diagram.astro';
-import SystemDiagram from '@components/ui/SystemDiagram.astro';
 import Glyph from '@components/ui/Glyph.astro';
-import PromptShieldAnimation from '@components/sections/landing/PromptShieldAnimation.astro';
 import type { CollectionEntry } from 'astro:content';
-import type { SystemName } from '@data/systems';
+import { flows, type FlowName } from '@data/explainers';
 import { localePath } from '@utils/locale';
 import { slugOf } from '@utils/content';
 
 /**
- * Product page in the original ScrewFast layout: a fading intro, the product
- * name beside its animated scene, then Overview / Specifications /
- * How it works tabs (the last runs the transaction animation), followed by
- * FAQ and a call to action.
+ * Product page, one long read: the product in use beside its name, the
+ * features as a bento grid, then "how it works" as a layered stack that a
+ * request travels through. Pavii adds the ten agent risks and how each is
+ * stopped; Hyper 0X adds its two labelled figures. Specifications, FAQ and
+ * a call to action close the page.
  */
 interface Props {
   product: CollectionEntry<'products'>;
@@ -24,97 +28,103 @@ interface Props {
 
 const { product } = Astro.props;
 const data = product.data;
+const slug = slugOf(product) as 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
 const soon = data.status === 'coming-soon';
 const href = (url: string) => localePath('en', url);
-type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
-const half = Math.ceil(data.details.items.length / 2);
-const tabs = [
-  { id: 'tab-overview', panel: '#panel-overview', title: 'Overview', icon: 'squares-four' },
-  { id: 'tab-specs', panel: '#panel-specs', title: data.details.title, icon: 'list-checks' },
-  { id: 'tab-architecture', panel: '#panel-architecture', title: 'How it works', icon: 'flow-arrow' },
-];
+
+const extras: Record<typeof slug, { flow: FlowName; highlight?: { value: string; label: string }; chips: string[] }> = {
+  'hyper-0x': { flow: 'hyper0x', highlight: { value: '1 pass', label: 'to a final record, with no reorgs' }, chips: ['aBFT consensus', 'Post-quantum-resistant', 'Private L2s', 'EVM · Solana · Sui bridges'] },
+  pavii: { flow: 'pavii', highlight: { value: '100M+', label: 'AI tokens saved across 82K+ queries' }, chips: ['Claude', 'Claude Code', 'Codex', 'ChatGPT', 'Grok', 'OpenCode', 'Custom agents'] },
+  'hyper-wallet': { flow: 'wallet', highlight: { value: '2M+', label: 'transactions, 33K+ portfolios and $128K+ saved in fees' }, chips: ['Bitcoin', 'Ethereum', 'Solana', 'Tron', 'TON', 'XRP', 'Stellar', 'Sui'] },
+  'h0x-pay': { flow: 'pay', chips: ['Gold first', 'Index funds next', 'Crypto payments'] },
+  hyperrun: { flow: 'run', chips: ['Play', 'Predict', 'Earn', 'Sponsor'] },
+};
+const extra = extras[slug];
+const flow = flows[extra.flow];
+const features = data.features.map(f => ({ icon: f.icon, title: f.title, text: f.subTitle }));
+let n = 0;
+const next = () => String(++n).padStart(2, '0');
 ---
 
 <section class="mx-auto flex max-w-[85rem] flex-col px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14">
-  <p id="fadeText" class="mb-8 max-w-[62ch] text-lg leading-relaxed text-pretty text-muted sm:text-xl">{data.summary}</p>
   <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
     <div id="fadeInUp">
-      <h1 class="text-5xl leading-[0.98] font-semibold text-ink sm:text-6xl lg:text-7xl">{data.title}</h1>
-      {soon && <p class="mt-4 w-fit rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-800 dark:bg-orange-950 dark:text-orange-200">Coming soon</p>}
-      <p class="mt-4 max-w-md text-lg font-medium text-pretty text-ink/80">{data.tagline}</p>
+      <p class="font-mono text-xs tracking-wide text-muted uppercase">Product{soon && ' · coming soon'}</p>
+      <h1 class="mt-4 text-5xl leading-[0.98] font-semibold text-ink sm:text-6xl lg:text-7xl">{data.title}</h1>
+      <p class="mt-4 max-w-md text-xl font-medium text-pretty text-ink/85">{data.tagline}</p>
+      <p id="fadeText" class="mt-5 max-w-[52ch] leading-relaxed text-pretty text-muted">{data.summary}</p>
       <div class="mt-7 flex flex-wrap gap-3">
         <PrimaryCTA title={data.cta.title} url={href(data.cta.url)} />
-        <SecondaryCTA title="How it works" url="#product-detail-body" />
+        <SecondaryCTA title="How it works" url="#how-it-works" />
       </div>
     </div>
-    <div id="fadeInMoveRight" class="overflow-hidden rounded-[1.8rem] ring-1 ring-line will-change-transform">
-      <ProductArt product={slugOf(product) as Art} class="aspect-[440/360]" />
+    <div id="fadeInMoveRight" class="will-change-transform">
+      {slug === 'hyper-0x'
+        ? <div class="overflow-hidden rounded-[1.8rem] ring-1 ring-line"><ProductArt product="hyper-0x" class="aspect-[440/360]" /></div>
+        : <ProductMock kind={slug} class="min-h-[24rem] ring-1 ring-line sm:min-h-[27rem]" />}
     </div>
   </div>
 </section>
 
-<div id="product-detail-body" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 pt-6 sm:px-6 lg:px-8">
-  <nav class="mx-auto grid max-w-3xl gap-1.5 rounded-[1.6rem] bg-card p-1.5 ring-1 ring-line sm:grid-cols-3 sm:rounded-full" aria-label={`${data.title} details`} role="tablist">
-    {tabs.map((tab, index) => <ProductTabBtn id={tab.id} dataTab={tab.panel} title={tab.title} icon={tab.icon} first={index === 0} />)}
-  </nav>
+<section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="features-title">
+  <SectionHead index={next()} label="Features" claim={`What ${data.title}`} payoff="does for you." id="features-title" />
+  <FeatureBento class="mt-10" items={features} highlight={extra.highlight} chips={extra.chips} />
+</section>
 
-  <div class="relative mt-10 md:mt-14">
-    <div id="panel-overview" class="product-tab-panel" role="tabpanel" aria-labelledby="tab-overview">
-      <div class="grid gap-12 pb-14 md:grid-cols-2">
-        <div>
-          <h2 class="text-3xl leading-tight font-semibold text-balance text-ink lg:text-4xl">What {data.title} does</h2>
-          <p class="mt-4 text-pretty text-muted">{data.summary}</p>
-          <p class="mt-6"><PrimaryCTA title={data.cta.title} url={href(data.cta.url)} /></p>
-        </div>
-        <ul class="grid gap-6 sm:grid-cols-2">
-          {data.features.map(feature => (
-            <li class="flex gap-4">
-              {feature.icon && <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={feature.icon} class="size-5" /></span>}
-              <div>
-                <p class="font-semibold text-ink">{feature.title}</p>
-                <p class="mt-1 text-sm text-pretty text-muted">{feature.subTitle}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+<section id="how-it-works" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="how-title">
+  <SectionHead
+    index={next()}
+    label="How it works"
+    claim={`Follow one ${flow.unit}`}
+    payoff={`through ${data.title}.`}
+    body={`Each layer has one job. Watch a ${flow.unit} pass through them, and see where a bad one stops and why.`}
+    id="how-title"
+  />
+  <FlowStack name={extra.flow} class="mt-10" />
+</section>
 
-    <div id="panel-specs" class="product-tab-panel hidden" role="tabpanel" aria-labelledby="tab-specs">
-      <div class="grid w-full grid-cols-1 gap-x-16 gap-y-6 pb-14 md:grid-cols-2">
-        {[data.details.items.slice(0, half), data.details.items.slice(half)].map(group => (
-          <div class="space-y-6">
-            {group.map(item => (
-              <div class="border-t border-line pt-5">
-                <h3 class="font-semibold text-ink">{item.title}</h3>
-                <p class="mt-1 text-pretty text-muted">{item.subTitle}</p>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
+{slug === 'pavii' && (
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="threats-title">
+    <SectionHead
+      index={next()}
+      label="Threats"
+      claim="Ten ways agents get attacked,"
+      payoff="and how Pavii stops each one."
+      body="We say plainly where the blockchain adds real protection, where it helps with part of the job, and where it only gives evidence after the fact."
+      id="threats-title"
+    />
+    <ThreatGrid class="mt-10" />
+  </section>
+)}
 
-    <div id="panel-architecture" class="product-tab-panel hidden" role="tabpanel" aria-labelledby="tab-architecture">
-      <div class="space-y-10 pb-14">
-        <SystemDiagram name={data.diagram as SystemName} />
-        {product.id.endsWith('pavii') && (
-          <div>
-            <h3 class="text-2xl font-semibold text-ink">Pavii in action</h3>
-            <p class="mt-2 max-w-[60ch] text-muted">Prompts, agents, tool calls, SDKs and emails go through Pavii, and Hyper 0X protects the record. Unsafe calls stop at the shield. Clean calls reach your systems.</p>
-            <div class="mt-6"><PromptShieldAnimation centerLabel="Pavii" /></div>
-          </div>
-        )}
-        <details class="group">
-          <summary class="inline-flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-orange-700 dark:text-orange-300">
-            <Glyph icon="caret-down" class="size-4 transition group-open:rotate-180" />Full architecture diagram
-          </summary>
-          <Diagram name={data.diagram} class="mt-4" caption={`${data.title} architecture. Select the diagram to open it full size.`} />
-        </details>
-      </div>
+{slug === 'hyper-0x' && (
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="inside-title">
+    <SectionHead index={next()} label="Inside Hyper 0X" claim="One L1, many L2s," payoff="four layers of encryption." id="inside-title" />
+    <div class="mt-10 grid gap-6 xl:grid-cols-2">
+      <IsoFigure name="chain-rack" />
+      <IsoFigure name="cipher-tower" />
     </div>
-  </div>
-</div>
+  </section>
+)}
+
+<section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="specs-title">
+  <SectionHead index={next()} label={data.details.title} claim={soon ? 'What we are' : 'What runs'} payoff={soon ? 'building next.' : 'under the hood.'} id="specs-title" />
+  <ul class="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+    {data.details.items.map((item, i) => (
+      <li class="rounded-[1.4rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
+        <p class="flex items-center gap-2 font-mono text-xs text-muted"><Glyph icon={soon ? 'flag' : 'check-circle'} class="size-4 text-orange-600 dark:text-orange-400" />{String(i + 1).padStart(2, '0')}</p>
+        <h3 class="mt-3 font-semibold text-ink">{item.title}</h3>
+        <p class="mt-1.5 text-sm leading-relaxed text-pretty text-muted">{item.subTitle}</p>
+      </li>
+    ))}
+  </ul>
+  <details class="group mt-8">
+    <summary class="inline-flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-orange-700 dark:text-orange-300">
+      <Glyph icon="caret-down" class="size-4 transition group-open:rotate-180" />Full architecture diagram
+    </summary>
+    <Diagram name={data.diagram} class="mt-4" caption={`${data.title} architecture. Select the diagram to open it full size.`} />
+  </details>
+</section>
 
 {(data.faqs.length > 0 || data.learnMore.length > 0) && (
   <section class="mx-auto grid max-w-[85rem] gap-12 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-20">
@@ -156,39 +166,12 @@ const tabs = [
 <script>
   import { gsap } from 'gsap';
 
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   // Intro: the text is visible from the first paint and only settles into
-  // place; the scene and the tabs fade in beside it.
-  if (!reduced) {
+  // place; the visual fades in beside it.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     gsap
       .timeline({ defaults: { ease: 'power3.out' } })
-      .from('#fadeText', { y: 16, duration: 0.8 }, 0)
-      .from('#fadeInUp', { y: 22, duration: 0.9 }, 0.05)
-      .from('#fadeInMoveRight', { autoAlpha: 0, x: 48, scale: 0.97, duration: 1 }, 0.1)
-      .from('#product-detail-body', { autoAlpha: 0, y: 20, duration: 0.8 }, 0.3);
+      .from('#fadeInUp', { y: 22, duration: 0.9 }, 0)
+      .from('#fadeInMoveRight', { autoAlpha: 0, x: 48, scale: 0.97, duration: 1 }, 0.1);
   }
-
-  // Tabs with a short fade between panels; arrow keys move between tabs.
-  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.product-tab')];
-  let active = document.querySelector<HTMLElement>('.product-tab-panel:not(.hidden)');
-  const show = (button: HTMLButtonElement) => {
-    const next = document.querySelector<HTMLElement>(button.dataset.target!);
-    if (!next || next === active) return;
-    buttons.forEach(b => b.setAttribute('aria-selected', String(b === button)));
-    active?.classList.add('hidden');
-    next.classList.remove('hidden');
-    if (!reduced) gsap.fromTo(next, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out' });
-    active = next;
-  };
-  buttons.forEach((button, index) => {
-    button.addEventListener('click', () => show(button));
-    button.addEventListener('keydown', event => {
-      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
-      if (!step) return;
-      const next = buttons[(index + step + buttons.length) % buttons.length];
-      next.focus();
-      show(next);
-    });
-  });
 </script>

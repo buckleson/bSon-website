@@ -25,7 +25,7 @@ Tool calling, or function calling, is how an AI agent acts. The model reads the 
 
 That is good news. The moment between "the model asked" and "the code ran" is where you can enforce rules.
 
-The risk is that the request can be wrong or hostile. Hidden instructions in a document, called a [prompt injection](../what-is-prompt-injection/), can steer it. A vague instruction can lead it to delete the wrong thing. OWASP lists this risk as Excessive Agency (LLM06) in its Top 10 for LLM Applications 2025. That list names the main security risks for apps built on large language models (LLMs). OWASP names three root causes: too much functionality, too many permissions and too much autonomy.
+The risk is that the request can be wrong or hostile. Hidden instructions in a document, called a [prompt injection](../what-is-prompt-injection/), can steer it. A vague instruction can lead it to delete the wrong thing. Security teams call this risk excessive agency. It has three root causes: too much functionality, too many permissions and too much autonomy.
 
 ## Which tools do you allow an agent to call?
 
@@ -71,7 +71,7 @@ Show the reviewer the exact call and its arguments, not the model's summary of i
 
 ## Why do agents need budgets?
 
-An agent stuck in a loop can call a tool thousands of times. Or it can fill its context (the text that the model holds for a task) with huge results. Both burn money and put strain on your systems. OWASP calls this Unbounded Consumption (LLM10). Set caps for each agent, such as calls per minute, tokens per task and spend per day.
+An agent stuck in a loop can call a tool thousands of times. Or it can fill its context (the text that the model holds for a task) with huge results. Both burn money and put strain on your systems. Security teams call this unbounded consumption. Set caps for each agent, such as calls per minute, tokens per task and spend per day.
 
 Pavii's budget gate uses budgets and MCP compaction (it makes the tool data from MCP servers smaller) to keep token spend under control. On a measured Claude Code task, it used 30 to 60 percent fewer tokens.
 

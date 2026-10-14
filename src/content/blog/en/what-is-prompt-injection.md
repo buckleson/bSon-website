@@ -12,7 +12,7 @@ faqs:
   - question: 'Can prompt injection be fully prevented?'
     answer: 'Not inside the model alone. A model reads instructions and data as one stream of text, so no filter catches every attack. The practical goal is to make a successful injection harmless. Limit what the agent can reach, send and do, and record everything.'
   - question: 'Is prompt injection the same as jailbreaking?'
-    answer: 'Jailbreaking is one form of it. OWASP describes jailbreaking as prompt injection that makes a model ignore its safety rules completely. Prompt injection is broader. It also covers instructions that attackers hide in documents, web pages and tool output to take control of what an agent does.'
+    answer: 'Jailbreaking is one form of it: a prompt injection that makes a model ignore its safety rules completely. Prompt injection is broader. It also covers instructions that attackers hide in documents, web pages and tool output to take control of what an agent does.'
   - question: 'Which AI agents are vulnerable to prompt injection?'
     answer: 'Any agent that reads text it did not write is vulnerable. This is true for agents on Claude, ChatGPT, Codex, Grok and open-source models. The risk grows with access. An agent that can send email, call APIs or move money needs controls outside the model.'
 ---
@@ -21,7 +21,7 @@ Prompt injection is an attack that hides instructions inside text that an AI mod
 
 ## Why is prompt injection the top risk for AI agents?
 
-Prompt injection is number one (LLM01) in the OWASP Top 10 for LLM Applications 2025. That list names the main security risks for apps built on large language models (LLMs). The reason for the top rank is simple. A language model gets your instructions and the content it works on as one stream of text. It has no reliable way to tell which part is in charge.
+Security teams rank prompt injection as the number one risk for apps built on large language models (LLMs). The reason for the top rank is simple. A language model gets your instructions and the content it works on as one stream of text. It has no reliable way to tell which part is in charge.
 
 An attacker can embarrass you through a chatbot that only answers questions. An AI agent is more than a chatbot: it is an AI model that uses tools to act. An attacker can turn an agent against you if the agent can read files, call APIs and send messages. The more access an agent has, the more an injected instruction can do.
 
@@ -68,7 +68,7 @@ The companies that build AI models train them to resist injection. A system prom
 3. **The model does not hold the keys.** The tools hold the permissions. A model can resist almost every injection. But when it misses one, it still has full tool access.
 4. **Refusals leave no proof.** When a model quietly ignores an injected instruction, nothing records that an attack happened. When the model does not ignore it, often nothing records that either.
 
-OWASP itself notes that models are probabilistic (their output is not fully predictable). So, it says, it is unclear whether any method fully prevents prompt injection. The realistic goal is not to make injection impossible. It is to make a successful injection harmless.
+Models are probabilistic (their output is not fully predictable). So it is unclear whether any method fully prevents prompt injection. The realistic goal is not to make injection impossible. It is to make a successful injection harmless.
 
 ## How do layered defences stop prompt injection?
 

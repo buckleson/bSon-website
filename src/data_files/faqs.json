@@ -99,7 +99,7 @@
         },
         {
           "question": "What is excessive agency in AI?",
-          "answer": "Excessive agency is entry LLM06 in the OWASP Top 10 for LLM applications. It means that an agent has more functions, permissions or freedom than its task needs. Then a mistake or an injected instruction can cause real damage. To prevent it, give the least permissions, use narrow tools and get approval for actions with a high impact.",
+          "answer": "Excessive agency is one of the top security risks for apps built on large language models. It means that an agent has more functions, permissions or freedom than its task needs. Then a mistake or an injected instruction can cause real damage. To prevent it, give the least permissions, use narrow tools and get approval for actions with a high impact.",
           "link": { "title": "How to secure AI agents: 8 attacks", "url": "/blog/how-to-secure-ai-agents/" }
         },
         {

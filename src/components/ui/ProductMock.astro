@@ -1,0 +1,235 @@
+---
+import Glyph from '@components/ui/Glyph.astro';
+
+/**
+ * A live product mock for the top of a product page: what the product looks
+ * like in use, not the system behind it (that is FlowStack, further down).
+ * Pavii: a gateway console streaming allow / mask / block decisions.
+ * Hyper Wallet: a phone that routes and settles a swap.
+ * H0X Pay: a payment that sends a slice to tokenized gold.
+ * HyperRun: a match HUD that ends in a signed result and payouts.
+ * Animations pause offscreen and hold still under reduced motion.
+ */
+interface Props {
+  kind: 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
+  class?: string;
+}
+
+const { kind, class: className } = Astro.props;
+const feed = [
+  { brand: 'claude', agent: 'Claude Code', call: 'git.commit("fix tests")', verdict: 'ok', note: 'Allowed' },
+  { brand: 'openai', agent: 'Codex', call: 'read_file(invoice.pdf)', verdict: 'bad', note: 'Injection' },
+  { brand: 'grok', agent: 'Grok', call: 'summarise(report.docx)', verdict: 'mask', note: 'PII masked' },
+  { brand: 'claude', agent: 'Claude', call: 'email.send(all@corp)', verdict: 'bad', note: 'Egress rule' },
+  { brand: 'openai', agent: 'ChatGPT', call: 'search("Q3 churn")', verdict: 'ok', note: 'Allowed' },
+  { brand: 'gemini', agent: 'Custom agent', call: 'npm install reqeusts', verdict: 'bad', note: 'Supply chain' },
+  { brand: 'claude', agent: 'Claude Code', call: 'db.query(orders)', verdict: 'ok', note: 'Allowed' },
+] as const;
+---
+
+<div class:list={['pm accent-warm relative overflow-hidden rounded-[1.8rem] bg-[#0c0c0c] text-white', className]} data-pm={kind}>
+  {kind === 'pavii' && (
+    <div class="pm-console flex h-full flex-col p-4 sm:p-5">
+      <div class="flex items-center justify-between gap-3">
+        <span class="inline-flex items-center gap-2 text-sm font-semibold"><span class="grid size-7 place-items-center rounded-lg bg-orange-600"><Glyph icon="shield-check" class="size-4" /></span>Pavii gateway</span>
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/12 px-2.5 py-1 font-mono text-[0.68rem] font-semibold text-emerald-300"><span class="pm-dot size-1.5 rounded-full bg-emerald-400"></span>LIVE</span>
+      </div>
+      <div class="mt-4 grid grid-cols-3 gap-2">
+        {[['100M+', 'tokens saved'], ['82K+', 'queries'], ['6', 'gates per call']].map(([v, l]) => (
+          <div class="rounded-xl bg-white/5 px-3 py-2.5 ring-1 ring-white/8"><p class="font-display text-xl font-semibold text-orange-300">{v}</p><p class="text-[0.7rem] text-white/55">{l}</p></div>
+        ))}
+      </div>
+      <p class="mt-4 font-mono text-[0.68rem] tracking-wide text-white/40 uppercase">Decisions · newest first</p>
+      <ol class="pm-feed relative mt-2 grid flex-1 content-start gap-1.5 overflow-hidden" data-feed>
+        {feed.map((row, i) => (
+          <li class="pm-row" data-verdict={row.verdict} style={`--i:${i}`}>
+            <span class="grid size-7 shrink-0 place-items-center rounded-lg bg-white/8"><Glyph brand={row.brand} class="size-3.5" /></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-[0.72rem] text-white/50">{row.agent}</span>
+              <span class="block truncate font-mono text-[0.78rem]">{row.call}</span>
+            </span>
+            <span class="pm-verdict">{row.verdict === 'ok' ? <Glyph icon="check" class="size-3" /> : row.verdict === 'bad' ? <Glyph icon="prohibit" class="size-3" /> : <Glyph icon="eye-slash" class="size-3" />}{row.note}</span>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-3 flex items-center gap-2 border-t border-white/8 pt-3 text-[0.72rem] text-white/55"><Glyph icon="link-simple" class="size-3.5 text-orange-300" />Every decision is a receipt chained on Hyper 0X</p>
+    </div>
+  )}
+
+  {kind === 'hyper-wallet' && (
+    <div class="pm-stage grid h-full place-items-center p-6">
+      <div class="pm-phone">
+        <div class="flex items-center justify-between text-[0.65rem] text-white/50"><span>9:41</span><span class="h-1.5 w-10 rounded-full bg-white/15"></span><span>5G</span></div>
+        <p class="mt-4 text-[0.7rem] text-white/50">Portfolio</p>
+        <p class="font-display text-2xl font-semibold tabular-nums">$12,480<span class="text-white/40">.22</span></p>
+        <ul class="mt-3 grid gap-1.5 text-[0.75rem]">
+          {[['bitcoin', 'Bitcoin', '0.081 BTC'], ['ethereum', 'Ethereum', '2.40 ETH'], ['solana', 'Solana', '31.5 SOL']].map(([b, n, v]) => (
+            <li class="flex items-center gap-2 rounded-xl bg-white/5 px-2.5 py-2"><Glyph brand={b as 'bitcoin'} class="size-4" /><span class="flex-1">{n}</span><span class="font-mono text-white/70">{v}</span></li>
+          ))}
+          <li class="flex items-center gap-2 rounded-xl bg-white/5 px-2.5 py-2"><Glyph icon="coins" class="size-4 text-amber-300" /><span class="flex-1">Tokenized gold</span><span class="font-mono text-white/70">4.0 g</span></li>
+        </ul>
+        <div class="pm-swap mt-3 rounded-2xl bg-white/8 p-3 ring-1 ring-white/10">
+          <div class="flex items-center justify-between text-[0.72rem]"><span class="text-white/55">Swap</span><span class="font-mono">0.5 ETH → USDC</span></div>
+          <div class="relative mt-2.5 h-8">
+            <span class="pm-w pm-w1">Swap now</span>
+            <span class="pm-w pm-w2"><Glyph icon="path" class="size-3.5" />Finding the best route</span>
+            <span class="pm-w pm-w3"><Glyph icon="cube" class="size-3.5" />Settling both sides</span>
+            <span class="pm-w pm-w4"><Glyph icon="check-circle" class="size-3.5" />Confirmed · one fee</span>
+          </div>
+          <span class="pm-bar mt-2 block h-1 overflow-hidden rounded-full bg-white/10"><span></span></span>
+        </div>
+      </div>
+      <span class="pm-float pm-f1"><Glyph icon="fingerprint" class="size-4 text-orange-300" />Passkey, no seed phrase</span>
+      <span class="pm-float pm-f2"><Glyph icon="shield-check" class="size-4 text-emerald-300" />MEV protected</span>
+    </div>
+  )}
+
+  {kind === 'h0x-pay' && (
+    <div class="pm-stage grid h-full place-items-center p-6">
+      <div class="pm-phone">
+        <div class="flex items-center justify-between text-[0.65rem] text-white/50"><span>9:41</span><span class="h-1.5 w-10 rounded-full bg-white/15"></span><span>5G</span></div>
+        <div class="mt-5 rounded-2xl bg-white/8 p-3.5 ring-1 ring-white/10">
+          <p class="flex items-center gap-2 text-[0.72rem] text-white/55"><Glyph icon="coffee" class="size-4 text-orange-300" />Corner Coffee</p>
+          <p class="mt-1 font-display text-3xl font-semibold tabular-nums">$4.50</p>
+          <div class="relative mt-3 h-9">
+            <span class="pm-p pm-p1">Pay</span>
+            <span class="pm-p pm-p2"><Glyph icon="check-circle" class="size-4" />Paid</span>
+          </div>
+        </div>
+        <span class="pm-slice"><Glyph icon="coins" class="size-3.5" />+$0.09 to gold</span>
+        <div class="mt-10 rounded-2xl bg-white/5 p-3.5 ring-1 ring-white/8">
+          <p class="text-[0.7rem] text-white/50">Plan: 2% of every payment</p>
+          <div class="mt-2 flex items-end justify-between">
+            <span class="flex items-center gap-2 text-sm"><Glyph icon="coins" class="size-5 text-amber-300" />Tokenized gold</span>
+            <span class="relative h-6 w-20 text-right font-mono text-sm tabular-nums"><span class="pm-g pm-g1">$41.20</span><span class="pm-g pm-g2">$41.29</span></span>
+          </div>
+          <span class="pm-bar pm-bar-gold mt-3 block h-1.5 overflow-hidden rounded-full bg-white/10"><span></span></span>
+        </div>
+        <p class="mt-4 rounded-full bg-orange-600/90 py-1.5 text-center text-[0.7rem] font-semibold">Coming soon</p>
+      </div>
+    </div>
+  )}
+
+  {kind === 'hyperrun' && (
+    <div class="pm-hud relative h-full min-h-[22rem] p-4 sm:p-5">
+      <div class="flex items-start justify-between gap-3">
+        <span class="rounded-xl bg-black/50 px-3 py-2 font-mono text-xs ring-1 ring-white/10">Ranked · round 12</span>
+        <span class="flex items-center gap-3 rounded-xl bg-black/50 px-3 py-2 text-sm font-semibold ring-1 ring-white/10">Ava <span class="font-display text-xl tabular-nums">13 : 9</span> Kai</span>
+      </div>
+      <span class="pm-cross" aria-hidden="true"></span>
+      <ul class="absolute top-20 right-4 grid gap-1 text-[0.7rem] sm:right-5">
+        <li class="pm-kill" style="--i:0">Ava <Glyph icon="crosshair" class="inline size-3 text-orange-300" /> Kai</li>
+        <li class="pm-kill" style="--i:1">Ava <Glyph icon="crosshair" class="inline size-3 text-orange-300" /> Rex</li>
+      </ul>
+      <div class="absolute inset-x-4 bottom-4 grid gap-2 sm:inset-x-5 sm:bottom-5">
+        <div class="rounded-2xl bg-black/60 p-3 ring-1 ring-white/10 backdrop-blur">
+          <p class="text-[0.7rem] text-white/55">Fan prediction · who wins?</p>
+          <div class="mt-2 grid grid-cols-2 gap-2 text-sm font-semibold">
+            <span class="rounded-xl bg-orange-600 px-3 py-1.5">Ava · 1.8×</span>
+            <span class="rounded-xl bg-white/10 px-3 py-1.5">Kai · 2.1×</span>
+          </div>
+        </div>
+        <div class="relative h-10">
+          <span class="pm-t pm-t1"><Glyph icon="seal-check" class="size-4 text-emerald-300" />Result signed by the game</span>
+          <span class="pm-t pm-t2"><Glyph icon="wallet" class="size-4 text-orange-300" />Ava and 212 fans paid</span>
+        </div>
+      </div>
+      <span class="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-orange-600 px-3 py-1 text-[0.7rem] font-semibold">Coming soon</span>
+    </div>
+  )}
+</div>
+
+<style>
+  .pm { min-height: 22rem; }
+  .pm-dot { animation: pm-blink 1.4s ease-in-out infinite; }
+  @keyframes pm-blink { 50% { opacity: 0.3; } }
+
+  /* Pavii feed: rows enter at the top and push the others down. */
+  .pm-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.55rem; border-radius: 0.85rem; background: rgb(255 255 255 / 0.04); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06); }
+  .pm-row[data-new] { animation: pm-in 500ms cubic-bezier(0.22, 1, 0.36, 1); }
+  @keyframes pm-in { from { opacity: 0; transform: translateY(-10px); } }
+  .pm-verdict { display: inline-flex; align-items: center; gap: 0.3rem; flex: none; border-radius: 999px; padding: 0.2rem 0.55rem; font: 600 0.68rem/1.2 var(--font-mono, ui-monospace, monospace); }
+  .pm-row[data-verdict='ok'] .pm-verdict { color: #a7f3d0; background: rgb(52 211 153 / 0.14); }
+  .pm-row[data-verdict='bad'] .pm-verdict { color: #fecaca; background: rgb(248 113 113 / 0.16); }
+  .pm-row[data-verdict='bad'] { box-shadow: inset 0 0 0 1px rgb(248 113 113 / 0.3); }
+  .pm-row[data-verdict='mask'] .pm-verdict { color: #fde68a; background: rgb(251 191 36 / 0.14); }
+
+  /* Phones. */
+  .pm-stage { background: radial-gradient(70% 60% at 50% 40%, color-mix(in oklab, var(--accent-600) 22%, transparent), transparent 70%), #0c0c0c; }
+  .pm-phone { position: relative; width: min(15.5rem, 70%); padding: 0.9rem 0.9rem 1.1rem; border-radius: 2rem; background: #151515; box-shadow: 0 0 0 6px #232323, 0 0 0 7px #333, 0 30px 60px -20px rgb(0 0 0 / 0.8); }
+  .pm-float { position: absolute; display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.75rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; background: rgb(28 28 28 / 0.92); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1), 0 12px 24px -12px #000; animation: pm-bob 5s ease-in-out infinite; }
+  .pm-f1 { left: 5%; top: 18%; }
+  .pm-f2 { right: 5%; bottom: 20%; animation-delay: -2.5s; }
+  @keyframes pm-bob { 50% { transform: translateY(-6px); } }
+  .pm-w, .pm-p, .pm-g, .pm-t { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 0.4rem; border-radius: 0.75rem; font-size: 0.75rem; font-weight: 600; opacity: 0; }
+  .pm-w1, .pm-p1 { background: var(--accent-600); }
+  .pm-w2, .pm-w3 { background: rgb(255 255 255 / 0.06); }
+  .pm-w4, .pm-p2 { background: rgb(52 211 153 / 0.16); color: #a7f3d0; }
+  .pm-w1 { animation: pm-s1 8s infinite; }
+  .pm-w2 { animation: pm-s2 8s infinite; }
+  .pm-w3 { animation: pm-s3 8s infinite; }
+  .pm-w4 { animation: pm-s4 8s infinite; }
+  @keyframes pm-s1 { 0%, 22% { opacity: 1; } 25%, 100% { opacity: 0; } }
+  @keyframes pm-s2 { 0%, 23% { opacity: 0; } 26%, 46% { opacity: 1; } 49%, 100% { opacity: 0; } }
+  @keyframes pm-s3 { 0%, 47% { opacity: 0; } 50%, 70% { opacity: 1; } 73%, 100% { opacity: 0; } }
+  @keyframes pm-s4 { 0%, 71% { opacity: 0; } 74%, 97% { opacity: 1; } 100% { opacity: 0; } }
+  .pm-bar span { display: block; height: 100%; width: 100%; border-radius: inherit; background: var(--accent-400); transform-origin: left; animation: pm-fill 8s infinite; }
+  @keyframes pm-fill { 0%, 24% { transform: scaleX(0); } 72%, 97% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+  .pm-p1 { animation: pm-pay1 7s infinite; }
+  .pm-p2 { animation: pm-pay2 7s infinite; }
+  @keyframes pm-pay1 { 0%, 26% { opacity: 1; } 29%, 100% { opacity: 0; } }
+  @keyframes pm-pay2 { 0%, 27% { opacity: 0; } 30%, 96% { opacity: 1; } 100% { opacity: 0; } }
+  .pm-slice { position: absolute; left: 50%; top: 9.5rem; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.65rem; border-radius: 999px; background: #f59e0b; color: #1c1206; font-size: 0.7rem; font-weight: 700; opacity: 0; transform: translateX(-50%); animation: pm-fly 7s infinite; }
+  @keyframes pm-fly { 0%, 32% { opacity: 0; transform: translate(-50%, 0); } 38% { opacity: 1; transform: translate(-50%, 0); } 58% { opacity: 1; transform: translate(-50%, 4.2rem) scale(0.9); } 62%, 100% { opacity: 0; transform: translate(-50%, 4.6rem) scale(0.8); } }
+  .pm-g { justify-content: flex-end; font-size: 0.85rem; }
+  .pm-g1 { animation: pm-gold1 7s infinite; }
+  .pm-g2 { animation: pm-gold2 7s infinite; color: #fcd34d; }
+  @keyframes pm-gold1 { 0%, 58% { opacity: 1; } 61%, 100% { opacity: 0; } }
+  @keyframes pm-gold2 { 0%, 59% { opacity: 0; } 62%, 97% { opacity: 1; } 100% { opacity: 0; } }
+  .pm-bar-gold span { background: #f59e0b; animation: pm-goldbar 7s infinite; }
+  @keyframes pm-goldbar { 0%, 58% { transform: scaleX(0.62); } 64%, 97% { transform: scaleX(0.66); } 100% { transform: scaleX(0.62); } }
+
+  /* HyperRun HUD. */
+  .pm-hud { background: radial-gradient(90% 70% at 50% 35%, rgb(255 255 255 / 0.05), transparent 70%), linear-gradient(180deg, #1a1612 0%, #0c0c0c 60%); }
+  .pm-hud::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 4px); pointer-events: none; }
+  .pm-cross { position: absolute; left: 50%; top: 42%; width: 2.6rem; height: 2.6rem; transform: translate(-50%, -50%); border-radius: 999px; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.7); animation: pm-aim 4s ease-in-out infinite; }
+  .pm-cross::before, .pm-cross::after { content: ''; position: absolute; left: 50%; top: 50%; background: rgb(255 255 255 / 0.8); transform: translate(-50%, -50%); }
+  .pm-cross::before { width: 3.6rem; height: 1.5px; }
+  .pm-cross::after { width: 1.5px; height: 3.6rem; }
+  @keyframes pm-aim { 0%, 100% { transform: translate(-50%, -50%); } 30% { transform: translate(calc(-50% + 1.4rem), calc(-50% - 0.6rem)); } 65% { transform: translate(calc(-50% - 1rem), calc(-50% + 0.5rem)); } }
+  .pm-kill { padding: 0.25rem 0.55rem; border-radius: 0.5rem; background: rgb(0 0 0 / 0.5); opacity: 0; animation: pm-killfeed 8s infinite; animation-delay: calc(var(--i) * 1.2s); }
+  @keyframes pm-killfeed { 0%, 8% { opacity: 0; transform: translateX(8px); } 12%, 40% { opacity: 1; transform: none; } 46%, 100% { opacity: 0; } }
+  .pm-t { justify-content: flex-start; padding: 0 0.85rem; background: rgb(0 0 0 / 0.65); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1); }
+  .pm-t1 { animation: pm-toast1 8s infinite; }
+  .pm-t2 { animation: pm-toast2 8s infinite; }
+  @keyframes pm-toast1 { 0%, 48% { opacity: 0; transform: translateY(6px); } 52%, 70% { opacity: 1; transform: none; } 73%, 100% { opacity: 0; } }
+  @keyframes pm-toast2 { 0%, 72% { opacity: 0; transform: translateY(6px); } 76%, 96% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+
+  .pm[data-paused] *, .pm[data-paused] *::before, .pm[data-paused] *::after { animation-play-state: paused !important; }
+  @media (prefers-reduced-motion: reduce) {
+    .pm *, .pm *::before, .pm *::after { animation: none !important; }
+    .pm-w4, .pm-p2, .pm-g2, .pm-t2, .pm-kill { opacity: 1; }
+    .pm-bar span { transform: none; }
+  }
+</style>
+
+<script>
+  // Pause each mock offscreen; the Pavii feed cycles its rows to the top.
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) (entry.target as HTMLElement).toggleAttribute('data-paused', !entry.isIntersecting);
+  });
+  document.querySelectorAll<HTMLElement>('[data-pm]').forEach(mock => {
+    observer.observe(mock);
+    const feed = mock.querySelector<HTMLElement>('[data-feed]');
+    if (!feed || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    window.setInterval(() => {
+      if (mock.hasAttribute('data-paused') || document.hidden) return;
+      const last = feed.lastElementChild as HTMLElement | null;
+      if (!last) return;
+      last.removeAttribute('data-new');
+      feed.prepend(last);
+      void last.offsetWidth;
+      last.setAttribute('data-new', '');
+    }, 1700);
+  });
+</script>

@@ -18,33 +18,33 @@ faqs:
     answer: 'Any agent: Claude, Claude Code, Codex, ChatGPT, Grok, OpenCode or custom agents. The controls sit between the agent and your systems, not inside the model.'
 ---
 
-To protect an AI agent (an AI model that uses tools to act), put controls between the agent and your systems, not inside the model. Check every call for prompt injection, and strip secrets and personal data. Limit what the agent can send or do, and cap its budget. Record every action in a log that nobody can quietly edit. We map the eight attacks below to the OWASP Top 10 for LLM applications. That list names the main security risks for apps built on large language models (LLMs).
+To protect an AI agent (an AI model that uses tools to act), put controls between the agent and your systems, not inside the model. Check every call for prompt injection, and strip secrets and personal data. Limit what the agent can send or do, and cap its budget. Record every action in a log that nobody can quietly edit. Below are the eight attacks that matter most for apps built on large language models (LLMs), and the fix for each one.
 
 ## Why do AI agents need their own security?
 
 Modern agents need deep access to be useful: your data, your internal APIs and the ability to act on their own. Traditional security covers people and fixed software. It does not cover a system that reads untrusted text and then decides what to do. [Pavii](../../products/pavii/), our security gateway for AI agents, closes that gap. The diagram above shows its six gates.
 
-## 1. Prompt injection (LLM01)
+## 1. Prompt injection
 
 An analyst asks an agent to summarise a vendor PDF. The PDF hides instructions that tell the agent to send data elsewhere. **Fix:** treat untrusted text as data, never as instructions. Pavii flags the injection, and a smart contract (a program on a blockchain) hard-stops it.
 
-## 2. Sensitive data leaks (LLM02)
+## 2. Sensitive data leaks
 
 Agents copy customer data or API keys into prompts and outputs. **Fix:** a privacy gate that redacts personal data and secrets (replaces them with placeholders) before any model sees them.
 
-## 3. Supply-chain attacks (LLM03)
+## 3. Supply-chain attacks
 
 An agent installs a package or connects a new MCP server (a service that gives an agent tools). The package or server turns out to be malicious. **Fix:** allow-lists, pinned hashes (fixed fingerprints of each version), a sandbox (an isolated place to run code), or human approval for anything new.
 
-## 4. Unsafe output (LLM05)
+## 4. Unsafe output
 
 Agent output contains scripts or secrets that end up in a web page or email. **Fix:** remove them before delivery.
 
-## 5. Excessive agency (LLM06)
+## 5. Excessive agency
 
 An agent can do far more than its task needs. **Fix:** an egress policy (rules for outgoing actions) that decides what the agent can send or do. In Pavii, that policy is a smart contract on the Hyper 0X blockchain, so nobody can quietly change it.
 
-## 6. Runaway cost (LLM10)
+## 6. Runaway cost
 
 A loop or an oversized context (the text that the model reads) burns through tokens (the units of text that you pay for). **Fix:** budgets and context compaction (a smaller context for each call). On a measured Claude Code task, Pavii used 30 to 60 percent fewer tokens. It has saved over 100 million tokens across 82,000+ queries.
 

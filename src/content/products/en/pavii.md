@@ -30,17 +30,17 @@ features:
 details:
   title: 'Threats Pavii stops'
   items:
-    - title: 'Prompt injection (OWASP LLM01)'
+    - title: 'Prompt injection'
       subTitle: 'Pavii finds and blocks injected instructions in web pages, files and tool output.'
-    - title: 'Sensitive data leaks (LLM02)'
+    - title: 'Sensitive data leaks'
       subTitle: 'Pavii removes personal data and secrets from what goes in and from what comes out.'
-    - title: 'Supply chain (LLM03)'
+    - title: 'Supply chain'
       subTitle: 'Every new package or MCP server must pass an allow-list, a pinned hash or a sandbox test.'
-    - title: 'Unsafe output (LLM05)'
+    - title: 'Unsafe output'
       subTitle: 'Pavii removes scripts and secrets from agent output before delivery.'
-    - title: 'Excessive agency (LLM06)'
+    - title: 'Excessive agency'
       subTitle: 'An egress smart contract on Hyper 0X decides what an agent can send and do.'
-    - title: 'Runaway cost (LLM10)'
+    - title: 'Runaway cost'
       subTitle: 'Budgets and MCP compaction keep token use under control.'
 cta:
   title: 'Book a Pavii demo'

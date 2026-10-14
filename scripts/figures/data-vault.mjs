@@ -376,10 +376,10 @@ const svg = k.figureSvg({
 });
 
 const pins = pinsHtml(P, WIDTH, HEIGHT, [
-  { id: 'transit', n: 1, at: [-139, 0, TUNNEL.h + 7], icon: 'lock-key', title: 'In transit', sub: 'The tunnel: post-quantum TLS seals every connection', expand: true, seek: 'transit' },
-  { id: 'use', n: 2, at: [CPU.x, 0, CPU.beam[1]], icon: 'cpu', title: 'In use', sub: 'The press works on the record without opening it', expand: true, seek: 'use' },
-  { id: 'ledger', n: 3, at: [STAMP.x, -24, STAMP.arm[1]], icon: 'users-three', title: 'On the ledger', sub: 'The stamp puts a hash on chain, one key per party', expand: true, seek: 'ledger' },
-  { id: 'rest', n: 4, at: [VAULT.x + 46, -6, VAULT.h], icon: 'vault', title: 'At rest', sub: 'The vault locks it with AES-256, keys in an HSM', expand: true, seek: 'rest' },
+  { id: 'transit', n: 1, at: [-139, 0, TUNNEL.h + 7], icon: 'lock-key', title: 'In transit', sub: 'Post-quantum TLS seals the line', expand: true, seek: 'transit' },
+  { id: 'use', n: 2, at: [CPU.x, 0, CPU.beam[1]], icon: 'cpu', title: 'In use', sub: 'Worked on without being opened', expand: true, seek: 'use' },
+  { id: 'ledger', n: 3, at: [STAMP.x, -24, STAMP.arm[1]], icon: 'users-three', title: 'On the ledger', sub: 'A hash on chain, a key per party', expand: true, seek: 'ledger' },
+  { id: 'rest', n: 4, at: [VAULT.x + 46, -6, VAULT.h], icon: 'vault', title: 'At rest', sub: 'AES-256 lock, keys in an HSM', expand: true, seek: 'rest' },
   { id: 'record', at: [0, CAR.y + CAR.d, CAR_Z[0]], icon: 'file-lock', title: 'Your data', side: 'down' },
 ]);
 

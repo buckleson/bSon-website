@@ -23,7 +23,7 @@ LLM data leaks happen when customer data or secrets reach places where they do n
 
 Most leaks come from convenience, not from hacks. A support employee pastes a full customer record to get a better draft. A developer pastes a config file, keys included, to debug an error. A retrieval system (a tool that finds documents for the model) pulls a whole contract into the context, the text that the model reads. One clause was enough. An agent with database access reads every column, not just the two it needs.
 
-In each case, more data than the task needs goes to a system that you possibly do not fully control. OWASP ranks Sensitive Information Disclosure second (LLM02) in its Top 10 for LLM Applications 2025. That list names the main security risks for apps built on LLMs.
+In each case, more data than the task needs goes to a system that you possibly do not fully control. Security teams rank sensitive information disclosure among the top risks for apps built on LLMs.
 
 ## Where else does sensitive data leak?
 
@@ -59,8 +59,8 @@ Input redaction is not enough on its own. Some data reaches the model through to
 
 1. Scan for personal data and secrets that do not belong in the reply.
 2. Check that the recipient has the right to see the content.
-3. Remove scripts, hidden links and image URLs that can carry data to an outside server. OWASP calls the wider risk Improper Output Handling (LLM05).
-4. Block replies that reveal the system prompt (the hidden instructions of the app) or internal configuration. OWASP calls this System Prompt Leakage (LLM07).
+3. Remove scripts, hidden links and image URLs that can carry data to an outside server. This wider risk is called improper output handling.
+4. Block replies that reveal the system prompt (the hidden instructions of the app) or internal configuration. This risk is called system prompt leakage.
 
 ## What does data residency mean for AI agents?
 
