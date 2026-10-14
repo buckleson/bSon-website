@@ -26,13 +26,9 @@ export const GET: APIRoute = async () => {
     [
       '## Frequently asked questions',
       `URL: ${SITE.origin}${localePath('en', '/faq/')}`,
-      ...copy.data.faqs.faqs.map(f => `Q: ${f.question}
-A: ${f.answer}`),
-      ...copy.data.faqs.topics.flatMap(topic => [`### ${topic.label}`, ...topic.faqs.map(f => `Q: ${f.question}
-A: ${f.answer}`)]),
-    ].join('
-
-'),
+      ...copy.data.faqs.faqs.map(f => `Q: ${f.question}\nA: ${f.answer}`),
+      ...copy.data.faqs.topics.flatMap(topic => [`### ${topic.label}`, ...topic.faqs.map(f => `Q: ${f.question}\nA: ${f.answer}`)]),
+    ].join('\n\n'),
     ...posts.map(post =>
       [`## ${post.data.title}`, `URL: ${SITE.origin}${pathFor(post)}`, (post.body ?? '').trim()].join('\n\n')
     ),
