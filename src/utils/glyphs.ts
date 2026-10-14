@@ -79,8 +79,8 @@ export interface Brand {
 const BRANDS = {
   claude: { ...icons.claude, title: 'Claude' },
   gemini: { ...icons.gemini, title: 'Gemini' },
-  openai: icons.openai,
-  grok: icons.grok,
+  openai: { ...icons.openai, rule: 'evenodd' as const },
+  grok: { ...icons.grok, rule: 'evenodd' as const },
   ethereum: { ...icons.ethereum, hex: '627EEA' },
   solana: icons.solana,
   sui: icons.sui,
