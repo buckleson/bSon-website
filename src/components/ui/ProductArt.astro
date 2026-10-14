@@ -2,16 +2,24 @@
 import { brand, glyph, type BrandKey } from '@utils/glyphs';
 
 /**
- * Small looping scene per product (pure SVG + CSS, no JavaScript), used
- * wherever a product needs an image: home accordion, product cards.
- * - hyper-0x: bank, fintech and AI L2s (and a fourth that comes and goes)
- *   stream into the L1, whose blocks slide by in different sizes.
+ * One looping scene per product (pure SVG + CSS, no JavaScript), used
+ * wherever a product needs a picture: the home accordion, product cards, the
+ * product page and services. Each scene has a title bar, a labelled diagram
+ * with small data (counts, amounts, statuses) and three numbered captions at
+ * the bottom that light up in turn, so it reads at a glance and explains
+ * itself on a closer look.
+ * - hyper-0x: bank, fintech and AI L2s (and one added live) pass rule checks
+ *   and settle on the L1, which seals blocks of different sizes; bridges to
+ *   public chains below.
  * - pavii: prompts and tool calls from three agents meet the Pavii shield;
- *   safe ones pass to tools, data or users; malicious ones turn red, show why
- *   they were blocked, crack and fall.
- * - hyper-wallet: a trade settles both legs at once.
- * - h0x-pay: a payment drops a slice into a growing gold balance.
- * - hyperrun: a match result is signed and rewards pay out.
+ *   safe ones pass to tools, data or users, malicious ones turn red, show
+ *   which gate stopped them, crack and fall; receipts tick by.
+ * - hyper-wallet: chains and exchanges on the left, a swap in the phone
+ *   settling both legs at once, the rest of the app on the right.
+ * - h0x-pay: a payment sends a slice into a tokenized gold balance; roadmap.
+ * - hyperrun: a match ends, the result is signed, players, fans and sponsors
+ *   are paid.
+ * Values in the scenes are illustrations, not live data.
  */
 interface Props {
   product: 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
@@ -21,83 +29,175 @@ interface Props {
 }
 
 const { product, class: className, fill = false } = Astro.props;
-// Hyper 0X: four L2s (one added and removed on a loop) feed one L1 whose
-// blocks vary in size; the chain repeats every 120 units so it loops cleanly.
+const W = 440;
+const H = 360;
+
+const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =>
+  `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 256 256" class="${cls}">${glyph(name)}</svg>`;
+const logo = (key: BrandKey, x: number, y: number, size: number, white = false) => {
+  const b = brand(key);
+  return `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 24 24"><path d="${b.path}"${b.rule ? ` fill-rule="${b.rule}"` : ''} fill="${white ? '#ffffff' : `#${b.hex}`}"/></svg>`;
+};
+
+const META = {
+  'hyper-0x': { title: 'How Hyper 0X works', icon: 'cube', live: true, dur: 9, steps: [['Each app gets', 'its own L2'], ['Every L2 settles', 'on one L1'], ['Final in one pass,', 'no reorgs']] },
+  pavii: { title: 'How Pavii secures agents', icon: 'shield-check', live: true, dur: 12, steps: [['Agents send prompts', 'and tool calls'], ['Six gates check', 'every call'], ['Bad calls stop,', 'receipts on-chain']] },
+  'hyper-wallet': { title: 'Inside Hyper Wallet', icon: 'wallet', live: true, dur: 8, steps: [['Every chain in', 'one app'], ['Best-route swap,', 'MEV-protected'], ['Both legs settle', 'at once']] },
+  'h0x-pay': { title: 'How H0X Pay works', icon: 'coins', live: false, dur: 9, steps: [['Pay as usual,', 'by link or QR'], ['A slice of each', 'payment is invested'], ['Your tokenized', 'gold grows']] },
+  hyperrun: { title: 'How HyperRun pays out', icon: 'crosshair', live: false, dur: 9, steps: [['Play a ranked', 'match'], ['The result is', 'signed'], ['Players and fans', 'get paid']] },
+} as const;
+const meta = META[product];
+
+// Hyper 0X
 const h0Nodes = [
-  { x: 58, label: 'Bank L2', icon: 'bank' },
-  { x: 154, label: 'Fintech L2', icon: 'credit-card' },
-  { x: 250, label: 'AI L2', icon: 'robot' },
-  { x: 346, label: 'New L2', icon: 'plus-circle', dynamic: true },
+  { x: 70, label: 'Bank L2', sub: 'KYC · limits', icon: 'bank', check: 'KYC ✓' },
+  { x: 166, label: 'Fintech L2', sub: 'Payments', icon: 'credit-card', check: 'limit ✓' },
+  { x: 262, label: 'AI L2', sub: 'Audit trail', icon: 'robot', check: 'signed ✓' },
+  { x: 358, label: 'New L2', sub: 'Added live', icon: 'plus-circle', dynamic: true },
 ];
 const h0Widths = [10, 22, 14, 28, 8, 18];
 const h0Gap = (120 - h0Widths.reduce((a, b) => a + b, 0)) / h0Widths.length;
 const h0Blocks: { x: number; w: number }[] = [];
-for (let x = 76, i = 0; x < 380; i++) {
+for (let x = 76, i = 0; x < 440; i++) {
   const w = h0Widths[i % h0Widths.length];
   h0Blocks.push({ x, w });
   x += w + h0Gap;
 }
-// Pavii: six calls from three agents on three lanes; safe ones reach a
-// system, malicious ones are stopped at the shield with the reason shown.
-const pvLane = [64, 124, 184];
+const h0Bridges: { label: string; brand?: BrandKey; icon?: string; x: number; w: number }[] = [
+  { label: 'Ethereum', brand: 'ethereum', x: 70, w: 86 },
+  { label: 'Solana', brand: 'solana', x: 162, w: 78 },
+  { label: 'Sui', brand: 'sui', x: 246, w: 60 },
+  { label: 'Core banking', icon: 'bank', x: 312, w: 112 },
+];
+
+// Pavii (scene drawn 20 right, 40 down from its original 400x260 layout)
+const pvLane = [104, 164, 224];
 const pvSources: BrandKey[] = ['claude', 'openai', 'gemini'];
 const pvTargets = [
   { icon: 'plugs', label: 'Tools' },
   { icon: 'database', label: 'Data' },
   { icon: 'users', label: 'Users' },
 ];
+const pvGates = ['Injection', 'Privacy', 'Supply chain', 'Budget', 'Egress', 'Output'];
 // `still`: the moment shown when motion is reduced (seconds into the loop).
-const pvItems: { label: string; tool: boolean; bad: boolean; from: number; to?: number; reason?: string; still: number }[] = [
+const pvItems: { label: string; tool: boolean; bad: boolean; from: number; to?: number; reason?: string; gate?: number; still: number }[] = [
   { label: 'Summarise Q3 report', tool: false, bad: false, from: 0, to: 2, still: -2.6 },
-  { label: 'email.send(all, db)', tool: true, bad: true, from: 1, reason: 'data exfiltration', still: -2.3 },
+  { label: 'email.send(all, db)', tool: true, bad: true, from: 1, reason: 'data exfiltration', gate: 4, still: -2.3 },
   { label: 'crm.lookup(4821)', tool: true, bad: false, from: 2, to: 1, still: -8 },
-  { label: 'Ignore all your rules', tool: false, bad: true, from: 0, reason: 'prompt injection', still: -8 },
+  { label: 'Ignore all your rules', tool: false, bad: true, from: 0, reason: 'prompt injection', gate: 0, still: -8 },
   { label: 'invoice.create()', tool: true, bad: false, from: 1, to: 0, still: -8 },
-  { label: 'wallet.send($50k)', tool: true, bad: true, from: 2, reason: 'over budget', still: -8 },
+  { label: 'wallet.send($50k)', tool: true, bad: true, from: 2, reason: 'over budget', gate: 3, still: -8 },
 ];
-const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =>
-  `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 256 256" class="${cls}">${glyph(name)}</svg>`;
+const gateX = (i: number) => 172 + (i % 3) * 52;
+const gateY = (i: number) => (i < 3 ? 240 : 256);
+
+// Hyper Wallet
+const hwChains: (BrandKey | 'more')[] = ['bitcoin', 'ethereum', 'solana', 'sui', 'tether', 'more'];
+const hwInside = [
+  { icon: 'chart-line-up', label: 'Perps' },
+  { icon: 'buildings', label: 'Pre-IPO stocks' },
+  { icon: 'chart-pie-slice', label: 'Index funds' },
+  { icon: 'diamond', label: 'Tokenized gold' },
+  { icon: 'target', label: 'Predictions' },
+  { icon: 'code', label: 'White-label SDK' },
+];
+
+// H0X Pay
+const hpPhases = [
+  { n: 'Phase 1', label: 'Tokenized gold', x: 14 },
+  { n: 'Phase 2', label: 'Funds, stocks, bonds', x: 152 },
+  { n: 'Phase 3', label: 'Crypto payments', x: 290 },
+];
+
+// HyperRun
+const hrRows = [
+  { icon: 'user', label: 'Ava · player', amount: '+$25.00' },
+  { icon: 'users-three', label: 'Fans who picked Ava', amount: '+$8.40' },
+  { icon: 'handshake', label: 'Ava’s sponsors', amount: '+$4.10' },
+];
+const hrBuilt = [
+  { icon: 'wallet', label: 'Hyper Wallet SDK', x: 14 },
+  { icon: 'scroll', label: 'Rewards contract', x: 152 },
+  { icon: 'seal-check', label: 'Signed results', x: 290 },
+];
 ---
 
-<div class:list={['pa overflow-hidden rounded-[inherit] bg-[#0e1014]', fill ? 'absolute inset-0' : 'relative', className]} role="img" aria-label={`${product} animation`}>
-  <svg viewBox="0 0 400 260" class="block h-full w-full" preserveAspectRatio={fill ? 'xMidYMid meet' : 'xMidYMid slice'}>
+<div class:list={['pa accent-warm overflow-hidden rounded-[inherit] bg-[#0c0c0c]', fill ? 'absolute inset-0' : 'relative', className]} role="img" aria-label={`${meta.title}: ${meta.steps.map(step => step.join(' ')).join('; ')}`} style={`--pa-dur:${meta.dur}s`}>
+  <svg viewBox={`0 0 ${W} ${H}`} class="block h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
     <defs>
-      <pattern id={`pa-grid-${product}`} width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#23272f" /></pattern>
+      <pattern id={`pa-grid-${product}`} width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#212121" /></pattern>
     </defs>
-    <rect width="400" height="260" fill={`url(#pa-grid-${product})`} />
+    <rect width={W} height={H} fill={`url(#pa-grid-${product})`} />
+
+    {/* Title bar */}
+    <rect x="14" y="10" width="22" height="22" rx="7" class="pa-chip-accent" />
+    <Fragment set:html={icon(meta.icon, 17, 13, 16, 'pa-ic-accent')} />
+    <text x="44" y="25.5" class="pa-title">{meta.title}</text>
+    {meta.live ? (
+      <g>
+        <rect x={W - 70} y="12" width="56" height="18" rx="9" class="pa-pill" />
+        <circle cx={W - 59} cy="21" r="3" class="pa-live-dot" />
+        <text x={W - 51} y="24.5" class="pa-pill-t">LIVE</text>
+      </g>
+    ) : (
+      <g>
+        <rect x={W - 100} y="12" width="86" height="18" rx="9" class="pa-pill-accent" />
+        <text x={W - 57} y="24.5" text-anchor="middle" class="pa-pill-t-accent">COMING SOON</text>
+      </g>
+    )}
+    <line x1="14" y1="40" x2={W - 14} y2="40" class="pa-rule" />
 
     {product === 'hyper-0x' && (
       <g>
-        <defs>
-          <clipPath id="h0-lane"><rect x="196" y="194" width="176" height="32" rx="9" /></clipPath>
-        </defs>
-        <rect x="304" y="30" width="84" height="38" rx="12" class="h0-slot" />
-        <text x="346" y="53" text-anchor="middle" class="pa-t-dim h0-slot-t">+ add an L2</text>
+        <rect x="314" y="52" width="88" height="42" rx="12" class="h0-slot" />
+        <text x="358" y="77" text-anchor="middle" class="pa-t-sm h0-slot-t">+ add an L2</text>
         {h0Nodes.map((node, i) => (
           <g class:list={[node.dynamic && 'h0-dyn']}>
-            <line x1={node.x} y1="68" x2={node.x} y2="186" class="pa-line" />
+            <line x1={node.x} y1="94" x2={node.x} y2="198" class="pa-line" />
             <rect x="-6" y="-6" width="12" height="12" rx="3" class="pa-block">
-              <animateMotion dur={`${1.3 + i * 0.25}s`} begin={`${i * 0.4}s`} repeatCount="indefinite" path={`M${node.x},70 L${node.x},184`} />
+              <animateMotion dur={`${1.3 + i * 0.25}s`} begin={`${i * 0.4}s`} repeatCount="indefinite" path={`M${node.x},98 L${node.x},194`} />
               <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.88;1" dur={`${1.3 + i * 0.25}s`} begin={`${i * 0.4}s`} repeatCount="indefinite" />
             </rect>
-            <rect x={node.x - 42} y="30" width="84" height="38" rx="12" class="pa-node" />
-            <Fragment set:html={icon(node.icon, node.x - 34, 40, 18)} />
-            <text x={node.x - 12} y="53" class="pa-t-sm">{node.label}</text>
+            {node.check && (
+              <g class="h0-check" style={`animation-delay:${i * 0.9}s`}>
+                <rect x={node.x + 6} y="132" width="46" height="16" rx="8" class="pa-ok-bg" />
+                <text x={node.x + 29} y="143.5" text-anchor="middle" class="pa-t-ok">{node.check}</text>
+              </g>
+            )}
+            <rect x={node.x - 44} y="52" width="88" height="42" rx="12" class="pa-node" />
+            <Fragment set:html={icon(node.icon, node.x - 38, 61, 16)} />
+            <text x={node.x - 18} y="70" class="pa-t">{node.label}</text>
+            <text x={node.x - 18} y="83" class="pa-t-xs">{node.sub}</text>
           </g>
         ))}
-        <rect x="20" y="186" width="360" height="48" rx="14" class="pa-chain" />
-        <svg x="34" y="198" width="22" height="24" viewBox="280 210 700 820" fill="none" stroke="#fff" stroke-linejoin="round" aria-hidden="true">
+        <rect x="14" y="198" width="412" height="48" rx="14" class="pa-chain" />
+        <svg x="26" y="210" width="20" height="24" viewBox="280 210 700 820" fill="none" stroke="#fff" stroke-linejoin="round" aria-hidden="true">
           <path vector-effect="non-scaling-stroke" stroke-width="1.6" d="M318 385Q318 360 339 347L494 247Q527 228 527 268L527 855Q527 870 513 880L352 988Q318 1005 318 970ZM527 362L436 421Q420 431 420 450L420 800Q420 818 436 828L513 880M736 385Q736 360 757 347L912 247Q945 228 945 268L945 855Q945 870 931 880L770 988Q736 1005 736 970ZM945 362L854 421Q838 431 838 450L838 800Q838 818 854 828L931 880" />
           <rect vector-effect="non-scaling-stroke" stroke-width="1.6" x="557" y="541" width="146" height="151" rx="22" />
         </svg>
-        <text x="64" y="208" class="pa-t-w">Hyper 0X L1</text>
-        <text x="64" y="222" class="pa-t-on">blocks resize with load</text>
-        <rect x="196" y="194" width="176" height="32" rx="9" class="h0-lane" />
+        <text x="54" y="217" class="pa-t-w">Hyper 0X L1</text>
+        {[48217, 48218, 48219].map((n, i) => (
+          <text x="54" y="231" class:list={['pa-t-on h0-count', i === 0 && 'h0-first']} style={`animation-delay:${i * 3}s`}>block #{n.toLocaleString('en-US')} · final ✓</text>
+        ))}
+        <rect x="196" y="206" width="220" height="32" rx="9" class="h0-lane" />
+        <clipPath id="h0-lane"><rect x="196" y="206" width="220" height="32" rx="9" /></clipPath>
         <g clip-path="url(#h0-lane)">
           <g class="h0-chain">
-            {h0Blocks.map(block => <rect x={block.x} y="201" width={block.w} height="18" rx="4" class="h0-chunk" />)}
+            {h0Blocks.map(block => <rect x={block.x} y="213" width={block.w} height="18" rx="4" class="h0-chunk" />)}
           </g>
         </g>
+        <text x="16" y="282" class="pa-t-xs">BRIDGES</text>
+        {h0Bridges.map((bridge, i) => (
+          <g>
+            <line x1={bridge.x + bridge.w / 2} y1="246" x2={bridge.x + bridge.w / 2} y2="264" class="pa-line" />
+            <circle r="2.4" class="pa-dot">
+              <animateMotion dur="1.6s" begin={`${i * 0.4}s`} repeatCount="indefinite" path={`M${bridge.x + bridge.w / 2},248 L${bridge.x + bridge.w / 2},262`} />
+            </circle>
+            <rect x={bridge.x} y="264" width={bridge.w} height="26" rx="13" class="pa-node" />
+            {bridge.brand ? <Fragment set:html={logo(bridge.brand, bridge.x + 8, 270, 14)} /> : <Fragment set:html={icon(bridge.icon!, bridge.x + 8, 270, 14)} />}
+            <text x={bridge.x + 27} y="281" class="pa-t-sm">{bridge.label}</text>
+          </g>
+        ))}
       </g>
     )}
 
@@ -107,38 +207,49 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
           <clipPath id="pv-left"><rect x="-70" y="-20" width="70" height="40" /></clipPath>
           <clipPath id="pv-right"><rect x="0" y="-20" width="70" height="40" /></clipPath>
         </defs>
-        <text x="24" y="34" text-anchor="middle" class="pa-t-dim">Agents</text>
+        <text x="44" y="70" text-anchor="middle" class="pa-t-xs">AGENTS</text>
         {pvSources.map((key, i) => (
           <g>
-            <circle cx="24" cy={pvLane[i]} r="14" class="pa-node" />
-            <svg x="16" y={pvLane[i] - 8} width="16" height="16" viewBox="0 0 24 24"><path d={brand(key).path} fill-rule={brand(key).rule} fill={key === 'openai' ? '#ffffff' : `#${brand(key).hex}`} /></svg>
+            <circle cx="44" cy={pvLane[i]} r="14" class="pa-node" />
+            <Fragment set:html={logo(key, 36, pvLane[i] - 8, 16, key === 'openai')} />
           </g>
         ))}
-        <text x="372" y="34" text-anchor="middle" class="pa-t-dim">Systems</text>
+        <text x="392" y="70" text-anchor="middle" class="pa-t-xs">SYSTEMS</text>
         {pvTargets.map((target, i) => (
           <g>
-            <rect x="355" y={pvLane[i] - 17} width="34" height="34" rx="10" class="pa-node" />
-            <Fragment set:html={icon(target.icon, 363, pvLane[i] - 9, 18)} />
-            <text x="372" y={pvLane[i] + 28} text-anchor="middle" class="pa-t-xs">{target.label}</text>
+            <rect x="375" y={pvLane[i] - 17} width="34" height="34" rx="10" class="pa-node" />
+            <Fragment set:html={icon(target.icon, 383, pvLane[i] - 9, 18)} />
+            <text x="392" y={pvLane[i] + 27} text-anchor="middle" class="pa-t-xs">{target.label.toUpperCase()}</text>
           </g>
         ))}
 
-        <circle cx="204" cy="124" r="46" class="pa-shield-ring" />
+        <circle cx="224" cy="164" r="46" class="pa-shield-ring" />
         {pvItems.map((item, i) => (
-          <circle cx="204" cy="124" r="36" class={item.bad ? 'pv-flash' : 'pv-pulse'} style={`animation-delay:${i * 2}s;--still:${item.still}s`} />
+          <circle cx="224" cy="164" r="36" class={item.bad ? 'pv-flash' : 'pv-pulse'} style={`animation-delay:${i * 2}s;--still:${item.still}s`} />
         ))}
-        <circle cx="204" cy="124" r="34" class="pa-chain" />
-        <svg x="184" y="104" width="40" height="40" viewBox="84 92 1086 1086" class="pv-logo" aria-hidden="true">
+        <circle cx="224" cy="164" r="34" class="pa-chain" />
+        <svg x="204" y="144" width="40" height="40" viewBox="84 92 1086 1086" class="pv-logo" aria-hidden="true">
           <circle cx="627" cy="613" r="503" fill="none" stroke="currentColor" stroke-width="56" />
           <path d="M376 335H728A185 199 0 0 1 728 733H665V980L552 848V613H722A79 79 0 0 0 722 455H497V710L376 567Z" fill="currentColor" />
         </svg>
-        <text x="204" y="190" text-anchor="middle" class="pa-t-w">Pavii</text>
-        <text x="204" y="203" text-anchor="middle" class="pa-t-dim">6 security gates</text>
+        <text x="224" y="224" text-anchor="middle" class="pa-t-w">Pavii · 6 gates</text>
+        {pvGates.map((gate, i) => (
+          <g>
+            <rect x={gateX(i) - 25} y={gateY(i) - 11} width="50" height="14" rx="7" class="pv-gate" />
+            <text x={gateX(i)} y={gateY(i) - 1.4} text-anchor="middle" class="pv-gate-t">{gate}</text>
+          </g>
+        ))}
+        {pvItems.filter(item => item.bad).map(item => (
+          <rect x={gateX(item.gate!) - 25} y={gateY(item.gate!) - 11} width="50" height="14" rx="7" class="pv-gate-hit" style={`animation-delay:${pvItems.indexOf(item) * 2}s;--still:${item.still}s`} />
+        ))}
         {pvItems.filter(item => item.bad).map(item => (
           <g class="pv-reason" style={`animation-delay:${pvItems.indexOf(item) * 2}s;--still:${item.still}s`}>
-            <rect x="136" y="214" width="136" height="22" rx="11" class="pv-reason-bg" />
-            <text x="204" y="229" text-anchor="middle" class="pv-reason-t">Blocked: {item.reason}</text>
+            <rect x="156" y="270" width="136" height="22" rx="11" class="pv-reason-bg" />
+            <text x="224" y="285" text-anchor="middle" class="pv-reason-t">Blocked: {item.reason}</text>
           </g>
+        ))}
+        {[1042, 1043, 1044].map((n, i) => (
+          <text x="16" y="286" class="pa-t-xs pv-receipt" style={`animation-delay:${i * 4}s`}>RECEIPT #{n} · ON HYPER 0X</text>
         ))}
 
         {pvItems.map((item, i) => {
@@ -171,111 +282,284 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
 
     {product === 'hyper-wallet' && (
       <g>
-        <rect x="140" y="20" width="120" height="220" rx="22" class="pa-phone" />
-        <text x="200" y="52" text-anchor="middle" class="pa-t-dim">Swap</text>
-        <g class="pa-swap-a"><rect x="154" y="66" width="92" height="40" rx="10" class="pa-node" /><Fragment set:html={icon('currency-eth', 162, 76, 20)} /><text x="190" y="91" class="pa-t">0.5 ETH</text></g>
-        <g class="pa-swap-b"><rect x="154" y="122" width="92" height="40" rx="10" class="pa-node" /><Fragment set:html={icon('currency-circle-dollar', 162, 132, 20)} /><text x="190" y="147" class="pa-t">1,250 USDC</text></g>
-        <g class="pa-settled"><rect x="154" y="184" width="92" height="32" rx="10" class="pa-ok-bg" /><text x="200" y="204" text-anchor="middle" class="pa-t-ok">Settled · both legs</text></g>
-        <rect x="24" y="92" width="96" height="40" rx="12" class="pa-node" /><text x="72" y="117" text-anchor="middle" class="pa-t">Many chains</text>
-        <rect x="280" y="92" width="96" height="40" rx="12" class="pa-chain" /><text x="328" y="117" text-anchor="middle" class="pa-t-w">Hyper 0X</text>
+        <text x="16" y="60" class="pa-t-xs">CHAINS</text>
+        {hwChains.map((chain, i) => {
+          const x = 16 + (i % 2) * 52;
+          const y = 68 + Math.floor(i / 2) * 32;
+          return (
+            <g class="hw-chain" style={`animation-delay:${i * 0.35}s`}>
+              <rect x={x} y={y} width="46" height="26" rx="9" class="pa-node" />
+              {chain === 'more' ? <text x={x + 23} y={y + 16.5} text-anchor="middle" class="pa-t-sm">+5 more</text> : <Fragment set:html={logo(chain, x + 15, y + 5, 16)} />}
+            </g>
+          );
+        })}
+        <text x="16" y="182" class="pa-t-xs">DEPOSIT FROM</text>
+        <rect x="16" y="190" width="98" height="26" rx="9" class="pa-node" />
+        <Fragment set:html={logo('binance', 24, 196, 14)} />
+        <text x="44" y="207" class="pa-t-sm">Binance</text>
+        <rect x="16" y="222" width="98" height="26" rx="9" class="pa-node" />
+        <Fragment set:html={logo('coinbase', 24, 228, 14)} />
+        <text x="44" y="239" class="pa-t-sm">Coinbase</text>
+        <rect x="16" y="262" width="98" height="26" rx="9" class="pa-ok-bg" />
+        <Fragment set:html={icon('fingerprint', 24, 268, 14, 'pa-ic-ok')} />
+        <text x="44" y="279" class="pa-t-ok">No seed phrase</text>
+
+        <rect x="130" y="50" width="180" height="248" rx="24" class="pa-phone" />
+        <rect x="196" y="58" width="48" height="6" rx="3" fill="#000" />
+        <text x="146" y="82" class="pa-t-xs">HYPER WALLET</text>
+        <Fragment set:html={icon('fingerprint', 280, 71, 14, 'pa-ic-accent')} />
+        <text x="146" y="98" class="pa-t-xs">PORTFOLIO</text>
+        <text x="146" y="116" class="pa-t-big">$12,480.25</text>
+        <text x="146" y="129" class="pa-t-ok">+2.4% this week</text>
+        <rect x="142" y="138" width="156" height="94" rx="14" class="pa-node" />
+        <text x="152" y="152" class="pa-t-xs">SWAP</text>
+        <Fragment set:html={logo('ethereum', 152, 160, 14)} />
+        <text x="172" y="171" class="pa-t">0.50 ETH</text>
+        <text x="288" y="171" text-anchor="end" class="pa-t-xs">FROM</text>
+        <line x1="152" y1="185" x2="288" y2="185" class="pa-rule" />
+        <circle cx="220" cy="185" r="9" class="hw-arrow-bg" />
+        <g class="hw-arrow"><Fragment set:html={icon('arrows-down-up', 213, 178, 14, 'pa-ic-w')} /></g>
+        <Fragment set:html={icon('currency-circle-dollar', 151, 198, 16, 'hw-usdc')} />
+        <text x="172" y="210" class="pa-t">1,250.00 USDC</text>
+        <text x="288" y="210" text-anchor="end" class="pa-t-xs">TO</text>
+        <text x="152" y="224" class="pa-t-xs">BEST ROUTE · 3 VENUES</text>
+        <g>
+          <rect x="142" y="240" width="156" height="22" rx="11" class="pa-node" />
+          <Fragment set:html={icon('shield-check', 150, 244, 14, 'pa-ic-accent')} />
+          <text x="168" y="255" class="pa-t-sm">MEV-protected · one fee</text>
+        </g>
+        <g class="hw-swap">
+          <rect x="142" y="268" width="156" height="22" rx="11" class="pa-accent-bg" />
+          <text x="220" y="283" text-anchor="middle" class="pa-t-w">Swap</text>
+        </g>
+        <g class="hw-done">
+          <rect x="142" y="268" width="156" height="22" rx="11" class="pa-ok-solid" />
+          <text x="220" y="283" text-anchor="middle" class="pa-t-dark">Settled · both legs ✓</text>
+        </g>
+
+        <text x="326" y="60" class="pa-t-xs">ALSO IN THE APP</text>
+        {hwInside.map((item, i) => (
+          <g class="hw-item" style={`animation-delay:${i * 0.5}s`}>
+            <rect x="326" y={68 + i * 34} width="100" height="26" rx="9" class="pa-node" />
+            <Fragment set:html={icon(item.icon, 334, 74 + i * 34, 14)} />
+            <text x="353" y={85 + i * 34} class="pa-t-sm">{item.label}</text>
+          </g>
+        ))}
       </g>
     )}
 
     {product === 'h0x-pay' && (
       <g>
-        <rect x="30" y="70" width="140" height="88" rx="16" class="pa-node" />
-        <Fragment set:html={icon('storefront', 44, 84, 22)} />
-        <text x="74" y="100" class="pa-t">Coffee shop</text>
-        <text x="44" y="138" class="pa-t-big">$40.00</text>
-        <g class="pa-slice"><rect x="-26" y="-12" width="52" height="24" rx="12" class="pa-accent-bg" /><text y="4" text-anchor="middle" class="pa-t-w">$0.80</text></g>
-        <rect x="250" y="50" width="120" height="160" rx="18" class="pa-node" />
-        <text x="310" y="78" text-anchor="middle" class="pa-t-dim">Gold balance</text>
-        <rect x="270" y="130" width="80" height="60" rx="6" class="pa-gold" />
-        <Fragment set:html={icon('diamond', 298, 92, 24)} />
+        <rect x="14" y="54" width="156" height="128" rx="16" class="pa-node" />
+        <Fragment set:html={icon('storefront', 26, 66, 18)} />
+        <text x="50" y="76" class="pa-t">Coffee shop</text>
+        <text x="50" y="88" class="pa-t-xs">PAID BY QR CODE</text>
+        <Fragment set:html={icon('qr-code', 144, 64, 16, 'pa-ic-dim')} />
+        <text x="26" y="124" class="pa-t-big">$40.00</text>
+        <rect x="26" y="140" width="132" height="26" rx="9" class="pa-ok-bg" />
+        <Fragment set:html={icon('check-circle', 33, 146, 14, 'pa-ic-ok')} />
+        <text x="52" y="157" class="pa-t-ok">Settled on Hyper 0X</text>
+
+        <rect x="180" y="96" width="96" height="44" rx="12" class="pa-node" />
+        <text x="228" y="113" text-anchor="middle" class="pa-t-xs">YOUR PLAN</text>
+        <text x="228" y="129" text-anchor="middle" class="pa-t">2% of each</text>
+        <line x1="170" y1="118" x2="180" y2="118" class="pa-line" />
+        <line x1="276" y1="118" x2="284" y2="118" class="pa-line" />
+        <g class="hp-slice"><rect x="-22" y="-10" width="44" height="20" rx="10" class="pa-accent-bg" /><text y="4" text-anchor="middle" class="pa-t-w">$0.80</text></g>
+
+        <rect x="284" y="54" width="142" height="152" rx="16" class="pa-node" />
+        <Fragment set:html={icon('diamond', 296, 66, 18, 'hp-gold-ic')} />
+        <text x="320" y="76" class="pa-t">Tokenized gold</text>
+        <text x="320" y="88" class="pa-t-xs">PHASE 1</text>
+        <text x="296" y="122" class="pa-t-big hp-bal hp-bal-a">0.82 g</text>
+        <text x="296" y="122" class="pa-t-big hp-bal hp-bal-b">0.83 g</text>
+        <text x="296" y="136" class="pa-t-xs">≈ $71.40 · +1 SLICE</text>
+        <polyline points="296,192 314,186 332,188 350,178 368,180 386,170 404,164 414,158" class="hp-spark" />
+        <circle cx="414" cy="158" r="3" class="hp-spark-dot" />
+
+        <text x="16" y="230" class="pa-t-xs">ROADMAP</text>
+        {hpPhases.map((phase, i) => (
+          <g>
+            <rect x={phase.x} y="238" width="132" height="44" rx="12" class={i === 0 ? 'pa-node-on' : 'pa-node'} />
+            <text x={phase.x + 12} y="254" class="pa-t-xs">{phase.n.toUpperCase()}</text>
+            <text x={phase.x + 12} y="270" class="pa-t">{phase.label}</text>
+          </g>
+        ))}
       </g>
     )}
 
     {product === 'hyperrun' && (
       <g>
-        <rect x="24" y="60" width="150" height="140" rx="18" class="pa-node" />
-        <Fragment set:html={icon('crosshair', 74, 82, 52, 'pa-ic-accent')} />
-        <text x="99" y="166" text-anchor="middle" class="pa-t">Match · Ava wins</text>
-        <g class="pa-signed"><rect x="190" y="112" width="76" height="34" rx="17" class="pa-ok-bg" /><text x="228" y="134" text-anchor="middle" class="pa-t-ok">Signed</text></g>
-        <rect x="286" y="80" width="96" height="100" rx="18" class="pa-chain" />
-        <Fragment set:html={icon('trophy', 314, 96, 40, 'pa-ic-w')} />
-        <text x="334" y="160" text-anchor="middle" class="pa-t-w">Reward</text>
-        {[0, 1, 2].map(i => <circle cx={318 + i * 16} cy="200" r="6" class="pa-coin" style={`animation-delay:${i * 0.25}s`} />)}
+        <rect x="14" y="54" width="162" height="152" rx="16" class="pa-node" />
+        <Fragment set:html={icon('crosshair', 26, 66, 18, 'pa-ic-accent')} />
+        <text x="50" y="76" class="pa-t">Ranked match</text>
+        <text x="50" y="88" class="pa-t-xs">ROUND 12 · LIVE</text>
+        <text x="40" y="128" class="pa-t-sm">Ava</text>
+        <text x="150" y="128" text-anchor="end" class="pa-t-sm">Kai</text>
+        <text x="95" y="132" text-anchor="middle" class="pa-t-big hr-score hr-score-a">12 : 9</text>
+        <text x="95" y="132" text-anchor="middle" class="pa-t-big hr-score hr-score-b">13 : 9</text>
+        <rect x="26" y="142" width="62" height="5" rx="2.5" fill="#2a2a2a" />
+        <rect x="26" y="142" width="62" height="5" rx="2.5" class="hr-hp-a" />
+        <rect x="102" y="142" width="62" height="5" rx="2.5" fill="#2a2a2a" />
+        <rect x="102" y="142" width="62" height="5" rx="2.5" class="hr-hp-b" />
+        <g class="hr-win">
+          <rect x="26" y="160" width="138" height="30" rx="10" class="pa-accent-bg" />
+          <Fragment set:html={icon('trophy', 36, 167, 16, 'pa-ic-w')} />
+          <text x="58" y="179" class="pa-t-w">Ava wins the match</text>
+        </g>
+
+        <g class="hr-seal">
+          <circle cx="224" cy="122" r="28" class="pa-node" />
+          <circle cx="224" cy="122" r="22" class="pa-ok-bg" />
+          <Fragment set:html={icon('seal-check', 212, 110, 24, 'pa-ic-ok')} />
+          <text x="224" y="166" text-anchor="middle" class="pa-t-ok">Result signed</text>
+          <text x="224" y="178" text-anchor="middle" class="pa-t-xs">0x9F…C2</text>
+        </g>
+        {[0, 1, 2].map(i => (
+          <circle r="4" class="pa-coin">
+            <animateMotion dur="2.2s" begin={`${3.6 + i * 0.5}s`} repeatCount="indefinite" path={`M224,122 Q252,${92 + i * 26} 290,${110 + i * 30}`} />
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="2.2s" begin={`${3.6 + i * 0.5}s`} repeatCount="indefinite" />
+          </circle>
+        ))}
+
+        <rect x="272" y="54" width="154" height="152" rx="16" class="pa-node" />
+        <text x="284" y="74" class="pa-t-xs">PAYOUTS</text>
+        {hrRows.map((row, i) => (
+          <g class="hr-row" style={`animation-delay:${i * 0.45}s`}>
+            <rect x="282" y={84 + i * 38} width="134" height="30" rx="9" fill="#1f1f1f" />
+            <Fragment set:html={icon(row.icon, 289, 92 + i * 38, 14)} />
+            <text x="308" y={99 + i * 38} class="pa-t-sm">{row.label}</text>
+            <text x="410" y={109 + i * 38} text-anchor="end" class="pa-t-ok">{row.amount}</text>
+          </g>
+        ))}
+
+        <text x="16" y="230" class="pa-t-xs">HOW IT STAYS FAIR</text>
+        {hrBuilt.map(item => (
+          <g>
+            <rect x={item.x} y="238" width="132" height="44" rx="12" class="pa-node" />
+            <Fragment set:html={icon(item.icon, item.x + 12, 253, 14, 'pa-ic-accent')} />
+            <text x={item.x + 32} y="264" class="pa-t">{item.label}</text>
+          </g>
+        ))}
       </g>
     )}
+
+    {/* Numbered captions that light up in turn */}
+    {meta.steps.map((step, i) => {
+      const x = 14 + i * 140;
+      const delay = `animation-delay:${i * (meta.dur / 3) - meta.dur}s`;
+      return (
+        <g>
+          <rect x={x} y="306" width="132" height="42" rx="12" class="pa-step-bg" />
+          <rect x={x} y="306" width="132" height="42" rx="12" class="pa-step-on" style={delay} />
+          <circle cx={x + 17} cy="327" r="8.5" class="pa-step-num" />
+          <circle cx={x + 17} cy="327" r="8.5" class="pa-step-num-on" style={delay} />
+          <text x={x + 17} y="330.5" text-anchor="middle" class="pa-step-n">{i + 1}</text>
+          <text x={x + 32} y="324" class="pa-step-t">{step[0]}</text>
+          <text x={x + 32} y="336" class="pa-step-t">{step[1]}</text>
+        </g>
+      );
+    })}
   </svg>
 </div>
 
 <style is:global>
   .pa { --pa-accent: var(--accent-500); }
-  .pa-node { fill: #1a1d23; stroke: #2c313a; stroke-width: 1.5; }
+  .pa-node { fill: #171717; stroke: #2a2a2a; stroke-width: 1.2; }
+  .pa-node-on { fill: color-mix(in oklab, var(--pa-accent) 16%, #171717); stroke: var(--pa-accent); stroke-width: 1.2; }
   .pa-chain { fill: var(--pa-accent); }
-  .pa-phone { fill: #15171c; stroke: #2c313a; stroke-width: 2; }
-  .pa-line { stroke: #2c313a; stroke-width: 1.5; stroke-dasharray: 3 5; }
-  .pa-t { fill: #e8e9ee; font-size: 12px; font-weight: 600; font-family: var(--font-sans); }
-  .pa-t-w { fill: #fff; font-size: 12px; font-weight: 650; font-family: var(--font-sans); }
-  .pa-t-dim { fill: #8b8f99; font-size: 11px; font-family: var(--font-sans); }
-  .pa-t-big { fill: #fff; font-size: 20px; font-weight: 700; font-family: var(--font-display); }
-  .pa-t-ok { fill: #34d399; font-size: 11px; font-weight: 650; font-family: var(--font-sans); }
-  .pa-ok-bg { fill: rgb(52 211 153 / 0.14); }
+  .pa-phone { fill: #111111; stroke: #2e2e2e; stroke-width: 1.5; }
+  .pa-line { stroke: #303030; stroke-width: 1.2; stroke-dasharray: 3 4; }
+  .pa-rule { stroke: #262626; stroke-width: 1; }
+  .pa-title { fill: #f2f2f0; font-size: 11.5px; font-weight: 650; font-family: var(--font-sans); }
+  .pa-t { fill: #ececea; font-size: 9.5px; font-weight: 600; font-family: var(--font-sans); }
+  .pa-t-sm { fill: #c9c9c6; font-size: 8.5px; font-weight: 500; font-family: var(--font-sans); }
+  .pa-t-xs { fill: #8a8a87; font-size: 7px; font-weight: 600; letter-spacing: 0.08em; font-family: var(--font-mono); }
+  .pa-t-w { fill: #fff; font-size: 9.5px; font-weight: 650; font-family: var(--font-sans); }
+  .pa-t-on { fill: rgb(255 255 255 / 0.8); font-size: 8px; font-family: var(--font-sans); }
+  .pa-t-dark { fill: #062014; font-size: 9px; font-weight: 700; font-family: var(--font-sans); }
+  .pa-t-big { fill: #fff; font-size: 19px; font-weight: 700; font-family: var(--font-display); }
+  .pa-t-ok { fill: #4ade80; font-size: 8.5px; font-weight: 650; font-family: var(--font-sans); }
+  .pa-ok-bg { fill: rgb(74 222 128 / 0.12); }
+  .pa-ok-solid { fill: #4ade80; }
   .pa-accent-bg { fill: var(--pa-accent); }
-  .pa-ic { color: #c9ccd4; }
+  .pa-chip-accent { fill: color-mix(in oklab, var(--pa-accent) 22%, transparent); }
+  .pa-pill { fill: rgb(74 222 128 / 0.12); }
+  .pa-live-dot { fill: #4ade80; animation: pa-live 1.6s ease-in-out infinite; }
+  @keyframes pa-live { 50% { opacity: 0.35; } }
+  .pa-pill-t { fill: #4ade80; font-size: 7.5px; font-weight: 700; letter-spacing: 0.1em; font-family: var(--font-mono); }
+  .pa-pill-accent { fill: color-mix(in oklab, var(--pa-accent) 22%, transparent); }
+  .pa-pill-t-accent { fill: var(--accent-300); font-size: 7.5px; font-weight: 700; letter-spacing: 0.1em; font-family: var(--font-mono); }
+  .pa-ic { color: #c9c9c6; }
   .pa-ic-w { color: #fff; }
-  .pa-ic-accent { color: var(--pa-accent); }
+  .pa-ic-dim { color: #6f6f6c; }
+  .pa-ic-ok { color: #4ade80; }
+  .pa-ic-accent { color: var(--accent-400); }
+  .pa-dot { fill: var(--pa-accent); }
+  .pa-coin { fill: #f5c542; }
+
+  /* Captions */
+  .pa-step-bg { fill: #141414; stroke: #262626; stroke-width: 1; }
+  .pa-step-on { fill: color-mix(in oklab, var(--pa-accent) 14%, transparent); stroke: var(--pa-accent); stroke-width: 1.2; opacity: 0; animation: pa-step var(--pa-dur) linear infinite; }
+  .pa-step-num { fill: #262626; }
+  .pa-step-num-on { fill: var(--pa-accent); opacity: 0; animation: pa-step var(--pa-dur) linear infinite; }
+  .pa-step-n { fill: #fff; font-size: 9px; font-weight: 700; font-family: var(--font-sans); }
+  .pa-step-t { fill: #d6d6d3; font-size: 8.5px; font-weight: 500; font-family: var(--font-sans); }
+  @keyframes pa-step { 0%, 31% { opacity: 1; } 34%, 100% { opacity: 0; } }
 
   /* hyper-0x */
-  .pa-t-sm { fill: #e8e9ee; font-size: 10.5px; font-weight: 600; font-family: var(--font-sans); }
-  .pa-t-on { fill: rgb(255 255 255 / 0.75); font-size: 10px; font-family: var(--font-sans); }
   .pa-block { fill: var(--pa-accent); }
-  .h0-slot { fill: none; stroke: #3a404b; stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .h0-slot { fill: none; stroke: #3a3a3a; stroke-width: 1.5; stroke-dasharray: 4 4; }
   .h0-dyn { animation: h0-dyn 9s ease-in-out infinite; }
   .h0-slot-t { animation: h0-slot 9s ease-in-out infinite; }
   @keyframes h0-dyn { 0%, 22% { opacity: 0; transform: translateY(-8px); } 30%, 78% { opacity: 1; transform: none; } 86%, 100% { opacity: 0; transform: translateY(-8px); } }
   @keyframes h0-slot { 0%, 20% { opacity: 1; } 28%, 80% { opacity: 0; } 88%, 100% { opacity: 1; } }
-  .h0-lane { fill: rgb(0 0 0 / 0.18); }
+  .h0-check { opacity: 0; animation: h0-check 2.7s ease-in-out infinite; }
+  @keyframes h0-check { 0%, 30% { opacity: 0; } 40%, 75% { opacity: 1; } 90%, 100% { opacity: 0; } }
+  .h0-count { opacity: 0; animation: h0-count 9s steps(1) infinite; }
+  @keyframes h0-count { 0%, 33.2% { opacity: 1; } 33.3%, 100% { opacity: 0; } }
+  .h0-lane { fill: rgb(0 0 0 / 0.2); }
   .h0-chunk { fill: rgb(255 255 255 / 0.92); }
   .h0-chain { animation: h0-chain 6s linear infinite; }
   @keyframes h0-chain { to { transform: translateX(120px); } }
 
   /* pavii */
-  .pa-t-xs { fill: #8b8f99; font-size: 9px; font-family: var(--font-sans); }
-  .pa-shield-ring { fill: none; stroke: var(--pa-accent); stroke-width: 2; stroke-dasharray: 8 7; transform-origin: 204px 124px; animation: pa-spin 14s linear infinite; }
+  .pa-shield-ring { fill: none; stroke: var(--pa-accent); stroke-width: 2; stroke-dasharray: 8 7; transform-origin: 224px 164px; animation: pa-spin 14s linear infinite; }
   @keyframes pa-spin { to { transform: rotate(360deg); } }
   .pv-logo { color: #fff; }
-  .pv-item, .pv-half, .pv-red, .pv-ok-ring, .pv-crack, .pv-check, .pv-flash, .pv-pulse, .pv-reason { animation-duration: 12s; animation-iteration-count: infinite; animation-fill-mode: both; }
-  .pv-pill { fill: #1a1d23; stroke: #343a45; stroke-width: 1.2; }
-  .pv-kind { fill: #8b8f99; font-size: 7px; font-weight: 600; letter-spacing: 0.08em; font-family: var(--font-mono); }
-  .pv-label { fill: #eef0f4; font-size: 9.5px; font-weight: 600; font-family: var(--font-sans); }
+  .pv-gate { fill: #171717; stroke: #2e2e2e; stroke-width: 1; }
+  .pv-gate-t { fill: #b5b5b2; font-size: 6.6px; font-weight: 600; font-family: var(--font-sans); }
+  .pv-gate-hit { fill: rgb(239 68 68 / 0.28); stroke: #ef4444; stroke-width: 1.2; opacity: 0; animation-name: pv-reason; }
+  .pv-item, .pv-half, .pv-red, .pv-ok-ring, .pv-crack, .pv-check, .pv-flash, .pv-pulse, .pv-reason, .pv-gate-hit { animation-duration: 12s; animation-iteration-count: infinite; animation-fill-mode: both; }
+  .pv-pill { fill: #1a1a1a; stroke: #353535; stroke-width: 1.2; }
+  .pv-kind { fill: #8a8a87; font-size: 7px; font-weight: 600; letter-spacing: 0.08em; font-family: var(--font-mono); }
+  .pv-label { fill: #eeeeec; font-size: 9.5px; font-weight: 600; font-family: var(--font-sans); }
   .pv-ic-prompt { fill: #3b5bdb; }
   .pv-ic-tool { fill: #a16207; }
   .pv-good { animation-name: pv-good; animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1); }
   @keyframes pv-good {
-    0% { transform: translate(48px, var(--y0)) scale(0.55); opacity: 0; }
+    0% { transform: translate(68px, var(--y0)) scale(0.55); opacity: 0; }
     3% { opacity: 1; }
-    14% { transform: translate(102px, 124px) scale(1); }
-    19% { transform: translate(204px, 124px) scale(0.6); }
-    24% { transform: translate(296px, var(--y1)) scale(0.85); opacity: 1; }
-    31% { transform: translate(356px, var(--y1)) scale(0.3); opacity: 0.9; }
-    33%, 100% { transform: translate(372px, var(--y1)) scale(0.2); opacity: 0; }
+    14% { transform: translate(122px, 164px) scale(1); }
+    19% { transform: translate(224px, 164px) scale(0.6); }
+    24% { transform: translate(316px, var(--y1)) scale(0.85); opacity: 1; }
+    31% { transform: translate(376px, var(--y1)) scale(0.3); opacity: 0.9; }
+    33%, 100% { transform: translate(392px, var(--y1)) scale(0.2); opacity: 0; }
   }
   .pv-bad { animation-name: pv-bad; animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1); }
   @keyframes pv-bad {
-    0% { transform: translate(48px, var(--y0)) scale(0.55); opacity: 0; }
+    0% { transform: translate(68px, var(--y0)) scale(0.55); opacity: 0; }
     3% { opacity: 1; }
-    14% { transform: translate(102px, 124px) scale(1); }
-    15% { transform: translate(97px, 124px); }
-    16% { transform: translate(106px, 124px); }
-    17% { transform: translate(99px, 124px); }
-    18%, 32% { transform: translate(102px, 124px); opacity: 1; }
-    34%, 100% { transform: translate(102px, 124px); opacity: 0; }
+    14% { transform: translate(122px, 164px) scale(1); }
+    15% { transform: translate(117px, 164px); }
+    16% { transform: translate(126px, 164px); }
+    17% { transform: translate(119px, 164px); }
+    18%, 32% { transform: translate(122px, 164px); opacity: 1; }
+    34%, 100% { transform: translate(122px, 164px); opacity: 0; }
   }
-  .pv-ok-ring { fill: none; stroke: #34d399; stroke-width: 1.6; opacity: 0; animation-name: pv-ok; }
+  .pv-ok-ring { fill: none; stroke: #4ade80; stroke-width: 1.6; opacity: 0; animation-name: pv-ok; }
   .pv-check { opacity: 0; animation-name: pv-ok; }
-  .pv-check circle { fill: #10b981; }
+  .pv-check circle { fill: #22c55e; }
   .pv-check path { fill: none; stroke: #04150e; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   @keyframes pv-ok { 0%, 17% { opacity: 0; } 19%, 100% { opacity: 1; } }
   .pv-red { fill: rgb(239 68 68 / 0.2); stroke: #ef4444; stroke-width: 1.6; opacity: 0; animation-name: pv-red; }
@@ -285,40 +569,67 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
   .pv-half { transform-box: fill-box; transform-origin: center; animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
   .pv-half-l { animation-name: pv-fall-l; }
   .pv-half-r { animation-name: pv-fall-r; }
-  @keyframes pv-fall-l { 0%, 19% { transform: none; opacity: 1; } 31% { transform: translate(-14px, 86px) rotate(-34deg); opacity: 0; } 100% { opacity: 0; } }
-  @keyframes pv-fall-r { 0%, 19% { transform: none; opacity: 1; } 31% { transform: translate(16px, 94px) rotate(28deg); opacity: 0; } 100% { opacity: 0; } }
-  .pv-flash { fill: none; stroke: #ef4444; stroke-width: 6; opacity: 0; transform-origin: 204px 124px; animation-name: pv-flash; }
+  @keyframes pv-fall-l { 0%, 19% { transform: none; opacity: 1; } 31% { transform: translate(-14px, 70px) rotate(-34deg); opacity: 0; } 100% { opacity: 0; } }
+  @keyframes pv-fall-r { 0%, 19% { transform: none; opacity: 1; } 31% { transform: translate(16px, 76px) rotate(28deg); opacity: 0; } 100% { opacity: 0; } }
+  .pv-flash { fill: none; stroke: #ef4444; stroke-width: 6; opacity: 0; transform-origin: 224px 164px; animation-name: pv-flash; }
   @keyframes pv-flash { 0%, 13.8% { opacity: 0; transform: scale(1); } 15% { opacity: 0.85; } 23%, 100% { opacity: 0; transform: scale(1.3); } }
-  .pv-pulse { fill: none; stroke: #34d399; stroke-width: 4; opacity: 0; transform-origin: 204px 124px; animation-name: pv-pulse; }
+  .pv-pulse { fill: none; stroke: #4ade80; stroke-width: 4; opacity: 0; transform-origin: 224px 164px; animation-name: pv-pulse; }
   @keyframes pv-pulse { 0%, 17% { opacity: 0; transform: scale(1); } 19% { opacity: 0.7; } 25%, 100% { opacity: 0; transform: scale(1.25); } }
   .pv-reason { opacity: 0; animation-name: pv-reason; }
   .pv-reason-bg { fill: rgb(239 68 68 / 0.16); stroke: rgb(239 68 68 / 0.5); }
   .pv-reason-t { fill: #fca5a5; font-size: 9.5px; font-weight: 650; font-family: var(--font-sans); }
   @keyframes pv-reason { 0%, 14.5% { opacity: 0; transform: translateY(4px); } 16%, 30% { opacity: 1; transform: none; } 33%, 100% { opacity: 0; } }
+  .pv-receipt { opacity: 0; animation: pv-receipt 12s steps(1) infinite; }
+  @keyframes pv-receipt { 0%, 33.2% { opacity: 1; } 33.3%, 100% { opacity: 0; } }
 
   /* hyper-wallet */
-  .pa-swap-a { animation: pa-swap-a 4s ease-in-out infinite; }
-  .pa-swap-b { animation: pa-swap-b 4s ease-in-out infinite; }
-  @keyframes pa-swap-a { 0%, 30% { transform: translateY(0); } 50%, 80% { transform: translateY(56px); } 100% { transform: translateY(0); } }
-  @keyframes pa-swap-b { 0%, 30% { transform: translateY(0); } 50%, 80% { transform: translateY(-56px); } 100% { transform: translateY(0); } }
-  .pa-settled { opacity: 0; animation: pa-flash 4s ease-in-out infinite; }
-  @keyframes pa-flash { 0%, 45% { opacity: 0; } 55%, 80% { opacity: 1; } 100% { opacity: 0; } }
+  .hw-chain { animation: hw-glow 2.1s ease-in-out infinite; }
+  @keyframes hw-glow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+  .hw-arrow-bg { fill: var(--pa-accent); }
+  .hw-arrow { transform-box: fill-box; transform-origin: center; animation: hw-arrow 8s ease-in-out infinite; }
+  @keyframes hw-arrow { 0%, 30% { transform: rotate(0); } 42%, 100% { transform: rotate(180deg); } }
+  .hw-usdc { color: #2775ca; }
+  .hw-swap { animation: hw-swap 8s ease-in-out infinite; }
+  .hw-done { opacity: 0; animation: hw-done 8s ease-in-out infinite; }
+  @keyframes hw-swap { 0%, 40% { opacity: 1; } 46%, 92% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes hw-done { 0%, 42% { opacity: 0; } 48%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+  .hw-item { animation: hw-item 3s ease-in-out infinite; }
+  @keyframes hw-item { 0%, 100% { opacity: 0.65; } 20% { opacity: 1; } }
 
   /* h0x-pay */
-  .pa-slice { animation: pa-slice 3s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-  @keyframes pa-slice { 0% { transform: translate(140px, 114px); opacity: 0; } 15% { opacity: 1; } 70% { transform: translate(310px, 170px); opacity: 1; } 85%, 100% { transform: translate(310px, 180px); opacity: 0; } }
-  .pa-gold { fill: #f5c542; transform-box: fill-box; transform-origin: bottom; animation: pa-gold 3s ease-out infinite; }
-  @keyframes pa-gold { 0%, 70% { transform: scaleY(0.55); } 85%, 100% { transform: scaleY(0.8); } }
+  .hp-slice { animation: hp-slice 9s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+  @keyframes hp-slice { 0%, 30% { transform: translate(140px, 150px); opacity: 0; } 36% { opacity: 1; transform: translate(150px, 118px); } 50% { transform: translate(228px, 118px); } 64% { transform: translate(300px, 118px); opacity: 1; } 70%, 100% { transform: translate(330px, 118px); opacity: 0; } }
+  .hp-gold-ic { color: #f5c542; }
+  .hp-bal-a { animation: hp-a 9s steps(1) infinite; }
+  .hp-bal-b { opacity: 0; animation: hp-b 9s steps(1) infinite; }
+  @keyframes hp-a { 0%, 69% { opacity: 1; } 70%, 100% { opacity: 0; } }
+  @keyframes hp-b { 0%, 69% { opacity: 0; } 70%, 100% { opacity: 1; } }
+  .hp-spark { fill: none; stroke: #f5c542; stroke-width: 1.8; stroke-linejoin: round; stroke-dasharray: 160; animation: hp-spark 9s ease-out infinite; }
+  @keyframes hp-spark { 0%, 60% { stroke-dashoffset: 40; } 75%, 100% { stroke-dashoffset: 0; } }
+  .hp-spark-dot { fill: #f5c542; opacity: 0; animation: hp-b 9s steps(1) infinite; }
 
   /* hyperrun */
-  .pa-signed { opacity: 0; animation: pa-flash 3.6s ease-in-out infinite; }
-  .pa-coin { fill: #f5c542; animation: pa-coin 1.8s ease-in-out infinite; }
-  @keyframes pa-coin { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .hr-score-a { animation: hp-a 9s steps(1) infinite; animation-name: hr-a; }
+  .hr-score-b { opacity: 0; animation: hr-b 9s steps(1) infinite; }
+  @keyframes hr-a { 0%, 22% { opacity: 1; } 23%, 100% { opacity: 0; } }
+  @keyframes hr-b { 0%, 22% { opacity: 0; } 23%, 100% { opacity: 1; } }
+  .hr-hp-a { fill: #4ade80; transform-box: fill-box; transform-origin: left; animation: hr-hp-a 9s ease-in-out infinite; }
+  .hr-hp-b { fill: #ef4444; transform-box: fill-box; transform-origin: left; animation: hr-hp-b 9s ease-in-out infinite; }
+  @keyframes hr-hp-a { 0%, 100% { transform: scaleX(0.8); } 20% { transform: scaleX(0.55); } }
+  @keyframes hr-hp-b { 0% { transform: scaleX(0.7); } 22%, 100% { transform: scaleX(0); } }
+  .hr-win { opacity: 0; animation: hr-win 9s ease-out infinite; }
+  @keyframes hr-win { 0%, 24% { opacity: 0; transform: translateY(4px); } 30%, 95% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+  .hr-seal { opacity: 0; animation: hr-seal 9s ease-out infinite; }
+  @keyframes hr-seal { 0%, 34% { opacity: 0; } 40%, 95% { opacity: 1; } 100% { opacity: 0; } }
+  .hr-row { opacity: 0; animation: hr-row 9s ease-out infinite; }
+  @keyframes hr-row { 0%, 55% { opacity: 0; transform: translateX(6px); } 62%, 95% { opacity: 1; transform: none; } 100% { opacity: 0; } }
 
   @media (prefers-reduced-motion: reduce) {
     .pa *:not([class*='pv-']) { animation: none !important; }
     .pa [class*='pv-'] { animation-delay: var(--still, -8s) !important; animation-play-state: paused !important; }
-    .pa-block { display: none; }
-    .pa-settled, .pa-signed { opacity: 1; }
+    .pa-block, .pa-dot, .pa-coin { display: none; }
+    .hw-done, .hr-win, .hr-seal, .hr-row, .h0-check, .hr-score-b, .hp-bal-b { opacity: 1; }
+    .hw-swap, .hr-score-a, .hp-bal-a, .h0-count { opacity: 0; }
+    .h0-first { opacity: 1; }
   }
 </style>

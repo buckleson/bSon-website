@@ -32,7 +32,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
     <p class="mt-5 max-w-[48ch] text-xl leading-relaxed font-medium text-pretty text-ink sm:text-2xl" data-reveal>{statement}</p>
 
     <div class="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-      <div class="bento rounded-[1.6rem] bg-sheet p-6 text-white md:col-span-2 lg:row-span-2" data-reveal>
+      <div class="bento accent-warm rounded-[1.6rem] bg-sheet p-6 text-white md:col-span-2 lg:row-span-2" data-reveal>
         <p class="flex items-center gap-2 font-mono text-xs tracking-wide text-white/60 uppercase"><span class="size-1.5 rounded-full bg-emerald-400"></span>Live in production</p>
         <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-8">
           {stats.map(stat => (

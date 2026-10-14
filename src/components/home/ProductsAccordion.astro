@@ -24,12 +24,40 @@ interface Props {
 const { index, label, claim, payoff, body, cta } = Astro.props;
 const products = await entriesFor('products', 'en');
 type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
+// Under each tagline: how it works in two sentences, and one real number.
+const explain: Record<string, { text: string; stat: string; statLabel: string }> = {
+  'hyper-0x': {
+    text: 'Each application runs on its own private L2 with its own rules. Every L2 settles on the shared Hyper 0X L1, where transactions are final in one pass.',
+    stat: '1 pass',
+    statLabel: 'to final, no reorgs',
+  },
+  pavii: {
+    text: 'Pavii sits between your agents and your systems. Every prompt and tool call passes six gates: safe calls go through, malicious ones are stopped and logged on Hyper 0X.',
+    stat: '100M+',
+    statLabel: 'AI tokens saved',
+  },
+  'hyper-wallet': {
+    text: 'One non-custodial app for every major chain. Swaps take the best route with MEV protection, and both legs of a trade settle at once.',
+    stat: '2M+',
+    statLabel: 'transactions',
+  },
+  'h0x-pay': {
+    text: 'Pay and get paid in crypto as usual. A slice of every payment, set by your plan, is invested in tokenized gold and settled on Hyper 0X.',
+    stat: 'Soon',
+    statLabel: 'early access open',
+  },
+  hyperrun: {
+    text: 'Play ranked matches in a realistic shooter. Every result is signed before payouts, so players, fans and sponsors are paid fairly.',
+    stat: 'Soon',
+    statLabel: 'early access open',
+  },
+};
 ---
 
 <section class="mx-auto max-w-[85rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28" id="products">
   <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} cta={cta} />
 
-  <div class="mt-12 flex flex-col gap-3 xl:h-[32rem] xl:flex-row" data-accordion>
+  <div class="mt-12 flex flex-col gap-3 xl:h-[36rem] xl:flex-row" data-accordion>
     {products.map((product, index) => {
       const soon = product.data.status === 'coming-soon';
       const id = `product-${slugOf(product)}`;
@@ -41,7 +69,7 @@ type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
             {soon && <span class="rounded-full bg-current/10 px-2 py-0.5 text-xs font-semibold xl:hidden">Soon</span>}
             <span class="acc-plus ms-auto grid size-8 shrink-0 place-items-center rounded-full bg-current/10 xl:ms-0"><Glyph icon="plus" class="size-4" /></span>
           </button>
-          <div id={id} class="acc-body gap-6 px-5 pb-5 sm:px-7 sm:pb-7 xl:h-full xl:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] xl:p-7">
+          <div id={id} class="acc-body accent-warm gap-6 px-5 pb-5 sm:px-7 sm:pb-7 xl:h-full xl:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] xl:p-6">
             <div class="flex flex-col">
               <div class="hidden items-center gap-3 xl:flex">
                 <span class="grid size-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/15"><ProductLogo product={slugOf(product)} class="size-7" /></span>
@@ -49,7 +77,9 @@ type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
                 {soon && <span class="rounded-full bg-white/12 px-2.5 py-0.5 text-xs font-semibold">Coming soon</span>}
               </div>
               <p class="font-medium text-pretty opacity-90 xl:mt-4">{product.data.tagline}</p>
-              <ul class="mt-5 space-y-2.5 text-sm xl:mt-6">
+              <p class="mt-5 font-mono text-[0.7rem] tracking-wide uppercase opacity-60">How it works</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-pretty opacity-75">{explain[slugOf(product)]?.text}</p>
+              <ul class="mt-5 space-y-2 text-sm">
                 {product.data.features.slice(0, 3).map(feature => (
                   <li class="flex items-center gap-2.5">
                     <span class="grid size-7 shrink-0 place-items-center rounded-lg bg-current/10">{feature.icon ? <Glyph icon={feature.icon} class="size-4" /> : <Glyph icon="check" class="size-4" />}</span>
@@ -57,12 +87,15 @@ type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
                   </li>
                 ))}
               </ul>
-              <a href={pathFor(product)} class="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-current/10 px-4 py-2 text-sm font-semibold hover:bg-current/15 xl:mt-auto">
-                Explore {product.data.title}<Glyph icon="arrow-right" class="size-4" />
-              </a>
+              <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 xl:mt-auto">
+                <p class="flex items-baseline gap-2"><span class="font-display text-2xl font-semibold text-orange-300">{explain[slugOf(product)]?.stat}</span><span class="text-xs opacity-60">{explain[slugOf(product)]?.statLabel}</span></p>
+                <a href={pathFor(product)} class="inline-flex w-fit items-center gap-2 rounded-full bg-current/10 px-4 py-2 text-sm font-semibold hover:bg-current/15">
+                  Explore {product.data.title}<Glyph icon="arrow-right" class="size-4" />
+                </a>
+              </div>
             </div>
-            <div class="self-center overflow-hidden rounded-[1.2rem] ring-1 ring-white/10">
-              <ProductArt product={slugOf(product) as Art} class="aspect-[400/260]" />
+            <div class="relative aspect-[440/360] overflow-hidden rounded-[1.2rem] ring-1 ring-white/10 xl:aspect-auto xl:h-full">
+              <ProductArt product={slugOf(product) as Art} fill />
             </div>
           </div>
         </article>

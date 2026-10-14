@@ -104,7 +104,8 @@
 
 /*
   Brand accent. The template's orange-* utilities read from --accent-*,
-  which is violet in light mode and the original orange in dark mode.
+  which is indigo blue in light mode and the original orange in dark mode
+  (and on every dark surface, via .on-sheet / .accent-warm).
 */
 @theme inline {
   --color-ground: var(--ground);
@@ -129,39 +130,57 @@
 }
 
 :root {
-  /* Surfaces: warm off-white ground, near-black sheets (sections that
-     overlap with a rounded top). Dark mode swaps the ground to near-black and
-     lifts the sheets one step. */
+  /* Surfaces: warm off-white ground, white cards and deep neutral-black
+     sheets (dark boxes). Dark mode swaps the ground to near-black and lifts
+     the sheets one step. Blacks are neutral (no blue cast). */
   --ground: #f1f0eb;
-  --ink: #0e0f11;
-  --muted: #55565c;
+  --ink: #0b0b0c;
+  --muted: #55555a;
   --card: #ffffff;
   --line: #dcdad2;
-  --sheet: #0c0d10;
-  --sheet-card: #17191d;
-  --sheet-line: #26292f;
-  --accent-50: oklch(0.969 0.016 293.756);
-  --accent-100: oklch(0.943 0.029 294.588);
-  --accent-200: oklch(0.894 0.057 293.283);
-  --accent-300: oklch(0.811 0.111 293.571);
-  --accent-400: oklch(0.702 0.183 293.541);
-  --accent-500: oklch(0.6 0.21 292.717);
-  --accent-600: oklch(0.53 0.235 293.009);
-  --accent-700: oklch(0.48 0.22 292.581);
-  --accent-800: oklch(0.432 0.232 292.759);
-  --accent-900: oklch(0.38 0.189 293.745);
-  --accent-950: oklch(0.283 0.141 291.089);
+  --sheet: #0a0a0a;
+  --sheet-card: #161616;
+  --sheet-line: #262626;
+  /* Light-mode accent: indigo blue. */
+  --accent-50: oklch(0.962 0.018 272.314);
+  --accent-100: oklch(0.93 0.034 272.788);
+  --accent-200: oklch(0.87 0.065 274.039);
+  --accent-300: oklch(0.785 0.115 274.713);
+  --accent-400: oklch(0.673 0.182 276.935);
+  --accent-500: oklch(0.585 0.233 277.117);
+  --accent-600: oklch(0.511 0.262 276.966);
+  --accent-700: oklch(0.457 0.24 277.023);
+  --accent-800: oklch(0.398 0.195 277.366);
+  --accent-900: oklch(0.359 0.144 278.697);
+  --accent-950: oklch(0.257 0.09 281.288);
 }
 
 .dark {
-  --ground: #0c0d10;
-  --ink: #eeeee8;
-  --muted: #a3a4aa;
-  --card: #15171b;
-  --line: #2a2d33;
-  --sheet: #131519;
-  --sheet-card: #1c1f24;
-  --sheet-line: #2c3037;
+  --ground: #0a0a0a;
+  --ink: #ededea;
+  --muted: #a1a1a1;
+  --card: #141414;
+  --line: #272727;
+  --sheet: #171717;
+  --sheet-card: #1f1f1f;
+  --sheet-line: #2e2e2e;
+  --accent-50: oklch(0.98 0.016 73.684);
+  --accent-100: oklch(0.954 0.038 75.164);
+  --accent-200: oklch(0.901 0.076 70.697);
+  --accent-300: oklch(70.72% 0.182 40.56);
+  --accent-400: oklch(67.4% 0.2072 39.23);
+  --accent-500: oklch(61.86% 0.1946 38.88);
+  --accent-600: oklch(0.646 0.222 41.116);
+  --accent-700: oklch(0.553 0.195 38.402);
+  --accent-800: oklch(0.47 0.157 37.304);
+  --accent-900: oklch(0.408 0.123 38.172);
+  --accent-950: oklch(0.266 0.079 36.259);
+}
+
+/* Dark surfaces always pair with the warm (orange) accent, in both themes,
+   the way the dark hero does; light surfaces use the indigo accent. */
+.on-sheet,
+.accent-warm {
   --accent-50: oklch(0.98 0.016 73.684);
   --accent-100: oklch(0.954 0.038 75.164);
   --accent-200: oklch(0.901 0.076 70.697);

@@ -13,7 +13,7 @@ interface Props {
 const { kind } = Astro.props;
 ---
 
-<div class="sm-mock relative h-full overflow-hidden rounded-[1.2rem] bg-[#0e1014] p-5 font-mono text-[0.72rem] text-white/80 ring-1 ring-white/10">
+<div class="sm-mock accent-warm relative h-full overflow-hidden rounded-[1.2rem] bg-[#0c0c0c] p-5 font-mono text-[0.72rem] text-white/80 ring-1 ring-white/10">
   {kind === 'chain' && (
     <div>
       <p class="flex items-center justify-between text-white/50"><span>your-l2 · explorer</span><span class="flex items-center gap-1.5 text-emerald-300"><span class="size-1.5 rounded-full bg-emerald-400"></span>live</span></p>
