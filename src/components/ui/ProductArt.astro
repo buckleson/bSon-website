@@ -4,7 +4,8 @@ import { brand, glyph, type BrandKey } from '@utils/glyphs';
 /**
  * Small looping scene per product (pure SVG + CSS, no JavaScript), used
  * wherever a product needs an image: home accordion, product cards.
- * - hyper-0x: three private L2s stream blocks into the shared L1.
+ * - hyper-0x: bank, fintech and AI L2s (and a fourth that comes and goes)
+ *   stream into the L1, whose blocks slide by in different sizes.
  * - pavii: prompts and tool calls from three agents meet the Pavii shield;
  *   safe ones pass to tools, data or users; malicious ones turn red, show why
  *   they were blocked, crack and fall.
@@ -20,6 +21,22 @@ interface Props {
 }
 
 const { product, class: className, fill = false } = Astro.props;
+// Hyper 0X: four L2s (one added and removed on a loop) feed one L1 whose
+// blocks vary in size; the chain repeats every 120 units so it loops cleanly.
+const h0Nodes = [
+  { x: 58, label: 'Bank L2', icon: 'bank' },
+  { x: 154, label: 'Fintech L2', icon: 'credit-card' },
+  { x: 250, label: 'AI L2', icon: 'robot' },
+  { x: 346, label: 'New L2', icon: 'plus-circle', dynamic: true },
+];
+const h0Widths = [10, 22, 14, 28, 8, 18];
+const h0Gap = (120 - h0Widths.reduce((a, b) => a + b, 0)) / h0Widths.length;
+const h0Blocks: { x: number; w: number }[] = [];
+for (let x = 76, i = 0; x < 380; i++) {
+  const w = h0Widths[i % h0Widths.length];
+  h0Blocks.push({ x, w });
+  x += w + h0Gap;
+}
 // Pavii: six calls from three agents on three lanes; safe ones reach a
 // system, malicious ones are stopped at the shield with the reason shown.
 const pvLane = [64, 124, 184];
@@ -51,21 +68,36 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
 
     {product === 'hyper-0x' && (
       <g>
-        {[70, 200, 330].map((x, i) => (
-          <g>
-            <rect x={x - 48} y="34" width="96" height="40" rx="12" class="pa-node" />
-            <text x={x} y="59" text-anchor="middle" class="pa-t">{['Bank L2', 'Fintech L2', 'AI L2'][i]}</text>
-            <line x1={x} y1="74" x2="200" y2="190" class="pa-line" />
-            <rect x="-7" y="-7" width="14" height="14" rx="3" class="pa-block">
-              <animateMotion dur="1.65s" begin={`${i * 0.55}s`} repeatCount="indefinite" path={`M${x},74 L200,190`} />
-              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.9;1" dur="1.65s" begin={`${i * 0.55}s`} repeatCount="indefinite" />
+        <defs>
+          <clipPath id="h0-lane"><rect x="196" y="194" width="176" height="32" rx="9" /></clipPath>
+        </defs>
+        <rect x="304" y="30" width="84" height="38" rx="12" class="h0-slot" />
+        <text x="346" y="53" text-anchor="middle" class="pa-t-dim h0-slot-t">+ add an L2</text>
+        {h0Nodes.map((node, i) => (
+          <g class:list={[node.dynamic && 'h0-dyn']}>
+            <line x1={node.x} y1="68" x2={node.x} y2="186" class="pa-line" />
+            <rect x="-6" y="-6" width="12" height="12" rx="3" class="pa-block">
+              <animateMotion dur={`${1.3 + i * 0.25}s`} begin={`${i * 0.4}s`} repeatCount="indefinite" path={`M${node.x},70 L${node.x},184`} />
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.88;1" dur={`${1.3 + i * 0.25}s`} begin={`${i * 0.4}s`} repeatCount="indefinite" />
             </rect>
+            <rect x={node.x - 42} y="30" width="84" height="38" rx="12" class="pa-node" />
+            <Fragment set:html={icon(node.icon, node.x - 34, 40, 18)} />
+            <text x={node.x - 12} y="53" class="pa-t-sm">{node.label}</text>
           </g>
         ))}
-        <rect x="70" y="190" width="260" height="44" rx="14" class="pa-chain" />
-        <Fragment set:html={icon('cube', 92, 202, 20, 'pa-ic-w')} />
-        <text x="122" y="217" class="pa-t-w">Hyper 0X L1 · final</text>
-        {[0, 1, 2, 3, 4].map(i => <rect x={250 + i * 14} y="204" width="10" height="16" rx="2" class="pa-stack" style={`animation-delay:${i * 0.4}s`} />)}
+        <rect x="20" y="186" width="360" height="48" rx="14" class="pa-chain" />
+        <svg x="34" y="198" width="22" height="24" viewBox="280 210 700 820" fill="none" stroke="#fff" stroke-linejoin="round" aria-hidden="true">
+          <path vector-effect="non-scaling-stroke" stroke-width="1.6" d="M318 385Q318 360 339 347L494 247Q527 228 527 268L527 855Q527 870 513 880L352 988Q318 1005 318 970ZM527 362L436 421Q420 431 420 450L420 800Q420 818 436 828L513 880M736 385Q736 360 757 347L912 247Q945 228 945 268L945 855Q945 870 931 880L770 988Q736 1005 736 970ZM945 362L854 421Q838 431 838 450L838 800Q838 818 854 828L931 880" />
+          <rect vector-effect="non-scaling-stroke" stroke-width="1.6" x="557" y="541" width="146" height="151" rx="22" />
+        </svg>
+        <text x="64" y="208" class="pa-t-w">Hyper 0X L1</text>
+        <text x="64" y="222" class="pa-t-on">blocks resize with load</text>
+        <rect x="196" y="194" width="176" height="32" rx="9" class="h0-lane" />
+        <g clip-path="url(#h0-lane)">
+          <g class="h0-chain">
+            {h0Blocks.map(block => <rect x={block.x} y="201" width={block.w} height="18" rx="4" class="h0-chunk" />)}
+          </g>
+        </g>
       </g>
     )}
 
@@ -196,9 +228,18 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
   .pa-ic-accent { color: var(--pa-accent); }
 
   /* hyper-0x */
+  .pa-t-sm { fill: #e8e9ee; font-size: 10.5px; font-weight: 600; font-family: var(--font-sans); }
+  .pa-t-on { fill: rgb(255 255 255 / 0.75); font-size: 10px; font-family: var(--font-sans); }
   .pa-block { fill: var(--pa-accent); }
-  .pa-stack { fill: #fff; opacity: 0.25; animation: pa-stack 2s ease-in-out infinite; }
-  @keyframes pa-stack { 50% { opacity: 0.95; } }
+  .h0-slot { fill: none; stroke: #3a404b; stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .h0-dyn { animation: h0-dyn 9s ease-in-out infinite; }
+  .h0-slot-t { animation: h0-slot 9s ease-in-out infinite; }
+  @keyframes h0-dyn { 0%, 22% { opacity: 0; transform: translateY(-8px); } 30%, 78% { opacity: 1; transform: none; } 86%, 100% { opacity: 0; transform: translateY(-8px); } }
+  @keyframes h0-slot { 0%, 20% { opacity: 1; } 28%, 80% { opacity: 0; } 88%, 100% { opacity: 1; } }
+  .h0-lane { fill: rgb(0 0 0 / 0.18); }
+  .h0-chunk { fill: rgb(255 255 255 / 0.92); }
+  .h0-chain { animation: h0-chain 6s linear infinite; }
+  @keyframes h0-chain { to { transform: translateX(120px); } }
 
   /* pavii */
   .pa-t-xs { fill: #8b8f99; font-size: 9px; font-family: var(--font-sans); }
@@ -215,7 +256,7 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
   @keyframes pv-good {
     0% { transform: translate(48px, var(--y0)) scale(0.55); opacity: 0; }
     3% { opacity: 1; }
-    14% { transform: translate(96px, 124px) scale(1); }
+    14% { transform: translate(102px, 124px) scale(1); }
     19% { transform: translate(204px, 124px) scale(0.6); }
     24% { transform: translate(296px, var(--y1)) scale(0.85); opacity: 1; }
     31% { transform: translate(356px, var(--y1)) scale(0.3); opacity: 0.9; }
@@ -225,12 +266,12 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
   @keyframes pv-bad {
     0% { transform: translate(48px, var(--y0)) scale(0.55); opacity: 0; }
     3% { opacity: 1; }
-    14% { transform: translate(96px, 124px) scale(1); }
-    15% { transform: translate(91px, 124px); }
-    16% { transform: translate(100px, 124px); }
-    17% { transform: translate(93px, 124px); }
-    18%, 32% { transform: translate(96px, 124px); opacity: 1; }
-    34%, 100% { transform: translate(96px, 124px); opacity: 0; }
+    14% { transform: translate(102px, 124px) scale(1); }
+    15% { transform: translate(97px, 124px); }
+    16% { transform: translate(106px, 124px); }
+    17% { transform: translate(99px, 124px); }
+    18%, 32% { transform: translate(102px, 124px); opacity: 1; }
+    34%, 100% { transform: translate(102px, 124px); opacity: 0; }
   }
   .pv-ok-ring { fill: none; stroke: #34d399; stroke-width: 1.6; opacity: 0; animation-name: pv-ok; }
   .pv-check { opacity: 0; animation-name: pv-ok; }
