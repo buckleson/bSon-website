@@ -21,20 +21,20 @@ const { kind } = Astro.props;
         {[['#1,204,883', '41 tx', 'final'], ['#1,204,882', '27 tx', 'final'], ['#1,204,881', '33 tx', 'final'], ['#1,204,880', '19 tx', 'final'], ['#1,204,879', '36 tx', 'final']].map(([block, tx, state], i) => (
           <li class="sm-row flex items-center gap-3 rounded-lg bg-white/4 px-3 py-2" style={`--d:${i * 0.12}s`}>
             <Glyph icon="cube" class="size-4 text-orange-300" />
-            <span class="text-white">{block}</span><span class="text-white/45">{tx}</span>
+            <span class="text-white">{block}</span><span class="text-white/60">{tx}</span>
             <span class="ms-auto rounded bg-emerald-400/12 px-1.5 py-0.5 text-emerald-300">{state}</span>
           </li>
         ))}
       </ul>
-      <p class="mt-4 text-white/45">rules: kyc ok · limits ok · maker-checker ok</p>
+      <p class="mt-4 text-white/60">rules: kyc ok · limits ok · maker-checker ok</p>
     </div>
   )}
   {kind === 'token' && (
     <div>
       <p class="text-white/50">mint · tokenized gold</p>
       <div class="mt-4 grid grid-cols-2 gap-2">
-        <div class="rounded-lg bg-white/4 p-3"><p class="text-white/45">in custody</p><p class="mt-1 font-display text-lg text-white">1,000 g</p></div>
-        <div class="rounded-lg bg-white/4 p-3"><p class="text-white/45">tokens</p><p class="mt-1 font-display text-lg text-white tabular-nums">1,000</p></div>
+        <div class="rounded-lg bg-white/4 p-3"><p class="text-white/60">in custody</p><p class="mt-1 font-display text-lg text-white">1,000 g</p></div>
+        <div class="rounded-lg bg-white/4 p-3"><p class="text-white/60">tokens</p><p class="mt-1 font-display text-lg text-white tabular-nums">1,000</p></div>
       </div>
       <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-white/8"><div class="sm-bar h-full rounded-full bg-orange-500"></div></div>
       <ul class="mt-4 space-y-1.5">
@@ -71,7 +71,7 @@ const { kind } = Astro.props;
           </li>
         ))}
       </ul>
-      <p class="mt-4 text-white/45">receipts anchored on Hyper 0X</p>
+      <p class="mt-4 text-white/60">receipts anchored on Hyper 0X</p>
     </div>
   )}
 </div>
