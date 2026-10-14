@@ -116,7 +116,35 @@ export const en = {
       payoff: 'So we built our own.',
       body:
         "Renting a public chain means sharing its fees, its roadmap and its outages. On Hyper 0X, one L1 settles everything and every application gets its own L2, sized to what it needs. Add a new L2, change one or retire it whenever your plans change.",
-      facts: ['Own L1', 'An L2 per application', 'Add or change L2s any time', 'Post-quantum-resistant'],
+      cards: [
+        {
+          figure: 'chain-rack',
+          tags: ['Hyper 0X', 'L1 + private L2s'],
+          title: 'How our blockchain works',
+          text: 'Hyper 0X is one L1 that settles everything. Each application gets its own L2 with its own rules, privacy and size. Add an L2, change one or retire it any time, and blocks grow when traffic is busy and shrink when it is quiet.',
+          stat: '1 pass',
+          statLabel: 'to final, with no reorgs',
+          cta: { title: 'Explore Hyper 0X', url: '/products/hyper-0x/' },
+        },
+        {
+          figure: 'pavii-gates',
+          tags: ['Pavii', 'AI-agent security'],
+          title: 'How we secure AI agents',
+          text: 'Every prompt and tool call your agents make passes six gates: injection, privacy, supply chain, budget, egress and output. Safe calls go through, malicious ones are stopped, and every decision gets a receipt on Hyper 0X.',
+          stat: '100M+',
+          statLabel: 'AI tokens saved across 82K+ queries',
+          cta: { title: 'Explore Pavii', url: '/products/pavii/' },
+        },
+        {
+          figure: 'cipher-tower',
+          tags: ['Encryption', 'Post-quantum-resistant'],
+          title: 'Four layers of encryption',
+          text: 'Your data stays encrypted in transit, while it is being used, on the ledger and at rest. Connections use hybrid X25519 + ML-KEM-768, records are encrypted per party, and master keys stay in an HSM.',
+          stat: '4 layers',
+          statLabel: 'in transit, in use, on the ledger, at rest',
+          cta: { title: 'How the layers work', url: '/blog/blockchain-data-encryption-four-layers/' },
+        },
+      ],
     },
     products: {
       label: 'Products',
@@ -312,6 +340,19 @@ export const en = {
     ],
   },
 
+  faqPage: {
+    title: 'FAQ',
+    seoTitle: 'Blockchain & AI-Agent Security FAQ | Buckleson',
+    metaDescription:
+      'Plain answers to what people ask about enterprise blockchains, AI-agent security, asset tokenization, business crypto wallets and post-quantum encryption.',
+    label: 'FAQ',
+    claim: 'Straight answers on',
+    payoff: 'blockchain and AI security.',
+    intro:
+      'The questions banks, fintechs, asset issuers and AI teams ask most, answered in plain English. Each answer links to a guide that goes deeper.',
+    more: 'Is your question not here?',
+    moreText: 'Ask an engineer. A 30-minute call is usually enough to map your use case.',
+  },
   about: {
     title: 'About',
     seoTitle: 'About Buckleson: Our Vision and Story',

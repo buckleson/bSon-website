@@ -14,7 +14,7 @@ interface Props {
 const { claim, payoff, text, btn, email } = Astro.props;
 ---
 
-<section class="px-2 pb-3 sm:px-3">
+<section class="mt-3 px-2 pb-3 sm:px-3">
   <div class="on-sheet relative isolate overflow-hidden rounded-[2rem] bg-sheet px-6 py-20 text-center text-white sm:py-28">
     <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 grid place-items-center">
       {[0, 1, 2, 3].map(i => <span class="cta-ring absolute aspect-square w-[18rem] rounded-full border border-white/10" style={`animation-delay:${i * 1.5}s`}></span>)}

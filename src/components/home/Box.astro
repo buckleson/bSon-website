@@ -1,0 +1,17 @@
+---
+/**
+ * One home section as its own rounded box, edge to edge with a small gutter,
+ * separated from its neighbours by a gap (no overlapping sheets).
+ * `light` is the white card; `dark` is the sheet colour.
+ */
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { tone = 'light', class: className } = Astro.props;
+---
+
+<div class:list={['mx-2 mt-3 rounded-[2rem] sm:mx-3', tone === 'dark' ? 'on-sheet bg-sheet text-white' : 'bg-card ring-1 ring-line', className]}>
+  <slot />
+</div>

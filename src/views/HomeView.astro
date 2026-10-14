@@ -11,15 +11,17 @@ import VisionSection from '@components/home/VisionSection.astro';
 import FaqTimeline from '@components/home/FaqTimeline.astro';
 import InsightsSection from '@components/home/InsightsSection.astro';
 import FinalCta from '@components/home/FinalCta.astro';
+import Box from '@components/home/Box.astro';
 import { BOOKING_URL } from '@data/constants';
 import type { SystemName } from '@data/systems';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
 /**
- * Home, one idea per section: who we are (hero), proof at a glance, products,
- * services, a live transaction, why we built our own chain, how we work,
- * vision, FAQ, insights and a closing call to action.
+ * Home, one idea per section, each in its own box: who we are (hero), proof
+ * at a glance, products, services, a live transaction, why Hyper 0X (three
+ * stacking cards), how we work, vision, FAQ, insights and a closing call to
+ * action.
  */
 interface Props {
   locale: MarketingLocale;
@@ -28,7 +30,6 @@ interface Props {
 const { locale } = Astro.props;
 const t = getCopy(locale);
 const c = t.home;
-const over = 'relative z-[1] -mt-8 rounded-t-[2rem] bg-ground';
 ---
 
 <MainLayout seoTitle={c.metaTitle} kind={{ type: 'Home' }} faqs={t.data.faqs.faqs}>
@@ -42,23 +43,14 @@ const over = 'relative z-[1] -mt-8 rounded-t-[2rem] bg-ground';
     chips={c.hero.chips}
   />
 
-  <GlanceBento label={c.glanceIntro.label} statement={c.glanceIntro.statement} pilot={c.glanceIntro.pilot} logosTitle={c.logos} />
-  <ProductsAccordion index="01" {...c.products} />
-  <ServicesBento index="02" {...c.services} />
-  <HowItWorks index="03" {...c.how} tabs={c.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))} />
-
-  <WhySection index="04" {...c.why} />
-
-  <div class={over}>
-    <ProcessSteps index="05" {...c.process} />
-  </div>
-
-  <VisionSection index="06" {...c.vision} />
-
-  <div class={over}>
-    <FaqTimeline index="07" {...c.faq} faqs={t.data.faqs.faqs} />
-    <InsightsSection index="08" {...c.latestPosts} />
-  </div>
-
+  <Box><GlanceBento label={c.glanceIntro.label} statement={c.glanceIntro.statement} pilot={c.glanceIntro.pilot} logosTitle={c.logos} /></Box>
+  <Box><ProductsAccordion index="01" {...c.products} /></Box>
+  <Box><ServicesBento index="02" {...c.services} /></Box>
+  <Box><HowItWorks index="03" {...c.how} tabs={c.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))} /></Box>
+  <Box><WhySection index="04" {...c.why} /></Box>
+  <Box><ProcessSteps index="05" {...c.process} /></Box>
+  <Box tone="dark"><VisionSection index="06" {...c.vision} /></Box>
+  <Box><FaqTimeline index="07" {...c.faq} faqs={t.data.faqs.faqs} /></Box>
+  <Box><InsightsSection index="08" {...c.latestPosts} /></Box>
   <FinalCta {...c.finalCta} />
 </MainLayout>

@@ -87,6 +87,7 @@ export const megaMenus: MegaMenu[] = [
         heading: 'Learn',
         items: [
           { title: 'Blog', desc: 'Guides from our engineers', href: '/blog/', icon: 'article' },
+          { title: 'FAQ', desc: 'Blockchain and AI security, answered', href: '/faq/', icon: 'question' },
           { title: 'Hyper 0X docs', desc: 'How the chain works', href: '/guides/intro/', icon: 'book-open-text' },
           { title: 'RSS feed', desc: 'Every new article', href: '/rss.xml', icon: 'rss' },
         ],
@@ -96,7 +97,8 @@ export const megaMenus: MegaMenu[] = [
         items: [
           { title: 'Asset tokenization', desc: 'Launch tokenized assets', href: '/blog/asset-tokenization-guide/', icon: 'diamond' },
           { title: 'Securing AI agents', desc: '8 attacks and how to stop them', href: '/blog/how-to-secure-ai-agents/', icon: 'shield-warning' },
-          { title: 'Private L2 vs public chain', desc: 'Pick the right model', href: '/blog/private-l2-vs-public-blockchain/', icon: 'scales' },
+          { title: 'Prompt injection', desc: 'How it works, how to stop it', href: '/blog/what-is-prompt-injection/', icon: 'warning-octagon' },
+          { title: 'Layer 1 vs layer 2', desc: 'One L1, many L2s', href: '/blog/layer-1-vs-layer-2-blockchain/', icon: 'stack' },
         ],
       },
     ],
@@ -150,6 +152,7 @@ export const footerColumns: { title: string; links: { label: string; path: strin
     links: [
       { label: 'About us', path: '/about/' },
       { label: 'Blog', path: '/blog/' },
+      { label: 'FAQ', path: '/faq/' },
       { label: 'Hyper 0X docs', path: '/guides/intro/' },
       { label: 'Contact', path: '/contact/' },
     ],

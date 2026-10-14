@@ -12,8 +12,9 @@ const REQUIRED_FILES = ['index.html', '404.html', 'robots.txt', 'llms.txt', 'llm
 
 // Cheap content assertions for key pages (site-relative route -> needles).
 const EXPECTATIONS = {
-  '/': ['<html lang="en"', 'blockchain infrastructure company', '"@type":"FAQPage"', 'data-hero', 'id="services"', 'data-vault', 'chain-rack'],
+  '/': ['<html lang="en"', 'blockchain infrastructure company', '"@type":"FAQPage"', 'data-hero', 'id="services"', 'data-vault', 'chain-rack', 'pavii-gates', 'cipher-tower'],
   '/about/': ['"@type":"AboutPage"', 'Our story'],
+  '/faq/': ['"@type":"FAQPage"', 'id="ai-agent-security"', 'ML-KEM'],
   '/products/': ['Hyper 0X', 'Coming soon'],
   '/products/pavii/': ['data-prompt-shield', '"@type":"SoftwareApplication"'],
   '/products/h0x-pay/': ['Coming soon'],

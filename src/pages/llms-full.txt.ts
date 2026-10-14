@@ -2,8 +2,9 @@ import type { APIRoute } from 'astro';
 import { SITE } from '@data/constants';
 import { getCopy } from '@/copy';
 import { entriesFor, pathFor } from '@utils/content';
+import { localePath } from '@utils/locale';
 
-/** llms-full.txt: every product page and blog post as plain text. */
+/** llms-full.txt: every product page, the FAQ and every blog post as plain text. */
 export const GET: APIRoute = async () => {
   const copy = getCopy('en');
   const products = await entriesFor('products', 'en');
@@ -22,6 +23,16 @@ export const GET: APIRoute = async () => {
         ...data.faqs.map(f => `Q: ${f.question}\nA: ${f.answer}`),
       ].join('\n\n');
     }),
+    [
+      '## Frequently asked questions',
+      `URL: ${SITE.origin}${localePath('en', '/faq/')}`,
+      ...copy.data.faqs.faqs.map(f => `Q: ${f.question}
+A: ${f.answer}`),
+      ...copy.data.faqs.topics.flatMap(topic => [`### ${topic.label}`, ...topic.faqs.map(f => `Q: ${f.question}
+A: ${f.answer}`)]),
+    ].join('
+
+'),
     ...posts.map(post =>
       [`## ${post.data.title}`, `URL: ${SITE.origin}${pathFor(post)}`, (post.body ?? '').trim()].join('\n\n')
     ),

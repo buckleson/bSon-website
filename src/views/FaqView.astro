@@ -1,0 +1,89 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Box from '@components/home/Box.astro';
+import FinalCta from '@components/home/FinalCta.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import { BOOKING_URL } from '@data/constants';
+import { getCopy } from '@/copy';
+import { localePath, type MarketingLocale } from '@utils/locale';
+
+/**
+ * The FAQ page: questions people actually ask about blockchains for
+ * business, AI-agent security, tokenization, wallets and post-quantum
+ * security, grouped by topic. Each answer is short enough to quote and links
+ * to the guide or product that goes deeper. All questions go into one
+ * FAQPage schema.
+ */
+interface Props {
+  locale: MarketingLocale;
+}
+
+const { locale } = Astro.props;
+const t = getCopy(locale);
+const copy = t.faqPage;
+const topics = t.data.faqs.topics;
+const icons: Record<string, string> = {
+  blockchain: 'cube',
+  'ai-agent-security': 'shield-check',
+  tokenization: 'diamond',
+  wallets: 'wallet',
+  'post-quantum': 'atom',
+};
+const all = topics.flatMap(topic => topic.faqs.map(({ question, answer }) => ({ question, answer })));
+---
+
+<MainLayout title={copy.title} seoTitle={copy.seoTitle} description={copy.metaDescription} kind={{ type: 'WebPage' }} faqs={all}>
+  <section class="mx-auto max-w-[85rem] px-4 pt-14 pb-12 sm:px-6 lg:px-8 lg:pt-20">
+    <p class="font-mono text-xs tracking-wide text-muted uppercase" data-reveal>{copy.label}</p>
+    <h1 class="mt-4 max-w-4xl text-5xl leading-[1] font-semibold text-ink sm:text-6xl" data-reveal>
+      <span class="block">{copy.claim}</span>
+      <span class="mark">{copy.payoff}</span>
+    </h1>
+    <p class="mt-6 max-w-[60ch] text-lg text-pretty text-muted" data-reveal>{copy.intro}</p>
+    <nav aria-label="FAQ topics" class="mt-8 flex flex-wrap gap-2" data-reveal>
+      {topics.map(topic => (
+        <a href={`#${topic.id}`} class="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm font-medium text-ink ring-1 ring-line transition hover:ring-orange-500">
+          <Glyph icon={icons[topic.id] ?? 'question'} class="size-4 text-orange-600 dark:text-orange-400" />{topic.label}
+        </a>
+      ))}
+    </nav>
+  </section>
+
+  {topics.map((topic, index) => (
+    <Box>
+      <section id={topic.id} class="mx-auto grid max-w-[85rem] scroll-mt-24 gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:px-8 lg:py-20" aria-labelledby={`${topic.id}-title`}>
+        <div class="lg:sticky lg:top-24 lg:self-start">
+          <p class="font-mono text-xs tracking-wide text-muted">0{index + 1} / 0{topics.length}</p>
+          <span class="mt-4 grid size-12 place-items-center rounded-2xl bg-ground text-orange-600 dark:text-orange-400"><Glyph icon={icons[topic.id] ?? 'question'} class="size-6" /></span>
+          <h2 id={`${topic.id}-title`} class="mt-5 text-3xl font-semibold text-balance text-ink">{topic.label}</h2>
+          <p class="mt-3 max-w-[36ch] text-pretty text-muted">{topic.intro}</p>
+        </div>
+        <div class="divide-y divide-line">
+          {topic.faqs.map((faq, i) => (
+            <details class="group py-5" open={i === 0}>
+              <summary class="flex cursor-pointer list-none items-start justify-between gap-6 text-lg font-semibold text-ink">
+                <h3 class="text-pretty">{faq.question}</h3>
+                <span class="grid size-8 shrink-0 place-items-center rounded-full bg-ground transition duration-300 group-open:rotate-45"><Glyph icon="plus" class="size-4" /></span>
+              </summary>
+              <p class="mt-3 max-w-[64ch] leading-relaxed text-pretty text-muted">{faq.answer}</p>
+              {'link' in faq && faq.link && (
+                <a href={localePath(locale, faq.link.url)} class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 hover:underline dark:text-orange-300">
+                  {faq.link.title}<Glyph icon="arrow-right" class="size-4" />
+                </a>
+              )}
+            </details>
+          ))}
+        </div>
+      </section>
+    </Box>
+  ))}
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 text-center sm:px-6 lg:px-8">
+    <p class="text-2xl font-semibold text-ink">{copy.more}</p>
+    <p class="mx-auto mt-2 max-w-[48ch] text-muted">{copy.moreText}</p>
+    <div class="mt-6 flex justify-center"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
+  </section>
+
+  <FinalCta {...t.home.finalCta} />
+</MainLayout>

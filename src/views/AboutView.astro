@@ -2,6 +2,7 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import VisionSection from '@components/home/VisionSection.astro';
 import FinalCta from '@components/home/FinalCta.astro';
+import Box from '@components/home/Box.astro';
 import Glyph from '@components/ui/Glyph.astro';
 import { Image } from 'astro:assets';
 import { team } from '@data/team';
@@ -53,10 +54,10 @@ const icons = ['trend-up', 'briefcase', 'piggy-bank', 'sparkle'];
     </dl>
   </section>
 
-  <VisionSection {...t.home.vision} cta={{ title: 'Talk to us', url: '/contact/' }} />
+  <Box tone="dark"><VisionSection {...t.home.vision} cta={{ title: 'Talk to us', url: '/contact/' }} /></Box>
 
   {team.length > 0 && (
-    <section class="relative z-[1] -mt-8 rounded-t-[2rem] bg-ground">
+    <Box><section>
       <div class="mx-auto max-w-[85rem] px-4 py-20 sm:px-6 lg:px-8">
         <p class="font-mono text-xs tracking-wide text-muted uppercase">{copy.team.label}</p>
         <h2 class="mt-4 text-4xl font-semibold text-ink"><span class="block">{copy.team.claim}</span><span class="mark">{copy.team.payoff}</span></h2>
@@ -89,12 +90,10 @@ const icons = ['trend-up', 'briefcase', 'piggy-bank', 'sparkle'];
           })}
         </ul>
       </div>
-    </section>
+    </section></Box>
   )}
 
-  <div class="relative z-[1] -mt-8 rounded-t-[2rem] bg-ground pt-12">
-    <FinalCta {...t.home.finalCta} />
-  </div>
+  <FinalCta {...t.home.finalCta} />
 </MainLayout>
 
 <style>

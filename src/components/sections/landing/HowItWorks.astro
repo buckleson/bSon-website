@@ -20,7 +20,7 @@ const { index, label, claim, payoff, body, tabs } = Astro.props;
 <section id="how-it-works" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-28" data-how>
   <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} />
   <div class="mt-10 flex" data-reveal>
-    <div role="tablist" aria-label={label} class="flex flex-wrap gap-1.5 rounded-full bg-card p-1.5 ring-1 ring-line">
+    <div role="tablist" aria-label={label} class="flex flex-wrap gap-1.5 rounded-full bg-ground p-1.5">
       {tabs.map((tab, i) => (
         <button
           type="button"

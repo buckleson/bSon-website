@@ -19,11 +19,11 @@ const [featured, ...rest] = await entriesFor('blog', 'en');
 const list = rest.slice(0, 4);
 ---
 
-<section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+<section class="mx-auto max-w-[85rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
   <SectionHead index={index} label={label} claim={claim} payoff={payoff} cta={{ title: cta, url: '/blog/' }} />
   <div class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,6fr)]">
     {featured && (
-      <a href={pathFor(featured)} class="group overflow-hidden rounded-[1.6rem] bg-card ring-1 ring-line" data-reveal>
+      <a href={pathFor(featured)} class="group overflow-hidden rounded-[1.6rem] bg-ground" data-reveal>
         <div class="overflow-hidden"><BlogCover seed={slugOf(featured)} label={featured.data.tags[0] ?? 'Hyper 0X'} class="transition duration-500 group-hover:scale-[1.03]" /></div>
         <div class="p-6">
           <p class="font-mono text-xs text-muted uppercase">{featured.data.tags[0]} · {formatDate(featured.data.pubDate, 'en')}</p>

@@ -119,6 +119,9 @@ html:not(.dark) .iso.iso-auto{
 .iso-hero .iso-plate{padding:46px 14px 42px}
 .fig-pin{position:absolute;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,calc(-100% + 3px));pointer-events:none;transition:opacity .45s ease,transform .45s cubic-bezier(.22,1,.36,1);z-index:1}
 .fig-pin[data-side="down"]{flex-direction:column-reverse;transform:translate(-50%,-3px)}
+.fig-pin[data-side="right"]{flex-direction:row-reverse;transform:translate(-3.5px,-50%)}
+.fig-pin[data-side="left"]{flex-direction:row;transform:translate(calc(-100% + 3.5px),-50%)}
+.fig-pin[data-side="right"] .fig-pin-stem,.fig-pin[data-side="left"] .fig-pin-stem{width:12px;height:1px}
 .fig-pin-tag{display:inline-flex;align-items:center;gap:7px;padding:5px 10px 5px 6px;border-radius:999px;background:var(--fig-tag,#fff);color:var(--anatomy-strong);box-shadow:0 0 0 1px color-mix(in oklab,var(--anatomy-mid) 35%,transparent),0 8px 18px -10px rgb(0 0 0/.35);white-space:nowrap;transition:box-shadow .45s ease,background .45s ease}
 .fig-pin-tag>svg{flex:none;width:22px;height:22px;padding:3px;border-radius:999px;color:var(--fig-accent,#7c3aed);background:color-mix(in oklab,var(--fig-accent,#7c3aed) 12%,transparent)}
 .fig-pin-text{display:grid;line-height:1.15;text-align:left}
@@ -137,7 +140,20 @@ html:not(.dark) .iso.iso-auto{
 .fig-step-text b{font:600 13px/1.25 var(--font-sans,ui-sans-serif,system-ui,sans-serif);color:var(--anatomy-strong)}
 .fig-step-text small{font:400 12px/1.4 var(--font-sans,ui-sans-serif,system-ui,sans-serif);color:var(--anatomy-text)}
 .fig-step[data-on]{box-shadow:0 0 0 1.5px var(--fig-accent,#7c3aed)}
-.fig-led{fill:var(--fig-accent,#7c3aed);transition:opacity .3s ease}
+.fig-led{fill:var(--fig-accent,#7c3aed);transition:opacity .3s ease,fill .2s ease}
+.fig-led[data-state="ok"]{fill:#22a35a}
+.fig-led[data-state="bad"]{fill:#e5484d}
+.fig-bad .iso-top{fill:color-mix(in oklab,#e5484d 38%,var(--anatomy-top))}
+.fig-bad .iso-shade{fill:color-mix(in oklab,#e5484d 30%,var(--anatomy-shade-2))}
+.fig-bad .iso-edge{stroke:#e5484d}
+.iso-placeholder{width:100%;border-radius:1.6rem;background:color-mix(in oklab,var(--anatomy-mid) 10%,transparent)}
+.iso-card .iso-placeholder{background:transparent}
+.iso-card{--anatomy-card:transparent}
+.iso-card .iso-plate{background:transparent;box-shadow:none;padding:10px 6px 30px}
+.iso-card .iso-plate-corner:not([data-corner="readout"]){display:none}
+.iso-card .iso-plate-corners{inset:auto 12px 6px 12px;height:12px}
+.iso-card .fig-steps{display:none}
+@container figbox (min-height:10rem){.iso-card .iso-stage{width:min(100cqw - 1rem,(100cqh - 3.5rem) * var(--fig-ar,1.7));margin-inline:auto}}
 html.dark .iso,.iso-sheet{--fig-tag:#1d2026}
 html:not(.dark) .iso{--fig-accent:var(--accent-600,#7c3aed)}
 html.dark .iso{--fig-accent:var(--accent-400,#fb923c)}

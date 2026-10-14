@@ -3,6 +3,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import CardBlog from '@components/ui/cards/CardBlog.astro';
 import BlogCover from '@components/ui/BlogCover.astro';
 import Diagram from '@components/ui/Diagram.astro';
+import IsoFigure from '@components/ui/IsoFigure.astro';
 import Icon from '@components/ui/icons/Icon.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 import SocialShare from '@components/ui/buttons/SocialShare.astro';
@@ -13,7 +14,7 @@ import { entriesFor, localeOf, slugOf } from '@utils/content';
 import { BOOKING_URL } from '@data/constants';
 import { localePath } from '@utils/locale';
 
-/** One blog post: answer-first intro, optional diagram, body, FAQ, CTA. */
+/** One blog post: answer-first intro, an animated figure or diagram, body, FAQ, CTA. */
 interface Props {
   post: CollectionEntry<'blog'>;
 }
@@ -71,7 +72,9 @@ const related = others
       </div>
     </div>
 
-    {data.diagram ? (
+    {data.figure ? (
+      <div class="mt-10"><IsoFigure name={data.figure} /></div>
+    ) : data.diagram ? (
       <Diagram name={data.diagram} class="mt-10" />
     ) : (
       <div class="relative mt-10 overflow-hidden rounded-[1.6rem] pt-[52%] ring-1 ring-line"><BlogCover seed={slugOf(post)} label="" fill /></div>

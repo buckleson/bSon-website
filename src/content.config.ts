@@ -53,6 +53,8 @@ const blogCollection = defineCollection({
       tags: z.array(z.string()).default([]),
       /** Optional architecture diagram shown under the intro. */
       diagram: z.enum(diagramNames).optional(),
+      /** Optional animated Anatomy figure shown under the intro. */
+      figure: z.enum(['data-vault', 'chain-rack', 'pavii-gates', 'cipher-tower']).optional(),
       faqs: z.array(faq).default([]),
     }),
 });

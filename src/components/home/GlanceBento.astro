@@ -26,8 +26,8 @@ const marquee: BrandKey[] = ['ethereum', 'bitcoin', 'solana', 'sui', 'tether', '
 const ticks = Array.from({ length: 48 }, (_, i) => i);
 ---
 
-<section class="mx-auto max-w-[85rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-  <div class="rounded-[2rem] bg-card p-6 ring-1 ring-line sm:p-10">
+<section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+  <div>
     <p class="font-mono text-xs tracking-wide text-muted uppercase">(00) {label}</p>
     <p class="mt-5 max-w-[48ch] text-xl leading-relaxed font-medium text-pretty text-ink sm:text-2xl" data-reveal>{statement}</p>
 
@@ -77,7 +77,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
         <p class="mt-1 text-sm text-muted">Hybrid ML-KEM-768 + X25519 key exchange on every connection.</p>
       </div>
 
-      <div class="bento flex flex-col justify-between rounded-[1.6rem] bg-card p-6 ring-1 ring-line" data-reveal>
+      <div class="bento flex flex-col justify-between rounded-[1.6rem] bg-ground p-6" data-reveal>
         <p class="font-mono text-xs tracking-wide text-muted uppercase">Enterprise pilot</p>
         <div class="mt-6">
           <p class="font-display text-xl font-semibold text-ink">{pilot.company}</p>
