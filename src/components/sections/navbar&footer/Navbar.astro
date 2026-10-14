@@ -11,7 +11,14 @@ import { localePath } from '@utils/locale';
  * All menus share one panel that resizes between them. The bar hides while
  * scrolling down and returns on scroll up. On phones the menu is a
  * full-screen sheet with drill-down views and pinned calls to action.
+ * `part="mobile"` renders only that sheet: the layout places it at the end
+ * of the page so the header and hero reach the first paint sooner.
  */
+interface Props {
+  part?: 'header' | 'mobile';
+}
+
+const { part = 'header' } = Astro.props;
 const { locale } = Astro.locals;
 const href = (path: string) => localePath(locale, path);
 const widths: Record<string, string> = {
@@ -22,6 +29,8 @@ const widths: Record<string, string> = {
 };
 ---
 
+{part === 'header' && (
+<Fragment>
 <header class="site-header fixed inset-x-0 top-0 z-50" data-header>
   <div class="header-bar border-b border-transparent transition-[background-color,border-color] duration-300">
     <nav class="mx-auto flex h-16 max-w-[85rem] items-center gap-2 px-4 sm:px-6 lg:px-8" aria-label="Main">
@@ -101,7 +110,10 @@ const widths: Record<string, string> = {
   </div>
 </header>
 <div class="h-16" aria-hidden="true"></div>
+</Fragment>
+)}
 
+{part === 'mobile' && (
 <div id="mobile-menu" class="mobile-menu fixed inset-0 z-[70] flex flex-col bg-ground lg:hidden" hidden data-mobile-menu>
   <div class="flex h-16 items-center justify-between border-b border-line px-4">
     <BrandLogo />
@@ -154,6 +166,7 @@ const widths: Record<string, string> = {
     <a href={BOOKING_URL} class="rounded-full bg-orange-600 py-3 text-center font-semibold text-white dark:bg-orange-700">Book a call</a>
   </div>
 </div>
+)}
 
 <style>
   .site-header { transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1); }
