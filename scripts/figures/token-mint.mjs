@@ -256,9 +256,9 @@ const svg = k.figureSvg({
 });
 
 const pins = pinsHtml(P, WIDTH, HEIGHT, [
-  { id: 'vault', n: 1, at: [VAULT.x + VAULT.w / 2, VAULT.y + VAULT.d / 2, VAULT.h], icon: 'vault', title: 'Custodian vault', sub: 'The asset stays in custody', expand: true, seek: 'custody' },
-  { id: 'reserve', n: 2, at: [METER.x, METER.y + METER.d / 2, METER.h / 2], icon: 'seal-check', title: 'Proof of reserve', sub: 'Tokens never exceed the reserve', side: 'left', lift: 16, expand: true, seek: 'reserve' },
-  { id: 'press', n: 3, at: [PRESS.x, 0, PRESS.beam[1] + 5], icon: 'coins', title: 'Mint press', sub: 'One token for each unit', expand: true, seek: 'mint' },
+  { id: 'vault', n: 1, at: [VAULT.x + 10, VAULT.y + VAULT.d - 10, VAULT.h], icon: 'vault', title: 'Custodian vault', sub: 'The asset stays in custody', expand: true, seek: 'custody' },
+  { id: 'reserve', n: 2, at: [METER.x + METER.w / 2, METER.y + METER.d, 0], icon: 'seal-check', title: 'Proof of reserve', sub: 'Tokens never exceed the reserve', side: 'down', lift: 10, expand: true, seek: 'reserve' },
+  { id: 'press', n: 3, at: [PRESS.x, 0, PRESS.beam[1] + 5], icon: 'coins', title: 'Mint press', sub: 'One token for each unit', lift: 16, expand: true, seek: 'mint' },
   { id: 'gate', n: 4, at: [GATE.x, 0, GATE.top + 5], icon: 'identification-card', title: 'Investor check', sub: 'KYC and limits before delivery', lift: 20, expand: true, seek: 'check' },
   { id: 'wallet', at: [WALLET.x + WALLET.w / 2, WALLET.y + WALLET.d / 2, WALLET.h], icon: 'wallet', title: 'Investor wallet', sub: 'Settled on Hyper 0X', expand: true },
   { id: 'held', at: [HELD.x + HELD.w / 2, HELD.y + HELD.d, 0], icon: 'hand-palm', title: 'Held for review', sub: 'Over the investor limit', side: 'down', expand: true },

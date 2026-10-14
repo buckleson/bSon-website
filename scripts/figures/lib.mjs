@@ -242,6 +242,7 @@ html:not(.dark) .iso{--fig-accent:var(--accent-600,#7c3aed)}
 html.dark .iso{--fig-accent:var(--accent-400,#fb923c)}
 @media (max-width:520px){.fig-steps{grid-template-columns:1fr 1fr;gap:6px}.fig-step{padding:9px;gap:8px;border-radius:14px}.fig-step-icon{width:26px;height:26px;border-radius:8px}.fig-step-icon svg{width:15px;height:15px}.fig-step-text b{font-size:12px}.fig-step-text small{font-size:11px}}
 @media (max-width:640px){.fig-pin:not([data-on]) .fig-pin-text small{display:none}.fig-pin-text small{max-width:21ch}.fig-pin-tag{gap:5px;padding:3px 7px 3px 3px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10px}.fig-pin[data-dim]{visibility:hidden}}
+@container (max-width:700px){.fig-pin:not([data-on]) .fig-pin-text small{display:none}.fig-pin-text small{max-width:22ch}.fig-pin-tag{gap:5px;padding:3px 8px 3px 4px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10.5px}.fig-pin-num{min-width:14px;height:14px;font-size:8.5px}}
 @media (prefers-reduced-motion:reduce){.fig-pin{transition:none}}
 `;
 
