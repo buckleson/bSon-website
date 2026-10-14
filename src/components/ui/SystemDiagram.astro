@@ -103,7 +103,7 @@ const story = spec.steps.map(step => ({
               <circle class="sd-icon-bg" cx="32" cy="32" r="19" />
               {logo ? (
                 logo.path ? (
-                  <svg x="21" y="21" width="22" height="22" viewBox="0 0 24 24" style={`color:#${logo.hex}`} class="sd-brand"><path d={logo.path} fill="currentColor" /></svg>
+                  <svg x="21" y="21" width="22" height="22" viewBox="0 0 24 24" style={`color:#${logo.hex}`} class="sd-brand"><path d={logo.path} fill="currentColor" fill-rule={logo.rule} /></svg>
                 ) : (
                   <text x="32" y="37" text-anchor="middle" class="sd-mono">{logo.monogram}</text>
                 )

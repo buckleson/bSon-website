@@ -1,11 +1,13 @@
 ---
-import { glyph } from '@utils/glyphs';
+import { brand, glyph, type BrandKey } from '@utils/glyphs';
 
 /**
  * Small looping scene per product (pure SVG + CSS, no JavaScript), used
  * wherever a product needs an image: home accordion, product cards.
  * - hyper-0x: three private L2s stream blocks into the shared L1.
- * - pavii: calls fly at a shield; red ones break, green ones pass.
+ * - pavii: prompts and tool calls from three agents meet the Pavii shield;
+ *   safe ones pass to tools, data or users; malicious ones turn red, show why
+ *   they were blocked, crack and fall.
  * - hyper-wallet: a trade settles both legs at once.
  * - h0x-pay: a payment drops a slice into a growing gold balance.
  * - hyperrun: a match result is signed and rewards pay out.
@@ -18,6 +20,24 @@ interface Props {
 }
 
 const { product, class: className, fill = false } = Astro.props;
+// Pavii: six calls from three agents on three lanes; safe ones reach a
+// system, malicious ones are stopped at the shield with the reason shown.
+const pvLane = [64, 124, 184];
+const pvSources: BrandKey[] = ['claude', 'openai', 'gemini'];
+const pvTargets = [
+  { icon: 'plugs', label: 'Tools' },
+  { icon: 'database', label: 'Data' },
+  { icon: 'users', label: 'Users' },
+];
+// `still`: the moment shown when motion is reduced (seconds into the loop).
+const pvItems: { label: string; tool: boolean; bad: boolean; from: number; to?: number; reason?: string; still: number }[] = [
+  { label: 'Summarise Q3 report', tool: false, bad: false, from: 0, to: 2, still: -2.6 },
+  { label: 'email.send(all, db)', tool: true, bad: true, from: 1, reason: 'data exfiltration', still: -2.3 },
+  { label: 'crm.lookup(4821)', tool: true, bad: false, from: 2, to: 1, still: -8 },
+  { label: 'Ignore all your rules', tool: false, bad: true, from: 0, reason: 'prompt injection', still: -8 },
+  { label: 'invoice.create()', tool: true, bad: false, from: 1, to: 0, still: -8 },
+  { label: 'wallet.send($50k)', tool: true, bad: true, from: 2, reason: 'over budget', still: -8 },
+];
 const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =>
   `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 256 256" class="${cls}">${glyph(name)}</svg>`;
 ---
@@ -51,18 +71,69 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
 
     {product === 'pavii' && (
       <g>
-        {['Prompt', 'Tool call', 'Email'].map((label, i) => (
-          <g class:list={['pa-call', i === 1 && 'pa-call--bad']} style={`animation-delay:${i * 1.1}s`}>
-            <rect x="-34" y="-12" width="68" height="24" rx="12" />
-            <text y="4" text-anchor="middle">{label}</text>
+        <defs>
+          <clipPath id="pv-left"><rect x="-70" y="-20" width="70" height="40" /></clipPath>
+          <clipPath id="pv-right"><rect x="0" y="-20" width="70" height="40" /></clipPath>
+        </defs>
+        <text x="24" y="34" text-anchor="middle" class="pa-t-dim">Agents</text>
+        {pvSources.map((key, i) => (
+          <g>
+            <circle cx="24" cy={pvLane[i]} r="14" class="pa-node" />
+            <svg x="16" y={pvLane[i] - 8} width="16" height="16" viewBox="0 0 24 24"><path d={brand(key).path} fill-rule={brand(key).rule} fill={key === 'openai' ? '#ffffff' : `#${brand(key).hex}`} /></svg>
           </g>
         ))}
-        <circle cx="200" cy="130" r="52" class="pa-shield-ring" />
-        <circle cx="200" cy="130" r="34" class="pa-chain" />
-        <Fragment set:html={icon('shield-check', 184, 114, 32, 'pa-ic-w')} />
-        <rect x="300" y="108" width="84" height="44" rx="12" class="pa-node" />
-        <Fragment set:html={icon('database', 310, 120, 20)} />
-        <text x="336" y="134" class="pa-t">Systems</text>
+        <text x="372" y="34" text-anchor="middle" class="pa-t-dim">Systems</text>
+        {pvTargets.map((target, i) => (
+          <g>
+            <rect x="355" y={pvLane[i] - 17} width="34" height="34" rx="10" class="pa-node" />
+            <Fragment set:html={icon(target.icon, 363, pvLane[i] - 9, 18)} />
+            <text x="372" y={pvLane[i] + 28} text-anchor="middle" class="pa-t-xs">{target.label}</text>
+          </g>
+        ))}
+
+        <circle cx="204" cy="124" r="46" class="pa-shield-ring" />
+        {pvItems.map((item, i) => (
+          <circle cx="204" cy="124" r="36" class={item.bad ? 'pv-flash' : 'pv-pulse'} style={`animation-delay:${i * 2}s;--still:${item.still}s`} />
+        ))}
+        <circle cx="204" cy="124" r="34" class="pa-chain" />
+        <svg x="184" y="104" width="40" height="40" viewBox="84 92 1086 1086" class="pv-logo" aria-hidden="true">
+          <circle cx="627" cy="613" r="503" fill="none" stroke="currentColor" stroke-width="56" />
+          <path d="M376 335H728A185 199 0 0 1 728 733H665V980L552 848V613H722A79 79 0 0 0 722 455H497V710L376 567Z" fill="currentColor" />
+        </svg>
+        <text x="204" y="190" text-anchor="middle" class="pa-t-w">Pavii</text>
+        <text x="204" y="203" text-anchor="middle" class="pa-t-dim">6 security gates</text>
+        {pvItems.filter(item => item.bad).map(item => (
+          <g class="pv-reason" style={`animation-delay:${pvItems.indexOf(item) * 2}s;--still:${item.still}s`}>
+            <rect x="136" y="214" width="136" height="22" rx="11" class="pv-reason-bg" />
+            <text x="204" y="229" text-anchor="middle" class="pv-reason-t">Blocked: {item.reason}</text>
+          </g>
+        ))}
+
+        {pvItems.map((item, i) => {
+          const timing = `animation-delay:${i * 2}s;--still:${item.still}s`;
+          const parts = item.bad ? ['pv-half pv-half-l', 'pv-half pv-half-r'] : ['pv-whole'];
+          return (
+            <g class:list={['pv-item', item.bad ? 'pv-bad' : 'pv-good']} style={`--y0:${pvLane[item.from]}px;--y1:${pvLane[item.to ?? 1]}px;${timing}`}>
+              {parts.map(part => (
+                <g class={part} clip-path={part.endsWith('-l') ? 'url(#pv-left)' : part.endsWith('-r') ? 'url(#pv-right)' : undefined} style={timing}>
+                  <rect x="-60" y="-14" width="120" height="28" rx="14" class="pv-pill" />
+                  <rect x="-60" y="-14" width="120" height="28" rx="14" class={item.bad ? 'pv-red' : 'pv-ok-ring'} style={timing} />
+                  <circle cx="-45" cy="0" r="10" class={item.tool ? 'pv-ic-tool' : 'pv-ic-prompt'} />
+                  <Fragment set:html={icon(item.tool ? 'wrench' : 'chat-circle-text', -52, -7, 14, 'pa-ic-w')} />
+                  <text x="-31" y="-2.5" class="pv-kind">{item.tool ? 'TOOL CALL' : 'PROMPT'}</text>
+                  <text x="-31" y="8" class="pv-label">{item.label}</text>
+                </g>
+              ))}
+              {item.bad && <path d="M0 -14 L-3 -6 L2 -1 L-2 5 L1 14" class="pv-crack" style={timing} />}
+              {!item.bad && (
+                <g class="pv-check" style={timing}>
+                  <circle cx="56" cy="-12" r="7" />
+                  <path d="M52.6 -12 L55 -9.6 L59.4 -14" />
+                </g>
+              )}
+            </g>
+          );
+        })}
       </g>
     )}
 
@@ -130,16 +201,59 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
   @keyframes pa-stack { 50% { opacity: 0.95; } }
 
   /* pavii */
-  .pa-call { animation: pa-call 3.3s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-  .pa-call rect { fill: #10b981; }
-  .pa-call text { fill: #04150e; font-size: 11px; font-weight: 700; font-family: var(--font-sans); }
-  @keyframes pa-call { 0% { transform: translate(40px, 130px); opacity: 0; } 10% { opacity: 1; } 45% { transform: translate(140px, 130px); } 100% { transform: translate(300px, 130px); opacity: 0; } }
-  .pa-call--bad { animation-name: pa-call-bad; }
-  .pa-call--bad rect { fill: #ef4444; }
-  .pa-call--bad text { fill: #1a0505; }
-  @keyframes pa-call-bad { 0% { transform: translate(40px, 130px); opacity: 0; } 10% { opacity: 1; } 45% { transform: translate(140px, 130px) scale(1); opacity: 1; } 60% { transform: translate(140px, 130px) scale(1.4); opacity: 0; } 100% { opacity: 0; } }
-  .pa-shield-ring { fill: none; stroke: var(--pa-accent); stroke-width: 2; stroke-dasharray: 8 7; transform-origin: 200px 130px; animation: pa-spin 14s linear infinite; }
+  .pa-t-xs { fill: #8b8f99; font-size: 9px; font-family: var(--font-sans); }
+  .pa-shield-ring { fill: none; stroke: var(--pa-accent); stroke-width: 2; stroke-dasharray: 8 7; transform-origin: 204px 124px; animation: pa-spin 14s linear infinite; }
   @keyframes pa-spin { to { transform: rotate(360deg); } }
+  .pv-logo { color: #fff; }
+  .pv-item, .pv-half, .pv-red, .pv-ok-ring, .pv-crack, .pv-check, .pv-flash, .pv-pulse, .pv-reason { animation-duration: 12s; animation-iteration-count: infinite; animation-fill-mode: both; }
+  .pv-pill { fill: #1a1d23; stroke: #343a45; stroke-width: 1.2; }
+  .pv-kind { fill: #8b8f99; font-size: 7px; font-weight: 600; letter-spacing: 0.08em; font-family: var(--font-mono); }
+  .pv-label { fill: #eef0f4; font-size: 9.5px; font-weight: 600; font-family: var(--font-sans); }
+  .pv-ic-prompt { fill: #3b5bdb; }
+  .pv-ic-tool { fill: #a16207; }
+  .pv-good { animation-name: pv-good; animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1); }
+  @keyframes pv-good {
+    0% { transform: translate(48px, var(--y0)) scale(0.55); opacity: 0; }
+    3% { opacity: 1; }
+    14% { transform: translate(96px, 124px) scale(1); }
+    19% { transform: translate(204px, 124px) scale(0.6); }
+    24% { transform: translate(296px, var(--y1)) scale(0.85); opacity: 1; }
+    31% { transform: translate(356px, var(--y1)) scale(0.3); opacity: 0.9; }
+    33%, 100% { transform: translate(372px, var(--y1)) scale(0.2); opacity: 0; }
+  }
+  .pv-bad { animation-name: pv-bad; animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1); }
+  @keyframes pv-bad {
+    0% { transform: translate(48px, var(--y0)) scale(0.55); opacity: 0; }
+    3% { opacity: 1; }
+    14% { transform: translate(96px, 124px) scale(1); }
+    15% { transform: translate(91px, 124px); }
+    16% { transform: translate(100px, 124px); }
+    17% { transform: translate(93px, 124px); }
+    18%, 32% { transform: translate(96px, 124px); opacity: 1; }
+    34%, 100% { transform: translate(96px, 124px); opacity: 0; }
+  }
+  .pv-ok-ring { fill: none; stroke: #34d399; stroke-width: 1.6; opacity: 0; animation-name: pv-ok; }
+  .pv-check { opacity: 0; animation-name: pv-ok; }
+  .pv-check circle { fill: #10b981; }
+  .pv-check path { fill: none; stroke: #04150e; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  @keyframes pv-ok { 0%, 17% { opacity: 0; } 19%, 100% { opacity: 1; } }
+  .pv-red { fill: rgb(239 68 68 / 0.2); stroke: #ef4444; stroke-width: 1.6; opacity: 0; animation-name: pv-red; }
+  @keyframes pv-red { 0%, 13.5% { opacity: 0; } 14.5%, 100% { opacity: 1; } }
+  .pv-crack { fill: none; stroke: #fca5a5; stroke-width: 1.4; stroke-linejoin: round; opacity: 0; animation-name: pv-crack; }
+  @keyframes pv-crack { 0%, 16.5% { opacity: 0; } 17.5%, 19% { opacity: 1; } 20%, 100% { opacity: 0; } }
+  .pv-half { transform-box: fill-box; transform-origin: center; animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  .pv-half-l { animation-name: pv-fall-l; }
+  .pv-half-r { animation-name: pv-fall-r; }
+  @keyframes pv-fall-l { 0%, 19% { transform: none; opacity: 1; } 31% { transform: translate(-14px, 86px) rotate(-34deg); opacity: 0; } 100% { opacity: 0; } }
+  @keyframes pv-fall-r { 0%, 19% { transform: none; opacity: 1; } 31% { transform: translate(16px, 94px) rotate(28deg); opacity: 0; } 100% { opacity: 0; } }
+  .pv-flash { fill: none; stroke: #ef4444; stroke-width: 6; opacity: 0; transform-origin: 204px 124px; animation-name: pv-flash; }
+  @keyframes pv-flash { 0%, 13.8% { opacity: 0; transform: scale(1); } 15% { opacity: 0.85; } 23%, 100% { opacity: 0; transform: scale(1.3); } }
+  .pv-pulse { fill: none; stroke: #34d399; stroke-width: 4; opacity: 0; transform-origin: 204px 124px; animation-name: pv-pulse; }
+  @keyframes pv-pulse { 0%, 17% { opacity: 0; transform: scale(1); } 19% { opacity: 0.7; } 25%, 100% { opacity: 0; transform: scale(1.25); } }
+  .pv-reason { opacity: 0; animation-name: pv-reason; }
+  .pv-reason-bg { fill: rgb(239 68 68 / 0.16); stroke: rgb(239 68 68 / 0.5); }
+  .pv-reason-t { fill: #fca5a5; font-size: 9.5px; font-weight: 650; font-family: var(--font-sans); }
+  @keyframes pv-reason { 0%, 14.5% { opacity: 0; transform: translateY(4px); } 16%, 30% { opacity: 1; transform: none; } 33%, 100% { opacity: 0; } }
 
   /* hyper-wallet */
   .pa-swap-a { animation: pa-swap-a 4s ease-in-out infinite; }
@@ -161,7 +275,8 @@ const icon = (name: string, x: number, y: number, size: number, cls = 'pa-ic') =
   @keyframes pa-coin { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
   @media (prefers-reduced-motion: reduce) {
-    .pa * { animation: none !important; }
+    .pa *:not([class*='pv-']) { animation: none !important; }
+    .pa [class*='pv-'] { animation-delay: var(--still, -8s) !important; animation-play-state: paused !important; }
     .pa-block { display: none; }
     .pa-settled, .pa-signed { opacity: 1; }
   }

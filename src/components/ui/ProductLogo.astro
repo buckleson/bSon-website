@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import Glyph from '@components/ui/Glyph.astro';
+import hyperWallet from '@images/brand/hyper-wallet.png';
+
+/**
+ * A product's mark: the Pavii and Hyper 0X logos as vectors (traced from
+ * src/images/brand, drawn in currentColor so they follow the theme), the
+ * Hyper Wallet app icon, and a Phosphor icon for products without a logo yet.
+ */
+interface Props {
+  product: string;
+  class?: string;
+}
+
+const { product, class: className } = Astro.props;
+const fallback: Record<string, string> = { 'h0x-pay': 'coins', hyperrun: 'crosshair' };
+---
+
+{product === 'pavii' && (
+  <svg viewBox="84 92 1086 1086" class:list={['block', className]} role="img" aria-label="Pavii logo">
+    <circle cx="627" cy="613" r="503" fill="none" stroke="currentColor" stroke-width="44" />
+    <path d="M376 335H728A185 199 0 0 1 728 733H665V980L552 848V613H722A79 79 0 0 0 722 455H497V710L376 567Z" fill="currentColor" />
+  </svg>
+)}
+{product === 'hyper-0x' && (
+  <svg viewBox="280 210 700 820" class:list={['block', className]} role="img" aria-label="Hyper 0X logo" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">
+    <g stroke-width="1.6" vector-effect="non-scaling-stroke">
+      {[0, 418].map(dx => (
+        <g transform={`translate(${dx} 0)`}>
+          <path vector-effect="non-scaling-stroke" d="M318 385Q318 360 339 347L494 247Q527 228 527 268L527 855Q527 870 513 880L352 988Q318 1005 318 970Z" />
+          <path vector-effect="non-scaling-stroke" d="M527 362L436 421Q420 431 420 450L420 800Q420 818 436 828L513 880" />
+        </g>
+      ))}
+      <rect vector-effect="non-scaling-stroke" x="557" y="541" width="146" height="151" rx="22" />
+    </g>
+  </svg>
+)}
+{product === 'hyper-wallet' && <Image src={hyperWallet} alt="Hyper Wallet logo" class:list={['block rounded-[22%]', className]} widths={[64, 128]} sizes="64px" />}
+{fallback[product] && <Glyph icon={fallback[product]} class={className} />}

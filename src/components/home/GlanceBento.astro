@@ -22,7 +22,7 @@ const stats = [
   { count: 100, prefix: '', suffix: 'M+', label: 'AI tokens saved by Pavii' },
 ];
 const models = (['claude', 'gemini', 'openai', 'grok'] as const).map(key => brand(key));
-const marquee: BrandKey[] = ['ethereum', 'bitcoin', 'solana', 'sui', 'tether', 'binance', 'coinbase', 'claude', 'gemini'];
+const marquee: BrandKey[] = ['ethereum', 'bitcoin', 'solana', 'sui', 'tether', 'binance', 'coinbase', 'openai', 'claude', 'gemini', 'grok'];
 const ticks = Array.from({ length: 48 }, (_, i) => i);
 ---
 
@@ -51,7 +51,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
             <span class="grid size-12 place-items-center rounded-full bg-card ring-4 ring-card" title={model.title}>
               <span class="grid size-11 place-items-center rounded-full bg-ground">
                 {model.path ? (
-                  <svg viewBox="0 0 24 24" class="size-6" style={`color:#${model.hex}`} aria-hidden="true"><path d={model.path} fill="currentColor" /></svg>
+                  <svg viewBox="0 0 24 24" class="size-6" style={`color:#${model.hex}`} aria-hidden="true"><path d={model.path} fill="currentColor" fill-rule={model.rule} /></svg>
                 ) : (
                   <span class="text-sm font-extrabold" style={`color:#${model.hex}`}>{model.monogram}</span>
                 )}
@@ -94,7 +94,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
             const logo = brand(key);
             return (
               <li class="flex items-center gap-2 text-muted" aria-hidden={index >= marquee.length ? 'true' : undefined}>
-                <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true"><path d={logo.path} fill="currentColor" /></svg>
+                <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true"><path d={logo.path} fill="currentColor" fill-rule={logo.rule} /></svg>
                 <span class="text-sm font-medium whitespace-nowrap">{logo.title}</span>
               </li>
             );

@@ -4,9 +4,9 @@ import Glyph from '@components/ui/Glyph.astro';
 import IsoFigure from '@components/ui/IsoFigure.astro';
 
 /**
- * "Why Hyper 0X" on a dark sheet, explained by Fig 1, the block press: three
- * private L2s hand over a state root each, the press seals them into one
- * block in a single stroke, and the block joins the shared ledger.
+ * "Why Hyper 0X" on a dark sheet, explained by Fig 2, the chain rack: one L1
+ * chassis with an L2 module per application, a new L2 dropping in and out
+ * while the others run, and blocks that grow and shrink with traffic.
  */
 interface Props {
   index: string;
@@ -25,7 +25,7 @@ const { index, label, claim, payoff, body, facts } = Astro.props;
     <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} tone="sheet" />
 
     <div class="mx-auto mt-12 max-w-5xl" data-reveal>
-      <IsoFigure name="block-press" tone="sheet" />
+      <IsoFigure name="chain-rack" tone="sheet" />
     </div>
 
     <ul class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">

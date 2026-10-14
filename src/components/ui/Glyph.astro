@@ -22,7 +22,7 @@ const a11y = title ? { role: 'img' as const, 'aria-label': title } : { 'aria-hid
   <svg class={className} viewBox="0 0 256 256" fill="currentColor" {...a11y} set:html={glyph(icon)} />
 )}
 {logo && (logo.path ? (
-  <svg class={className} viewBox="0 0 24 24" fill="currentColor" {...a11y}><path d={logo.path} /></svg>
+  <svg class={className} viewBox="0 0 24 24" fill="currentColor" {...a11y}><path d={logo.path} fill-rule={logo.rule} /></svg>
 ) : (
   <svg class={className} viewBox="0 0 24 24" {...a11y}>
     <text x="12" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">{logo.monogram}</text>

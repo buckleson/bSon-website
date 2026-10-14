@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-// Logo paths extracted from Simple Icons (CC0, simpleicons.org).
+// Logo paths: Simple Icons (CC0, simpleicons.org); OpenAI and Grok marks from
+// LobeHub icons (MIT, github.com/lobehub/lobe-icons). Trademarks belong to
+// their owners and are used only to say which models we work with.
 import icons from '@data/brand-icons.json';
 
 /**
@@ -67,17 +69,18 @@ export function glyph(name: string): string {
 export interface Brand {
   title: string;
   hex: string;
-  /** Simple Icons path; absent for marks we render as a monogram. */
+  /** Logo path (viewBox 0 0 24 24); absent for marks we render as a monogram. */
   path?: string;
   monogram?: string;
+  /** SVG fill-rule for paths that need it. */
+  rule?: 'evenodd';
 }
 
 const BRANDS = {
   claude: { ...icons.claude, title: 'Claude' },
   gemini: { ...icons.gemini, title: 'Gemini' },
-  // OpenAI and xAI logos are not redistributable; show name monograms instead.
-  openai: { title: 'OpenAI', hex: '10a37f', monogram: 'AI' },
-  grok: { title: 'Grok', hex: '6b7280', monogram: 'G' },
+  openai: icons.openai,
+  grok: icons.grok,
   ethereum: { ...icons.ethereum, hex: '627EEA' },
   solana: icons.solana,
   sui: icons.sui,

@@ -115,8 +115,8 @@ export const en = {
       claim: "Public chains don't fit banks.",
       payoff: 'So we built our own.',
       body:
-        "Renting a public chain means sharing its fees, its roadmap and its outages. Hyper 0X gives every customer a private L2 with their own rules, settled on one shared L1.",
-      facts: ['Own L1', 'A private L2 per customer', 'Post-quantum-resistant', 'No seed phrases'],
+        "Renting a public chain means sharing its fees, its roadmap and its outages. On Hyper 0X, one L1 settles everything and every application gets its own L2, sized to what it needs. Add a new L2, change one or retire it whenever your plans change.",
+      facts: ['Own L1', 'An L2 per application', 'Add or change L2s any time', 'Post-quantum-resistant'],
     },
     products: {
       label: 'Products',
