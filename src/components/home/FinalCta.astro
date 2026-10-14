@@ -20,7 +20,7 @@ const { claim, payoff, text, btn, email } = Astro.props;
       {[0, 1, 2, 3].map(i => <span class="cta-ring absolute aspect-square w-[18rem] rounded-full border border-white/10" style={`animation-delay:${i * 1.5}s`}></span>)}
     </div>
     <h2 class="mx-auto max-w-3xl text-4xl leading-[1.02] font-semibold sm:text-6xl" data-reveal>
-      <span class="block">{claim}</span>
+      <span class="relative z-[1] block">{claim}</span>
       <span class="mark">{payoff}</span>
     </h2>
     <p class="mx-auto mt-5 max-w-md text-pretty text-white/70" data-reveal>{text}</p>

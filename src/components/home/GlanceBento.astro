@@ -16,10 +16,10 @@ interface Props {
 
 const { label, statement, pilot, logosTitle } = Astro.props;
 const stats = [
-  { count: 2000000, prefix: '', label: 'transactions through Hyper Wallet' },
-  { count: 33000, prefix: '', label: 'portfolios managed' },
-  { count: 128000, prefix: '$', label: 'saved by users in wallet fees' },
-  { count: 100000000, prefix: '', label: 'AI tokens saved by Pavii' },
+  { count: 2, prefix: '', suffix: 'M+', label: 'transactions through Hyper Wallet' },
+  { count: 33, prefix: '', suffix: 'K+', label: 'portfolios managed' },
+  { count: 128, prefix: '$', suffix: 'K+', label: 'saved by users in wallet fees' },
+  { count: 100, prefix: '', suffix: 'M+', label: 'AI tokens saved by Pavii' },
 ];
 const models = (['claude', 'gemini', 'openai', 'grok'] as const).map(key => brand(key));
 const marquee: BrandKey[] = ['ethereum', 'bitcoin', 'solana', 'sui', 'tether', 'binance', 'coinbase', 'claude', 'gemini'];
@@ -38,7 +38,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i);
           {stats.map(stat => (
             <div>
               <dt class="sr-only">{stat.label}</dt>
-              <dd class="font-display text-4xl font-semibold tabular-nums sm:text-5xl" data-count={stat.count} data-prefix={stat.prefix} data-suffix="+">{stat.prefix}{stat.count.toLocaleString('en-US')}+</dd>
+              <dd class="font-display text-4xl font-semibold tabular-nums sm:text-5xl" data-count={stat.count} data-prefix={stat.prefix} data-suffix={stat.suffix}>{stat.prefix}{stat.count}{stat.suffix}</dd>
               <dd class="mt-2 text-sm text-white/70">{stat.label}</dd>
             </div>
           ))}
