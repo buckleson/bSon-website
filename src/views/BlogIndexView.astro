@@ -196,6 +196,8 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
   :global(.dark) .topic-more { color: var(--accent-300); }
   @media (prefers-reduced-motion: reduce) { .topic-tile { transition: none; } .topic-tile:hover { transform: none; } }
   .post-cell > :global(*) { height: 100%; }
+  /* Cards below the fold skip style and layout until they come near. */
+  .post-cell { content-visibility: auto; contain-intrinsic-size: auto 29rem; }
   @media (min-width: 768px) { .post-cell.is-wide { grid-column: span 2; } }
 </style>
 
