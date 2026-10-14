@@ -15,6 +15,7 @@ interface Props {
 }
 
 const { index, label, claim, payoff, body, tabs } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <section id="how-it-works" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-28" data-how>
@@ -39,13 +40,35 @@ const { index, label, claim, payoff, body, tabs } = Astro.props;
   <div class="mt-6" data-reveal>
     {tabs.map((tab, i) => (
       <div role="tabpanel" id={`how-panel-${tab.system}`} aria-labelledby={`how-tab-${tab.system}`} hidden={i !== 0}>
-        <SystemDiagram name={tab.system} />
+        {i === 0 ? <SystemDiagram name={tab.system} /> : <div class="aspect-[900/420] rounded-[1.6rem] bg-sheet" data-sd-lazy={`${base}/systems/${tab.system}.txt`}></div>}
       </div>
     ))}
   </div>
 </section>
 
 <script>
+  // Hidden tabs fetch their diagram after load (or at once when picked), so
+  // the first paint carries only the first diagram.
+  const cache = new Map<string, Promise<string>>();
+  const fetchDiagram = (url: string) => {
+    if (!cache.has(url)) cache.set(url, fetch(url).then(r => (r.ok ? r.text() : '')));
+    return cache.get(url)!;
+  };
+  const fill = async (holder: HTMLElement) => {
+    const html = await fetchDiagram(holder.dataset.sdLazy!);
+    if (!html || !holder.isConnected) return;
+    const tpl = document.createElement('template');
+    tpl.innerHTML = html;
+    const figure = tpl.content.firstElementChild as HTMLElement | null;
+    if (!figure) return;
+    holder.replaceWith(figure);
+    figure.dispatchEvent(new Event('sd:add', { bubbles: true }));
+  };
+  const fillAll = () => document.querySelectorAll<HTMLElement>('[data-sd-lazy]').forEach(fill);
+  const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 300));
+  if (document.readyState === 'complete') idle(fillAll);
+  else window.addEventListener('load', () => idle(fillAll), { once: true });
+
   document.querySelectorAll<HTMLElement>('[data-how]').forEach(root => {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
     const select = (tab: HTMLButtonElement) => {
@@ -53,7 +76,10 @@ const { index, label, claim, payoff, body, tabs } = Astro.props;
         const on = other === tab;
         other.setAttribute('aria-selected', String(on));
         other.tabIndex = on ? 0 : -1;
-        root.querySelector<HTMLElement>(`#${other.getAttribute('aria-controls')}`)!.hidden = !on;
+        const panel = root.querySelector<HTMLElement>(`#${other.getAttribute('aria-controls')}`)!;
+        panel.hidden = !on;
+        const holder = on && panel.querySelector<HTMLElement>('[data-sd-lazy]');
+        if (holder) fill(holder);
       });
     };
     tabs.forEach((tab, index) => {
