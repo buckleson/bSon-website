@@ -53,7 +53,7 @@ const steps = servicePages[0].steps;
   </section>
 
   <section class="mx-auto max-w-[85rem] px-4 pb-14 sm:px-6 lg:px-8" aria-label="Our services">
-    <ul class="grid gap-3 md:grid-cols-2 lg:grid-cols-12" data-reveal-group>
+    <ul class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-12" data-reveal-group>
       {items.map(item => {
         const look = layout[item.id];
         const page = pages[item.id];
@@ -87,7 +87,7 @@ const steps = servicePages[0].steps;
 
   <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="process-title">
     <SectionHead index="02" label="How we work" claim="Small first," payoff="then production." body="You see it work before you commit. Every project starts with one use case and one measure of success." id="process-title" />
-    <ol class="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+    <ol class="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
       {steps.map((step, i) => (
         <li class="rounded-[1.6rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
           <div class="flex items-center justify-between">

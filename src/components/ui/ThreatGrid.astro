@@ -20,7 +20,7 @@ const badge = {
 };
 ---
 
-<ol class:list={['grid gap-3 md:grid-cols-2 xl:grid-cols-3', className]} data-reveal-group>
+<ol class:list={['grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3', className]} data-reveal-group>
   {threats.slice(0, limit).map((threat, i) => (
     <li class="flex flex-col rounded-[1.6rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
       <div class="flex items-start justify-between gap-3">

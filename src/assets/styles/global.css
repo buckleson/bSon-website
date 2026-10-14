@@ -344,6 +344,8 @@ a {
   .word { will-change: opacity; }
 }
 
+html { overflow-x: clip; }
+
 /* Wide comparison tables scroll inside their own box on phones, so the page
    itself never scrolls sideways. */
 @media (max-width: 639px) {

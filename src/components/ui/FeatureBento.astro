@@ -32,7 +32,7 @@ const layout = spans[Math.min(6, Math.max(2, items.length))];
 const [lead, ...rest] = items;
 ---
 
-<div class:list={['grid gap-3 md:grid-cols-2 lg:grid-cols-12', className]} data-bento data-reveal-group>
+<div class:list={['grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-12', className]} data-bento data-reveal-group>
   <article class:list={['bento-card bento-lead accent-warm relative flex flex-col overflow-hidden rounded-[1.8rem] bg-sheet p-7 text-white sm:p-8 md:col-span-2', layout[0]]} data-reveal-item>
     <span class="bento-mark" aria-hidden="true">{lead.icon && <Glyph icon={lead.icon} class="size-full" />}</span>
     <span class="grid size-12 place-items-center rounded-2xl bg-white/10 text-orange-300">{lead.icon && <Glyph icon={lead.icon} class="size-6" />}</span>

@@ -184,7 +184,7 @@ const SITE_CSS = `
 .iso-bare .iso-plate{background:transparent;box-shadow:none;padding:28px 0 8px}
 .iso-bare{--anatomy-card:transparent;--anatomy-paper:var(--figure-paper,#fbfbfa)}
 .iso .iso-figure{margin:0}
-.iso .iso-plate{border-radius:1.6rem;box-shadow:0 0 0 1px color-mix(in oklab,var(--anatomy-mid) 45%,transparent)}
+.iso .iso-plate{overflow:hidden;border-radius:1.6rem;box-shadow:0 0 0 1px color-mix(in oklab,var(--anatomy-mid) 45%,transparent)}
 .iso .iso-legend{margin-top:14px}
 .iso-stage{position:relative;container-type:inline-size}
 .iso-plate{container-type:inline-size}

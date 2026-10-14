@@ -38,7 +38,7 @@ const href = (url: string) => localePath('en', url);
   kind={{ type: 'Service', services: [{ name: item.title, description: page.description }] }}
   faqs={page.faqs}
 >
-  <section class="mx-auto grid max-w-[85rem] items-center gap-10 px-4 pt-10 pb-12 sm:px-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:px-8 lg:pt-14">
+  <section class="mx-auto grid max-w-[85rem] grid-cols-1 items-center gap-10 px-4 pt-10 pb-12 sm:px-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:px-8 lg:pt-14">
     <div>
       <p class="font-mono text-xs tracking-wide text-muted uppercase">Service</p>
       <h1 class="mt-3 text-lg font-semibold text-balance text-orange-700 dark:text-orange-300">{item.title}</h1>
@@ -67,9 +67,9 @@ const href = (url: string) => localePath('en', url);
 
   <section id="how-it-works" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="how-title">
     <SectionHead index="02" label="How it works" claim="See the machine" payoff="behind the service." body="Each figure is live. Select a step under it to jump to that stage, and watch the labels explain each part." id="how-title" />
-    <div class="mt-10 grid gap-12">
+    <div class="mt-10 grid grid-cols-1 gap-12">
       {page.figures.map((figure, i) => (
-        <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-10">
+        <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-10">
           <div class="lg:sticky lg:top-28">
             <p class="font-mono text-xs text-muted">Figure {i + 1} of {page.figures.length}</p>
             <h3 class="mt-2 text-2xl font-semibold text-balance text-ink">{figure.title}</h3>
@@ -88,7 +88,7 @@ const href = (url: string) => localePath('en', url);
 
   <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="process-title">
     <SectionHead index="04" label="How we work" claim="Small first," payoff="then production." id="process-title" />
-    <ol class="process mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+    <ol class="process mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
       {page.steps.map((step, i) => (
         <li class="relative rounded-[1.6rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
           <div class="flex items-center justify-between">
@@ -102,7 +102,7 @@ const href = (url: string) => localePath('en', url);
     </ol>
   </section>
 
-  <section class="mx-auto grid max-w-[85rem] gap-12 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-20">
+  <section class="mx-auto grid max-w-[85rem] grid-cols-1 gap-12 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-20">
     <div data-reveal>
       <h2 class="text-3xl font-semibold text-balance text-ink">{item.title} questions</h2>
       <ul class="mt-6 space-y-3">

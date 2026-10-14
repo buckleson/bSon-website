@@ -47,7 +47,7 @@ const next = () => String(++n).padStart(2, '0');
 ---
 
 <section class="mx-auto flex max-w-[85rem] flex-col px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14">
-  <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+  <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
     <div id="fadeInUp">
       <p class="font-mono text-xs tracking-wide text-muted uppercase">Product{soon && ' · coming soon'}</p>
       <h1 class="mt-4 text-5xl leading-[0.98] font-semibold text-ink sm:text-6xl lg:text-7xl">{data.title}</h1>
@@ -100,7 +100,7 @@ const next = () => String(++n).padStart(2, '0');
 {slug === 'hyper-0x' && (
   <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="inside-title">
     <SectionHead index={next()} label="Inside Hyper 0X" claim="One L1, many L2s," payoff="four layers of encryption." id="inside-title" />
-    <div class="mt-10 grid gap-6 xl:grid-cols-2">
+    <div class="mt-10 grid grid-cols-1 gap-6 xl:grid-cols-2">
       <IsoFigure name="chain-rack" />
       <IsoFigure name="cipher-tower" />
     </div>
@@ -109,7 +109,7 @@ const next = () => String(++n).padStart(2, '0');
 
 <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="specs-title">
   <SectionHead index={next()} label={data.details.title} claim={soon ? 'What we are' : 'What runs'} payoff={soon ? 'building next.' : 'under the hood.'} id="specs-title" />
-  <ul class="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+  <ul class="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
     {data.details.items.map((item, i) => (
       <li class="rounded-[1.4rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
         <p class="flex items-center gap-2 font-mono text-xs text-muted"><Glyph icon={soon ? 'flag' : 'check-circle'} class="size-4 text-orange-600 dark:text-orange-400" />{String(i + 1).padStart(2, '0')}</p>
@@ -127,7 +127,7 @@ const next = () => String(++n).padStart(2, '0');
 </section>
 
 {(data.faqs.length > 0 || data.learnMore.length > 0) && (
-  <section class="mx-auto grid max-w-[85rem] gap-12 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-20">
+  <section class="mx-auto grid max-w-[85rem] grid-cols-1 gap-12 px-4 py-14 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-20">
     <div data-reveal>
       <h2 class="text-3xl font-semibold text-balance text-ink">{data.title} questions</h2>
       {data.learnMore.length > 0 && (
