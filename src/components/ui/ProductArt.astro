@@ -28,9 +28,11 @@ interface Props {
   class?: string;
   /** Fill a positioned parent instead of sizing itself. */
   fill?: boolean;
+  /** `hover`: play only while the surrounding link is hovered or focused. */
+  play?: 'auto' | 'hover';
 }
 
-const { product, class: className, fill = false } = Astro.props;
+const { product, class: className, fill = false, play = 'auto' } = Astro.props;
 const W = 440;
 const H = 360;
 
@@ -124,7 +126,7 @@ const hrBuilt = [
 ];
 ---
 
-<div class:list={['pa pa-off accent-warm overflow-hidden rounded-[inherit] bg-[#0c0c0c]', fill ? 'absolute inset-0' : 'relative', className]} data-pa role="img" aria-label={`${meta.title}: ${meta.steps.map(step => step.join(' ')).join('; ')}`} style={`--pa-dur:${meta.dur}s`}>
+<div class:list={['pa pa-off accent-warm overflow-hidden rounded-[inherit] bg-[#0c0c0c]', fill ? 'absolute inset-0' : 'relative', className]} data-pa={play} role="img" aria-label={`${meta.title}: ${meta.steps.map(step => step.join(' ')).join('; ')}`} style={`--pa-dur:${meta.dur}s`}>
   <svg viewBox={`0 0 ${W} ${H}`} class="block h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
     <defs>
       <pattern id={`pa-grid-${product}`} width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#212121" /></pattern>
@@ -651,8 +653,10 @@ const hrBuilt = [
   // accordion panel counts as hidden; the accordion fires pa:refresh.
   const scenes = [...document.querySelectorAll<HTMLElement>('[data-pa]')];
   const inView = new WeakMap<HTMLElement, boolean>();
+  const hovered = new WeakMap<HTMLElement, boolean>();
   const update = (el: HTMLElement) => {
-    const on = !!inView.get(el) && !el.closest('[data-panel]:not(.is-open)');
+    const wanted = el.dataset.pa !== 'hover' || !!hovered.get(el);
+    const on = wanted && !!inView.get(el) && !el.closest('[data-panel]:not(.is-open)');
     el.classList.toggle('pa-off', !on);
     const svg = el.querySelector('svg');
     if (svg) on ? svg.unpauseAnimations() : svg.pauseAnimations();
@@ -667,6 +671,14 @@ const hrBuilt = [
     }, { rootMargin: '80px 0px' });
     scenes.forEach(el => observer.observe(el));
     document.addEventListener('pa:refresh', () => scenes.forEach(update));
+    scenes.filter(el => el.dataset.pa === 'hover').forEach(el => {
+      const host = el.closest<HTMLElement>('a, [data-pa-host]') ?? el;
+      const set = (on: boolean) => () => { hovered.set(el, on); update(el); };
+      host.addEventListener('mouseenter', set(true));
+      host.addEventListener('mouseleave', set(false));
+      host.addEventListener('focusin', set(true));
+      host.addEventListener('focusout', set(false));
+    });
   };
   const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
   if (document.readyState === 'complete') idle(start);
