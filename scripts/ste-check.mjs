@@ -6,7 +6,7 @@
  * and (as warnings) passive voice and modal verbs.
  *
  * Usage: node scripts/ste-check.mjs [--strict] [--all] [files...]
- *   default files: blog posts, product pages, docs, FAQ data and site copy
+ *   default files: blog posts, product pages, docs, FAQ data and diagram captions
  *   --strict  exit 1 when there are errors
  *   --all     list every finding (default: first 6 per file)
  */
@@ -86,9 +86,10 @@ const defaults = [
   ...walk(join(ROOT, 'src/content/products'), ['.md']),
   ...walk(join(ROOT, 'src/content/docs'), ['.md', '.mdx']),
   join(ROOT, 'src/data_files/faqs.json'),
-  join(ROOT, 'src/copy/en.ts'),
   join(ROOT, 'src/data_files/systems.ts'),
 ];
+// Site copy (src/copy/en.ts: hero, section intros, vision, about) uses the
+// brand voice instead; check it on demand: node scripts/ste-check.mjs src/copy/en.ts
 const files = given.length ? given.map(f => join(process.cwd(), f)) : defaults;
 
 /** Blocks of prose: { text, line, kind: 'para' | 'item' | 'heading' | 'field' }. */

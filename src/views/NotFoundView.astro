@@ -1,61 +1,132 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
+import Glyph from '@components/ui/Glyph.astro';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
-/** The 404 page. Marked noindex and kept out of the sitemap. */
+/**
+ * The 404 page, as a block explorer: a terminal looks up block #404 on
+ * Hyper 0X and finds it was never minted. Below it, a chain of live blocks
+ * (the site's main pages) with a gap where #404 should be; "Mint #404"
+ * drops a block into the gap. Marked noindex and kept out of the sitemap.
+ */
 interface Props {
   locale: MarketingLocale;
 }
 
 const { locale } = Astro.props;
 const copy = getCopy(locale).notFound;
+const href = (path: string) => localePath(locale, path);
+const blocks = [
+  { n: 401, label: 'Home', path: '/', icon: 'house' },
+  { n: 402, label: 'Products', path: '/products/', icon: 'cube' },
+  { n: 403, label: 'Pavii', path: '/products/pavii/', icon: 'shield-check' },
+  { n: 404, label: '', path: '', icon: '' },
+  { n: 405, label: 'Blog', path: '/blog/', icon: 'article' },
+  { n: 406, label: 'FAQ', path: '/faq/', icon: 'question' },
+  { n: 407, label: 'Contact', path: '/contact/', icon: 'envelope-simple' },
+];
+const hash = (n: number) => `0x${((n * 2654435761) >>> 0).toString(16).padStart(8, '0').slice(0, 4)}…${(n * 97).toString(16).slice(-2)}`;
 ---
 
 <MainLayout title={copy.title} noindex hideFooter>
-  <section class="min-h-[calc(100svh-5.5rem)]" aria-labelledby="subtitle">
-    <div class="pointer-events-none fixed inset-0 z-10 grid place-content-center px-4">
-      <div class="pointer-events-auto mx-auto max-w-(--breakpoint-sm) text-center">
-        <h1 class="text-dark mb-4 text-7xl font-extrabold text-orange-600 lg:text-9xl dark:text-orange-400">
-          404
+  <section class="nf relative mx-2 overflow-hidden rounded-[2rem] bg-card ring-1 ring-line sm:mx-3" aria-labelledby="nf-title">
+    <div aria-hidden="true" class="nf-paper pointer-events-none absolute inset-0"></div>
+    <div class="relative mx-auto grid max-w-[85rem] items-center gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:py-20">
+      <div>
+        <p class="inline-flex items-center gap-2 rounded-full bg-ground px-3 py-1.5 font-mono text-xs tracking-wide text-muted uppercase ring-1 ring-line">
+          <span class="size-2 rounded-full bg-red-500"></span>{copy.eyebrow}
+        </p>
+        <h1 id="nf-title" class="mt-6 text-5xl leading-[0.98] font-semibold text-balance text-ink sm:text-6xl lg:text-7xl">
+          <span class="block">{copy.claim}</span>
+          <span class="mark">{copy.payoff}</span>
         </h1>
-        <p
-          id="subtitle"
-          class="mb-4 text-3xl font-bold tracking-tight text-balance text-ink md:text-4xl"
-        >
-          {copy.subTitle}
-        </p>
-        <p
-          id="content"
-          class="mb-4 text-lg text-pretty text-muted"
-        >
-          {copy.content}
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-3">
-          <PrimaryCTA
-            title={copy.goHome}
-            url={localePath(locale)}
-            noArrow
-          />
-          <PrimaryCTA
-            title={copy.goBack}
-            id="go-back"
-            data-home={localePath(locale)}
-          />
+        <p class="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-muted">{copy.content}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={href('/')} class="cta-pill"><span>{copy.goHome}</span><span class="cta-chip"><Glyph icon="house" class="size-3.5" /></span></a>
+          <button type="button" class="cta-ghost text-ink" id="go-back" data-home={href('/')}>{copy.goBack}</button>
         </div>
       </div>
+
+      <div class="accent-warm overflow-hidden rounded-[1.6rem] bg-sheet text-white shadow-[0_30px_60px_-30px_rgb(0_0_0/0.5)] ring-1 ring-white/10">
+        <div class="flex items-center gap-2 border-b border-white/10 px-5 py-3">
+          <span class="size-2.5 rounded-full bg-white/20"></span><span class="size-2.5 rounded-full bg-white/20"></span><span class="size-2.5 rounded-full bg-white/20"></span>
+          <span class="ms-3 font-mono text-xs text-white/50">hyper0x · block explorer</span>
+        </div>
+        <ol class="space-y-2 p-5 font-mono text-[0.8rem] leading-relaxed sm:text-sm" data-terminal aria-label="Block lookup">
+          {copy.terminal.map((line, i) => (
+            <li class:list={['nf-line', line.kind === 'cmd' && 'text-white', line.kind === 'info' && 'text-white/60', line.kind === 'bad' && 'text-red-400', line.kind === 'ok' && 'text-orange-300']} style={`--d:${i}`}>
+              {line.kind === 'cmd' ? <span class="text-orange-300">$ </span> : <span class="text-white/30">→ </span>}{line.text}
+            </li>
+          ))}
+          <li class="nf-line nf-caret text-white" style={`--d:${copy.terminal.length}`} aria-hidden="true">$ <span class="nf-cursor"></span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="relative mx-auto max-w-[85rem] px-5 pb-16 sm:px-8 lg:pb-20">
+      <p class="font-mono text-xs tracking-wide text-muted uppercase">{copy.chainLabel}</p>
+      <ol class="nf-chain mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7" data-chain>
+        {blocks.map(block => block.path ? (
+          <li>
+            <a href={href(block.path)} class="nf-block group flex h-full flex-col justify-between rounded-2xl bg-ground p-4 ring-1 ring-line transition hover:-translate-y-1 hover:ring-orange-500">
+              <span class="flex items-center justify-between font-mono text-[0.7rem] text-muted"><span>#{block.n}</span><Glyph icon="check-circle" class="size-4 text-emerald-600 dark:text-emerald-400" /></span>
+              <span class="mt-6 flex items-center gap-2 font-semibold text-ink"><Glyph icon={block.icon} class="size-5 text-orange-600 dark:text-orange-400" />{block.label}</span>
+              <span class="mt-1 font-mono text-[0.65rem] text-muted">{hash(block.n)}</span>
+            </a>
+          </li>
+        ) : (
+          <li>
+            <button type="button" class="nf-gap flex h-full w-full flex-col justify-between rounded-2xl border-2 border-dashed border-orange-500/60 p-4 text-left" data-mint>
+              <span class="font-mono text-[0.7rem] text-orange-700 dark:text-orange-300">#404</span>
+              <span class="nf-gap-label mt-6 flex items-center gap-2 font-semibold text-ink"><Glyph icon="plus-circle" class="size-5 text-orange-600 dark:text-orange-400" /><span data-mint-label>{copy.mint}</span></span>
+              <span class="mt-1 font-mono text-[0.65rem] text-muted" data-mint-hash>{copy.missing}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-4 min-h-[1.5em] text-sm text-muted" data-mint-note aria-live="polite"></p>
     </div>
   </section>
 </MainLayout>
 
+<style>
+  .nf-paper {
+    background:
+      radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--ink) 12%, transparent) 1px, transparent 1.2px) 0 0 / 22px 22px,
+      radial-gradient(60% 60% at 80% 30%, color-mix(in oklab, var(--accent-500) 8%, transparent), transparent 70%);
+  }
+  .nf-line { opacity: 0; transform: translateY(4px); animation: nf-in 0.35s ease-out forwards; animation-delay: calc(var(--d) * 0.55s + 0.3s); }
+  @keyframes nf-in { to { opacity: 1; transform: none; } }
+  .nf-cursor { display: inline-block; width: 0.55em; height: 1em; vertical-align: -0.15em; background: currentColor; animation: nf-blink 1s steps(1) infinite; }
+  @keyframes nf-blink { 50% { opacity: 0; } }
+  .nf-gap { animation: nf-pulse 1.8s ease-in-out infinite; }
+  @keyframes nf-pulse { 50% { border-color: color-mix(in oklab, var(--accent-500) 25%, transparent); } }
+  .nf-gap.is-minted { animation: nf-drop 0.6s cubic-bezier(0.22, 1, 0.36, 1); border-style: solid; background: color-mix(in oklab, var(--accent-500) 12%, transparent); }
+  @keyframes nf-drop { from { transform: translateY(-28px); opacity: 0.2; } to { transform: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .nf-line { opacity: 1; transform: none; animation: none; }
+    .nf-gap, .nf-cursor { animation: none; }
+  }
+</style>
+
 <script>
-  const goBackButton = document.getElementById('go-back');
-  goBackButton?.addEventListener('click', () => {
-    if (window.history.length > 1) {
-      history.back();
-    } else {
-      window.location.href = goBackButton.dataset.home ?? '/';
-    }
+  const goBack = document.getElementById('go-back');
+  goBack?.addEventListener('click', () => {
+    if (window.history.length > 1) history.back();
+    else window.location.href = goBack.dataset.home ?? '/';
+  });
+
+  // "Mint #404": the block drops into the gap, which then reads as minted.
+  const mint = document.querySelector<HTMLButtonElement>('[data-mint]');
+  const note = document.querySelector<HTMLElement>('[data-mint-note]');
+  mint?.addEventListener('click', () => {
+    if (mint.classList.contains('is-minted')) return;
+    mint.classList.add('is-minted');
+    const label = mint.querySelector('[data-mint-label]');
+    const hash = mint.querySelector('[data-mint-hash]');
+    if (label) label.textContent = 'Minted';
+    if (hash) hash.textContent = '0x404…f1 · final ✓';
+    if (note) note.textContent = 'Block #404 is now final in one pass. The page is still not here, but every other block is live.';
   });
 </script>

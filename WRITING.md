@@ -11,6 +11,21 @@ We apply the STE writing rules and a list of approved and forbidden words
 (below). We do not claim certified STE compliance: that needs the full STE
 dictionary and a trained STE writer.
 
+## Two voices
+
+The site speaks in two voices, each where it works best:
+
+- **Plain technical English (the rules below)** wherever a reader could get
+  something wrong: product descriptions, features and specifications, FAQs,
+  docs, diagram captions and the explanations inside blog posts. The build
+  checks these files.
+- **The brand voice** for the hero, section headlines and intros, the vision,
+  the about story and calls to action (`src/copy/en.ts`). Here we write for
+  investors, advisors, customers and people who meet us at a summit: big
+  picture, confident, energetic, and short. It must still be true: no
+  invented numbers, no claims we cannot show, and the fact rules in section 4
+  still apply.
+
 Run the checker before you publish:
 
 ```bash

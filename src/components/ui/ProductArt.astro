@@ -650,10 +650,12 @@ const hrBuilt = [
 <script>
   // Run each scene only while it is visible: CSS animations pause through
   // .pa-off, SMIL motion through pauseAnimations(). A scene inside a closed
-  // accordion panel counts as hidden; the accordion fires pa:refresh.
-  const scenes = [...document.querySelectorAll<HTMLElement>('[data-pa]')];
+  // accordion panel counts as hidden; the accordion fires pa:refresh, and
+  // pa:add for a scene it has just loaded.
+  const scenes: HTMLElement[] = [];
   const inView = new WeakMap<HTMLElement, boolean>();
   const hovered = new WeakMap<HTMLElement, boolean>();
+  let observer: IntersectionObserver | undefined;
   const update = (el: HTMLElement) => {
     const wanted = el.dataset.pa !== 'hover' || !!hovered.get(el);
     const on = wanted && !!inView.get(el) && !el.closest('[data-panel]:not(.is-open)');
@@ -661,25 +663,30 @@ const hrBuilt = [
     const svg = el.querySelector('svg');
     if (svg) on ? svg.unpauseAnimations() : svg.pauseAnimations();
   };
-  scenes.forEach(el => el.querySelector('svg')?.pauseAnimations());
-  const start = () => {
-    const observer = new IntersectionObserver(entries => {
+  const register = (el: HTMLElement) => {
+    if (scenes.includes(el)) return;
+    scenes.push(el);
+    el.querySelector('svg')?.pauseAnimations();
+    observer ??= new IntersectionObserver(entries => {
       for (const entry of entries) {
         inView.set(entry.target as HTMLElement, entry.isIntersecting);
         update(entry.target as HTMLElement);
       }
     }, { rootMargin: '80px 0px' });
-    scenes.forEach(el => observer.observe(el));
-    document.addEventListener('pa:refresh', () => scenes.forEach(update));
-    scenes.filter(el => el.dataset.pa === 'hover').forEach(el => {
+    observer.observe(el);
+    if (el.dataset.pa === 'hover') {
       const host = el.closest<HTMLElement>('a, [data-pa-host]') ?? el;
       const set = (on: boolean) => () => { hovered.set(el, on); update(el); };
       host.addEventListener('mouseenter', set(true));
       host.addEventListener('mouseleave', set(false));
       host.addEventListener('focusin', set(true));
       host.addEventListener('focusout', set(false));
-    });
+    }
   };
+  document.querySelectorAll<HTMLElement>('[data-pa]').forEach(el => el.querySelector('svg')?.pauseAnimations());
+  document.addEventListener('pa:refresh', () => scenes.forEach(update));
+  document.addEventListener('pa:add', event => register(event.target as HTMLElement));
+  const start = () => document.querySelectorAll<HTMLElement>('[data-pa]').forEach(register);
   const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
   if (document.readyState === 'complete') idle(start);
   else window.addEventListener('load', () => idle(start), { once: true });

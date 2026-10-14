@@ -79,11 +79,24 @@ export const en = {
 
   notFound: {
     title: 'Page Not Found',
-    subTitle: 'This block is not on our chain.',
+    eyebrow: 'Error 404 · block not found',
+    claim: 'This block was',
+    payoff: 'never minted.',
     content:
-      'The page that you want does not exist, or it has moved. Use the buttons below to go back.',
-    goHome: 'Go Home',
-    goBack: 'Go Back',
+      'We searched every validator on Hyper 0X and came back empty. The link may be old, or the page has moved. Every other block below is live, so pick one and keep going.',
+    terminal: [
+      { kind: 'cmd', text: 'hyper0x block get 404' },
+      { kind: 'info', text: 'asking 7 validators…' },
+      { kind: 'info', text: 'consensus reached in one pass' },
+      { kind: 'bad', text: 'block #404: not found' },
+      { kind: 'bad', text: 'status: never minted' },
+      { kind: 'ok', text: 'suggestion: try a live block below' },
+    ],
+    chainLabel: 'Live blocks on this chain',
+    mint: 'Mint #404',
+    missing: 'empty slot',
+    goHome: 'Back to home',
+    goBack: 'Go back',
   },
 
   home: {
@@ -94,7 +107,7 @@ export const en = {
       lead: 'We build blockchains',
       phrases: ['for banks.', 'for asset issuers.', 'for fintechs.', 'for AI teams.'],
       intro:
-        'Buckleson is a blockchain infrastructure company. On Hyper 0X, our own post-quantum-resistant chain, we build private blockchains, tokenized assets, wallets and security for AI agents.',
+        'Buckleson is the blockchain infrastructure company behind Hyper 0X, a post-quantum-resistant chain built for real money, real assets and AI that acts on its own. We give every client its own chain, ready for production.',
       primaryBtn: 'Book a call',
       secondaryBtn: 'See our products',
       counterLabel: 'transactions settled through Hyper Wallet',
@@ -103,7 +116,7 @@ export const en = {
     glanceIntro: {
       label: 'At a glance',
       statement:
-        'We own the chain that we build on. Every product and every client gets the same base. Each transaction settles once and is final. Data is private by default, and every connection is post-quantum-resistant.',
+        'We own the chain we build on. So every product we ship and every chain we launch for a client starts from the same foundation: final in one pass, private by default, and post-quantum-resistant from day one.',
       pilot: {
         company: '10x Technologies',
         text: 'Runs a pilot of the Hyper 0X module for AI training and inference, in a real enterprise environment.',
@@ -112,10 +125,10 @@ export const en = {
     logos: 'Works with',
     why: {
       label: 'Why Hyper 0X',
-      claim: 'Public chains do not fit banks.',
+      claim: 'Public chains were never built for banks.',
       payoff: 'So we built our own.',
       body:
-        'On a rented public chain, you share its fees, its roadmap and its outages. On Hyper 0X, one L1 settles everything, and every application gets its own L2 with the size it needs. Add, change or retire an L2 when your plans change.',
+        'Renting a public chain means inheriting its fees, its roadmap and its outages. Hyper 0X turns that around: one L1 settles everything, and every application runs on its own L2, shaped around its rules. Launch one for a pilot, scale it when demand spikes, retire it when you move on.',
       cards: [
         {
           figure: 'chain-rack',
@@ -150,14 +163,14 @@ export const en = {
       label: 'Products',
       claim: 'One chain.',
       payoff: 'Five products on top.',
-      body: 'Everything we ship runs on Hyper 0X. Open a product to see how it works.',
+      body: 'Everything we ship runs on Hyper 0X, from guardrails for AI agents to a wallet that has already moved more than two million transactions. Open a product and watch it work.',
       cta: { title: 'All products', url: '/products/' },
     },
     services: {
       label: 'Services',
       claim: 'Tell us what to put on-chain.',
-      payoff: 'We build it with you.',
-      body: 'Four things we build for clients, each on its own private L2.',
+      payoff: 'We will build it with you.',
+      body: 'From a first pilot to a chain in production, our engineers build alongside your team. Every project gets its own private L2.',
       items: [
         {
           id: 'custom-blockchains',
@@ -197,7 +210,7 @@ export const en = {
       label: 'How we work',
       claim: 'From a first call',
       payoff: 'to a live chain.',
-      body: 'Small first, then production. You see results before you commit.',
+      body: 'Start small, prove it fast, then go to production. You see it working before you commit.',
       steps: [
         { title: 'Discovery call', text: 'We learn your use case, your data and your rules.', stage: 'Scope', artifact: 'A one-page pilot scope' },
         { title: 'Pilot on your L2', text: 'One use case and one engineer. We agree on the success measures at the start.', stage: 'Prove', artifact: 'A working L2 and explorer' },
@@ -220,7 +233,7 @@ export const en = {
     vision: {
       label: 'Our vision',
       statement:
-        'Money, assets and AI decisions must run on records that you can check yourself. That is what we build.',
+        'Money, assets and the decisions of AI should run on records that anyone with permission can verify. We are building that layer, and it is already live.',
       story: [
         'We built our own blockchain, Hyper 0X, so we control its fees, roadmap and security model.',
         'Then we built on it ourselves. Hyper Wallet has processed more than 2 million transactions, and Pavii protects AI agents in production.',
@@ -253,9 +266,9 @@ export const en = {
       cta: 'All articles',
     },
     finalCta: {
-      claim: 'Ready to build',
-      payoff: 'on Hyper 0X?',
-      text: 'Book a 30-minute call. We will map your use case to a pilot on your own L2.',
+      claim: 'Build the next financial rail',
+      payoff: 'on Hyper 0X.',
+      text: 'Thirty minutes with one of our engineers is enough to turn your idea into a pilot on your own L2.',
       btn: 'Book a call',
       email: 'Or email vijay@buckleson.com',
     },
@@ -272,7 +285,7 @@ export const en = {
     intro: {
       title: 'Blockchain Development Services',
       subTitle:
-        'We design, build and run blockchain systems for banks, fintechs, asset issuers and AI teams. Everything runs on Hyper 0X, the blockchain we built, so you get your own L2 with your own rules on one verifiable record.',
+        'We design, build and run blockchain systems for banks, fintechs, asset issuers and AI teams. Every project runs on Hyper 0X, the chain we built and operate, so you get your own L2, your own rules and one record that everyone can verify.',
       cta: 'Book a call',
     },
     stats: {
@@ -365,10 +378,10 @@ export const en = {
       label: 'Our story',
       title: 'Why we own the whole stack, from consensus to the app in your hand.',
       paragraphs: [
-        'Buckleson builds blockchain infrastructure and the products that run on it. Banks, fintechs and AI teams will trust a blockchain with real money and real decisions only when one company owns the full stack.',
+        'Buckleson builds blockchain infrastructure and the products that run on it. We started from one belief: if banks, fintechs and AI teams are going to trust a blockchain with real money and real decisions, someone has to own the whole stack and answer for it.',
         'So we built Hyper 0X, our own permissioned L1. Every customer gets a private L2, every transaction is final in one pass, and every connection is post-quantum-resistant.',
-        'Then we built on it ourselves. Hyper Wallet has processed more than 2 million transactions. Pavii protects AI agents and has saved more than 100 million tokens.',
-        'Today we use the same base to build custom blockchains, tokenized assets, wallets and AI-agent security for our clients. H0X Pay and HyperRun come next.',
+        'Then we proved it on ourselves first. Hyper Wallet has processed more than 2 million transactions, and Pavii guards AI agents in production and has saved more than 100 million tokens.',
+        'Today that same foundation powers the custom chains, tokenized assets, wallets and AI-agent security we build for clients. H0X Pay and HyperRun are next.',
       ],
     },
     stats: [
@@ -416,7 +429,7 @@ export const en = {
       'Guides on custom blockchain development, asset tokenization, private L2s, post-quantum security, AI-agent security and crypto wallet SDKs, from Buckleson.',
     heading: 'Notes from the chain',
     subTitle:
-      'Plain-language guides about how to build with blockchain: custom chains, tokenized assets, wallets and AI-agent security, from the team that built Hyper 0X.',
+      'Clear guides to building with blockchain, from custom chains and tokenized assets to wallets and AI-agent security. Written by the team that built Hyper 0X.',
     noPosts: 'No posts yet. Check back soon.',
   },
 
@@ -427,7 +440,7 @@ export const en = {
       "Buckleson's blockchain products: the Hyper 0X enterprise blockchain, Pavii AI-agent security and Hyper Wallet & SDKs, with H0X Pay and HyperRun coming soon.",
     heading: 'Blockchain products built on Hyper 0X',
     subTitle:
-      'Every product that we ship runs on Hyper 0X, our own blockchain. Start with the chain, protect your AI agents with Pavii, or launch a wallet with Hyper Wallet & SDKs.',
+      'Every product we ship runs on Hyper 0X, our own blockchain. Start with the chain itself, put guardrails around your AI agents with Pavii, or launch a wallet on rails that already carry millions of transactions.',
     soonHeading: 'Coming soon',
     why: {
       title: 'Why build on Hyper 0X?',

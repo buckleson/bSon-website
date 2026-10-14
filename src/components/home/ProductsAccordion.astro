@@ -22,6 +22,7 @@ interface Props {
 }
 
 const { index, label, claim, payoff, body, cta } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const products = await entriesFor('products', 'en');
 type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
 // Under each tagline: how it works in two sentences, and one real number.
@@ -94,8 +95,12 @@ const explain: Record<string, { text: string; stat: string; statLabel: string }>
                 </a>
               </div>
             </div>
-            <div class="relative aspect-[440/360] overflow-hidden rounded-[1.2rem] ring-1 ring-white/10 xl:aspect-auto xl:h-full">
-              <ProductArt product={slugOf(product) as Art} fill />
+            <div class="relative aspect-[440/360] overflow-hidden rounded-[1.2rem] bg-[#0c0c0c] ring-1 ring-white/10 xl:aspect-auto xl:h-full">
+              {index === 0 ? (
+                <ProductArt product={slugOf(product) as Art} fill />
+              ) : (
+                <div class="absolute inset-0" data-pa-lazy={`${base}/scenes/${slugOf(product)}.txt`}></div>
+              )}
             </div>
           </div>
         </article>
@@ -132,8 +137,30 @@ const explain: Record<string, { text: string; stat: string; statLabel: string }>
         p.classList.toggle('is-open', on);
         p.querySelector('[data-tab]')!.setAttribute('aria-expanded', String(on));
       });
+      load(panel);
       document.dispatchEvent(new Event('pa:refresh'));
     };
+    // Scenes of closed panels load when their panel first opens; their text
+    // is fetched ahead, once the page is idle, so opening feels instant.
+    const cache = new Map<string, Promise<string>>();
+    const fetchScene = (src: string) => {
+      if (!cache.has(src)) cache.set(src, fetch(src).then(r => (r.ok ? r.text() : '')).catch(() => ''));
+      return cache.get(src)!;
+    };
+    const load = async (panel: HTMLElement) => {
+      const holder = panel.querySelector<HTMLElement>('[data-pa-lazy]');
+      if (!holder) return;
+      const src = holder.dataset.paLazy!;
+      holder.removeAttribute('data-pa-lazy');
+      const html = await fetchScene(src);
+      if (!html) return;
+      holder.outerHTML = html;
+      const scene = panel.querySelector<HTMLElement>('[data-pa]');
+      scene?.dispatchEvent(new Event('pa:add', { bubbles: true }));
+      document.dispatchEvent(new Event('pa:refresh'));
+    };
+    const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 3000 }) : setTimeout(fn, 1500));
+    window.addEventListener('load', () => idle(() => root.querySelectorAll<HTMLElement>('[data-pa-lazy]').forEach(h => fetchScene(h.dataset.paLazy!))), { once: true });
     panels.forEach(panel => {
       const tab = panel.querySelector<HTMLElement>('[data-tab]')!;
       tab.addEventListener('click', () => open(panel));
