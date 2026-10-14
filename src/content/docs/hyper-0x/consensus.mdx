@@ -5,26 +5,28 @@ sidebar:
   order: 1
 ---
 
-Hyper 0X uses a hashgraph-style, **asynchronous Byzantine fault tolerant (aBFT)** consensus. It stays safe as long as fewer than one third of validators are faulty.
+Hyper 0X uses a hashgraph-style, **asynchronous Byzantine fault tolerant (aBFT)** consensus. Consensus is the way the validators, the named institutions that run the network, agree on one order of transactions. With aBFT, the validators agree even when some of them fail or act maliciously, or when messages arrive late. In a hashgraph, validators share a graph of signed events, as the steps below show. This consensus stays safe as long as fewer than one third of validators are faulty.
 
 ## How it works
 
-1. **Event:** a validator wraps new transactions in a signed event. The event holds two hashes: its own last event and the last event a peer sent it.
-2. **Gossip about gossip:** validators sync with random peers, so the graph itself records who heard what, and when.
-3. **Virtual voting:** no votes are sent over the network. A witness becomes "famous" once more than two thirds of validators strongly see it.
-4. **Consensus order:** each event's timestamp is the median of the times validators first received it.
+1. **Event:** a validator wraps new transactions in a signed event. The event holds two hashes (short fingerprints of data). One is the hash of the last event of the validator. The other is the hash of the last event that a peer sent to it.
+2. **Gossip about gossip:** validators exchange events with random peers. So the graph itself records who heard what, and when.
+3. **Virtual voting:** validators send no votes over the network. Each validator works out the votes from its own copy of the graph. A witness is the first event of a validator in a round. A witness becomes "famous" once more than two thirds of validators strongly see it.
+4. **Consensus order:** the timestamp of each event is the median of the times when validators first received it.
 
 ## Attacks it blocks
 
-| Attack                               | Why it fails on Hyper 0X                                                                  |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- |
-| 51% attack and double-spend by reorg | Validators are named institutions and finality is deterministic                           |
-| Sybil                                | Keys are bound to PKI, so an unknown identity gets no vote                                |
-| Leader DDoS or censorship            | There is no leader to target                                                              |
-| Front-running (MEV)                  | Order comes from the median receive time, so no single node can move a transaction ahead  |
-| Eclipse                              | Peers are picked at random from a known set, over mutually authenticated post-quantum channels |
+| Attack                               | Why it fails on Hyper 0X                                                                                  |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| 51% attack and double-spend by reorg | Validators are named institutions and finality is deterministic                                           |
+| Sybil (many fake identities)         | PKI (public key infrastructure) binds each key to an identity, so an unknown identity gets no vote        |
+| Leader DDoS or censorship            | There is no leader to target                                                                              |
+| Front-running (MEV)                  | Order comes from the median receive time, so no single node can move a transaction ahead                  |
+| Eclipse                              | Validators pick peers at random from a known set, over mutually authenticated post-quantum channels       |
 
 ## Compared with other chains
+
+Finality is the point after which nobody can change or reverse a transaction.
 
 |                           | Finality                                   | Who orders                   |
 | ------------------------- | ------------------------------------------ | ---------------------------- |
@@ -35,8 +37,8 @@ Hyper 0X uses a hashgraph-style, **asynchronous Byzantine fault tolerant (aBFT)*
 
 ## What we changed from classic hashgraph
 
-- Permissioned validators; joining or leaving takes a threshold vote on-chain.
-- Post-quantum gossip using ML-KEM-768 + X25519.
+- Permissioned validators. To join or leave, a validator needs a threshold vote on-chain (a vote that must reach a set number of approvals).
+- Post-quantum gossip with ML-KEM-768 + X25519.
 - A policy engine in the transaction path for approvals, holds and corrections.
-- Each party's data stays encrypted to that party alone.
-- L2 hooks: L2s post their state roots as ordinary events.
+- The data of each party stays encrypted to that party alone.
+- L2 hooks: L2s (the customer chains that settle to the L1) post their state roots as ordinary events. A state root is one hash of the full state of an L2.

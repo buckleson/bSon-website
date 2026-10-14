@@ -202,7 +202,7 @@ const svg = k.figureSvg({
   width: WIDTH,
   height: HEIGHT,
   label:
-    'A long chassis, the Hyper 0X L1, with L2 modules of different sizes plugged into bays on top: bank, fintech, AI and asset issuer. Each module sends transactions down a feeder onto the L1 bus. The L1 gathers what arrived into one block, longer when traffic is heavy and shorter when it is quiet, and the block joins the chain. A new L2 module drops into the empty bay, starts sending, and later lifts out again.',
+    'A long chassis is the Hyper 0X L1. L2 modules of different sizes sit in bays on top: bank, fintech, AI and asset issuer. Each module sends transactions down a feeder to the L1 bus. The L1 puts them into one block. The block is longer when traffic is high and shorter when it is low, and it joins the chain. A new L2 module drops into the empty bay, sends transactions, and later lifts out again.',
   body,
 });
 
@@ -219,9 +219,9 @@ const pins = pinsHtml(P, WIDTH, HEIGHT, [
 
 const steps = stepsHtml([
   { id: 'l1', icon: 'cube', title: 'One L1 under everything', sub: 'Hyper 0X settles every L2 and keeps the final record' },
-  { id: 'l2', icon: 'tree-structure', title: 'An L2 per application', sub: 'Each with its own rules, privacy and size' },
-  { id: 'new', icon: 'plus-circle', title: 'Add or remove any time', sub: 'A new L2 goes live without touching the others' },
-  { id: 'blocks', icon: 'arrows-out-line-horizontal', title: 'Blocks follow demand', sub: 'Bigger when busy, smaller when quiet' },
+  { id: 'l2', icon: 'tree-structure', title: 'An L2 per application', sub: 'Each L2 has its own rules, privacy and size' },
+  { id: 'new', icon: 'plus-circle', title: 'Add or remove any time', sub: 'A new L2 starts with no change to the others' },
+  { id: 'blocks', icon: 'arrows-out-line-horizontal', title: 'Blocks follow demand', sub: 'Bigger when traffic is high, smaller when it is low' },
 ]);
 
 const LOOP = 16;

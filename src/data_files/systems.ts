@@ -65,8 +65,8 @@ export const systems = {
     steps: [
       { path: ['e1'], packet: 'Pay $250', caption: 'A customer signs a payment with a passkey. No seed phrase, no gas token.' },
       { path: ['e2'], packet: 'Pay $250', caption: 'Your app sends it to your private L2 on Hyper 0X.' },
-      { path: ['e3'], packet: 'Check', caption: 'Compliance rules run before anything executes: KYC, limits, approvals.' },
-      { path: ['e1', 'e2', 'e3'], packet: 'Pay $90,000', caption: 'A payment over the limit is stopped before it runs. Nothing to unwind.', blocked: true },
+      { path: ['e3'], packet: 'Check', caption: 'Compliance rules (KYC, limits, approvals) run before the payment executes.' },
+      { path: ['e1', 'e2', 'e3'], packet: 'Pay $90,000', caption: 'The chain stops a payment over the limit before it runs. You have nothing to undo.', blocked: true },
       { path: ['e4', 'e5'], packet: 'Order', caption: 'Validators order it fairly and finalise it in one pass. No reorgs.' },
       { path: ['e6'], packet: 'Final', caption: 'It lands on one shared record that only the parties can read.' },
       { path: ['e7', 'e8'], packet: 'Bridge', caption: 'Need another chain? A k-of-n bridge moves it to Ethereum, Solana or Sui.' },
@@ -94,9 +94,9 @@ export const systems = {
       ['d7', 'wallet', 'swap'],
     ],
     steps: [
-      { path: ['d1'], packet: '+1,250 USDC', caption: 'Top up straight from Binance or Coinbase. Your address is filled in.' },
+      { path: ['d1'], packet: '+1,250 USDC', caption: 'Add funds from Binance or Coinbase. The app fills in your address.' },
       { path: ['d2', 'd3'], packet: 'Buy 0.5 ETH', caption: 'Place an order. The order book runs inside Hyper 0X consensus.' },
-      { path: ['d4'], packet: 'Sell 0.5 ETH', caption: 'A seller matches by price, then time. Nobody can front-run.' },
+      { path: ['d4'], packet: 'Sell 0.5 ETH', caption: 'A seller matches by price, then by time. Nobody can trade ahead of the order.' },
       { path: ['d5'], packet: 'ETH ⇄ USDC', caption: 'Both legs settle in one step on Hyper 0X: both or neither.' },
       { path: ['d6'], packet: 'BTC · SOL', caption: 'Hold Bitcoin, Ethereum, Solana, TON, XRP and more in the same app.' },
       { path: ['d7'], packet: 'Swap', caption: 'Or swap any coin at the best route, with MEV protection.' },
@@ -127,11 +127,11 @@ export const systems = {
     ],
     steps: [
       { path: ['t1'], packet: 'Gold bar', caption: 'An issuer places the real asset with a custodian, who proves the reserve.' },
-      { path: ['t2'], packet: '1,000 g', caption: 'Tokens are minted one-to-one with what sits in custody.' },
-      { path: ['t3'], packet: 'Rules', caption: 'Compliance is written as code: KYC, countries, investor limits.' },
+      { path: ['t2'], packet: '1,000 g', caption: 'The issuer mints one token for each unit in custody.' },
+      { path: ['t3'], packet: 'Rules', caption: 'The rules are code: KYC, countries and investor limits.' },
       { path: ['t4'], packet: 'Tokens', caption: 'The tokens live on your own L2, private by default.' },
       { path: ['t5', 't6'], packet: 'Buy $10', caption: 'An investor buys a slice in your branded app.' },
-      { path: ['t5', 't6'], packet: 'No KYC', caption: 'A buyer without KYC is blocked before the trade runs.', blocked: true },
+      { path: ['t5', 't6'], packet: 'No KYC', caption: 'The chain blocks a buyer without KYC before the trade runs.', blocked: true },
       { path: ['t7'], packet: 'Settle', caption: 'The trade settles atomically: tokens and cash move together.' },
       { path: ['t8'], packet: 'Bridge', caption: 'When your rules allow, tokens can reach public chains.' },
     ],
@@ -160,10 +160,10 @@ export const systems = {
     steps: [
       { path: ['p1'], packet: 'Tool call', caption: 'An agent calls a tool. Every call goes through the Pavii gateway.' },
       { path: ['p7'], packet: 'Tokens', caption: 'Budgets and compaction cut token spend by 30 to 60 percent.' },
-      { path: ['p2', 'p3'], packet: 'Read CRM', caption: 'Injected instructions are caught and secrets are redacted.' },
+      { path: ['p2', 'p3'], packet: 'Read CRM', caption: 'Pavii catches injected instructions and removes secrets.' },
       { path: ['p1', 'p2'], packet: 'Ignore rules', caption: 'A hidden prompt in a PDF tries to take over the agent. Blocked.', blocked: true },
       { path: ['p4', 'p5'], packet: 'Allowed', caption: 'The egress contract allows the action and it reaches your systems.' },
-      { path: ['p6'], packet: 'Receipt', caption: 'A signed receipt is chained on Hyper 0X. Nothing can be quietly deleted.' },
+      { path: ['p6'], packet: 'Receipt', caption: 'Pavii chains a signed receipt on Hyper 0X. Nobody can secretly delete it.' },
     ],
   },
   h0xpay: {
@@ -186,7 +186,7 @@ export const systems = {
       ['h6', 'l1', 'gold'],
     ],
     steps: [
-      { path: ['h1', 'h2'], packet: '$40', caption: 'You pay a merchant with H0X Pay. They are paid instantly.' },
+      { path: ['h1', 'h2'], packet: '$40', caption: 'You pay a merchant with H0X Pay. The merchant receives the payment at once.' },
       { path: ['h3'], packet: '$0.80', caption: 'Your plan sets aside a small slice of every payment.' },
       { path: ['h4'], packet: 'Buy gold', caption: 'The slice buys tokenized gold at the best price.' },
       { path: ['h5', 'h6'], packet: '+0.01 g', caption: 'It settles on Hyper 0X and your gold balance grows.' },
@@ -214,9 +214,9 @@ export const systems = {
     steps: [
       { path: ['r1'], packet: 'Match', caption: 'A player joins a realistic FPS match.' },
       { path: ['r2'], packet: 'Back Ava', caption: 'Fans predict outcomes and back the players they believe in.' },
-      { path: ['r3'], packet: 'Win', caption: 'When the match ends, the result is signed so it cannot be changed.' },
+      { path: ['r3'], packet: 'Win', caption: 'When the match ends, the game signs the result, so nobody can change it.' },
       { path: ['r4', 'r6'], packet: 'Reward', caption: 'The rewards contract pays the player into their in-game wallet.' },
-      { path: ['r5', 'r6'], packet: 'Payout', caption: 'Correct predictions pay out too, and great players get sponsored.' },
+      { path: ['r5', 'r6'], packet: 'Payout', caption: 'Correct predictions also pay out, and fans sponsor great players.' },
     ],
   },
 } satisfies Record<string, SystemSpec>;

@@ -207,7 +207,7 @@ const svg = k.figureSvg({
   width: WIDTH,
   height: HEIGHT,
   label:
-    'A conveyor carries agent calls, round prompts and square tool calls, under six gates: injection, privacy, supply chain, budget, egress and output. Safe calls pass every gate and drop into the systems tray. A malicious call is caught by the gate it breaks: the lamp turns red, the call turns red and a pusher shoves it into the reject trough, where it breaks in two. Every decision adds a line to the receipt printing on the right.',
+    'A conveyor moves agent calls under six gates: injection, privacy, supply chain, budget, egress and output. Round pucks are prompts, and square pucks are tool calls. Safe calls pass every gate and drop into the systems tray. The gate that a malicious call breaks catches it. The lamp and the call turn red, and a pusher moves the call into the reject trough, where it breaks in two. Every decision adds a line to the receipt on the right.',
   body,
 });
 
@@ -221,9 +221,9 @@ const pins = pinsHtml(P, WIDTH, HEIGHT, [
 
 const steps = stepsHtml([
   { id: 'calls', icon: 'robot', title: 'Every call is checked', sub: 'Prompts and tool calls from any agent pass six gates' },
-  { id: 'delivered', icon: 'check-circle', title: 'Safe calls go through', sub: 'Personal data is redacted on the way' },
-  { id: 'blocked', icon: 'prohibit', title: 'Malicious calls stop', sub: 'Injection, exfiltration and runaway spend are blocked' },
-  { id: 'receipt', icon: 'receipt', title: 'A receipt for each decision', sub: 'Recorded on Hyper 0X, so nobody can edit it later' },
+  { id: 'delivered', icon: 'check-circle', title: 'Safe calls go through', sub: 'Pavii removes personal data on the way' },
+  { id: 'blocked', icon: 'prohibit', title: 'Malicious calls stop', sub: 'Pavii blocks injection, data theft and runaway spend' },
+  { id: 'receipt', icon: 'receipt', title: 'A receipt for each decision', sub: 'Hyper 0X records it, so nobody can edit it later' },
 ]);
 
 // The loop's calls: kind, and the gate that blocks it (-1 = safe).
@@ -365,7 +365,7 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
 
 const plate = k.plateHtml({
   fig: 'Fig 3',
-  title: 'How Pavii secures AI agents',
+  title: 'How Pavii protects AI agents',
   hint: 'Good calls pass, bad calls break',
   readout: 'calls arriving from your agents',
   body: `<div class="iso-stage" data-figure="pavii-gates">${svg}${pins}</div>`,

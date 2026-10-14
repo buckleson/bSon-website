@@ -371,7 +371,7 @@ const svg = k.figureSvg({
   width: WIDTH,
   height: HEIGHT,
   label:
-    'A bench model of how Hyper 0X protects a record. A locked box rides a carriage out of a shielded tunnel (in transit), under a compute head that works on it through contact pads without opening it (in use), under a stamp that marks the two parties\' keys on the lid while a copy is filed on the ledger stack (on the ledger), and into a vault that closes and bolts, with its keys in an HSM on the side (at rest).',
+    'A bench model of how Hyper 0X protects a record. A locked box with the record leaves a shielded tunnel (in transit). A compute head works on the box through contact pads and does not open it (in use). A stamp marks the keys of the two parties on the lid, and a copy goes onto the ledger stack (on the ledger). Then the box goes into a vault that closes and bolts. The keys stay in an HSM on the side (at rest).',
   body,
 });
 
@@ -384,10 +384,10 @@ const pins = pinsHtml(P, WIDTH, HEIGHT, [
 ]);
 
 const steps = stepsHtml([
-  { id: 'transit', icon: 'lock-key', title: 'In transit', sub: 'Post-quantum-resistant TLS on every connection' },
-  { id: 'use', icon: 'cpu', title: 'In use', sub: 'Processed without being opened' },
-  { id: 'ledger', icon: 'users-three', title: 'On the ledger', sub: 'Encrypted per party: only your parties hold keys' },
-  { id: 'rest', icon: 'vault', title: 'At rest', sub: 'AES-256, master keys sealed in an HSM' },
+  { id: 'transit', icon: 'lock-key', title: 'In transit', sub: 'Post-quantum-resistant TLS protects every connection' },
+  { id: 'use', icon: 'cpu', title: 'In use', sub: 'The system works on the record and does not open it' },
+  { id: 'ledger', icon: 'users-three', title: 'On the ledger', sub: 'Each party has its own key, and only the parties can read it' },
+  { id: 'rest', icon: 'vault', title: 'At rest', sub: 'AES-256 encryption, with the master keys in an HSM' },
 ]);
 
 const T = {

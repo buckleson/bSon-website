@@ -7,23 +7,25 @@ sidebar:
 
 ## One L2 per customer
 
-Every customer gets their own L2, with its own sequencer, prover, policies and bridge. All L2s settle to one root of record on the Hyper 0X L1. Faults stay local to one L2, and one institution's traffic never slows down another's.
+Every customer gets their own L2, a separate chain that settles to the Hyper 0X L1. Each L2 has its own sequencer, prover, policies and bridge. The sequencer puts the transactions of the L2 in order. The prover makes proofs that the state of the L2 is correct. All L2s settle to one root of record on the L1.
+
+A fault stays local to one L2. The traffic of one institution never slows down the traffic of another.
 
 A single L2 can also run several policy sets side by side, for example retail and corporate rulebooks.
 
 ## Dynamic block size
 
-A block seals when it reaches its size target or when its time limit runs out, whichever comes first. Each L2 sets its own minimum size, maximum size and time limit.
+A block seals when it reaches its size target or when its time limit runs out, whichever comes first. A sealed block takes no more transactions. Each L2 sets its own minimum size, maximum size and time limit.
 
-In an illustrative salary-day model, a bank's payroll L2 receives 6,000 payments per second for ten minutes. Fixed blocks capped at 2,000 transactions per second take about 23 minutes to clear the backlog. Dynamic blocks grow from about 150 to 3,000 payments and keep waits under one second. Dynamic blocks do not add compute; they remove the fixed-size bottleneck.
+Take an example. On salary day, the payroll L2 of a bank receives several times its usual number of payments for a few minutes. With fixed-size blocks, a queue builds up and payments wait. With dynamic blocks, each block grows to hold the extra payments, so no queue builds up. Dynamic blocks do not add computing power. They remove the limit of a fixed block size.
 
 ## Batch settlement
 
-L2s settle to the L1 in batches. A single L1 commit can settle thousands of L2 payments, followed by a challenge window.
+L2s settle to the L1 in batches. A single L1 commit (one write to the L1) can settle thousands of L2 payments. A challenge window follows each commit. This is a set period in which a party can dispute the batch.
 
-## What modularity buys
+## What modularity lets you do
 
-- Add an encryption layer without a fork.
-- Add or change an L2 type, for example moving from fraud proofs to validity proofs.
+- Add an encryption layer without a fork (a split of the chain into two versions).
+- Add or change an L2 type. For example, move from fraud proofs to validity proofs. With fraud proofs, a batch counts as correct unless someone proves it wrong. With validity proofs, each batch carries a proof that it is correct.
 - Connect an existing chain to Hyper 0X.
 - Keep faults local to one L2.

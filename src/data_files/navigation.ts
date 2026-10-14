@@ -62,7 +62,7 @@ export const megaMenus: MegaMenu[] = [
         items: [
           { title: 'Custom blockchains', desc: 'Your own private L2', href: '/services/#custom-blockchains', icon: 'stack' },
           { title: 'Asset tokenization', desc: 'Real assets, on-chain', href: '/services/#asset-tokenization', icon: 'diamond' },
-          { title: 'Wallets & exchanges', desc: 'Branded, built on our rails', href: '/services/#wallets-exchanges', icon: 'device-mobile' },
+          { title: 'Wallets & exchanges', desc: 'With your brand, on our technology', href: '/services/#wallets-exchanges', icon: 'device-mobile' },
         ],
       },
       {
@@ -70,7 +70,7 @@ export const megaMenus: MegaMenu[] = [
         items: [
           { title: 'Wallet SDKs', desc: 'Wallets inside your own apps', href: '/services/#wallet-sdks', icon: 'code' },
           { title: 'AI-agent security', desc: 'Gates and receipts for agents', href: '/services/#ai-agent-security', icon: 'robot' },
-          { title: 'Forward-deployed engineering', desc: 'Our engineers in your stack', href: '/services/#forward-deployed-engineering', icon: 'handshake' },
+          { title: 'Forward-deployed engineering', desc: 'Our engineers in your team', href: '/services/#forward-deployed-engineering', icon: 'handshake' },
         ],
       },
     ],
@@ -96,7 +96,7 @@ export const megaMenus: MegaMenu[] = [
         heading: 'Popular guides',
         items: [
           { title: 'Asset tokenization', desc: 'Launch tokenized assets', href: '/blog/asset-tokenization-guide/', icon: 'diamond' },
-          { title: 'Securing AI agents', desc: '8 attacks and how to stop them', href: '/blog/how-to-secure-ai-agents/', icon: 'shield-warning' },
+          { title: 'Secure AI agents', desc: '8 attacks and how to stop them', href: '/blog/how-to-secure-ai-agents/', icon: 'shield-warning' },
           { title: 'Prompt injection', desc: 'How it works, how to stop it', href: '/blog/what-is-prompt-injection/', icon: 'warning-octagon' },
           { title: 'Layer 1 vs layer 2', desc: 'One L1, many L2s', href: '/blog/layer-1-vs-layer-2-blockchain/', icon: 'stack' },
         ],

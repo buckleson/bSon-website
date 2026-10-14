@@ -1,29 +1,31 @@
 ---
 title: Bridges, SDKs and contracts
-description: Connecting Hyper 0X to other chains, and deploying smart contracts.
+description: How Hyper 0X connects to other chains, and how to deploy smart contracts on it.
 sidebar:
   order: 4
 ---
 
 ## Bridges
 
-Hyper 0X has one shared L1 bridge, and any L2 can also run its own. Bridge adapters connect to **EVM chains, Solana and Sui**: no lock-in, shared liquidity.
+A bridge is a link that moves assets between two chains. Hyper 0X has one shared L1 bridge, and any L2 can also run its own bridge. Bridge adapters connect to **EVM chains, Solana and Sui**. EVM chains run the Ethereum Virtual Machine (EVM), as Ethereum does. This gives you no lock-in and shared liquidity.
 
-For example, a fintech moving USDC from Ethereum to pay exporters locks the USDC on Ethereum. Independent signers vouch for the lock before the same amount appears on Hyper 0X.
+For example, a fintech wants to move USDC (a US dollar stablecoin) from Ethereum to pay exporters. The fintech locks the USDC on Ethereum. Independent signers confirm the lock. Then the same amount appears on Hyper 0X.
 
 ## SDKs
 
-The Hyper Wallet SDKs let apps and games embed wallets and payments in hours, and reach other chains through Hyper 0X bridge adapters.
+The Hyper Wallet SDKs (software development kits) let apps and games embed wallets and payments in hours. These apps also reach other chains through the Hyper 0X bridge adapters.
 
 ## Smart contracts
 
+A smart contract is a program on the chain that runs by itself when its conditions are true.
+
 - **Languages:** Rust today, with a TypeScript framework in development.
 - **Targets:** deploy to the L1 or any L2.
-- **Governed upgrades:** the contract version hash is stored on the L1, and upgrades need approvals.
+- **Governed upgrades:** the L1 stores the version hash (a fingerprint of the code) of the contract. Each upgrade needs approvals.
 - **Policy annotations:** declare approval rules directly in code, for example `#[policy(approvals = "2-of-3")]`.
 
-A typical example is export escrow: proof of shipping releases payment to the exporter, and if there is no proof by the deadline, the buyer is refunded automatically.
+A typical example is export escrow, where a contract holds the payment until there is proof of shipping. Proof of shipping releases the payment to the exporter. If there is no proof by the deadline, the contract refunds the buyer automatically.
 
 ## Account abstraction
 
-Users never handle seed phrases or gas tokens. One face scan to pay; the account enforces limits, the app can pay the fee, and a lost phone is not a lost wallet.
+Account abstraction turns the wallet into a smart contract account with its own rules. Users never handle seed phrases (the secret backup words of a wallet) or gas tokens (tokens that pay network fees). They pay with one face scan. The account enforces limits, and the app can pay the fee. A lost phone is not a lost wallet.

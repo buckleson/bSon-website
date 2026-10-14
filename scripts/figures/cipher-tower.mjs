@@ -162,7 +162,7 @@ const svg = k.figureSvg({
   width: WIDTH,
   height: HEIGHT,
   label:
-    'A tower of four rings around a core. A record drops into the core and the four rings, one per layer of encryption (in transit, in use, on the ledger, at rest), spin one after another to a scrambled position and light up. The owner\'s key from the HSM on the side spins them back into line with the index bar and the record comes out.',
+    'A tower of four rings stands around a core. Each ring is one layer of encryption: in transit, in use, on the ledger and at rest. A record drops into the core, and the rings turn one after another to a locked position and light up. The key of the owner comes from the HSM on the side. It turns the rings back into line with the index bar, and the record comes out.',
   body,
 });
 
@@ -178,10 +178,10 @@ const pins = pinsHtml(P, WIDTH, HEIGHT, [
 ]);
 
 const steps = stepsHtml([
-  { id: 'transit', icon: 'lock-key', title: 'In transit', sub: 'TLS 1.3 with hybrid X25519 + ML-KEM-768' },
-  { id: 'use', icon: 'cpu', title: 'In use', sub: 'Processed without exposing the plaintext' },
-  { id: 'ledger', icon: 'users-three', title: 'On the ledger', sub: 'Encrypted per party; only they hold keys' },
-  { id: 'rest', icon: 'vault', title: 'At rest', sub: 'AES-256-GCM, master keys held in an HSM' },
+  { id: 'transit', icon: 'lock-key', title: 'In transit', sub: 'TLS 1.3 with hybrid X25519 and ML-KEM-768' },
+  { id: 'use', icon: 'cpu', title: 'In use', sub: 'The system works on data and does not expose it' },
+  { id: 'ledger', icon: 'users-three', title: 'On the ledger', sub: 'Each party has its own key to its own record' },
+  { id: 'rest', icon: 'vault', title: 'At rest', sub: 'AES-256-GCM, with the master keys in an HSM' },
 ]);
 
 const T = {

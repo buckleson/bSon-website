@@ -3,31 +3,31 @@
   "faqs": [
     {
       "question": "What does Buckleson do?",
-      "answer": "Buckleson is a blockchain infrastructure company. We build our own blockchain, Hyper 0X, and use it to deliver custom blockchains, asset tokenization, crypto wallets and exchanges, and security for AI agents."
+      "answer": "Buckleson is a blockchain infrastructure company. We built our own blockchain, Hyper 0X. On it, we deliver custom blockchains, asset tokenization, crypto wallets and exchanges, and security for AI agents."
     },
     {
       "question": "Can you build a custom blockchain for my company?",
-      "answer": "Yes, that is our core service. We set up a private L2 on Hyper 0X with your own rules, privacy and bridges, connect it to your existing systems, and support you from pilot to production."
+      "answer": "Yes, that is our core service. We set up a private L2 on Hyper 0X with your own rules, privacy and bridges. We connect it to your systems and support you from the pilot to production."
     },
     {
       "question": "How does Hyper 0X keep each customer's data private?",
-      "answer": "Every customer runs on its own L2, so its transactions never mix with anyone else's. Data is encrypted in transit, while it is being processed, on the ledger and at rest, and only the parties to a record hold the keys to read it."
+      "answer": "Every customer runs on its own L2, so its transactions never mix with the transactions of others. Data stays encrypted in transit, in use, on the ledger and at rest. Only the parties to a record hold the keys to read it."
     },
     {
       "question": "Will Pavii block the tool calls my agents need?",
-      "answer": "No. Pavii only stops a call that breaks a rule: an injected instruction, personal data leaving, an unknown package, an exhausted budget or a disallowed destination. Allowed calls pass straight through, and every decision, pass or block, gets a receipt."
+      "answer": "No. Pavii stops only a call that breaks a rule. Examples are an injected instruction, personal data that leaves, an unknown package, an empty budget or a destination that is not allowed. Allowed calls go through, and every decision gets a receipt."
     },
     {
       "question": "Why is a blockchain more secure for my business?",
-      "answer": "Records on Hyper 0X cannot be quietly edited or deleted, every connection is post-quantum-resistant, and compliance rules run before a transaction executes. That gives auditors and regulators one verifiable record."
+      "answer": "Nobody can secretly edit or delete records on Hyper 0X. Every connection is post-quantum-resistant. Compliance rules run before a transaction executes. So auditors and regulators get one record that they can check."
     },
     {
       "question": "Who do you work with?",
-      "answer": "Banks and fintechs, asset issuers and AI or enterprise security teams. Most start with one use case, such as a payment flow, a tokenized asset or a group of AI agents, and grow from there."
+      "answer": "We work with banks and fintechs, asset issuers and AI or enterprise security teams. Most start with one use case, such as a payment flow, a tokenized asset or a group of AI agents. Then they grow from there."
     },
     {
       "question": "How do we get started?",
-      "answer": "Book a 30-minute call. We learn what you want to put on-chain, then propose a scoped pilot on your own L2 with clear success metrics."
+      "answer": "Book a 30-minute call. We learn what you want to put on a blockchain. Then we propose a pilot on your own L2, with a clear scope and clear success measures."
     },
     {
       "question": "When do H0X Pay and HyperRun launch?",
@@ -38,36 +38,36 @@
     {
       "id": "blockchain",
       "label": "Blockchain for business",
-      "intro": "When a ledger beats a database, how consensus works, and what it takes to run your own chain.",
+      "intro": "When a ledger is better than a database, how consensus works, and what it takes to run your own chain.",
       "faqs": [
         {
-          "question": "Isn't a private blockchain just a shared database?",
-          "answer": "Not when several organisations need to share one record and none of them should control it alone. A database has one owner who can change any row; a permissioned blockchain gives every participant a copy, lets known validators agree on each change, and makes history tamper-evident. If only one company writes the data and everyone trusts it, a normal database is the better choice.",
+          "question": "Is a private blockchain just a shared database?",
+          "answer": "No, not when several organisations must share one record and no single one must control it. A database has one owner who can change any row. A permissioned blockchain gives every participant a copy, and known validators agree on each change. History is tamper-evident. If only one company writes the data and everyone trusts it, use a normal database.",
           "link": { "title": "Permissioned vs permissionless blockchain", "url": "/blog/permissioned-vs-permissionless-blockchain/" }
         },
         {
           "question": "When should a company not use a blockchain?",
-          "answer": "When one party owns the data, nobody else needs to verify it, and records may need to be edited freely. Blockchains earn their place when several parties must trust the same record, settlement must be final, or an auditor needs proof that nothing was changed after the fact.",
+          "answer": "Do not use a blockchain when one party owns the data, nobody else checks it and records change often. A blockchain is useful when several parties must trust the same record. It is also useful when settlement must be final, or when an auditor needs proof that nobody changed a record later.",
           "link": { "title": "How to choose a blockchain development company", "url": "/blog/how-to-choose-a-blockchain-development-company/" }
         },
         {
           "question": "How does consensus work on an enterprise blockchain?",
-          "answer": "Validators are known organisations, each bound to an identity certificate. They use a Byzantine fault tolerant protocol to agree on the next block, which keeps working even if some validators fail or misbehave. On Hyper 0X the protocol is asynchronous BFT with deterministic finality: once a block is agreed, it is final in one pass.",
+          "answer": "The validators are organisations that everyone knows, and each one has an identity certificate. They use a Byzantine fault tolerant protocol to agree on the next block. The protocol continues to work when some validators fail or act badly. Hyper 0X uses asynchronous BFT with deterministic finality: when the validators agree on a block, it is final in one pass.",
           "link": { "title": "Blockchain finality explained", "url": "/blog/blockchain-finality-explained/" }
         },
         {
           "question": "Should a company launch its own L1 or an L2?",
-          "answer": "For most companies, an L2. Running an L1 means recruiting and coordinating independent validators for years. An L2 gives you your own rules, privacy and capacity while a shared L1 provides security and settlement. On Hyper 0X every customer gets a private L2 and the L1 is run for them.",
+          "answer": "Most companies need an L2. To run an L1, you must find and coordinate independent validators for years. An L2 gives you your own rules, privacy and capacity, and a shared L1 gives security and settlement. On Hyper 0X, every customer gets a private L2, and we run the L1 for them.",
           "link": { "title": "Layer 1 vs layer 2 blockchain", "url": "/blog/layer-1-vs-layer-2-blockchain/" }
         },
         {
           "question": "How does a blockchain handle GDPR and the right to be forgotten?",
-          "answer": "Personal data should not sit on the ledger in readable form. The usual pattern is to keep it off-chain or encrypted, store only a reference or fingerprint on-chain, and make it unreadable by destroying the key when a deletion request arrives. Regulators are still refining their guidance, so take legal advice for your case.",
+          "answer": "Do not put readable personal data on the ledger. Keep the data off the chain or encrypted. Put only a reference or a fingerprint on the chain. When a person asks for deletion, destroy the key, and the data becomes unreadable. Regulators still change their guidance, so get legal advice for your case.",
           "link": { "title": "Blockchain data encryption: the four layers", "url": "/blog/blockchain-data-encryption-four-layers/" }
         },
         {
           "question": "What decides how much a private blockchain costs?",
-          "answer": "Scope more than technology: how many organisations take part, how many systems it must connect to, the compliance rules it must enforce, and the security reviews it needs. Building on an existing L1 instead of a new one removes most of the infrastructure cost. A scoped pilot is the cheapest way to get a real number.",
+          "answer": "The scope decides the cost more than the technology. Count the organisations that take part, the systems to connect, the compliance rules to apply and the security reviews to do. A chain on an existing L1 costs much less infrastructure than a new chain. A small pilot is the cheapest way to get a real number.",
           "link": { "title": "Custom blockchain development", "url": "/services/#custom-blockchains" }
         }
       ]
@@ -75,41 +75,41 @@
     {
       "id": "ai-agent-security",
       "label": "AI-agent security",
-      "intro": "Prompt injection, tool-call permissions, runaway costs and how to audit what an agent did.",
+      "intro": "Prompt injection, permissions for tool calls, costs that run out of control, and how to audit what an agent did.",
       "faqs": [
         {
           "question": "What actually works against prompt injection?",
-          "answer": "Layers, because no single filter catches every attack. Check inputs and tool outputs for injected instructions, give each agent only the permissions its task needs, restrict where it can send data, require human approval for risky actions, and log everything. The goal is that an injected agent cannot do real damage.",
+          "answer": "Use layers, because no single filter catches every attack. Check inputs and tool outputs for injected instructions. Give each agent only the permissions that its task needs. Limit where it can send data, and get a person to approve risky actions. Log everything. Then an injected agent cannot do real damage.",
           "link": { "title": "What is prompt injection?", "url": "/blog/what-is-prompt-injection/" }
         },
         {
           "question": "How do you enforce permissions on AI agent tool calls?",
-          "answer": "Put a gateway between agents and tools. It checks each call against a policy for that agent: which tools it may use, which arguments are valid, what data may leave and how much it may spend. Calls that pass go straight through; the rest are blocked with a reason, and the decision is logged.",
+          "answer": "Put a gateway between the agents and the tools. The gateway checks each call against the policy for that agent. The policy sets the tools, the valid arguments, the data that can leave and the spend limit. Calls that pass go through. The gateway blocks the other calls, gives a reason and logs the decision.",
           "link": { "title": "AI agent tool calling security", "url": "/blog/ai-agent-tool-calling-security/" }
         },
         {
           "question": "How do you stop AI agents from running up huge bills?",
-          "answer": "Give every agent its own budget and enforce it outside the model: token and spend caps per task and per day, retry limits, loop detection and context compaction. Provider dashboards show spend after the fact; a gateway can stop the call before it happens.",
+          "answer": "Give every agent its own budget, and enforce it outside the model. Set token and spend limits for each task and each day. Limit retries, find loops and compact the context. A provider dashboard shows the spend after it happens. A gateway stops the call before it happens.",
           "link": { "title": "Pavii: security gateway for AI agents", "url": "/products/pavii/" }
         },
         {
           "question": "How do you monitor AI agents that take real actions?",
-          "answer": "Record every action with who asked, which agent acted, what it was allowed to do and what happened. Make the log tamper-evident by chaining each entry to the last and anchoring the chain on a blockchain, so a deleted or edited entry shows up as a gap.",
+          "answer": "Record every action: who asked, which agent acted, what it had permission to do and what happened. Chain each entry to the entry before it, and anchor the chain on a blockchain. Then a deleted or changed entry shows as a gap.",
           "link": { "title": "Proof of execution for AI", "url": "/blog/proof-of-execution-ai/" }
         },
         {
           "question": "What is excessive agency in AI?",
-          "answer": "It is entry LLM06 in the OWASP Top 10 for LLM applications: an agent has more functions, permissions or autonomy than its task needs, so a mistake or an injected instruction can cause real harm. The fix is least privilege, narrow tools and approval for high-impact actions.",
+          "answer": "Excessive agency is entry LLM06 in the OWASP Top 10 for LLM applications. It means that an agent has more functions, permissions or freedom than its task needs. Then a mistake or an injected instruction can cause real damage. To prevent it, give the least permissions, use narrow tools and get approval for actions with a high impact.",
           "link": { "title": "How to secure AI agents: 8 attacks", "url": "/blog/how-to-secure-ai-agents/" }
         },
         {
           "question": "How do companies stop sensitive data reaching external AI models?",
-          "answer": "By routing all model traffic through one gateway that detects and redacts personal data and secrets before a prompt leaves, and that records who sent what to which model. Blocking unapproved AI tools at the network edge closes the remaining gap.",
+          "answer": "Send all model traffic through one gateway. The gateway finds personal data and secrets and removes them before a prompt leaves. It also records who sent which data to which model. Then block AI tools that are not approved at the edge of the network.",
           "link": { "title": "How to stop LLM data leaks", "url": "/blog/stop-llm-data-leaks-pii-redaction/" }
         },
         {
           "question": "Can an AI agent be trusted to spend money?",
-          "answer": "Only inside limits it cannot change: a fixed budget, an allow-list of payees, human approval above a threshold, and a receipt for every payment. Keeping those rules outside the agent, ideally as a contract on a ledger, means a compromised agent still cannot overspend.",
+          "answer": "Yes, but only inside limits that the agent cannot change. Give it a fixed budget and a list of allowed payees. Get a person to approve payments above a set amount, and keep a receipt for every payment. Keep these rules outside the agent, for example as a contract on a ledger. Then a compromised agent still cannot spend too much.",
           "link": { "title": "AI-agent security services", "url": "/services/#ai-agent-security" }
         }
       ]
@@ -117,25 +117,25 @@
     {
       "id": "tokenization",
       "label": "Asset tokenization",
-      "intro": "What tokenization really changes, which chain to use, and where the hard parts are.",
+      "intro": "What tokenization really changes, which chain to use, and which parts are difficult.",
       "faqs": [
         {
           "question": "What is the difference between asset tokenization and security tokenization?",
-          "answer": "Asset tokenization is the broad idea of representing any asset, such as gold, invoices or property, as a digital token. A security token is a tokenized asset that legally counts as a security, so securities rules on issuing, selling and transferring it apply."
+          "answer": "Asset tokenization is the general idea: you show any asset, such as gold, invoices or property, as a digital token. A security token is a tokenized asset that is a security by law. So securities rules apply when you issue, sell and transfer it."
         },
         {
           "question": "Which blockchain is best for tokenizing assets?",
-          "answer": "Judge it on five things: privacy for holders, final settlement, compliance controls built into transfers, the ability to connect to the venues where the asset will trade, and an operator you can hold to account. Regulated issuers often use a permissioned chain with bridges to public networks.",
+          "answer": "Check five things. Check privacy for holders and final settlement. Check that compliance controls are part of each transfer. Check that the chain connects to the places where the asset will trade. Check that you can hold the operator to account. Regulated issuers often use a permissioned chain with bridges to public networks.",
           "link": { "title": "Asset tokenization services", "url": "/services/#asset-tokenization" }
         },
         {
           "question": "Is owning a token the same as owning the asset?",
-          "answer": "Only if the legal documents say so. A token is a record; the rights it carries come from the legal structure behind it, often a special purpose vehicle that holds the asset. Good tokenization ties the on-chain record to enforceable legal rights.",
+          "answer": "Only if the legal documents say so. A token is a record. Its rights come from the legal structure behind it, often a special purpose vehicle that holds the asset. Good tokenization connects the record on the chain to legal rights that a court can enforce.",
           "link": { "title": "Asset tokenization guide", "url": "/blog/asset-tokenization-guide/" }
         },
         {
           "question": "What is the hardest part of tokenizing real-world assets?",
-          "answer": "Rarely the technology. The hard parts are the legal structure, custody of the underlying asset, investor onboarding and building real demand so the token can be traded. Plan those first; the smart contracts come last."
+          "answer": "The technology is rarely the hardest part. The hard parts are the legal structure, the custody of the asset, the onboarding of investors and real demand for the token. Plan these first. Write the smart contracts last."
         }
       ]
     },
@@ -146,25 +146,25 @@
       "faqs": [
         {
           "question": "How can I tell if a wallet is really non-custodial?",
-          "answer": "Ask who can move the funds without the user. If the provider holds a key, or a key share it can combine with another it controls, the wallet is effectively custodial. In a truly non-custodial wallet, only the user's own keys or devices can authorise a transfer.",
+          "answer": "Ask who can move the funds without the user. If the provider holds a key, or a key share that it can combine with another share it controls, the wallet is really custodial. In a non-custodial wallet, only the keys or devices of the user can approve a transfer.",
           "link": { "title": "Custodial vs non-custodial wallets", "url": "/blog/custodial-vs-non-custodial-wallet/" }
         },
         {
           "question": "What is the difference between MPC, multisig and smart account wallets?",
-          "answer": "MPC splits one private key into shares held by different parties. Multisig needs several separate keys to approve a transaction, enforced on-chain. A smart account is a contract wallet with programmable rules such as spending limits, recovery and gas sponsorship. Many business wallets combine them."
+          "answer": "An MPC wallet splits one private key into shares that different parties hold. A multisig wallet needs several separate keys to approve a transaction, and the chain enforces this rule. A smart account is a contract wallet with rules that you can program, such as spending limits, recovery and paid gas. Many business wallets use more than one of these."
         },
         {
           "question": "What is the difference between ERC-4337 and EIP-7702?",
-          "answer": "ERC-4337 adds smart contract accounts to Ethereum without changing the protocol, using a separate flow of user operations. EIP-7702, live since the Pectra upgrade in 2025, lets an ordinary account delegate to smart contract code, so existing addresses can gain smart-account features.",
+          "answer": "ERC-4337 adds smart contract accounts to Ethereum without a change to the protocol. It uses a separate flow of user operations. EIP-7702 has been live since the Pectra upgrade in 2025. It lets a normal account delegate to smart contract code, so existing addresses can get smart-account features.",
           "link": { "title": "Account abstraction without seed phrases", "url": "/blog/account-abstraction-no-seed-phrases/" }
         },
         {
           "question": "Can you recover crypto if you lose your seed phrase?",
-          "answer": "Usually not, which is why paid recovery services that promise otherwise are a common scam. The fix is prevention: smart accounts can add recovery through trusted devices, guardians or a passkey, so losing a phone does not mean losing funds."
+          "answer": "Usually not. Paid recovery services that promise to recover your crypto are a common scam. The solution is prevention. A smart account can add recovery through trusted devices, guardians or a passkey. Then a lost phone does not mean lost funds."
         },
         {
           "question": "Are passkeys safe for crypto wallets?",
-          "answer": "Yes, when the wallet is built for them. A passkey signs with a key that never leaves secure hardware and cannot be phished like a password. Synced passkeys are easier to recover; device-bound ones are stricter. A good wallet pairs either with a separate recovery path.",
+          "answer": "Yes, when the wallet supports them correctly. A passkey signs with a key that never leaves secure hardware, and nobody can steal it with a fake login page. A synced passkey is easier to recover. A passkey on one device is stricter. A good wallet adds a separate recovery path to both types.",
           "link": { "title": "Hyper Wallet & SDKs", "url": "/products/hyper-wallet/" }
         }
       ]
@@ -172,33 +172,33 @@
     {
       "id": "post-quantum",
       "label": "Post-quantum security",
-      "intro": "What quantum computers threaten, what they don't, and why hybrid encryption is the safe default.",
+      "intro": "What quantum computers can break, what they cannot break, and why hybrid encryption is the safe default.",
       "faqs": [
         {
           "question": "Can quantum computers break blockchains?",
-          "answer": "Parts of them. A large enough quantum computer could forge today's digital signatures, which secure wallets. Hash functions hold up much better. And encrypted data recorded today could be decrypted later, which matters most for private enterprise records.",
+          "answer": "They can break some parts. A large quantum computer can forge the digital signatures that protect wallets today. Hash functions are much stronger against it. Also, an attacker can record encrypted data today and decrypt it later. This risk is largest for private enterprise records.",
           "link": { "title": "What makes a blockchain post-quantum-resistant?", "url": "/blog/post-quantum-resistant-blockchain/" }
         },
         {
           "question": "Is Bitcoin quantum resistant?",
-          "answer": "Not yet. Bitcoin signatures use elliptic-curve cryptography that a large quantum computer could break, especially for coins whose public keys are already visible on-chain. Moving to post-quantum signatures would need a network-wide upgrade, which is still under discussion."
+          "answer": "Not yet. Bitcoin signatures use elliptic-curve cryptography, and a large quantum computer can break it. The risk is highest for coins whose public keys are already visible on the chain. A move to post-quantum signatures needs an upgrade of the full network, and that is still under discussion."
         },
         {
           "question": "Is SHA-256 safe against quantum computers?",
-          "answer": "Largely, yes. The best known quantum attack on hash functions, Grover's algorithm, only halves the effective security, which still leaves SHA-256 with a very large margin. Signatures and key exchange are the parts that need replacing."
+          "answer": "Mostly, yes. The best known quantum attack on hash functions, Grover's algorithm, cuts the effective security in half. SHA-256 still keeps a very large margin. Signatures and key exchange are the parts to replace."
         },
         {
           "question": "What is ML-KEM?",
-          "answer": "ML-KEM is the post-quantum key-encapsulation standard NIST published as FIPS 203 in August 2024, based on the Kyber algorithm. Two parties use it to agree on a shared secret that quantum computers are not known to be able to break."
+          "answer": "ML-KEM is the post-quantum standard for key encapsulation. NIST published it as FIPS 203 in August 2024, and it is based on the Kyber algorithm. Two parties use it to agree on a shared secret. Nobody knows a way for a quantum computer to break it."
         },
         {
           "question": "Why combine X25519 with ML-KEM instead of using ML-KEM alone?",
-          "answer": "Defence in depth. X25519 is decades-tested against classical attacks; ML-KEM is designed to resist quantum ones. A hybrid key exchange stays secure as long as either one holds, so a flaw found later in the newer algorithm does not expose your data. Hyper 0X uses this hybrid on every connection.",
+          "answer": "Two locks are safer than one. X25519 has resisted classical attacks for decades. ML-KEM is designed to resist quantum attacks. A hybrid key exchange stays secure while either one holds. So if someone finds a flaw in the newer algorithm later, your data stays protected. Hyper 0X uses this hybrid on every connection.",
           "link": { "title": "Hyper 0X", "url": "/products/hyper-0x/" }
         },
         {
           "question": "Do we need post-quantum encryption now?",
-          "answer": "If your data must stay confidential for years, yes. Attackers can record encrypted traffic today and decrypt it once quantum computers are ready. If the years your data must stay secret plus the years a migration takes exceed the time until that point, you are already late."
+          "answer": "Yes, if your data must stay secret for years. Attackers can record encrypted traffic today and decrypt it when quantum computers are ready. Add the years that your data must stay secret to the years that a migration takes. If that total is longer than the time until such computers exist, you are already late."
         }
       ]
     }

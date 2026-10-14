@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build && node process-html.mjs && node scripts/smoke.mjs",
+    "build": "node scripts/ste-check.mjs --strict && astro check && astro build && node process-html.mjs && node scripts/smoke.mjs",
+    "ste": "node scripts/ste-check.mjs",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "preview": "astro preview",

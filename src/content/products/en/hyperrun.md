@@ -6,27 +6,27 @@ order: 5
 status: 'coming-soon'
 tagline: 'A realistic FPS where you play, predict and earn'
 summary: |
-  HyperRun is coming soon. It is a realistic first-person shooter where players earn money for playing, fans earn by predicting matches, and great players get sponsored by the people who back them. Results are signed and payouts settle on Hyper 0X.
+  HyperRun is coming soon. It is a realistic first-person shooter. Players earn money when they play and win. Fans earn when they predict matches correctly. Fans can also sponsor good players. The game signs every result, and payouts settle on Hyper 0X.
 diagram: 'hyperrun'
 features:
   - title: 'Earn by playing'
     icon: 'gamepad-2'
-    subTitle: 'Players earn through gameplay and wins.'
+    subTitle: 'Players earn money when they play and when they win.'
   - title: 'In-game predictions'
     icon: 'trending-up'
-    subTitle: 'Predict matches and players, and earn when you are right.'
+    subTitle: 'Predict the results of matches and players. Earn when your prediction is correct.'
   - title: 'Player sponsorship'
     icon: 'handshake'
-    subTitle: 'Skilled gamers get sponsored through other players'' predictions on them.'
+    subTitle: 'Other players back good players through their predictions, and the good players get sponsorship.'
 details:
   title: 'How it stays fair'
   items:
     - title: 'Signed match results'
-      subTitle: 'Every result is signed before any payout, so it cannot be changed afterwards.'
+      subTitle: 'The game signs every result before any payout. Nobody can change a result after the game signs it.'
     - title: 'Rewards contract'
-      subTitle: 'A smart contract on Hyper 0X resolves predictions and pays out.'
+      subTitle: 'A smart contract on Hyper 0X settles the predictions and pays the winners.'
     - title: 'In-game wallet'
-      subTitle: 'Players and fans get a wallet built with the Hyper Wallet SDK.'
+      subTitle: 'Players and fans get a wallet that uses the Hyper Wallet SDK.'
 cta:
   title: 'Get notified at launch'
   url: 'https://cal.com/buckleson-group/30min'

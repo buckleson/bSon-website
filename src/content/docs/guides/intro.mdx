@@ -5,23 +5,23 @@ sidebar:
   order: 1
 ---
 
-Hyper 0X is Buckleson's own **permissioned L1 blockchain**, engineered from scratch. Every Buckleson product, including Hyper Wallet, the Wallet SDKs and Pavii, signs, settles and logs on Hyper 0X, so all of them write to the same record.
+Hyper 0X is Buckleson's own **permissioned L1 blockchain**, engineered from scratch. An L1 is a base blockchain that does not settle to another chain. "Permissioned" means that only named institutions run its validators, the parties that agree on the order of transactions. Every Buckleson product signs, settles and logs on Hyper 0X. This includes Hyper Wallet, the Wallet SDKs and Pavii. So all of them write to the same record.
 
 ## Why our own L1?
 
-Building on a public chain means inheriting its fees, its roadmap and its outages. Owning the chain lets us design for what enterprises actually need:
+When you build on a public chain, you inherit its fees, its roadmap and its outages. Because we own the chain, we can design it for what enterprises need:
 
-- **Final in one pass:** leaderless aBFT ordering, so there are no reorgs and no front-running.
-- **Post-quantum today:** hybrid ML-KEM-768 on every connection, plus four layers of encryption.
-- **Modular core:** add an encryption layer, L2 type, bridge or rule without a fork.
-- **An L2 per customer:** each with its own design, policies and bridge, all on one shared record.
-- **Dynamic blocks:** blocks resize with load, fast when quiet, no backlog at peaks.
-- **Compliance as code:** limits, KYC and maker-checker approvals run before a transaction executes.
-- **Connects to anything:** bridges and SDKs reach public chains, bank DLTs and APIs.
+- **Final in one pass:** leaderless aBFT ordering. The validators agree on one order, and no single node sets it. So there are no reorgs (rewrites of past blocks) and no front-running (a party moves its transaction ahead of yours).
+- **Post-quantum today:** a hybrid ML-KEM-768 key exchange on every connection, plus four layers of encryption.
+- **Modular core:** add an encryption layer, an L2 type, a bridge or a rule without a fork (a split of the chain into two versions).
+- **An L2 per customer:** each customer gets an L2, a separate chain that settles to the L1. Each L2 has its own design, policies and bridge. All L2s write to one shared record.
+- **Dynamic blocks:** blocks change size with the load. They stay fast when traffic is low, and no backlog builds up at peaks.
+- **Compliance as code:** limits, know-your-customer (KYC) checks and maker-checker approvals run before a transaction executes. Maker-checker means one person makes a transaction and a second person approves it.
+- **Connects to anything:** bridges and SDKs reach public chains, bank DLTs (distributed ledgers that banks run) and APIs. A bridge is a link that moves assets between chains.
 
 ## How it is layered
 
-The core sits at the bottom and never depends on the products built on top of it.
+The core sits at the bottom. It never depends on the products that run on top of it.
 
 | Layer               | What lives here                               |
 | ------------------- | --------------------------------------------- |
