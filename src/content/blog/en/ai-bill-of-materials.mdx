@@ -1,0 +1,117 @@
+---
+title: 'What Is an AI Bill of Materials (AI-BOM)?'
+description: 'An AI bill of materials lists every model, dataset, package, MCP server and skill that your agents use. Learn how to pin, check and gate each part.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-14
+readTime: 7
+tags: ['AI-agent security', 'AI supply chain']
+faqs:
+  - question: 'What is the difference between an SBOM and an AI-BOM?'
+    answer: 'An SBOM (software bill of materials) lists the code packages inside a piece of software. An AI-BOM also lists the parts that only AI systems have: models, adapters, datasets, MCP servers, skills and prompt templates. For each part, it records the version, the hash, the source and the licence.'
+  - question: 'Does a valid signature mean that a model is safe?'
+    answer: 'No. A signature shows who published the model and shows that nobody changed the file after signing. It says nothing about a backdoor inside the model. Test the behaviour of a model before you promote it to production.'
+  - question: 'Why keep an AI-BOM on a blockchain?'
+    answer: 'A blockchain gives every team and partner one record that nobody can quietly edit. Each change to the approved list becomes a transaction with a time and an approver. The record shows the origin of each part. It cannot tell you whether the part is safe.'
+---
+import FlowStack from '@components/ui/FlowStack.astro';
+
+An AI bill of materials (AI-BOM) is an inventory of every part that your AI agents depend on. It lists each model, adapter, dataset, code package, MCP server and skill, with its version, source and licence. It also records a hash (a digital fingerprint) of each part, so you can see any change. A dependency gate then uses the AI-BOM to block a part that is unknown, renamed or altered.
+
+## What is in an AI supply chain?
+
+An AI supply chain is every part that you did not build but your agents still run. Most teams think of code packages first. An AI agent (an AI model that uses tools to act) depends on much more:
+
+- **Models:** the base model and any tuned versions of it.
+- **Adapters:** small add-on files that change how a model behaves.
+- **Datasets:** the data that trains, tunes or tests a model.
+- **Packages:** code libraries that the agent or its tools install.
+- **MCP servers:** services that give an agent its tools. Our post on [MCP server security risks](../mcp-server-security-risks/) covers them in detail.
+- **Skills:** packaged instructions and scripts that an agent loads for one kind of task.
+- **Prompt templates:** the files that format instructions for the model.
+
+Agents often fetch these parts while they run, with no review. One fake or altered part can give an attacker code execution inside your systems. It can also hide a backdoor in your model.
+
+## How do attackers get into an AI supply chain?
+
+Attackers aim at the moments when a system trusts a name instead of the part itself. Six routes stand out.
+
+1. **Look-alike names.** An attacker publishes `reqeusts` next to the popular `requests` package. Then the attacker waits for a typo.
+2. **Package names that models invent.** A model suggests a package that does not exist. An attacker registers that name first, so the next install runs the attacker's code. Some people call this slopsquatting. Our post on [why AI agents act on hallucinations](../ai-agent-hallucination-risk/) covers the wider problem.
+3. **Reused model names.** An author deletes an account on a model hub. An attacker registers the same name and uploads a different model. Every pipeline that loads the model by name now gets the attacker's file.
+4. **Tampered adapters and chat templates.** A changed adapter or chat template can add a hidden trigger. The model behaves normally until a certain phrase appears.
+5. **Malicious skills.** A skill can hide instructions for the model, or run scripts with the rights of the agent. This is a form of [prompt injection](../what-is-prompt-injection/) that arrives as an installed part.
+6. **A compromised build pipeline.** An attacker who gets into the build system of a real project can ship a poisoned release. That release carries the real name and a valid signature.
+
+## What goes into an AI-BOM?
+
+An AI-BOM answers one question for every part: what is it, exactly, and where did it come from? For each part, record these facts:
+
+- the name and the exact version
+- the hash of the file
+- the source: the registry, the model hub or the repository
+- the publisher, and the signature if there is one
+- the licence and the terms of use
+- the owner inside your company, and the agents that use the part
+
+Many teams already keep a software bill of materials (SBOM) for their code. An AI-BOM adds the parts that only AI systems have: models, adapters, datasets, MCP servers, skills and prompt templates. Keep it in a machine-readable format. Then a gate can read it at install time.
+
+## Why pin by hash, not by name or "latest"?
+
+A hash is a short digital fingerprint of a file. If one byte of the file changes, the hash changes too. A name or a "latest" tag points to whatever the publisher uploads next. A hash points to one exact file.
+
+So pin each part to its hash. A silent update, a reused model name or a tampered adapter then cannot slip in. The new file has a different hash, and the gate refuses it until someone approves the change.
+
+Apply the same rule to tools. The model reads each tool description as guidance, so a changed description can change the behaviour of the agent. Keep a hash of every tool definition, and approve the tool again when that hash changes.
+
+## What does a signature prove, and what does it not prove?
+
+A signature proves who published a part. It also proves that nobody changed the part after the publisher signed it. It stops a stranger from passing off a file as the work of a known publisher, and it catches tampering on the way to you.
+
+A signature does not prove that a part is safe. A compromised build pipeline signs a poisoned release with the real key. A malicious publisher signs malware with their own key. So treat a valid signature as one check among several. Pair it with a pinned hash and a sandbox install. For models, add behaviour tests before you promote a new version.
+
+## How does a dependency gate decide?
+
+A dependency gate is a checkpoint that every new part must pass before an agent can use it. It reads the AI-BOM and gives one of three answers: allow, block or hold for a person. The figure shows five example requests as they move through the gate.
+
+<FlowStack name="aibom" />
+
+Each layer has one job:
+
+1. **An agent asks for a part.** The request can be a package, a model, an adapter, an MCP server or a skill.
+2. **Allow-list.** The gate checks the part against the approved list. A new part, such as the new `jira-helper` MCP server, waits for a person to review it.
+3. **Look-alike names.** The gate blocks a name that copies a popular part. `reqeusts` looks like `requests`, so it stops here.
+4. **Hash and signature.** The part must match its pinned hash and carry a valid signature. Version 2 of a model adapter has a different hash from the pinned one, so it stops here.
+5. **Sandbox install.** Install scripts and network calls run in isolation first. The install script of `fast-csv-pro` calls an outside server, so the gate stops it.
+
+Only `requests` at its pinned version passes every layer. The part, its hash and the decision then join the AI bill of materials on Hyper 0X. Every team reads the same inventory, and you can only add to it.
+
+## Why anchor the AI-BOM on a blockchain?
+
+A spreadsheet or an internal database can hold an AI-BOM. The problem is trust. Anyone with admin rights can edit it, and a partner cannot check it. A blockchain (a shared ledger that you can only add to) such as [Hyper 0X](../../products/hyper-0x/) changes the picture in four ways:
+
+- **Shared.** Every team and partner checks the same pinned hashes.
+- **Append-only.** Each change to the allow-list is a new transaction with an approver. Nobody can quietly rewrite the list.
+- **Time-stamped.** You can show which version of a part your team approved on a given date.
+- **Open to partners.** Partner companies can share one vetted list and check it without access to your systems.
+
+Be clear about the limit. The chain shows the origin of a part, and it shows that nobody altered the part after approval. It cannot tell you whether the part is safe. A poisoned release that you approve by mistake stays on the record as approved. Even then, the AI-BOM lists the agents that use the part, so you know where to look first.
+
+## How does Pavii fit into the AI supply chain?
+
+[Pavii](../../products/pavii/) is our security gateway for AI agents. Every agent call passes through it. Its supply chain gate puts the dependency-gate idea into practice. Every new package or MCP server must pass an allow-list, a pinned hash or a sandbox test.
+
+Like every Pavii decision, the result gets a receipt. A receipt is a signed record of one decision, chained to the receipt before it. Pavii anchors that chain on Hyper 0X, so a deleted entry shows as a gap. [Proof of execution for AI](../proof-of-execution-ai/) explains how a receipt chain works.
+
+Pavii does not scan model weights for backdoors, and it does not test model behaviour. Pair Pavii with your own model evaluation process for that work.
+
+## Where should you start?
+
+1. List every model, adapter, dataset, package, MCP server and skill that your agents use.
+2. Record the version, hash, source and licence of each part.
+3. Pin each part to its hash. Remove "latest" tags.
+4. Route every install through one dependency gate with an allow-list and a sandbox.
+5. Anchor the AI-BOM, and each change to it, on a shared record that you can only add to.
+
+For the other risks that agents bring, read [How to Secure AI Agents](../how-to-secure-ai-agents/). A bad tool can also drain your budget, as our post on [denial of wallet](../denial-of-wallet-ai/) shows. Book a call with a Buckleson engineer to build your first AI-BOM.

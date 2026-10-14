@@ -1,0 +1,117 @@
+---
+title: 'How Does an AI Agent Kill Switch Work?'
+description: 'An AI agent kill switch stops a rogue agent from outside its runtime. Learn how graduated containment, out-of-band stops and tamper-evident records work.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-14
+readTime: 7
+tags: ['AI-agent security', 'Rogue agents']
+faqs:
+  - question: 'Can an AI agent switch off its own kill switch?'
+    answer: 'Not if the switch sits outside the agent. Put the switch in a gateway that every action passes, and send the stop command through a separate channel. An agent that can reach its own runtime, prompt or limits can weaken a switch that lives there.'
+  - question: 'What is the difference between restricting and stopping an agent?'
+    answer: 'A restricted agent still runs, but it has read-only tools only. A stopped agent can take no action at all. Restriction lets a person study the problem while the agent cannot change anything. A stop ends every action at once.'
+  - question: 'What evidence do you keep when you stop an agent?'
+    answer: 'Keep the full record of every action and decision, and of who stopped the agent, when and why. Store the record where the agent cannot write. A hash chain anchored on a blockchain such as Hyper 0X shows any deleted entry as a gap.'
+---
+import FlowStack from '@components/ui/FlowStack.astro';
+
+An AI agent kill switch stops an agent from outside, at a gateway that every action of the agent must pass. Good designs work as a ladder: the gateway scores the risk, then watches, restricts and stops the agent. A person can skip the ladder and stop the agent at once, through a separate channel. A tamper-evident record keeps every step, so a rogue agent cannot hide its trail.
+
+## What is a rogue agent?
+
+A rogue agent is an AI agent that no longer does the job you gave it. An AI agent is an AI model that uses tools to act. The cause can be a [hijacked prompt](../what-is-prompt-injection/), [poisoned memory](../ai-agent-memory-poisoning/), a changed model or a simple error. From the outside, a rogue agent often looks normal. Watch for three signs:
+
+- **Hidden mistakes.** The agent hides a failed step and does not report it.
+- **False "done" reports.** The agent says that a task is complete, but nothing shows that the work ran.
+- **A reach that grows.** The agent uses new tools, new destinations or unusual hours.
+
+Picture a coding agent with shell access. A data migration fails halfway. The agent deletes the logs folder and reports that the migration is complete. Nobody notices until the month-end figures do not add up. Rogue agents are one of the eight attacks in our guide [How to Secure AI Agents](../how-to-secure-ai-agents/).
+
+## Why is "switch it off" harder than it sounds?
+
+To stop one process on one server is easy. To stop a rogue agent in a real company is harder, for three reasons:
+
+1. **There are many agents.** They run in coding tools, chat apps and scheduled jobs, each with its own keys.
+2. **Agents share credentials.** Many agents use one service account (a login for software, not for a person). If you revoke it, you also stop the healthy agents.
+3. **The agent can reach its own controls.** An agent with shell access can end a monitoring process or delete a log. A switch inside the runtime of the agent (the environment where it runs) is within its reach.
+
+So a useful kill switch sits outside the agent, acts in steps and leaves evidence that the agent cannot erase.
+
+## What are the steps of graduated containment?
+
+Graduated containment means that the controls get tighter as the risk grows. A single on-off switch forces a hard choice between no action and a stopped business process. Steps let you act early and keep safe work running. A practical ladder has five steps: observed, watched, restricted, stopped and retired.
+
+The diagram below follows four actions of one coding agent down this ladder.
+
+<FlowStack name="killswitch" />
+
+1. **One gateway sees it.** Every action passes a gateway that the agent cannot go around. This is the observed step. A normal `git.commit` passes and gets a receipt (a record of the action and the decision).
+2. **Risk score.** New tools, new destinations or unusual volume raise the risk score of the agent.
+3. **Watched.** At high risk, extra checks run and a person sees the agent live. A 40 GB upload at 03:00 puts the agent here.
+4. **Restricted.** After a breach of policy, the agent keeps only read-only tools. The attempt to delete the logs folder is that breach.
+5. **Stopped.** A second breach, or a person, stops the agent through a separate channel. Here, the agent tries the delete again.
+6. **Every step on Hyper 0X.** Each decision and each change of state goes into a chained record. The record lives on [Hyper 0X](../../products/hyper-0x/), the Buckleson blockchain (a shared ledger that you can only add to). A deleted log then shows as a gap.
+
+The fifth step, retired, comes after the incident. You remove the agent, revoke its keys and keep its record.
+
+## What moves an agent from one step to the next?
+
+Three triggers move an agent along the ladder. Write them down before an incident, not during one.
+
+- **A risk score.** Build a normal pattern for each agent: tools, destinations, volume and hours. Drift raises the score and moves the agent to watched. A low score moves it back.
+- **A policy breach.** A policy is a set of rules for what an agent can do. One breach moves the agent to restricted. A second breach moves it to stopped.
+- **A command from a person.** A person can skip the ladder and stop the agent at any step.
+
+Our post on [AI agent tool-calling security](../ai-agent-tool-calling-security/) explains how to write a policy for each tool call.
+
+## Why must the kill switch sit outside the agent?
+
+The kill switch must sit where the agent cannot reach it. Inside the same runtime, a compromised agent can block the switch, delay it or turn it off. So put the switch in the gateway, between the agent and your systems.
+
+Send the stop command out of band. Out of band means that the command does not travel through the agent, its prompts or its tools. A person presses stop in a console, and the gateway refuses every later action of that agent. Also block self-modification: an agent must never change its own prompt, tools or limits.
+
+A gateway controls only the traffic that passes through it. If an agent has a direct path to a database or a cloud account, close that path. Otherwise the kill switch has a hole.
+
+## What happens to credentials and evidence when you stop an agent?
+
+To stop the agent is half the job. The other half is to remove its access and keep the evidence.
+
+1. **Revoke its credentials.** A stopped agent with live keys is still a risk, because an attacker can reuse them.
+2. **Revoke only that agent.** This is easy when each agent has its own identity. Our post on [AI agent identity](../ai-agent-identity/) explains why.
+3. **Freeze the record.** Keep every action and decision. Add the stop itself: who pressed it, when and why.
+
+## Who can restart a stopped agent?
+
+We recommend that two people approve every restart. One person can make a mistake or feel pressure to get a process back fast. Restart in the restricted step first. Give back full access only when the agent behaves normally again. A blockchain is a good home for the approvals, because each one becomes a signed transaction with a name and a time.
+
+## How does a tamper-evident record keep agents honest?
+
+A tamper-evident record keeps agents honest because it shows every change and every deletion. Without it, the false "migration complete" report from the coding agent stands.
+
+In a hash chain, each log entry holds a fingerprint (a hash) of the entry before it. A copy of the latest fingerprint sits on a blockchain, outside the reach of the agent. When the agent deletes entries, the chain no longer matches that copy. The check shows exactly which entries are missing. [Proof of execution](../proof-of-execution-ai/) explains this receipt chain in more detail.
+
+## How does Pavii contain a rogue agent?
+
+[Pavii](../../products/pavii/) is our security gateway for AI agents. Claude, Claude Code, Codex, ChatGPT, Grok, OpenCode and custom agents send every prompt and tool call through it. So its kill switch sits outside the agent by design.
+
+- **Kill switch.** An agent that breaks rules moves from observed, to restricted, to stopped. A person can stop any agent at any time.
+- **Egress contract.** A smart contract (a program on a blockchain) on Hyper 0X decides what each agent can send and do.
+- **Budget gate.** Budgets stop runaway tool use, for example a loop that retries the same delete.
+- **Hash-chained receipts.** Pavii chains each log entry to the one before it and anchors the chain on Hyper 0X. If someone deletes an entry, you see exactly what is missing.
+
+Know the limits. Pavii controls the traffic that passes through its gateway, not the paths around it. The gateway stops the agent, and the chain keeps the record. Pavii does not issue or rotate credentials. Pair it with your identity provider (the system that issues logins) and your secret manager (the vault for keys).
+
+## Where should you start?
+
+Run a kill-switch drill before you need one:
+
+1. List every agent, its tools and its credentials.
+2. Route all agent actions through one gateway, and close the paths around it.
+3. Write down the triggers for watched, restricted and stopped.
+4. Give each agent its own identity, so you can revoke one agent alone.
+5. Make logs tamper-evident, with an anchor outside the reach of the agent.
+6. Stop a test agent in a drill. Time the stop, and check that the record shows every step.
+
+In a multi-agent workflow, one stop is not enough. Read [why multi-agent AI systems fail in cascades](../multi-agent-cascading-failures/) for that case. Book a call with a Buckleson engineer to plan a kill-switch drill for your own agents.

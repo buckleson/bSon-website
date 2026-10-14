@@ -60,17 +60,17 @@ export const megaMenus: MegaMenu[] = [
       {
         heading: 'Build',
         items: [
-          { title: 'Custom blockchains', desc: 'Your own private L2', href: '/services/#custom-blockchains', icon: 'stack' },
-          { title: 'Asset tokenization', desc: 'Real assets, on-chain', href: '/services/#asset-tokenization', icon: 'diamond' },
-          { title: 'Wallets & exchanges', desc: 'With your brand, on our technology', href: '/services/#wallets-exchanges', icon: 'device-mobile' },
+          { title: 'Custom blockchains', desc: 'Your own private L2', href: '/services/custom-blockchains/', icon: 'stack' },
+          { title: 'Asset tokenization', desc: 'Real assets, on-chain', href: '/services/asset-tokenization/', icon: 'diamond' },
+          { title: 'Wallets & exchanges', desc: 'With your brand, on our technology', href: '/services/wallets-exchanges/', icon: 'device-mobile' },
         ],
       },
       {
         heading: 'Secure & integrate',
         items: [
-          { title: 'Wallet SDKs', desc: 'Wallets inside your own apps', href: '/services/#wallet-sdks', icon: 'code' },
-          { title: 'AI-agent security', desc: 'Gates and receipts for agents', href: '/services/#ai-agent-security', icon: 'robot' },
-          { title: 'Forward-deployed engineering', desc: 'Our engineers in your team', href: '/services/#forward-deployed-engineering', icon: 'handshake' },
+          { title: 'Wallet SDKs', desc: 'Wallets inside your own apps', href: '/services/wallet-sdks/', icon: 'code' },
+          { title: 'AI-agent security', desc: 'Gates and receipts for agents', href: '/services/ai-agent-security/', icon: 'robot' },
+          { title: 'Forward-deployed engineering', desc: 'Our engineers in your team', href: '/services/forward-deployed-engineering/', icon: 'handshake' },
         ],
       },
     ],
@@ -141,10 +141,10 @@ export const footerColumns: { title: string; links: { label: string; path: strin
   {
     title: 'Services',
     links: [
-      { label: 'Custom blockchains', path: '/services/#custom-blockchains' },
-      { label: 'Asset tokenization', path: '/services/#asset-tokenization' },
-      { label: 'Wallets & exchanges', path: '/services/#wallets-exchanges' },
-      { label: 'AI-agent security', path: '/services/#ai-agent-security' },
+      { label: 'Custom blockchains', path: '/services/custom-blockchains/' },
+      { label: 'Asset tokenization', path: '/services/asset-tokenization/' },
+      { label: 'Wallets & exchanges', path: '/services/wallets-exchanges/' },
+      { label: 'AI-agent security', path: '/services/ai-agent-security/' },
     ],
   },
   {

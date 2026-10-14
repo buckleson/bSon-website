@@ -42,7 +42,7 @@ type Mock = 'chain' | 'token' | 'wallet' | 'agent';
             {item.included.map(point => <li class="flex items-start gap-2"><Glyph icon="check-circle" class="mt-px size-4.5 shrink-0 text-orange-500" />{point}</li>)}
           </ul>
           <p class="mt-5 w-fit rounded-full bg-orange-600 px-3.5 py-1.5 text-sm font-semibold text-white dark:bg-orange-700">{item.outcome}</p>
-          <a href={localePath('en', `/services/#${item.id}`)} class="mt-5 inline-flex w-fit items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">
+          <a href={localePath('en', `/services/${item.id}/`)} class="mt-5 inline-flex w-fit items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">
             See {item.title.toLowerCase()}<Glyph icon="arrow-right" class="size-4" />
           </a>
         </div>

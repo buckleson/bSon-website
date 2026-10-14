@@ -46,7 +46,7 @@ const testimonials = copy.testimonials.quotes.map((quote, index) => ({ ...quote,
 
     <section class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
       {products.map((product, index) => <CardProduct product={product} wide={wide[index]} />)}
-      <a href={localePath(locale, '/services/#custom-blockchains')} class="group relative flex h-64 flex-col justify-between overflow-hidden rounded-[1.6rem] bg-orange-600 p-6 text-white md:h-80 dark:bg-orange-700" data-reveal>
+      <a href={localePath(locale, '/services/custom-blockchains/')} class="group relative flex h-64 flex-col justify-between overflow-hidden rounded-[1.6rem] bg-orange-600 p-6 text-white md:h-80 dark:bg-orange-700" data-reveal>
         <span class="grid size-12 place-items-center rounded-2xl bg-white/15"><Glyph icon="stack" class="size-6" /></span>
         <span>
           <span class="block text-2xl font-semibold">Need your own chain?</span>

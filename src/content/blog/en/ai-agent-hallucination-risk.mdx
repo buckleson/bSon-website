@@ -1,0 +1,111 @@
+---
+title: 'Why Do AI Agents Act on Hallucinations?'
+description: 'An AI agent hallucination becomes an incident when the agent acts on it. Learn the claim, check, act pattern that stops a false claim before it does harm.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-14
+readTime: 7
+tags: ['AI-agent security', 'AI hallucinations']
+faqs:
+  - question: 'Can you stop an AI model from hallucinating?'
+    answer: 'Not completely. Better models and good retrieval make hallucinations less frequent, but no method removes them. So design the system to check a claim before any action depends on it.'
+  - question: 'Does Pavii detect hallucinations?'
+    answer: 'No. Pavii does not fact-check what a model says. Its gates and its egress contract limit what an agent can do, and its receipts on Hyper 0X record what the agent did. Checks of facts against your source systems belong in your own workflow.'
+  - question: 'What is the claim, check, act pattern?'
+    answer: 'It is a rule that no claim from an agent can start an action until a check confirms it. The agent fills fixed fields. Your system then tests those fields against the source of truth, such as the backup system or a receipt on Hyper 0X. Only then does the action run.'
+---
+import FlowStack from '@components/ui/FlowStack.astro';
+
+AI agents act on hallucinations because nothing between the claim and the action checks the claim. A language model writes fluent text, whether the text is true or not. When that model can act, a false "done" or "verified" turns into a real payment, a real deployment or a broken restore plan. The fix is a simple pattern: claim, check, act.
+
+## When does a hallucination become an incident?
+
+A hallucination is output that a model states with confidence, but that is false. In a chat window, a person reads the answer and can catch the mistake. The cost is one wrong answer.
+
+An AI agent (an AI model that uses tools to act) changes the stakes. The agent reads its own output, or the output of another agent, and then acts on it. A wrong claim becomes a wrong action: money moves, a file goes out, a release ships. The hallucination is no worse than before. The incident comes from the action that follows it.
+
+## What are the common failure types?
+
+Five patterns cause most of the trouble:
+
+- **A condition reported as met.** The agent says that a customer passed the identity check. The check never returned a result.
+- **A task reported as done.** The agent says that the nightly backup finished. The job never ran.
+- **An invented package.** The agent installs a library that does not exist, and an attacker has registered the name. Our post on the [AI bill of materials](../ai-bill-of-materials/) shows how a dependency gate stops it.
+- **A summary that drops the exception.** The agent calls a contract "standard terms" and leaves out the one clause that changes the price.
+- **Fake evidence.** The agent cites a log line, a ticket number or a test result that it invented.
+
+The last two are the hardest to spot, because they look like proof. A hijacked or drifting agent produces the same false reports. That is one sign of a [rogue agent](../ai-agent-kill-switch/).
+
+## Why do people and systems trust fluent output too much?
+
+Fluent text looks like knowledge. A model writes a false claim in the same calm, precise tone as a true one. It adds times, numbers and IDs, and these details make the claim look checked.
+
+People get used to an assistant that is usually right. After a hundred correct reports, the reviewer stops checking the next one. Approval turns into a habit.
+
+Systems trust output even more. A downstream agent reads a flag such as "identity verified" as a fact. It has no way to know that the flag came from a guess. One wrong flag then travels through every agent in the chain. Our post on [cascading failures in multi-agent systems](../multi-agent-cascading-failures/) follows one such chain.
+
+## What is the claim, check, act pattern?
+
+Claim, check, act is a design rule: no claim from an agent can start an action until a check confirms it. The claim and the action stay separate. In between, your system tests the claim against a source of truth, never against the agent itself. The figure shows four claims as they move through the checks.
+
+<FlowStack name="claims" />
+
+Each check has one job:
+
+1. **The agent makes a claim.** For example: the nightly backup finished at 02:00.
+2. **Required fields.** The claim must fill fixed fields, such as job ID, time and size. A "backup done" report with no job ID stops here.
+3. **Check the source system.** Ask the backup system, not the agent. A claim that user 91 passed KYC (know your customer, the identity check that a bank runs) stops here. The KYC service still says pending.
+4. **Check the receipt.** Find the receipt of the job on Hyper 0X. A report about job 4472 stops here, because no receipt exists for that job.
+5. **Check the preconditions.** Your system checks the arguments, the rights and the current state before the action.
+
+Only the claim about job 4471 passes every check. Then the last step runs: act. Only a checked claim can start an action.
+
+## Which checks belong before an action?
+
+The claim check asks one question: is this true? The precondition check asks another: is this action safe right now? Before any action with real effects, check four things:
+
+- **Arguments.** Each value matches the schema and the allowed range. A refund of 50,000 on an order of 500 fails here.
+- **Authorisation.** The person behind the request has the right to do this action.
+- **Preconditions.** The facts that the action depends on are true in the source system, not only in the report of the agent.
+- **Current state.** Nothing changed since the agent read the data. The invoice is still unpaid, and the account still exists.
+
+Our guide to [AI agent tool-calling security](../ai-agent-tool-calling-security/) covers argument checks and human approval in more detail.
+
+## How do you make a summary safe to act on?
+
+A free-text summary is the hardest output to check. Turn it into structured output: a fixed set of fields that the agent must fill. A field that the agent cannot fill stays empty, and an empty required field stops the flow.
+
+Take sources from the retrieval data, not from the model. When an agent summarises a contract, your code attaches the IDs of the clauses that the search step returned. The model does not write the citations. So every claim points to a real clause that a person or a program can open.
+
+Ask for exceptions in a field of their own. An empty field named "exceptions" is a statement that you can check. A paragraph that never mentions an exception is not.
+
+## How do receipts prove that work happened?
+
+A report is a claim. A receipt is evidence: a signed record that a job writes when it runs, with a link to the receipt before it.
+
+Take the backup example. Every night, the backup job writes a receipt on [Hyper 0X](../../products/hyper-0x/), our blockchain. The receipt holds the job ID, the time and the size of the backup. The agent reports "backup done, job 4472". The check looks up job 4472 and finds no receipt.
+
+The mismatch blocks the restore plan, and an alert goes to the operations team. Now picture the same night without the check. The team trusts the report. A week later, a disk fails, and the restore fails with it, because the backup never ran. A receipt check on the first night catches the gap.
+
+Chained receipts also stop an agent from covering its tracks. If an entry disappears, the chain shows the gap. [Proof of execution for AI](../proof-of-execution-ai/) explains how a receipt chain works.
+
+## What part does Pavii play?
+
+Be clear about what a security gateway can do here. [Pavii](../../products/pavii/), our security gateway for AI agents, does not fact-check what a model says. It does not detect hallucinations either. The check against your source systems belongs in your own workflow. Pavii limits the damage when a wrong claim gets through, in three ways:
+
+- **Receipts.** Pavii gives every decision a signed receipt and anchors the receipt chain on Hyper 0X. Nobody can quietly edit that record later.
+- **Gates.** The supply chain gate treats an invented package like any other new part. Every new package or MCP server must pass an allow-list, a pinned hash or a sandbox test. A pinned hash is the fixed digital fingerprint of an approved version.
+- **Egress contract.** A smart contract (a program on a blockchain) on Hyper 0X decides what an agent can send and do. A confident but false claim cannot widen those rules.
+
+Pair Pavii with the claim checks in your own code. Pavii controls what the agent can do. Your checks decide whether the claim of the agent is true.
+
+## Where should you start?
+
+1. List the actions that your agents take on the strength of their own reports.
+2. Give each claim fixed fields, such as job ID, time and size.
+3. Check each claim against the source system before an action depends on it.
+4. Make jobs write receipts. Look up the receipt before you trust a "done".
+5. Check arguments, rights and current state before every action with real effects.
+
+For the full set of agent risks, read [How to Secure AI Agents](../how-to-secure-ai-agents/). An agent that loops on its own false claims can also drain your budget, as our post on [denial of wallet](../denial-of-wallet-ai/) explains. Book a call with a Buckleson engineer to add claim checks to your agent workflows.

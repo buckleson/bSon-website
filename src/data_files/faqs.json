@@ -68,7 +68,7 @@
         {
           "question": "What decides how much a private blockchain costs?",
           "answer": "The scope decides the cost more than the technology. Count the organisations that take part, the systems to connect, the compliance rules to apply and the security reviews to do. A chain on an existing L1 costs much less infrastructure than a new chain. A small pilot is the cheapest way to get a real number.",
-          "link": { "title": "Custom blockchain development", "url": "/services/#custom-blockchains" }
+          "link": { "title": "Custom blockchain development", "url": "/services/custom-blockchains/" }
         }
       ]
     },
@@ -110,7 +110,7 @@
         {
           "question": "Can an AI agent be trusted to spend money?",
           "answer": "Yes, but only inside limits that the agent cannot change. Give it a fixed budget and a list of allowed payees. Get a person to approve payments above a set amount, and keep a receipt for every payment. Keep these rules outside the agent, for example as a contract on a ledger. Then a compromised agent still cannot spend too much.",
-          "link": { "title": "AI-agent security services", "url": "/services/#ai-agent-security" }
+          "link": { "title": "AI-agent security services", "url": "/services/ai-agent-security/" }
         }
       ]
     },
@@ -126,7 +126,7 @@
         {
           "question": "Which blockchain is best for tokenizing assets?",
           "answer": "Check five things. Check privacy for holders and final settlement. Check that compliance controls are part of each transfer. Check that the chain connects to the places where the asset will trade. Check that you can hold the operator to account. Regulated issuers often use a permissioned chain with bridges to public networks.",
-          "link": { "title": "Asset tokenization services", "url": "/services/#asset-tokenization" }
+          "link": { "title": "Asset tokenization services", "url": "/services/asset-tokenization/" }
         },
         {
           "question": "Is owning a token the same as owning the asset?",

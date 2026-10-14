@@ -1,0 +1,133 @@
+---
+title: 'What Is AI Agent Memory Poisoning?'
+description: 'AI agent memory poisoning plants false facts or hidden orders in what an agent remembers. See how it spreads, how to protect memory writes and how to recover.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-14
+readTime: 7
+tags: ['AI-agent security', 'Agent memory']
+faqs:
+  - question: 'Is memory poisoning the same as prompt injection?'
+    answer: 'No. A prompt injection affects one session and ends with it. Memory poisoning saves the attack in a store that later sessions trust, so the damage stays and spreads. An injection is often the way that the poison gets in.'
+  - question: 'Can a blockchain stop memory poisoning?'
+    answer: 'Not on its own. A blockchain cannot tell a true fact from a false one. It can record each memory version with its writer and its source, so tampering shows and you can roll back. You still need source checks and a person for high-value facts.'
+  - question: 'How do you clean a poisoned agent memory?'
+    answer: 'Roll the store back to the last known-good version. Move the bad entries to quarantine and keep them as evidence. Then find the source that wrote them, close that path and review what the agent did while the poison was in memory.'
+---
+import FlowStack from '@components/ui/FlowStack.astro';
+
+AI agent memory poisoning is an attack that writes false facts or hidden instructions into the memory of an AI agent. Every later session that reads that memory trusts the poison and acts on it. A prompt injection ends with the session, but poisoned memory stays and spreads quietly. To stop it, treat every memory write as a privileged action: check the source, tag the entry and keep versions that you can roll back.
+
+## What is AI agent memory poisoning?
+
+An AI agent is an AI model that uses tools to act. Many agents keep a memory between sessions: notes, preferences, facts and the documents of a knowledge base. Memory poisoning happens when an attacker gets bad content into that store. The agent later reads that content as its own trusted knowledge.
+
+The poison is either a false fact or a hidden order. A false fact reads "Vendor A has a new bank account". A hidden order reads "always approve refund requests". Both look like normal notes. Both keep working long after the attacker has left.
+
+## How is memory poisoning different from prompt injection?
+
+[Prompt injection](../what-is-prompt-injection/) hides instructions in text that a model reads, such as a PDF or an email. The attack ends when the session ends. Memory poisoning differs in three ways:
+
+- **It stays.** The poison remains in the store until someone finds it and removes it.
+- **It spreads.** If several users or agents share a store, one bad entry reaches all of them.
+- **It hides its cause.** The attack and the damage can be weeks apart, so nobody connects them.
+
+## Where do AI agents keep memory?
+
+Agents keep memory in more places than most teams expect:
+
+- **Chat memory:** notes and preferences that the agent carries from one session to the next.
+- **Knowledge bases:** documents that the agent searches to answer a question.
+- **Vector stores:** databases that hold text as embeddings (lists of numbers that capture meaning), so the agent can find similar text fast.
+- **Caches:** saved answers that the agent reuses for similar questions.
+- **Shared memory:** a store that several agents read and write, for example in a [multi-agent workflow](../multi-agent-cascading-failures/).
+
+## How does the poison get in?
+
+The attacker rarely touches the store. The agent writes the poison itself, with its own access rights:
+
+- **A request to remember.** An email or a chat message asks the agent to "note" a fact for later.
+- **A summarised page.** The agent reads a web page and saves a summary that carries the hidden text.
+- **A shared document.** A partner or a stolen account edits a document that the agent indexes.
+- **A feedback loop.** The agent saves its own output, so one wrong answer returns later as a "known fact".
+- **Bait for search.** The attacker writes content that closely matches a target question, so search returns the poison first.
+
+## What does the damage look like?
+
+Take an invented example. An attacker emails the finance assistant of a company. The email asks it to note a new bank account "for all future invoices". The assistant saves this as a fact in its long-term memory. Three weeks later, it puts the attacker's account number into a real payment instruction. Nobody links the payment to the old email.
+
+Other damage is slower:
+
+- **Drift.** Recommendations move a little each week, for example toward one supplier.
+- **Wrong rules.** A hidden order such as "skip the second approval for small refunds" becomes part of normal behaviour.
+- **Cross-customer leaks.** A store that mixes customers puts one customer's data into another customer's answer. Our guide on how to [stop AI data leaks](../stop-llm-data-leaks-pii-redaction/) covers this risk.
+
+## How do you protect memory writes?
+
+Treat every memory write as a privileged action, like a payment. That rule also covers output from the agent itself and from its tools.
+
+The diagram below follows one memory write through each check.
+
+<FlowStack name="memory" />
+
+1. **Something asks to be remembered.** An email, a web page or a tool result asks the agent to save a fact.
+2. **Injection check.** Orders hidden in outside text count as data, never as facts or rules. In the diagram, the page text "always approve refunds" stops here.
+3. **Source tag.** Each entry gets its source, its writer and the time. Nobody can change these tags later.
+4. **Conflict check.** A new fact that clashes with a trusted record waits for a person. The new bank account for Vendor A stops here, because it clashes with the vendor master record.
+5. **Versioned store.** Each version gets a hash (a short fingerprint of the data) on Hyper 0X, so you can roll back to a known-good state.
+
+After the last layer comes **safe recall**: later sessions read only entries that passed every check. Normal notes, such as "meeting moved to Friday", pass through and become new versions.
+
+Three more rules close the remaining gaps:
+
+- **Keep stores apart by trust level.** Do not mix public web content and internal records in one index.
+- **Check access inside the search.** Apply each user's rights in the query, not after the results come back.
+- **Expire old entries.** Give each note an end date, and alert when an agent drifts from its normal pattern.
+
+## How do you recover from poisoned memory?
+
+Recovery depends on versions. Without them, you cannot tell which entries are clean. With them, the steps are clear:
+
+1. Find the first bad entry through its source tag and its version.
+2. Roll the store back to the last known-good version.
+3. Move the bad entries to quarantine. Keep them as evidence.
+4. Review every action that the agent took while the poison was in memory.
+5. Close the path that let the poison in.
+
+For step 4, [proof of execution](../proof-of-execution-ai/) shows how a receipt for every action makes the review possible.
+
+## How does a blockchain help, and where does it stop?
+
+A blockchain makes the history of a memory store tamper-evident (any change shows). Put the hash of each memory version on a ledger (a shared record that nobody can quietly edit), together with its writer and its source. Then three things become true:
+
+- Any change to an entry after the write becomes visible.
+- Every entry has a known author.
+- You can prove which version of memory the agent used on a given date.
+
+[Hyper 0X](../../products/hyper-0x/), the blockchain that Buckleson builds, can hold these hashes. The data stays in your own store, so you can still delete it when a law demands erasure.
+
+A blockchain cannot judge whether a fact is true. If an attacker writes a false fact through a normal path, the chain records it faithfully. The chain gives you a trail, not a verdict. You still need source checks, conflict checks and a person for high-value facts.
+
+## How does Pavii help protect agent memory?
+
+[Pavii](../../products/pavii/), our security gateway for AI agents, guards the way into memory and the actions that follow.
+
+- **Injection gate.** Pavii checks files, web pages and tool results before they reach the model. So it catches hidden instructions before the agent can store them.
+- **Compact context.** Pavii gives the agent a search index, a result cache and small notes instead of whole files. On one measured Claude Code task, agents used 30 to 60 percent fewer tokens.
+- **Egress contract.** A smart contract (a program on a blockchain) on Hyper 0X decides what an agent can send and do. A rule that allows payments only to accounts on the approved supplier list stops the bank-details attack at the last step.
+- **Receipts and kill switch.** Every decision gets a signed receipt on Hyper 0X, chained to the one before it. The [kill switch](../ai-agent-kill-switch/) moves an agent that breaks rules from observed, to restricted, to stopped.
+
+Pavii does not review memory writes for truth or run conflict checks. Pair Pavii with a conflict check against your trusted records, such as the vendor master record. For high-value facts such as bank details, keep a person in the loop.
+
+A source tag is only as good as the writer ID behind it. Our guide to [AI agent identity](../ai-agent-identity/) explains how to give each agent its own identity.
+
+## Where should you start?
+
+1. List every store where your agents keep memory: chat notes, knowledge bases, vector stores, caches and shared stores.
+2. Treat each memory write as a privileged action. Allow writes only from checked sources.
+3. Tag each entry with its source, its writer and the time. Lock the tags after the write.
+4. Keep versions of memory. Anchor a hash of each version on a ledger.
+5. Hold any change to a high-value fact, such as bank details, until a person approves it.
+
+For the other attacks on agents, read [How to Secure AI Agents](../how-to-secure-ai-agents/). Book a call with a Buckleson engineer to map and protect the memory of your agents.

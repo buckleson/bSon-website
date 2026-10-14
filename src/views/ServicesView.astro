@@ -1,19 +1,19 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
+import SectionHead from '@components/home/SectionHead.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
-import Diagram from '@components/ui/Diagram.astro';
 import Glyph from '@components/ui/Glyph.astro';
-import ProductArt from '@components/ui/ProductArt.astro';
 import ServiceMock from '@components/ui/ServiceMock.astro';
+import IsoFigure from '@components/ui/IsoFigure.astro';
 import { BOOKING_URL } from '@data/constants';
-import type { DiagramName } from '@data/diagrams';
+import { servicePages } from '@data/services';
 import { getCopy } from '@/copy';
 import { localePath, type MarketingLocale } from '@utils/locale';
 
 /**
- * Services in the original ScrewFast layout: a centred intro, then
- * alternating sections (text with two staggered visuals, or one diagram
- * beside the text), then a stats band.
+ * Services overview: a centred intro, the six services as a bento grid (each
+ * card links to its own page), one live figure, how we work, the numbers
+ * from our own products, and the pilot call to action.
  */
 interface Props {
   locale: MarketingLocale;
@@ -21,14 +21,21 @@ interface Props {
 
 const { locale } = Astro.props;
 const copy = getCopy(locale).services;
-type Mock = 'chain' | 'token' | 'wallet' | 'agent';
-type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
-const visuals: Record<string, { mock?: Mock; art?: Art }> = {
-  'custom-blockchains': { mock: 'chain', art: 'hyper-0x' },
-  'wallets-exchanges': { mock: 'wallet', art: 'hyper-wallet' },
-  'ai-agent-security': { mock: 'agent', art: 'pavii' },
+const href = (path: string) => localePath(locale, path);
+const pages = Object.fromEntries(servicePages.map(page => [page.id, page]));
+// Card size on the 12-column grid, and whether it shows its live mock.
+const layout: Record<string, { span: string; mock: boolean; dark?: boolean }> = {
+  'custom-blockchains': { span: 'lg:col-span-7', mock: true, dark: true },
+  'ai-agent-security': { span: 'lg:col-span-5', mock: true },
+  'asset-tokenization': { span: 'lg:col-span-5', mock: true },
+  'wallets-exchanges': { span: 'lg:col-span-7', mock: true, dark: true },
+  'wallet-sdks': { span: 'lg:col-span-6', mock: false },
+  'forward-deployed-engineering': { span: 'lg:col-span-6', mock: false },
 };
+const order = ['custom-blockchains', 'ai-agent-security', 'asset-tokenization', 'wallets-exchanges', 'wallet-sdks', 'forward-deployed-engineering'];
+const items = order.map(id => copy.items.find(item => item.id === id)!).filter(Boolean);
 const icons = ['trend-up', 'briefcase', 'piggy-bank', 'sparkle'];
+const steps = servicePages[0].steps;
 ---
 
 <MainLayout
@@ -43,40 +50,56 @@ const icons = ['trend-up', 'briefcase', 'piggy-bank', 'sparkle'];
     <h1 class="mx-auto mt-4 max-w-4xl text-5xl leading-[1] font-semibold text-balance text-ink sm:text-6xl">{copy.intro.title}</h1>
     <p class="mx-auto mt-5 max-w-2xl text-lg text-pretty text-muted" data-reveal>{copy.intro.subTitle}</p>
     <div class="mt-8" data-reveal><PrimaryCTA title={copy.intro.cta} url={BOOKING_URL} /></div>
-    <nav aria-label="Services" class="mt-10 flex flex-wrap justify-center gap-2" data-reveal>
-      {copy.items.map(item => (
-        <a href={`#${item.id}`} class="rounded-full bg-card px-4 py-2 text-sm font-medium text-ink ring-1 ring-line transition hover:ring-orange-500">{item.title}</a>
-      ))}
-    </nav>
   </section>
 
-  {copy.items.map((item, index) => {
-    const pair = visuals[item.id];
-    const text = (
-      <div data-reveal>
-        <h2 class="text-4xl leading-[1.05] font-semibold text-balance text-ink">{item.title}</h2>
-        <p class="mt-4 max-w-prose text-pretty text-muted sm:text-lg">{item.content}</p>
-        <ul class="mt-6 space-y-2.5">
-          {item.points.map(point => <li class="flex items-center gap-2.5 text-ink"><Glyph icon="check-circle" class="size-5 text-orange-600 dark:text-orange-400" />{point}</li>)}
-        </ul>
-        {'link' in item && item.link && <div class="mt-7"><PrimaryCTA title={item.link.title} url={localePath(locale, item.link.url)} /></div>}
-      </div>
-    );
-    return pair ? (
-      <section id={item.id} class="mx-auto max-w-[85rem] scroll-mt-24 items-center gap-16 px-4 py-14 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8 lg:py-20">
-        {text}
-        <div class="mt-10 grid grid-cols-2 gap-4 lg:mt-0" data-reveal>
-          <div class="h-72"><ServiceMock kind={pair.mock!} /></div>
-          <div class="mt-8 overflow-hidden rounded-[1.2rem] ring-1 ring-line lg:mt-14"><ProductArt product={pair.art!} class="aspect-[440/360]" /></div>
-        </div>
-      </section>
-    ) : (
-      <section id={item.id} class="mx-auto max-w-[85rem] scroll-mt-24 items-center gap-16 px-4 py-14 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8 lg:py-20">
-        <div class="mb-10 lg:mb-0" data-reveal><Diagram name={item.diagram as DiagramName} /></div>
-        {text}
-      </section>
-    );
-  })}
+  <section class="mx-auto max-w-[85rem] px-4 pb-14 sm:px-6 lg:px-8" aria-label="Our services">
+    <ul class="grid gap-3 md:grid-cols-2 lg:grid-cols-12" data-reveal-group>
+      {items.map(item => {
+        const look = layout[item.id];
+        const page = pages[item.id];
+        return (
+          <li class:list={['md:col-span-1', look.span, (item.id === 'custom-blockchains' || item.id === 'wallets-exchanges') && 'md:col-span-2']} data-reveal-item>
+            <a href={href(`/services/${item.id}/`)} class:list={['svc-card group flex h-full flex-col overflow-hidden rounded-[1.8rem] p-5 transition duration-300 hover:-translate-y-0.5 sm:p-6', look.dark ? 'accent-warm bg-sheet text-white' : 'bg-card text-ink ring-1 ring-line hover:ring-orange-500/60']}>
+              {look.mock && <div class="h-56 sm:h-64"><ServiceMock kind={page.mock} /></div>}
+              <div class:list={['flex flex-1 flex-col', look.mock && 'mt-6']}>
+                <h2 class="text-2xl leading-tight font-semibold text-balance">{item.title}</h2>
+                <p class:list={['mt-2 leading-relaxed text-pretty', look.dark ? 'text-white/70' : 'text-muted']}>{page.intro}</p>
+                <ul class="mt-5 flex flex-wrap gap-2">
+                  {item.points.map(point => (
+                    <li class:list={['inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold', look.dark ? 'bg-white/10 text-white/85' : 'bg-ground text-ink/80 ring-1 ring-line']}><Glyph icon="check" class="size-3.5 text-orange-500" />{point}</li>
+                  ))}
+                </ul>
+                <span class:list={['mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold', look.dark ? 'text-orange-300' : 'text-orange-700 dark:text-orange-300']}>
+                  Explore {item.title.toLowerCase()}<Glyph icon="arrow-right" class="size-4 transition group-hover:translate-x-1" />
+                </span>
+              </div>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="machine-title">
+    <SectionHead index="01" label="The base under every service" claim="One L1, and an L2" payoff="for each use case." body="Every service runs on Hyper 0X. Each use case gets its own L2, and every L2 settles on one L1. Select a step to see each part at work." id="machine-title" />
+    <div class="mt-10"><IsoFigure name="chain-rack" /></div>
+  </section>
+
+  <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="process-title">
+    <SectionHead index="02" label="How we work" claim="Small first," payoff="then production." body="You see it work before you commit. Every project starts with one use case and one measure of success." id="process-title" />
+    <ol class="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+      {steps.map((step, i) => (
+        <li class="rounded-[1.6rem] bg-card p-6 ring-1 ring-line" data-reveal-item>
+          <div class="flex items-center justify-between">
+            <span class="grid size-11 place-items-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300"><Glyph icon={step.icon} class="size-5" /></span>
+            <span class="font-mono text-xs text-muted">Step {i + 1}</span>
+          </div>
+          <h3 class="mt-5 text-lg font-semibold text-ink">{step.title}</h3>
+          <p class="mt-1.5 text-sm leading-relaxed text-pretty text-muted">{i === 1 ? 'A small, real version on your own L2, with the success measure agreed at the start.' : i === 2 ? 'Your security team reviews the design, the keys and the access before go-live.' : step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
 
   <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8">
     <div class="on-sheet rounded-[2rem] bg-sheet p-6 text-white sm:p-10">

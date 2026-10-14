@@ -1,0 +1,126 @@
+---
+title: 'What Is AI Agent Identity and Why Does It Matter?'
+description: 'AI agent identity gives each agent its own keys, rights and status. Learn why shared accounts fail and how short-lived tokens and signed identities stop abuse.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-14
+readTime: 7
+tags: ['AI-agent security', 'Agent identity']
+faqs:
+  - question: 'What is a non-human identity?'
+    answer: 'A non-human identity is a login that belongs to software, not to a person. API keys, tokens and service accounts are all non-human identities. Every AI agent uses at least one, so each one needs an owner, a scope and an end date.'
+  - question: 'Why does each AI agent need its own identity?'
+    answer: 'Each agent needs its own identity so that you can limit it, trace it and stop it alone. With a shared account, you cannot tell which agent acted. You also cannot revoke one agent without a change that breaks all the others.'
+  - question: 'Does Pavii replace an identity provider?'
+    answer: 'No. Pavii does not issue, rotate or store credentials, so keep your identity provider and your secret manager for that work. Pavii adds one gateway that knows which agent made each call. Its egress contract on Hyper 0X checks each action against the rules for that agent.'
+---
+import FlowStack from '@components/ui/FlowStack.astro';
+
+AI agent identity is the set of credentials that an AI agent uses to act, such as its keys, tokens and service accounts. It answers three questions for every action: which agent acted, for whom, and with what rights. Without a clear identity, an attacker who steers an agent gets all of its access. With one, you can limit each agent, trace each action and stop one agent fast.
+
+## What is an AI agent identity?
+
+An AI agent is an AI model that uses tools to act. To use a tool, the agent must log in to the system behind it. It does this with a non-human identity: a login that belongs to software, not to a person. The common forms are API keys, service accounts and tokens (digital passes that grant access for a limited time).
+
+A good agent identity has four parts:
+
+- **A unique ID** for each agent, not one ID for a whole team.
+- **An owner:** the person or team that answers for the agent.
+- **A scope:** the exact rights that the agent has, and nothing more.
+- **A status:** active or halted, so every system knows if the agent can still act.
+
+## Why do shared service accounts fail?
+
+A shared service account gives an agent the rights of the account, not the rights of the person who asked. Security teams call this the "confused deputy" problem. A trusted helper uses its own power for someone who has no right to that power.
+
+Take an invented example. A reporting agent connects to the data warehouse with a shared admin account. An intern with no access to HR data asks it to "compare pay across the leadership team". The agent runs the query with its own rights and returns every salary. No control failed, because every system followed its rules.
+
+Shared accounts also cause two more problems:
+
+- **No trace.** When five agents use one account, the logs cannot tell you which agent acted.
+- **No clean stop.** To revoke one agent, you must change a credential that all the others use.
+
+## How do agents end up with too much power?
+
+Agents rarely get too much power in one step. They collect it in three ways:
+
+- **Inherited rights.** An agent keeps the full rights of its developer or of an admin account from its test phase.
+- **Chained delegation.** One agent hands work to a second agent, which calls a third. Each hop can add rights, and nobody sees the total.
+- **Leaked secrets.** Keys and tokens end up in prompts, memory and logs. Anyone who reads them, an attacker included, can use them.
+
+Memory is a poor place for a secret, because it lasts across sessions. Our guide to [AI agent memory poisoning](../ai-agent-memory-poisoning/) shows why. An attacker who steers the agent through [prompt injection](../what-is-prompt-injection/) gets all of this power at once. The agent then does what the attacker can never do alone.
+
+## What does least privilege look like for an agent?
+
+Least privilege means that an agent gets only the rights that its current task needs. For agents, it comes down to three rules:
+
+1. **One identity per agent.** Do not share service accounts across agents or teams.
+2. **Short-lived tokens per task.** Each token covers one task and one scope. It expires after a short time, for example 15 minutes. Revoke it when the task ends.
+3. **The user's rights travel with the request.** At every hop, the agent can do no more than the person who asked.
+
+Also check every token on every request: its issuer, its audience (the system it is for), its expiry and its scope. In a long session, check the rights again before each privileged action. Our guide to [AI agent tool-calling security](../ai-agent-tool-calling-security/) applies the same idea to each tool.
+
+The diagram below follows one request through a delegation chain, from a person to the data warehouse.
+
+<FlowStack name="identity" />
+
+1. **A person asks.** An analyst asks for a sales report. The analyst's rights travel with the request.
+2. **Orchestrator agent A1.** The orchestrator (an agent that splits work among other agents) splits the task. It hands one narrow job to a report agent, A2.
+3. **Short-lived token.** A2 gets a token for one task and one scope: read sales data, valid for 15 minutes. A request with yesterday's token stops here, because the token has expired.
+4. **Identity registry on Hyper 0X.** The registry shows each agent with its owner, its public key and its status: active or halted. Agent A3 has the status halted, so its request stops here.
+5. **Rights check.** The request can never do more than the person who asked can do. A request from A2 to read all salaries stops here, because the analyst cannot see them.
+
+At the end, **the data warehouse answers**. The call runs with the smallest rights, and the receipt shows which agent signed it.
+
+## How do you keep secrets out of the model?
+
+Assume that a user can make the model reveal anything that the model can read. So keys and tokens never belong in a prompt, a system prompt or agent memory. Store them in a secret manager (a vault that gives secrets to your code, not to the model). Your own code gets the secret and makes the call. The model only asks for the action.
+
+[Pavii](../../products/pavii/) adds a second line of defence. Its privacy gate removes personal data and secrets before a model sees them. Its output gate removes them from what comes back. Our guide on how to [stop AI data leaks](../stop-llm-data-leaks-pii-redaction/) explains these gates.
+
+## How do you stop an agent fast?
+
+When an agent misbehaves, act fast with two steps:
+
+- **Revoke its keys and tokens.** Short-lived tokens also expire on their own within minutes.
+- **Set its status to halted.** Make every system check the status before it accepts a call. Then one change stops the agent everywhere.
+
+When an agent retires, revoke all its keys and remove its access. Our guide to the [AI agent kill switch](../ai-agent-kill-switch/) covers the full set of containment steps.
+
+## How do signed identities on a blockchain help?
+
+A blockchain gives agent identity one shared record that every system and every partner can check. Each agent gets a key pair. The private key signs for the agent and never enters a prompt. The public key lets anyone check those signatures. Put the public key on a blockchain, together with the owner and the status of the agent.
+
+The record gives four benefits:
+
+- **Every action carries a signature.** Each record shows which agent acted.
+- **A halted status is visible at once** to every system that reads the chain.
+- **Partner companies can check an agent** without access to your identity provider. This matters when agents work across companies, as in [multi-agent workflows](../multi-agent-cascading-failures/).
+- **Changes leave a trail.** Each change of status or owner is a recorded transaction with a time.
+
+[Hyper 0X](../../products/hyper-0x/), the blockchain that Buckleson builds, uses post-quantum-resistant key exchange for every connection. This matters for agent records that must stay private for many years.
+
+The limit: a blockchain does not decide which rights an agent needs. It records who the agent is and whether it can act. The rights check still runs in a gateway and in your own systems.
+
+## How does Pavii tie each agent to its rules?
+
+Pavii, our security gateway for AI agents, adds control where agents act.
+
+- **One gateway for every agent.** Claude, Claude Code, Codex, ChatGPT, Grok, OpenCode and custom agents send every call through one entry point. So Pavii knows which agent made each call.
+- **Egress contract on Hyper 0X.** A smart contract (a program on a blockchain) checks each action against the rules for that agent. Nobody can quietly change those rules, not even a hijacked agent.
+- **Kill switch.** An agent that breaks rules moves from observed, to restricted, to stopped. A person can stop any agent at any time.
+- **Receipts.** Every decision gets a signed receipt on Hyper 0X, chained to the one before it. [Proof of execution](../proof-of-execution-ai/) explains how they work.
+
+Pavii does not issue, rotate or store credentials. Keep your identity provider and your secret manager for that work. Pavii also covers only the traffic that passes through its gateway.
+
+## Where should you start?
+
+1. List every agent and every credential that it uses: API keys, tokens and service accounts.
+2. Give each agent its own identity, with an owner and a status.
+3. Replace long-lived keys with short-lived tokens that cover one task.
+4. Carry the user's rights through every hop. Check them again before each privileged action.
+5. Move every secret out of prompts, memory and logs into a secret manager.
+6. Practise a fast stop. Revoke the tokens of one agent and set its status to halted.
+
+Book a call with a Buckleson engineer to review the identities of your agents and plan the first fixes.

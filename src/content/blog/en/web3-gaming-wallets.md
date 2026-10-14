@@ -88,4 +88,4 @@ Studios do not have to wait. The [Hyper Wallet](../../products/hyper-wallet/) SD
 4. Set spending limits and session-key rules before launch.
 5. Explain in plain words what players own and what happens if the game ends.
 
-For in-game wallets, see our [wallet SDK services](../../services/#wallet-sdks). Book a call to see the Hyper Wallet SDKs, or to get notified when HyperRun launches.
+For in-game wallets, see our [wallet SDK services](../../services/wallet-sdks/). Book a call to see the Hyper Wallet SDKs, or to get notified when HyperRun launches.

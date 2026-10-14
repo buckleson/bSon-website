@@ -22,7 +22,7 @@ const feed = [
   { brand: 'grok', agent: 'Grok', call: 'summarise(report.docx)', verdict: 'mask', note: 'PII masked' },
   { brand: 'claude', agent: 'Claude', call: 'email.send(all@corp)', verdict: 'bad', note: 'Egress rule' },
   { brand: 'openai', agent: 'ChatGPT', call: 'search("Q3 churn")', verdict: 'ok', note: 'Allowed' },
-  { brand: 'gemini', agent: 'Custom agent', call: 'npm install reqeusts', verdict: 'bad', note: 'Supply chain' },
+  { brand: '', agent: 'Custom agent', call: 'npm install reqeusts', verdict: 'bad', note: 'Supply chain' },
   { brand: 'claude', agent: 'Claude Code', call: 'db.query(orders)', verdict: 'ok', note: 'Allowed' },
 ] as const;
 ---
@@ -43,7 +43,7 @@ const feed = [
       <ol class="pm-feed relative mt-2 grid flex-1 content-start gap-1.5 overflow-hidden" data-feed>
         {feed.map((row, i) => (
           <li class="pm-row" data-verdict={row.verdict} style={`--i:${i}`}>
-            <span class="grid size-7 shrink-0 place-items-center rounded-lg bg-white/8"><Glyph brand={row.brand} class="size-3.5" /></span>
+            <span class="grid size-7 shrink-0 place-items-center rounded-lg bg-white/8">{row.brand ? <Glyph brand={row.brand} class="size-3.5" /> : <Glyph icon="robot" class="size-4" />}</span>
             <span class="min-w-0 flex-1">
               <span class="block truncate text-[0.72rem] text-white/50">{row.agent}</span>
               <span class="block truncate font-mono text-[0.78rem]">{row.call}</span>
@@ -66,7 +66,7 @@ const feed = [
           {[['bitcoin', 'Bitcoin', '0.081 BTC'], ['ethereum', 'Ethereum', '2.40 ETH'], ['solana', 'Solana', '31.5 SOL']].map(([b, n, v]) => (
             <li class="flex items-center gap-2 rounded-xl bg-white/5 px-2.5 py-2"><Glyph brand={b as 'bitcoin'} class="size-4" /><span class="flex-1">{n}</span><span class="font-mono text-white/70">{v}</span></li>
           ))}
-          <li class="flex items-center gap-2 rounded-xl bg-white/5 px-2.5 py-2"><Glyph icon="coins" class="size-4 text-amber-300" /><span class="flex-1">Tokenized gold</span><span class="font-mono text-white/70">4.0 g</span></li>
+          <li class="flex items-center gap-2 rounded-xl bg-white/5 px-2.5 py-2"><Glyph icon="coins" class="size-4 text-yellow-300" /><span class="flex-1">Tokenized gold</span><span class="font-mono text-white/70">4.0 g</span></li>
         </ul>
         <div class="pm-swap mt-3 rounded-2xl bg-white/8 p-3 ring-1 ring-white/10">
           <div class="flex items-center justify-between text-[0.72rem]"><span class="text-white/55">Swap</span><span class="font-mono">0.5 ETH → USDC</span></div>
@@ -100,7 +100,7 @@ const feed = [
         <div class="mt-10 rounded-2xl bg-white/5 p-3.5 ring-1 ring-white/8">
           <p class="text-[0.7rem] text-white/50">Plan: 2% of every payment</p>
           <div class="mt-2 flex items-end justify-between">
-            <span class="flex items-center gap-2 text-sm"><Glyph icon="coins" class="size-5 text-amber-300" />Tokenized gold</span>
+            <span class="flex items-center gap-2 text-sm"><Glyph icon="coins" class="size-5 text-yellow-300" />Tokenized gold</span>
             <span class="relative h-6 w-20 text-right font-mono text-sm tabular-nums"><span class="pm-g pm-g1">$41.20</span><span class="pm-g pm-g2">$41.29</span></span>
           </div>
           <span class="pm-bar pm-bar-gold mt-3 block h-1.5 overflow-hidden rounded-full bg-white/10"><span></span></span>

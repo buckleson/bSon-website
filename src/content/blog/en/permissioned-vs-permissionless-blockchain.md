@@ -82,4 +82,4 @@ The diagram above shows the full picture. Bank, fintech and AI workloads each ru
 4. Find where you need public reach. Design those bridges with limits from day one.
 5. Run a pilot on one private L2 with clear success metrics.
 
-Hyper 0X gives you a permissioned L1 with PKI-bound validators and a private L2 for each application. Our [custom blockchain team](../../services/#custom-blockchains) can set up the pilot with you. Book a call to talk it through.
+Hyper 0X gives you a permissioned L1 with PKI-bound validators and a private L2 for each application. Our [custom blockchain team](../../services/custom-blockchains/) can set up the pilot with you. Book a call to talk it through.

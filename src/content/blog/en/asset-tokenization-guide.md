@@ -66,4 +66,4 @@ No. Bridges connect your L2 to public chains such as Ethereum and other EVM netw
 
 ## How does Buckleson help?
 
-We design the token, the private L2, the compliance rules, the wallet and the market as one system on Hyper 0X. [H0X Pay](../../products/h0x-pay/) is coming soon. It will let everyday users invest a slice of every payment in tokenized gold, funds and stocks. To launch your own tokenized asset, see our [blockchain development services](../../services/#asset-tokenization) or book a call.
+We design the token, the private L2, the compliance rules, the wallet and the market as one system on Hyper 0X. [H0X Pay](../../products/h0x-pay/) is coming soon. It will let everyday users invest a slice of every payment in tokenized gold, funds and stocks. To launch your own tokenized asset, see our [blockchain development services](../../services/asset-tokenization/) or book a call.

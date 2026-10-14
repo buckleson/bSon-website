@@ -1,0 +1,10 @@
+---
+import ServiceView from '@views/ServiceView.astro';
+import { servicePages } from '@data/services';
+
+export const getStaticPaths = () => servicePages.map(page => ({ params: { id: page.id } }));
+
+const { id } = Astro.params;
+---
+
+<ServiceView id={id!} />

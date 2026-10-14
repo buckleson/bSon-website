@@ -77,4 +77,4 @@ An attacker who taps the network, reads a copy of the ledger or steals a backup 
 4. Put records with a long legal life first in line for post-quantum-resistant key exchange.
 5. Test each layer on its own. Assume that the layer has failed. Then check what an attacker can see.
 
-Hyper 0X applies all four layers by default on every private L2. Our [custom blockchain team](../../services/#custom-blockchains) can map them to your data. Book a call to walk through your records layer by layer.
+Hyper 0X applies all four layers by default on every private L2. Our [custom blockchain team](../../services/custom-blockchains/) can map them to your data. Book a call to walk through your records layer by layer.

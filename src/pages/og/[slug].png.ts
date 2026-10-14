@@ -3,6 +3,7 @@ import sharp from 'sharp';
 import { readFile } from 'node:fs/promises';
 import { getCopy } from '@/copy';
 import { entriesFor, slugOf } from '@utils/content';
+import { servicePages } from '@data/services';
 
 /**
  * Social share images (1200x630 PNG), one per page, rendered at build time
@@ -30,6 +31,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
       title: product.data.tagline,
       label: product.data.status === 'coming-soon' ? `${product.data.title} · Coming soon` : product.data.title,
     };
+  }
+  for (const page of servicePages) {
+    const item = copy.services.items.find(entry => entry.id === page.id);
+    cards[`services-${page.id}`] = { title: `${page.claim} ${page.payoff}`, label: item?.title ?? 'Services' };
   }
   for (const post of posts) {
     cards[`blog-${slugOf(post)}`] = { title: post.data.title, label: post.data.tags[0] ?? 'Blog' };

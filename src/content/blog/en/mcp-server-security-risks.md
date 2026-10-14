@@ -92,4 +92,4 @@ Then a public server that the team relies on ships an update that changes a tool
 4. Sandbox local servers. Route all MCP traffic through a gateway.
 5. Keep tamper-evident receipts of every call.
 
-For the wider set of agent threats, see our guide [How to Secure AI Agents](../how-to-secure-ai-agents/). Our [AI-agent security](../../services/#ai-agent-security) team can vet your MCP servers and put Pavii in front of them. Book a call to start with an inventory.
+For the wider set of agent threats, see our guide [How to Secure AI Agents](../how-to-secure-ai-agents/). Our [AI-agent security](../../services/ai-agent-security/) team can vet your MCP servers and put Pavii in front of them. Book a call to start with an inventory.

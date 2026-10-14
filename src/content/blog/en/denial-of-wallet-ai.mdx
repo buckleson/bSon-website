@@ -1,0 +1,121 @@
+---
+title: 'What Is Denial of Wallet and How Do You Stop It?'
+description: 'A denial of wallet attack makes an AI agent burn tokens until your budget is gone. Learn how token caps, loop detection and a compact context stop it.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-14
+readTime: 7
+tags: ['AI-agent security', 'AI cost control']
+faqs:
+  - question: 'What is the difference between denial of wallet and denial of service?'
+    answer: 'Denial of service takes a system offline. Denial of wallet keeps the system busy and makes you pay for every minute of the work. With AI agents, one often leads to the other: the attack drains the budget, and then the provider stops the service at your quota.'
+  - question: 'Are rate limits enough to stop a denial of wallet attack?'
+    answer: 'No. A request limit counts calls, but one call can carry a huge prompt or start a long chain of reasoning. Limit tokens and spend as well, per key, user, team and agent. A cap must end the work at the limit, because an alert alone comes too late.'
+  - question: 'How much can a smaller context save?'
+    answer: 'It depends on the task. With the compact context from Pavii, agents used 30 to 60 percent fewer tokens on one measured Claude Code task. Across all use so far, Pavii counts 100M+ AI tokens saved across 82K+ queries.'
+---
+import FlowStack from '@components/ui/FlowStack.astro';
+
+Denial of wallet is an attack that makes your AI system spend money until the budget is gone. The attacker does not need to break in. A loop, a malicious tool or a flood of long prompts is enough, because every model call has a price. You stop it with hard caps on tokens and spend, a loop detector and a smaller context for every call.
+
+## What is denial of wallet?
+
+Denial of wallet is the cost version of denial of service. A denial-of-service attack takes a system offline. A denial-of-wallet attack keeps the system busy, and you pay for every minute of it.
+
+AI makes this attack cheap for the attacker and expensive for you. Model providers bill by tokens: the small pieces of text that a model reads and writes. One short message from an attacker can make an agent read and write millions of them.
+
+## Why do AI agents make costs grow so fast?
+
+A chatbot answers one question with one model call. An AI agent (an AI model that uses tools to act) turns one request into a chain of calls. Five things multiply the cost:
+
+- **Fan-out.** One request becomes a plan, then many tool calls, then a model call to read each result.
+- **Loops.** An agent that retries a failed step, or checks its own work again and again, can run for hours.
+- **A growing context.** Many agents send the whole conversation again with every turn. Turn 50 pays for turns 1 to 49 one more time.
+- **Reasoning tokens.** Models that think step by step bill for the hidden thinking as well as for the answer.
+- **Images and audio.** A screenshot or a voice clip costs far more tokens than the same content as text.
+
+## What does a denial-of-wallet attack look like?
+
+Four patterns are common. None of them needs an exploit.
+
+1. **A malicious tool.** A team installs a free web research tool from a public repository. Its description tells the agent to confirm every result with one more search. The agent obeys. By morning, it has made tens of thousands of calls and spent the model budget for the month.
+2. **Endless sessions.** An attacker keeps a public assistant in a very long conversation. Each turn sends the growing history again, so each reply costs more than the last.
+3. **Short prompts with long answers.** A ten-word puzzle can trigger thousands of reasoning tokens. The attacker sends the same puzzle from many accounts.
+4. **Stolen API keys.** An attacker finds a model key in a public repository or a log file. Then the attacker runs a private workload on your account.
+
+The first pattern is a [poisoned tool description](../mcp-server-security-risks/). Hidden text in a web page can do the same. That is [prompt injection](../what-is-prompt-injection/) with a cost goal.
+
+## Why are request limits not enough?
+
+Most APIs limit requests per minute. That limit counts calls, not cost. One request can carry a 2M-token paste or start a long chain of reasoning. To a request counter, one hundred cheap requests and one hundred expensive requests look the same.
+
+So limit what you actually pay for: tokens and spend. Estimate the cost of each call before it runs, from the size of the input and the output cap. Reject the call if the estimate breaks a cap. Set separate limits for input length, output length and the reasoning budget.
+
+## How does layered cost control work?
+
+Good cost control is a set of layers in the gateway: a single checkpoint that every agent call passes. Each layer catches a different kind of waste. The figure shows four agent tasks as they move through the layers.
+
+<FlowStack name="budget" />
+
+The layers work in this order:
+
+1. **The agent starts a task.** Every call carries its agent, its task and an estimated cost.
+2. **Compact context.** Search results, a cache and small notes go in, not whole files and the full history.
+3. **Token limits.** Caps apply per call, per minute and per day on tokens, not only on requests. The prompt with a 2M-token paste stops here.
+4. **Loop detector.** Step limits and repeated-state checks stop a loop. The research tool that wants to check again 400 times stops after 25 steps.
+5. **Spend cap.** A hard cap per key, team and agent stops the work. It does not only send an alert. The night batch stops when the team cap runs out.
+
+The task that fixes a failing test passes every layer with a compact context. It ends in a metered receipt: a signed usage record on Hyper 0X that a billing team can check.
+
+## Which budgets do you need?
+
+Set a budget at every level where money leaves:
+
+- **Per API key,** so a stolen key has a ceiling.
+- **Per user,** so one account cannot drain a shared service.
+- **Per team,** so one project cannot spend the money of another team.
+- **Per agent,** so a misbehaving agent stops on its own.
+- **Per run,** with a cost ceiling, a step limit and a time limit.
+
+Each budget needs a hard stop. An alert in the middle of the night does not stop an agent that spends faster than a person can respond. Send the alert, and stop the work.
+
+Also require authentication on every model endpoint. An open endpoint is a free model for anyone who finds it.
+
+## How do you detect a loop?
+
+A loop detector looks for an agent that repeats itself and makes no progress. Use three checks together:
+
+1. **Step and recursion limits.** Cap the number of steps in one run. Also cap the depth of agents that call other agents.
+2. **Repeated-state checks.** Compare each new tool call with the last few calls. The same call with the same arguments, again and again, is a loop.
+3. **Baselines.** Compare each run with the normal run for that task. A task that usually takes 12 steps and now stands at 300 needs a stop.
+
+Some loops start with a false claim: the agent retries a step that already worked. See [why AI agents act on hallucinations](../ai-agent-hallucination-risk/).
+
+These checks run in the gateway, on every call, at the speed of the call. They do not run on chain. When a loop still gets through, a person needs a fast way out. The Pavii kill switch lets a person stop any agent at any time. Our post on [how an AI agent kill switch works](../ai-agent-kill-switch/) explains the design.
+
+## How does a smaller context cut cost?
+
+The cheapest token is the one that you never send. Many coding agents read whole files and send the full history again with every call.
+
+A compact context sends only what the task needs. A search index finds the relevant lines. A result cache answers a repeated question without a new model call. Small notes keep decisions and conventions, so the agent does not read them again from the source.
+
+[Pavii](../../products/pavii/), our security gateway for AI agents, gives agents these three tools through MCP servers (services that give an agent its tools). Agents that used them needed 30 to 60 percent fewer tokens on one measured Claude Code task. The total so far is 100M+ AI tokens saved across 82K+ queries. Pavii also has a budget gate that stops calls when the budget of an agent is empty.
+
+## How do signed usage records help billing and disputes?
+
+Cost disputes get harder once agents work across teams and companies. A vendor bills for 40 million tokens. Your own logs say 25 million. Each side trusts its own log, and the other side cannot check it.
+
+Signed usage records fix this. Each record shows which agent made the call, which model ran and how many tokens the call used. Anchor the records on [Hyper 0X](../../products/hyper-0x/), and both sides read the same numbers. Nobody can edit them afterwards, so a billing team can settle the dispute from one record. [Proof of execution for AI](../proof-of-execution-ai/) explains how such a receipt chain works.
+
+A blockchain can also protect the rules. Put the budget rule in a smart contract (a program on a blockchain), and nobody can quietly raise a cap. Each change becomes a recorded transaction with a time and an approver.
+
+## Where should you start?
+
+1. Put a hard spend cap on every API key, team and agent.
+2. Limit tokens per call, per minute and per day.
+3. Add step limits and a repeated-state check to every agent run.
+4. Cut the context: send search results, cached results and notes instead of whole files.
+5. Keep signed usage records that your finance team and your partners can check.
+
+Vet each new tool before an agent can call it, as our post on the [AI bill of materials](../ai-bill-of-materials/) explains. Our guide to [AI agent tool-calling security](../ai-agent-tool-calling-security/) covers limits on tool calls. Book a call with a Buckleson engineer to find out where your agents spend their tokens.

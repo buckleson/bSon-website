@@ -3,6 +3,7 @@ import { SITE } from '@data/constants';
 import { getCopy } from '@/copy';
 import { entriesFor, pathFor } from '@utils/content';
 import { localePath } from '@utils/locale';
+import { servicePages } from '@data/services';
 
 /**
  * llms.txt (https://llmstxt.org): a plain summary of the company, products
@@ -32,6 +33,10 @@ export const GET: APIRoute = async () => {
     '## Services',
     '',
     `- [Blockchain development services](${url('/services/')}): custom blockchains, asset tokenization, wallets and exchanges, wallet SDKs, AI-agent security and forward-deployed engineering.`,
+    ...servicePages.map(page => {
+      const item = copy.services.items.find(entry => entry.id === page.id);
+      return `- [${item?.title ?? page.id}](${url(`/services/${page.id}/`)}): ${page.description}`;
+    }),
     '',
     '## Guides',
     '',

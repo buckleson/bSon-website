@@ -100,4 +100,4 @@ Settlement design matters too. Say the retailer converts stablecoins to another 
 4. Agree refund rules, accounting treatment and tax handling with your finance team.
 5. Run a pilot with a small share of orders before the full rollout.
 
-For branded payments, see our [wallet SDK services](../../services/#wallet-sdks). Join the H0X Pay early-access list too. Book a call to talk it through.
+For branded payments, see our [wallet SDK services](../../services/wallet-sdks/). Join the H0X Pay early-access list too. Book a call to talk it through.

@@ -5,6 +5,14 @@ import { entriesFor, pathFor } from '@utils/content';
 import { localePath } from '@utils/locale';
 
 /** llms-full.txt: every product page, the FAQ and every blog post as plain text. */
+// MDX posts carry import lines and component tags; keep only the prose.
+const plain = (body = '') =>
+  body
+    .replace(/^import .*$/gm, '')
+    .replace(/^<[A-Z][^>]*\/>\s*$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
 export const GET: APIRoute = async () => {
   const copy = getCopy('en');
   const products = await entriesFor('products', 'en');
@@ -30,7 +38,7 @@ export const GET: APIRoute = async () => {
       ...copy.data.faqs.topics.flatMap(topic => [`### ${topic.label}`, ...topic.faqs.map(f => `Q: ${f.question}\nA: ${f.answer}`)]),
     ].join('\n\n'),
     ...posts.map(post =>
-      [`## ${post.data.title}`, `URL: ${SITE.origin}${pathFor(post)}`, (post.body ?? '').trim()].join('\n\n')
+      [`## ${post.data.title}`, `URL: ${SITE.origin}${pathFor(post)}`, plain(post.body)].join('\n\n')
     ),
   ];
   return new Response(sections.join('\n\n---\n\n'), {

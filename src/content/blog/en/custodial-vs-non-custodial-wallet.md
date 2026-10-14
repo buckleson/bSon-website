@@ -91,4 +91,4 @@ That is how the Hyper Wallet SDKs work. The wallet is non-custodial out of the b
 4. Design recovery first, with passkeys and account abstraction instead of seed phrases.
 5. Pick an SDK that supports both models, so custody later is an add-on, not a rebuild. See [how to launch your own crypto wallet](../how-to-launch-a-crypto-wallet/) for build vs white-label.
 
-Hyper Wallet and its SDKs give you a production non-custodial wallet with optional custody, backed by our [wallet SDK services](../../services/#wallet-sdks). Book a call to map the right model for your users.
+Hyper Wallet and its SDKs give you a production non-custodial wallet with optional custody, backed by our [wallet SDK services](../../services/wallet-sdks/). Book a call to map the right model for your users.

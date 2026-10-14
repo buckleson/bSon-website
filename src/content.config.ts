@@ -54,7 +54,7 @@ const blogCollection = defineCollection({
       /** Optional architecture diagram shown under the intro. */
       diagram: z.enum(diagramNames).optional(),
       /** Optional animated Anatomy figure shown under the intro. */
-      figure: z.enum(['data-vault', 'chain-rack', 'pavii-gates', 'cipher-tower']).optional(),
+      figure: z.enum(['data-vault', 'chain-rack', 'pavii-gates', 'cipher-tower', 'token-mint', 'order-book']).optional(),
       faqs: z.array(faq).default([]),
     }),
 });

@@ -98,4 +98,4 @@ Every row, passed or blocked, leaves a signed receipt (a record of the call and 
 4. Move credentials into a gateway. Then set egress rules and budgets.
 5. Require human approval for irreversible actions. Keep tamper-evident receipts (records that show any change).
 
-For the full threat picture, see our guide [How to Secure AI Agents](../how-to-secure-ai-agents/). Pavii applies all six gates to every tool call. Our [AI-agent security](../../services/#ai-agent-security) team can help you roll it out. Book a call to see it on your own agents.
+For the full threat picture, see our guide [How to Secure AI Agents](../how-to-secure-ai-agents/). Pavii applies all six gates to every tool call. Our [AI-agent security](../../services/ai-agent-security/) team can help you roll it out. Book a call to see it on your own agents.

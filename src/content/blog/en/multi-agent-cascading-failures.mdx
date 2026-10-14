@@ -1,0 +1,114 @@
+---
+title: 'Why Do Multi-Agent AI Systems Fail in Cascades?'
+description: 'Multi-agent AI security starts at the hand-offs. See how one wrong fact spreads through a chain of agents, and how signed messages and circuit breakers stop it.'
+author: 'Buckleson Engineering'
+authorImage: '@/images/brand/buckleson.png'
+authorImageAlt: 'Buckleson logo'
+pubDate: 2026-10-14
+readTime: 7
+tags: ['AI-agent security', 'Multi-agent systems']
+faqs:
+  - question: 'What is a cascading failure in AI agents?'
+    answer: 'It is one error that spreads through a chain of AI agents and grows at each step. One agent passes a wrong fact, a poisoned message or a fake task to the next agent. Each agent trusts its input and acts on it, so the damage grows.'
+  - question: 'How do you protect messages between AI agents?'
+    answer: 'Sign every message, and check the signature, the sender and a schema before an agent acts on it. Reject messages from unknown agents and messages that arrive twice. Before a high-impact step, check key facts against the source system.'
+  - question: 'Does Pavii protect traffic between agents?'
+    answer: 'Pavii protects every call that passes through its gateway. Each of those calls goes through the same gates and leaves a signed receipt on Hyper 0X. Pavii does not see messages that go from one agent to another around the gateway, so protect those in your own code.'
+---
+import FlowStack from '@components/ui/FlowStack.astro';
+
+Multi-agent AI systems fail in cascades because agents trust each other's output without checks. One wrong fact from one agent becomes the input of the next agent, and the error grows at each step. Fluent, confident text makes the error look correct at every hop. Signed hand-offs, checks against the source system and circuit breakers between agents stop the spread.
+
+## What is a cascading failure in a multi-agent system?
+
+A cascading failure is one error that spreads through a chain of agents and grows at each step. In a multi-agent system, several AI agents (AI models that use tools to act) share one job. One agent reads a document, the next decides and a third acts.
+
+A person who gets a file often asks a question about it. An agent rarely does. It takes the input and moves on. So the error, whether a wrong fact, a poisoned message or a fake agent, has a free path to the end of the chain. Our guide [How to Secure AI Agents](../how-to-secure-ai-agents/) covers attacks on a single agent. This post covers the space between agents.
+
+## How does one wrong fact travel?
+
+Take a loan workflow with four agents. The intake agent reads a blurry scan of an ID and sets the flag "identity verified" by mistake. The credit agent trusts the flag and approves the application. The pricing agent makes an offer, and the payout agent sends the money. No agent broke a rule, yet one blurry scan ended as a real payment.
+
+The diagram below runs the same workflow with three controls between the agents.
+
+<FlowStack name="cascade" />
+
+1. **Intake agent.** It reads the scanned ID and fills in the application.
+2. **Signed hand-off.** Every message between agents carries a signature and must match a schema (a fixed format for the message). A message from an unknown agent stops here.
+3. **Credit agent.** It checks key facts against the source system, not against another agent's flag. For loan 8813, the ID service disagrees with the flag, so the loan stops.
+4. **Circuit breaker.** Step limits, budgets and timeouts between agents stop a failure that spreads. A retry loop on loan 8814 reaches the step limit.
+5. **Pricing agent.** It makes the offer only when every earlier hop passed.
+6. **Payout, traced hop by hop.** Each hop leaves a signed receipt on [Hyper 0X](../../products/hyper-0x/), the Buckleson blockchain (a shared ledger that you can only add to). A bad fact then leads back to its first step. Loan 8812, with a matching ID, reaches this point and gets paid.
+
+## What makes messages between agents risky?
+
+Messages between agents are risky because they often carry no proof of the sender and no check of the content. Four weak points stand out:
+
+- **No authentication.** The receiver cannot tell who sent a message. Any process can claim to be the intake agent.
+- **Fake agent profiles.** An attacker registers an agent with a trusted name. Other agents then send it tasks and data.
+- **Replayed messages.** An attacker copies a valid message, for example "payment approved", and sends it again.
+- **No schema checks.** A free-text message can carry hidden instructions. This is [prompt injection](../what-is-prompt-injection/) (hidden instructions in text that an agent reads), one hop further down the chain.
+
+Give each agent its own key pair (a private key to sign and a public key to check). The receiver checks the signature, the rights of the sender, the schema and a one-time number that blocks replays. Also set which agent can give tasks to which agent. Our post on [AI agent identity](../ai-agent-identity/) covers this in detail.
+
+## Why does confident output make it worse?
+
+Confident output makes it worse because every agent reads fluent text as true. Language models use the same calm tone whether the content is right or wrong. A flag that says "identity verified" looks the same whether the check ran or not.
+
+Confidence also builds along the chain. When the payout agent reads the file, two agents seem to agree. In fact, both depend on one blurry scan. [Poisoned memory](../ai-agent-memory-poisoning/) has a similar effect over time, because a stored false fact comes back in every later session.
+
+## How do you check a claim before you act on it?
+
+Check key facts against the source system, not against another agent's flag. The source system is the system that owns the fact, for example the ID service for identity. Before a high-impact step, the agent asks the source system directly.
+
+Choose the few facts that a high-impact step depends on, such as identity and the payout account. Ask for structured claims too. A claim with fixed fields, such as a check ID and a time, is easy to verify.
+
+## Where do circuit breakers go?
+
+Put circuit breakers between agents, not only at the edge of the system. A circuit breaker is a rule that stops the flow when something looks wrong. It limits the damage before anyone knows the cause.
+
+- **Step limits.** Cap the hops and retries for one task.
+- **Budgets.** Cap the tokens, calls and money that one workflow can use.
+- **Timeouts.** Stop a task that waits too long for an answer.
+- **The strictest approval rule.** If one step needs approval from a person, apply that rule to the whole chain. Then nobody can split a risky action into small steps that each look safe.
+
+Also carry the rights of the original user through every hop. An agent deep in the chain must never do more than the person who started the task. Our post on [AI agent tool-calling security](../ai-agent-tool-calling-security/) applies the same idea to each tool call.
+
+Circuit breakers must react at full speed. So they run off chain (outside the blockchain), in a gateway (a single checkpoint for agent calls) and in your own code.
+
+## How do you stop all agents at once?
+
+Keep one stop command for the whole workflow. A cascade moves faster than a person can stop agents one by one. The command must work outside the agents, so that a hijacked agent cannot block it. Our post on the [AI agent kill switch](../ai-agent-kill-switch/) explains how to build it.
+
+A shared ledger helps here. When the status of an agent changes to stopped on a blockchain, every system and every partner sees the change at once. Test the stop in a drill before production.
+
+## How does a shared record find the first bad step?
+
+A signed receipt for every hop lets you walk back from the damage to the first bad step. Each receipt records which agent acted, what it got, what it sent and when. Each receipt also links to the one before it, so a deleted receipt leaves a visible gap. [Proof of execution](../proof-of-execution-ai/) explains how this chain works.
+
+In the loan case, the trace runs from the payout receipt back to the first receipt. That receipt names the source: scan.pdf. The team can now find every other loan that used the same scan check.
+
+The record matters most across companies, which rarely share one identity system or one log. A blockchain such as Hyper 0X gives both sides one record. Each side can check the signatures of the other without access to its systems.
+
+## How does Pavii help in a multi-agent workflow?
+
+[Pavii](../../products/pavii/) is our security gateway for AI agents. Every prompt and tool call that passes through it goes through six gates: injection, privacy, supply chain, budget, egress and output. Each decision gets a signed, hash-chained receipt on Hyper 0X. So when each agent in a workflow sends its calls through Pavii, you can trace which agent made which call.
+
+- **Budget gate.** Budgets stop a failure that spreads through runaway calls.
+- **Kill switch.** An agent that breaks rules moves from observed, to restricted, to stopped. A person can stop any agent at any time.
+- **Egress contract.** A smart contract (a program on a blockchain) on Hyper 0X decides what each agent can send and do.
+
+Know the limits. Pavii covers traffic that passes through its gateway. It does not see messages that go straight from one agent to another, so sign and check those in your own agent framework. Pavii also does not check whether a fact is true, so the checks against source systems run off chain, in your own code.
+
+## Where should you start?
+
+Use this checklist to begin:
+
+1. Draw every agent, every hand-off and every system that each agent can reach.
+2. Give each agent its own identity, and sign every message between agents.
+3. Mark the high-impact steps, and check their key facts against the source system.
+4. Put step limits, budgets and timeouts between agents.
+5. Keep one stop command for the whole workflow, and test it in a drill.
+6. Keep a signed receipt for every hop, so you can trace a bad fact to its source.
+
+Book a call with a Buckleson engineer to map the hand-offs in your own agent workflow.

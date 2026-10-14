@@ -100,4 +100,4 @@ Even if the instruction slips through, the egress policy only allows payments to
 4. Remove the permissions that the agent does not need. Require approval for high-risk actions.
 5. Make logs tamper-evident, so you can prove what happened.
 
-For the attacks other than injection, read our guide [How to Secure AI Agents](../how-to-secure-ai-agents/). Pavii and our [AI-agent security](../../services/#ai-agent-security) service put all six gates in front of your agents. Book a call to test them against your own documents.
+For the attacks other than injection, read our guide [How to Secure AI Agents](../how-to-secure-ai-agents/). Pavii and our [AI-agent security](../../services/ai-agent-security/) service put all six gates in front of your agents. Book a call to test them against your own documents.

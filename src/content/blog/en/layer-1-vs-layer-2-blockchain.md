@@ -92,4 +92,4 @@ On salary day, the payroll L2 fills larger blocks to handle the peak, and the fu
 4. Check that you can add, resize or retire one application and leave the others as they are.
 5. Start with one pilot L2. Agree on success metrics before you scale.
 
-Buckleson sets up private L2s on Hyper 0X as part of our [custom blockchain service](../../services/#custom-blockchains). Book a call to map your applications to L2s.
+Buckleson sets up private L2s on Hyper 0X as part of our [custom blockchain service](../../services/custom-blockchains/). Book a call to map your applications to L2s.

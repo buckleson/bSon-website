@@ -86,4 +86,4 @@ Non-custodial design limits the damage of a provider breach, because keys never 
 4. Build address checks and clear warnings into every send screen.
 5. Choose an SDK that already supports your chains in production. See [what a wallet SDK is](../what-is-a-wallet-sdk/).
 
-Hyper Wallet and its SDKs give you these chains in one non-custodial wallet, with swaps that settle atomically on Hyper 0X. Our [wallets and exchanges team](../../services/#wallets-exchanges) can tailor it to your product. Book a call to plan your chain list.
+Hyper Wallet and its SDKs give you these chains in one non-custodial wallet, with swaps that settle atomically on Hyper 0X. Our [wallets and exchanges team](../../services/wallets-exchanges/) can tailor it to your product. Book a call to plan your chain list.

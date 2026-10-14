@@ -88,4 +88,4 @@ The result: customers never leave the bank's app, and keys stay on their devices
 4. Check the five essentials above: keys, chains, swaps, account abstraction and compliance hooks.
 5. Run a pilot with one market and a handful of assets.
 
-The Hyper Wallet SDKs cover all five, and our [wallet SDK services](../../services/#wallet-sdks) help you embed them in your own product. Book a call to see them working in your app.
+The Hyper Wallet SDKs cover all five, and our [wallet SDK services](../../services/wallet-sdks/) help you embed them in your own product. Book a call to see them working in your app.
