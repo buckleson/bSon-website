@@ -10,6 +10,8 @@ const w = window as unknown as { IsoKit: typeof kit; __isoRun?: Record<string, R
 w.IsoKit = kit;
 window.dispatchEvent(new Event('isokit'));
 
+const pause = () => new Promise<void>(resolve => setTimeout(resolve, 0));
+
 async function load(el: HTMLElement) {
   const { isoSrc: src, isoJs: js, isoLazy: name = '' } = el.dataset;
   if (!src || !js) return;
@@ -17,8 +19,19 @@ async function load(el: HTMLElement) {
   try {
     const response = await fetch(src);
     if (!response.ok) return;
+    const drawing = (await response.json()) as { svgOpen: string; chunks: string[]; pins: string };
     const box = el.querySelector<HTMLElement>(`[data-figure="${name}"]`) ?? el;
-    box.innerHTML = await response.text();
+    // Build the drawing a piece at a time, yielding between pieces, so no
+    // single task blocks the page; then the labels, then the script.
+    // The empty SVG has the drawing's size, so swapping it in shifts nothing.
+    box.innerHTML = `${drawing.svgOpen}</svg>`;
+    const svg = box.firstElementChild as SVGSVGElement;
+    for (const chunk of drawing.chunks) {
+      svg.insertAdjacentHTML('beforeend', chunk);
+      await pause();
+    }
+    box.insertAdjacentHTML('beforeend', drawing.pins);
+    await pause();
     if (w.__isoRun?.[name]) w.__isoRun[name]();
     else await import(/* @vite-ignore */ js);
   } catch {

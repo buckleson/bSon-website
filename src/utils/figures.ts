@@ -28,6 +28,39 @@ export function figureParts(name: FigureName) {
   };
 }
 
+/**
+ * The drawing split into pieces of whole top-level SVG elements, so the page
+ * can add it a piece at a time without one long task.
+ */
+export function figureChunks(name: FigureName, target = 9000) {
+  const { stage } = figureParts(name);
+  const openEnd = stage.indexOf('>') + 1;
+  const svgClose = stage.lastIndexOf('</svg>');
+  const svgOpen = stage.slice(0, openEnd);
+  const inner = stage.slice(openEnd, svgClose);
+  const pins = stage.slice(svgClose + '</svg>'.length);
+  const chunks: string[] = [];
+  const tag = /<\/?[a-zA-Z][^>]*>/g;
+  let depth = 0;
+  let from = 0;
+  let current = '';
+  for (let m = tag.exec(inner); m; m = tag.exec(inner)) {
+    const text = m[0];
+    if (depth === 0 && !text.startsWith('</')) from = m.index;
+    if (text.startsWith('</')) depth--;
+    else if (!text.endsWith('/>')) depth++;
+    if (depth === 0) {
+      current += inner.slice(from, tag.lastIndex);
+      if (current.length >= target) {
+        chunks.push(current);
+        current = '';
+      }
+    }
+  }
+  if (current) chunks.push(current);
+  return { svgOpen, chunks, pins };
+}
+
 /** The live script as a function body: runs once per stage, kit in scope. */
 export function figureScript(name: FigureName) {
   const source = live[`../components/home/figures/${name}.live.js`].replace(

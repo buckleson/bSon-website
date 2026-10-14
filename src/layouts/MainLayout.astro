@@ -56,7 +56,7 @@ const metadata = buildPageMetadata({
 
 <html
   lang={metadata.lang}
-  class="lenis lenis-smooth scroll-pt-24"
+  class="scroll-pt-24 motion-safe:scroll-smooth"
 >
   <head>
     <Meta metadata={metadata} />
@@ -73,7 +73,6 @@ const metadata = buildPageMetadata({
       }
     </script>
     <script>
-      import '@scripts/lenisSmoothScroll.js';
       import '@scripts/reveal.ts';
       import '@scripts/motion.ts';
     </script>

@@ -8,9 +8,6 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
   <StarlightHead {...Astro.props}>
     <slot />
   </StarlightHead>
-  <script>
-    import '@scripts/lenisSmoothScroll.js';
-  </script>
 </VtbotStarlight>
 
 <style is:global>
@@ -24,14 +21,3 @@ import VtbotStarlight from 'astro-vtbot/components/starlight/Base.astro';
     overflow: hidden;
   }
 </style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const siteSearch = document.querySelector(
-      'site-search'
-    ) as HTMLElement | null;
-    if (siteSearch) {
-      siteSearch.setAttribute('data-lenis-prevent', '');
-    }
-  });
-</script>

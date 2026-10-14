@@ -9,7 +9,7 @@ import { figureParts, figureScript, type FigureName } from '@utils/figures';
  * hero's paper, `card` drops the frame and step list (inside a stacking card)
  * and fits the drawing to its box, `auto` follows the theme.
  * `lazy` (default): the frame, labels and steps are in the page, but the
- * drawing and its script load from /figures/<name>.txt and .js once the
+ * drawing and its script load from /figures/<name>.json and .js once the
  * figure is near, into a box already the right size, so nothing shifts.
  * `lazy={false}` puts everything inline.
  */
@@ -28,7 +28,7 @@ const style = `--fig-ar:${parts.ratio.toFixed(4)}`;
 ---
 
 {lazy ? (
-  <div class:list={classes} style={style} data-iso-lazy={name} data-iso-src={`${base}.txt`} data-iso-js={`${base}.js`} set:html={parts.shell} />
+  <div class:list={classes} style={style} data-iso-lazy={name} data-iso-src={`${base}.json`} data-iso-js={`${base}.js`} set:html={parts.shell} />
 ) : (
   <div class:list={classes} style={style} set:html={parts.markup} />
 )}
