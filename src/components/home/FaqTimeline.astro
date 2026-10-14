@@ -10,6 +10,7 @@ import { BOOKING_URL } from '@data/constants';
  * so search engines and assistants can read them.
  */
 interface Props {
+  index: string;
   label: string;
   claim: string;
   payoff: string;
@@ -18,11 +19,11 @@ interface Props {
   faqs: { question: string; answer: string }[];
 }
 
-const { label, claim, payoff, stillUnsure, stillUnsureText, faqs } = Astro.props;
+const { index, label, claim, payoff, stillUnsure, stillUnsureText, faqs } = Astro.props;
 ---
 
 <section id="faq" class="mx-auto max-w-[85rem] scroll-mt-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-  <SectionHead index="07" label={label} claim={claim} payoff={payoff} />
+  <SectionHead index={index} label={label} claim={claim} payoff={payoff} />
   <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
     <div class="on-sheet h-fit rounded-[1.6rem] bg-sheet p-7 text-white lg:sticky lg:top-24" data-reveal>
       <Glyph icon="chats-circle" class="size-9 text-orange-300" />

@@ -28,13 +28,13 @@ const onSheet = tone === 'sheet';
       {index && <span>({index}) </span>}{label}
     </p>
     <h2 id={id} class:list={['mt-4 text-4xl leading-[1.02] font-semibold sm:text-5xl lg:text-[3.3rem]', onSheet ? 'text-white' : 'text-ink']} data-reveal>
-      <span class="block">{claim}</span>
+      <span class="relative z-[1] block">{claim}</span>
       <span class="mark block w-fit">{payoff}</span>
     </h2>
   </div>
   {(body || cta) && (
     <div class="lg:pb-2" data-reveal>
-      {body && <p class:list={['max-w-[44ch] text-pretty', onSheet ? 'text-white/70' : 'text-muted']}>{body}</p>}
+      {body && <p class:list={['max-w-[44ch] text-lg text-pretty', onSheet ? 'text-white/80' : 'text-ink/80']}>{body}</p>}
       {cta && <div class="mt-5"><PrimaryCTA title={cta.title} url={localePath('en', cta.url)} /></div>}
     </div>
   )}

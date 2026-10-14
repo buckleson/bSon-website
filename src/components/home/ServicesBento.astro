@@ -1,0 +1,52 @@
+---
+import SectionHead from '@components/home/SectionHead.astro';
+import Glyph from '@components/ui/Glyph.astro';
+import ServiceMock from '@components/ui/ServiceMock.astro';
+import { localePath } from '@utils/locale';
+
+/**
+ * Services as a 2x2 bento: each card has a small live UI, what's included
+ * and the outcome, and links to its section on the services page.
+ */
+interface Item {
+  id: string;
+  title: string;
+  line: string;
+  included: string[];
+  outcome: string;
+  mock: string;
+}
+interface Props {
+  index: string;
+  label: string;
+  claim: string;
+  payoff: string;
+  body: string;
+  items: Item[];
+}
+
+const { index, label, claim, payoff, body, items } = Astro.props;
+type Mock = 'chain' | 'token' | 'wallet' | 'agent';
+---
+
+<section class="mx-auto max-w-[85rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28" id="services">
+  <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} cta={{ title: 'All services', url: '/services/' }} />
+  <div class="mt-12 grid gap-4 lg:grid-cols-2" data-reveal-group>
+    {items.map((item, i) => (
+      <article class:list={['grid gap-6 rounded-[1.6rem] p-5 sm:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] sm:p-6', i === 1 || i === 2 ? 'on-sheet bg-sheet text-white' : 'bg-card text-ink ring-1 ring-line']} data-reveal-item>
+        <div class="h-64 sm:h-auto"><ServiceMock kind={item.mock as Mock} /></div>
+        <div class="flex flex-col">
+          <h3 class="text-2xl font-semibold">{item.title}</h3>
+          <p class="mt-2 opacity-80">{item.line}</p>
+          <ul class="mt-5 space-y-2 text-sm">
+            {item.included.map(point => <li class="flex items-start gap-2"><Glyph icon="check-circle" class="mt-px size-4.5 shrink-0 text-orange-500" />{point}</li>)}
+          </ul>
+          <p class="mt-5 w-fit rounded-full bg-orange-600 px-3.5 py-1.5 text-sm font-semibold text-white dark:bg-orange-700">{item.outcome}</p>
+          <a href={localePath('en', `/services/#${item.id}`)} class="mt-5 inline-flex w-fit items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">
+            See {item.title.toLowerCase()}<Glyph icon="arrow-right" class="size-4" />
+          </a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

@@ -58,8 +58,8 @@ const widths: Record<string, string> = {
     </nav>
   </div>
 
-  <div id="mega-panel" class="mega-panel pointer-events-none absolute top-full left-1/2 hidden -translate-x-1/2 pt-2 lg:block" data-panel>
-    <div class="mega-card overflow-hidden rounded-2xl border border-line bg-card shadow-[0_24px_60px_-24px_rgb(20_18_30/0.35)]" data-panel-card>
+  <div id="mega-panel" class="mega-panel pointer-events-none absolute top-full left-1/2 hidden pt-2 lg:block" data-panel>
+    <div class="mega-card overflow-hidden rounded-[1.6rem] border border-line bg-card shadow-[0_24px_60px_-24px_rgb(20_18_30/0.35)]" data-panel-card>
       {megaMenus.map(menu => (
         <div class:list={['mega-content p-3', widths[menu.id]]} data-menu={menu.id} hidden>
           <div class="grid gap-x-2" style={`grid-template-columns: repeat(${menu.columns.length}, minmax(0, 1fr));`}>

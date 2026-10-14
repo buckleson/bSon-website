@@ -9,6 +9,7 @@ import IsoFigure from '@components/ui/IsoFigure.astro';
  * block in a single stroke, and the block joins the shared ledger.
  */
 interface Props {
+  index: string;
   label: string;
   claim: string;
   payoff: string;
@@ -16,20 +17,20 @@ interface Props {
   facts: string[];
 }
 
-const { label, claim, payoff, body, facts } = Astro.props;
+const { index, label, claim, payoff, body, facts } = Astro.props;
 ---
 
 <section class="on-sheet relative rounded-t-[2rem] bg-sheet text-white">
   <div class="mx-auto max-w-[85rem] px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-28">
-    <SectionHead index="01" label={label} claim={claim} payoff={payoff} body={body} tone="sheet" />
+    <SectionHead index={index} label={label} claim={claim} payoff={payoff} body={body} tone="sheet" />
 
     <div class="mx-auto mt-12 max-w-5xl" data-reveal>
       <IsoFigure name="block-press" tone="sheet" />
     </div>
 
-    <ul class="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-sheet-line lg:grid-cols-4">
+    <ul class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
       {facts.map(fact => (
-        <li class="flex items-center gap-3 bg-sheet px-5 py-4 text-sm font-medium text-white/85">
+        <li class="flex items-center gap-3 rounded-[1.2rem] bg-sheet-card px-5 py-4 text-sm font-medium text-white/85 ring-1 ring-sheet-line">
           <Glyph icon="check-circle" class="size-5 shrink-0 text-orange-300" />{fact}
         </li>
       ))}

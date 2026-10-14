@@ -7,19 +7,20 @@ import { formatDate } from '@utils/utils';
 
 /** Latest writing: one featured post with its cover, and a short list. */
 interface Props {
+  index: string;
   label: string;
   claim: string;
   payoff: string;
   cta: string;
 }
 
-const { label, claim, payoff, cta } = Astro.props;
+const { index, label, claim, payoff, cta } = Astro.props;
 const [featured, ...rest] = await entriesFor('blog', 'en');
 const list = rest.slice(0, 4);
 ---
 
 <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
-  <SectionHead index="08" label={label} claim={claim} payoff={payoff} cta={{ title: cta, url: '/blog/' }} />
+  <SectionHead index={index} label={label} claim={claim} payoff={payoff} cta={{ title: cta, url: '/blog/' }} />
   <div class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,6fr)]">
     {featured && (
       <a href={pathFor(featured)} class="group overflow-hidden rounded-[1.6rem] bg-card ring-1 ring-line" data-reveal>

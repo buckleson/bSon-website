@@ -78,7 +78,7 @@ export const systems = {
       { id: 'exch', col: 0, row: 0, brand: 'binance', label: 'Exchanges', sub: 'Binance · Coinbase' },
       { id: 'trader', col: 0, row: 1, icon: 'user', label: 'Trader', sub: 'places an order' },
       { id: 'wallet', col: 1, row: 1, icon: 'wallet', label: 'Hyper Wallet', sub: 'non-custodial', tone: 'chain' },
-      { id: 'chains', col: 0, row: 2, brand: 'bitcoin', label: '20+ chains', sub: 'BTC · ETH · SOL' },
+      { id: 'chains', col: 0, row: 2, brand: 'bitcoin', label: 'Multi-chain', sub: 'BTC · ETH · SOL · TON' },
       { id: 'seller', col: 2, row: 0, icon: 'user-round', label: 'Counterparty', sub: 'sells 0.5 ETH' },
       { id: 'book', col: 2, row: 1, icon: 'chart-candlestick', label: 'Order book', sub: 'price, then time' },
       { id: 'swap', col: 2, row: 2, icon: 'repeat', label: 'Best-route swap', sub: 'MEV-protected', tone: 'guard' },

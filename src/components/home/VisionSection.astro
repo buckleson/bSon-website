@@ -1,71 +1,31 @@
 ---
-import Glyph from '@components/ui/Glyph.astro';
 import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
-import { Image } from 'astro:assets';
-import mark from '@images/brand/buckleson.png';
 import { localePath } from '@utils/locale';
 
 /**
- * "Our vision" on a dark sheet: a framed brand card with viewfinder corners
- * (a founder portrait can replace it later), a statement that reveals word
- * by word, and four principles.
+ * "Our vision" on a dark sheet: one statement that reveals word by word as it
+ * scrolls, beside the short story of what we have already shipped.
  */
 interface Props {
+  index?: string;
   label: string;
   statement: string;
+  story: string[];
   cta: { title: string; url: string };
 }
 
-const { label, statement, cta } = Astro.props;
-const principles = [
-  { icon: 'seal-check', title: 'Verifiable', text: 'Every action leaves a record anyone with access can check.' },
-  { icon: 'eye-slash', title: 'Private by default', text: 'Each party only sees its own data.' },
-  { icon: 'lock-key', title: 'Built to last', text: 'Post-quantum-resistant from day one.' },
-  { icon: 'package', title: 'Real products', text: 'We run what we sell, in production.' },
-];
+const { index = '06', label, statement, story, cta } = Astro.props;
 ---
 
 <section class="on-sheet relative rounded-t-[2rem] bg-sheet text-white">
-  <div class="mx-auto max-w-[85rem] px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-28">
-    <div class="grid gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
-      <div class="relative mx-auto w-full max-w-xs lg:mx-0" data-reveal>
-        <div class="viewfinder relative aspect-[4/5] rounded-[1.4rem] bg-sheet-card p-8 ring-1 ring-sheet-line">
-          <div class="flex h-full flex-col items-center justify-center gap-5">
-            <Image src={mark} alt="" width={96} height={96} densities={[1, 2]} class="size-24 rounded-2xl" />
-            <p class="font-display text-2xl font-semibold">Buckleson</p>
-          </div>
-        </div>
-        <p class="mt-4 font-mono text-xs tracking-wide text-white/60 uppercase">Blockchain infrastructure · Hyper 0X</p>
-      </div>
-      <div>
-        <p class="flex items-center gap-4 font-mono text-xs tracking-wide text-white/60 uppercase">
-          (06) {label}<span class="h-px flex-1 bg-white/15"></span>
-        </p>
-        <p class="mt-6 text-3xl leading-[1.12] font-semibold text-balance sm:text-4xl lg:text-[2.85rem]" data-words>{statement}</p>
-        <div class="mt-8"><PrimaryCTA title={cta.title} url={localePath('en', cta.url)} /></div>
-      </div>
+  <div class="mx-auto grid max-w-[85rem] gap-12 px-4 pt-20 pb-28 sm:px-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:px-8 lg:pt-28">
+    <div>
+      <p class="font-mono text-xs tracking-wide text-white/60 uppercase">({index}) {label}</p>
+      <p class="mt-6 max-w-[30ch] text-3xl leading-[1.15] font-semibold text-balance sm:text-4xl lg:text-[2.4rem]" data-words>{statement}</p>
     </div>
-    <ul class="mt-16 grid gap-8 border-t border-white/12 pt-10 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
-      {principles.map(item => (
-        <li data-reveal-item>
-          <Glyph icon={item.icon} class="size-8 text-orange-300" />
-          <p class="mt-4 font-semibold">{item.title}</p>
-          <p class="mt-1 text-sm text-white/60">{item.text}</p>
-        </li>
-      ))}
-    </ul>
+    <div class="space-y-5 text-lg leading-relaxed text-pretty text-white/80 lg:pt-12" data-reveal>
+      {story.map(paragraph => <p>{paragraph}</p>)}
+      <div class="pt-3"><PrimaryCTA title={cta.title} url={localePath('en', cta.url)} /></div>
+    </div>
   </div>
 </section>
-
-<style>
-  .viewfinder::before,
-  .viewfinder::after {
-    content: '';
-    position: absolute;
-    width: 1.4rem;
-    height: 1.4rem;
-    border-color: var(--accent-400);
-  }
-  .viewfinder::before { top: 0.75rem; left: 0.75rem; border-top: 2px solid; border-left: 2px solid; }
-  .viewfinder::after { right: 0.75rem; bottom: 0.75rem; border-right: 2px solid; border-bottom: 2px solid; }
-</style>
