@@ -1,5 +1,5 @@
 ---
-import { brand, colorIcon, glyph, type BrandKey } from '@utils/glyphs';
+import { brand, colorSymbol, glyph, type BrandKey } from '@utils/glyphs';
 
 /**
  * An inline icon for HTML: a Phosphor duotone icon (`icon`), a multi-colour
@@ -15,7 +15,9 @@ interface Props {
 }
 
 const { icon, color, brand: brandKey, class: className, title } = Astro.props;
-const tinted = color ? colorIcon(color) : undefined;
+// Colour icons are drawn once per page in ColorSprite; here they are a <use>.
+const tinted = color ? colorSymbol(color) : undefined;
+if (color) (Astro.locals.colorIcons ??= new Set()).add(color);
 const logo = brandKey ? brand(brandKey) : undefined;
 const a11y = title ? { role: 'img' as const, 'aria-label': title } : { 'aria-hidden': 'true' as const };
 ---
@@ -24,7 +26,7 @@ const a11y = title ? { role: 'img' as const, 'aria-label': title } : { 'aria-hid
   <svg class={className} viewBox="0 0 256 256" fill="currentColor" {...a11y} set:html={glyph(icon)} />
 )}
 {tinted && (
-  <svg class={className} viewBox={`0 0 ${tinted.size} ${tinted.size}`} fill="none" {...a11y} set:html={tinted.body} />
+  <svg class={className} viewBox={`0 0 ${tinted.size} ${tinted.size}`} fill="none" {...a11y}><use href={`#ci-${color}`} /></svg>
 )}
 {logo && (logo.path ? (
   <svg class={className} viewBox="0 0 24 24" fill="currentColor" {...a11y}><path d={logo.path} fill-rule={logo.rule} /></svg>

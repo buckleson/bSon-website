@@ -108,6 +108,19 @@ const FLUENT = JSON.parse(readFileSync(join(process.cwd(), 'node_modules', '@ico
 };
 let colorUses = 0;
 
+/** One icon's markup for the page sprite: ids prefixed with the icon name. */
+export function colorSymbol(name: string): { body: string; size: number } {
+  const key = [24, 20, 28, 32, 48, 16].map(size => `${name}-${size}`).find(k => FLUENT.icons[k]);
+  if (!key) throw new Error(`Unknown colour icon "${name}"`);
+  const icon = FLUENT.icons[key];
+  const size = icon.width ?? FLUENT.width ?? Number(key.split('-').pop());
+  const body = icon.body
+    .replace(/id="([^"]+)"/g, (_, id) => `id="ci-${name}-${id}"`)
+    .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#ci-${name}-${id})`)
+    .replace(/href="#([^"]+)"/g, (_, id) => `href="#ci-${name}-${id}"`);
+  return { body, size };
+}
+
 export function colorIcon(name: string): { body: string; size: number } {
   const key = [24, 20, 28, 32, 48, 16].map(size => `${name}-${size}`).find(k => FLUENT.icons[k]);
   if (!key) throw new Error(`Unknown colour icon "${name}"`);
