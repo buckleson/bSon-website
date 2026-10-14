@@ -10,7 +10,7 @@
 // touching the others.
 //
 // Run: node scripts/figures/chain-rack.mjs
-import { k, tools, basePlate, pinsHtml, stepsHtml, writeFigure } from './lib.mjs';
+import { k, tools, basePlate, pinsHtml, stepsHtml, playFigure, writeFigure } from './lib.mjs';
 
 const WIDTH = 760;
 const HEIGHT = 400;
@@ -208,13 +208,13 @@ const svg = k.figureSvg({
 
 const top = m => [m.x + m.w / 2, MOD_Y.y + MOD_Y.d / 2, SOCKET_Z + m.h + 7];
 const pins = pinsHtml(P, WIDTH, HEIGHT, [
-  { id: 'bank', at: top(MODS[0]), icon: 'bank', title: 'Bank L2', lift: 40 },
-  { id: 'fintech', at: top(MODS[1]), icon: 'credit-card', title: 'Fintech L2', lift: 54 },
-  { id: 'ai', at: top(MODS[2]), icon: 'robot', title: 'AI L2' },
-  { id: 'asset', at: top(MODS[3]), icon: 'coins', title: 'Asset L2', lift: 50 },
-  { id: 'new', at: top(MODS[4]), icon: 'plus-circle', title: 'New L2' },
-  { id: 'blocks', at: [COUNTER.x + COUNTER.w - 6, COUNTER.y + 3, COUNTER.h], icon: 'stack', title: 'Dynamic blocks' },
-  { id: 'l1', at: [-40, PLATE.y + PLATE.d, -16], icon: 'cube', title: 'Hyper 0X L1', side: 'down' },
+  { id: 'bank', at: top(MODS[0]), icon: 'bank', title: 'Bank L2', sub: 'Own validators, KYC rules', lift: 40, expand: true, seek: 'l2' },
+  { id: 'fintech', at: top(MODS[1]), icon: 'credit-card', title: 'Fintech L2', sub: 'Own nodes for payments', lift: 54, expand: true, seek: 'l2' },
+  { id: 'ai', at: top(MODS[2]), icon: 'robot', title: 'AI L2', sub: 'Receipts for agent actions', expand: true, seek: 'l2' },
+  { id: 'asset', at: top(MODS[3]), icon: 'coins', title: 'Asset L2', sub: 'Tokenized gold and funds', lift: 50, expand: true, seek: 'l2' },
+  { id: 'new', at: [MODS[4].x + MODS[4].w, MOD_Y.y + MOD_Y.d / 2, MODS[4].h - 10], icon: 'plus-circle', title: 'New L2', sub: 'Plugs in for a new use case', side: 'right', lift: 40, expand: true, seek: 'new' },
+  { id: 'blocks', at: [COUNTER.x + COUNTER.w - 6, COUNTER.y + 3, COUNTER.h], icon: 'stack', title: 'Dynamic blocks', sub: 'Bigger when busy, smaller when quiet', expand: true, seek: 'blocks' },
+  { id: 'l1', at: [-40, PLATE.y + PLATE.d, -16], icon: 'cube', title: 'Hyper 0X L1, the main chain', sub: 'Settles every L2, final in one pass', side: 'down', seek: 'l1' },
 ]);
 
 const steps = stepsHtml([
@@ -237,6 +237,7 @@ const BURST = [12.4, 14];
 const live = `
 ${packetSvg.toString()}
 ${blockSvg.toString()}
+${playFigure.toString()}
 const P = ${JSON.stringify(P)};
 const C = ${JSON.stringify({ CUBE, MODS, MOD_Y, SOCKET_Z, LIFT, BUS, LANE_Z, TRAY_X, CHAIN_X, CHAIN_END, FIRST_BLOCK, LOOP, PHASES, NEW, BURST, WIDTH, HEIGHT })};
 const K = { slabOf, solidSvg, lineSvg, planOutline, insetPlan, ring };
@@ -259,7 +260,7 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
   const SEAL = 2.6, SPEED = 78, DROP = 0.4, GAP = 5;
   const mods = C.MODS.map((m) => ({ ...m, cx: m.x + m.w / 2, next: m.offset, blink: -1 }));
   let clock = 0, lastSeal = 0, tray = 0, height = C.FIRST_BLOCK, lastSize = 0;
-  let packets = [], chain = [], frame = 0, prev = 0, visible = false, phase = -1;
+  let packets = [], chain = [], phase = '';
 
   function newState(t) {
     if (t < C.NEW.down[0] || t >= C.NEW.up[1]) return { lift: 1, seated: false };
@@ -335,13 +336,17 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
       return true;
     });
     // Labels and steps follow the loop's phases.
-    const index = C.PHASES.findIndex((p) => t < p.until);
-    if (index !== phase) {
-      phase = index;
-      const on = C.PHASES[index];
+    // In the L2 phase the modules light one at a time, so each note reads.
+    const index = Math.max(0, C.PHASES.findIndex((p) => t < p.until));
+    const on = C.PHASES[index];
+    let lit = on.pins;
+    if (on.step === 'l2') lit = [on.pins[Math.min(on.pins.length - 1, Math.floor(t - C.PHASES[index - 1].until))]];
+    const key = index + ':' + lit.join();
+    if (key !== phase) {
+      phase = key;
       for (const [id, el] of Object.entries(pins)) {
-        el.toggleAttribute('data-on', on.pins.includes(id));
-        el.toggleAttribute('data-dim', !on.pins.includes(id));
+        el.toggleAttribute('data-on', lit.includes(id));
+        el.toggleAttribute('data-dim', !lit.includes(id));
       }
       for (const s of steps) s.toggleAttribute('data-on', s.dataset.step === on.step);
     }
@@ -349,12 +354,6 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
     const liveCount = 4 + (ns.seated ? 1 : 0);
     const msg = 'block #' + height.toLocaleString('en-US') + ' · ' + (lastSize || '-') + ' tx · ' + liveCount + ' L2s live';
     if (readout && readout.textContent !== msg) readout.textContent = msg;
-  }
-  function tick(now) {
-    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
-    prev = now;
-    step(dt);
-    frame = visible ? requestAnimationFrame(tick) : 0;
   }
   if (still.matches) {
     // One still frame: every L2 seated and a chain of blocks of mixed sizes.
@@ -367,10 +366,18 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
     if (readout) readout.textContent = 'block #' + height.toLocaleString('en-US') + ' · 3 tx · 5 L2s live';
     continue;
   }
-  new IntersectionObserver((entries) => {
-    visible = entries[entries.length - 1].isIntersecting;
-    if (visible && !frame) { prev = 0; frame = requestAnimationFrame(tick); }
-  }, { rootMargin: '120px 0px' }).observe(stage);
+  // Steps and pins jump the loop to their phase.
+  const SEEK = { l1: 0, l2: C.PHASES[0].until, new: C.PHASES[1].until, blocks: C.PHASES[2].until };
+  playFigure(stage, (t, dt) => step(dt), {
+    onSeek: (id) => {
+      if (SEEK[id] == null) return;
+      const t = clock % C.LOOP;
+      clock += ((SEEK[id] - t) + C.LOOP) % C.LOOP;
+      lastSeal = clock;
+      mods.forEach((m) => { m.next = clock + m.offset; });
+      step(0);
+    },
+  });
 }
 `;
 

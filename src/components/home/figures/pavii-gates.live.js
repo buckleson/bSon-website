@@ -34,6 +34,37 @@ function paperSvg(K, P, C, lines) {
   }
   return K.solidSvg(K.slabOf(plan, C.PRINTER.h, 0.4, P, 2), { tone: 'mid', crease: 'none', flat: true }) + K.lineSvg(rules.join(''), { tone: 'lo', free: true });
 }
+function playFigure(stage, draw, opts) {
+  const { loop = 0, seek = {}, onSeek, stillAt = 0 } = opts || {};
+  const figure = stage.closest('.iso-figure') || stage;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let frame = 0, prev = 0, clock = 0, visible = false, failed = false;
+  const run = (dt) => {
+    try { draw(clock, dt); } catch (err) { if (!failed) { failed = true; console.warn('figure frame', err); } }
+  };
+  function tick(now) {
+    frame = visible ? requestAnimationFrame(tick) : 0;
+    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
+    prev = now;
+    clock = loop ? (clock + dt) % loop : clock + dt;
+    run(dt);
+  }
+  const jump = (id) => {
+    if (seek[id] != null) { clock = seek[id]; prev = 0; run(0); }
+    if (onSeek) onSeek(id);
+    if (!still && visible && !frame) frame = requestAnimationFrame(tick);
+  };
+  for (const el of figure.querySelectorAll('[data-step]')) el.addEventListener('click', () => jump(el.dataset.step));
+  for (const el of stage.querySelectorAll('[data-pin][data-seek]')) el.addEventListener('click', () => jump(el.dataset.seek));
+  clock = still ? stillAt : 0;
+  run(0);
+  if (still) return;
+  new IntersectionObserver((entries) => {
+    visible = entries[entries.length - 1].isIntersecting;
+    prev = 0;
+    if (visible && !frame) frame = requestAnimationFrame(tick);
+  }, { rootMargin: '120px 0px' }).observe(stage);
+}
 const P = {"origin":[383.3216445349911,204.31315728556675],"scale":1.5837584832931748,"azimuth":56,"elevation":30};
 const C = {"PRINTER":{"x":96,"y":28,"w":36,"d":22,"h":16},"GATES":[-112,-76,-40,-4,32,68],"GATE_NAMES":["injection","privacy","supply chain","budget","egress","output"],"CALLS":[{"kind":"prompt","gate":-1},{"kind":"tool","gate":0},{"kind":"prompt","gate":-1,"redact":true},{"kind":"tool","gate":-1},{"kind":"tool","gate":4},{"kind":"prompt","gate":-1},{"kind":"tool","gate":3},{"kind":"tool","gate":-1,"redact":true}],"START_X":-152,"END_X":136,"BELT_Z":[6,9],"BIN":{"x":-132,"y":-52,"w":226,"d":26,"h":8},"TRAY":{"x":138,"y":-20,"w":30,"d":40,"h":6}};
 const K = { solidSvg, cylinder, slabOf, extrude, lineSvg, ring, planOutline, pathOf, iso };
@@ -52,8 +83,8 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
   const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const SPAWN = 1.5, SPEED = 42, HOLD = 0.55, PUSH = 0.4, FALL = 0.35;
   const svgNS = 'http://www.w3.org/2000/svg';
-  let clock = 0, nextSpawn = 0, serial = 1200, lines = 3, frame = 0, prev = 0, visible = false;
-  let pucks = [], broken = [], lampUntil = C.GATES.map(() => 0), lampState = C.GATES.map(() => ''), focus = 'calls', focusUntil = 0;
+  let clock = 0, nextSpawn = 0, serial = 1200, lines = 3;
+  let pucks = [], broken = [], lampUntil = C.GATES.map(() => 0), lampState = C.GATES.map(() => ''), focusUntil = 0, shown = '';
 
   function spawn() {
     const call = C.CALLS[serial % C.CALLS.length];
@@ -72,13 +103,20 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
     paper.innerHTML = paperSvg(K, P, C, lines);
     const msg = 'call #' + p.id + ' · ' + (blocked ? C.GATE_NAMES[p.call.gate] + ' gate · blocked' : 'passed 6 gates · delivered');
     if (readout) readout.textContent = msg;
-    setFocus(blocked ? 'blocked' : 'delivered');
+    setFocus(blocked ? ['blocked', 'g' + p.call.gate] : ['delivered', 'receipt']);
   }
-  function setFocus(id) {
-    focus = id;
-    focusUntil = clock + 1.2;
-    for (const [key, el] of Object.entries(pins)) { el.toggleAttribute('data-on', key === id || (id === 'blocked' && key === 'gates')); el.toggleAttribute('data-dim', !(key === id || (id === 'blocked' && key === 'gates'))); }
-    for (const s of steps) s.toggleAttribute('data-on', s.dataset.step === id);
+  // Labels: a decision lights the gate that made it; between decisions the
+  // gates take turns, so each one's note can be read.
+  function show(ids) {
+    const key = ids.join();
+    if (key === shown) return;
+    shown = key;
+    for (const [id, el] of Object.entries(pins)) { el.toggleAttribute('data-on', ids.includes(id)); el.toggleAttribute('data-dim', !ids.includes(id)); }
+    for (const s of steps) s.toggleAttribute('data-on', ids.includes(s.dataset.step));
+  }
+  function setFocus(ids, hold = 1.4) {
+    focusUntil = clock + hold;
+    show(ids);
   }
   function step(dt) {
     clock += dt;
@@ -133,13 +171,7 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
       return true;
     });
     lamps.forEach((lamp, i) => { if (clock > lampUntil[i] && lamp.getAttribute('opacity') !== '0.25') { lamp.setAttribute('opacity', '0.25'); lamp.dataset.state = ''; lampState[i] = ''; } });
-    if (focus !== 'calls' && clock > focusUntil) setFocus('calls');
-  }
-  function tick(now) {
-    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
-    prev = now;
-    step(dt);
-    frame = visible ? requestAnimationFrame(tick) : 0;
+    if (clock > focusUntil) show(['calls', 'g' + (Math.floor(clock / 1.8) % C.GATES.length)]);
   }
   if (still.matches) {
     // A still moment: calls on the belt, one caught red at the egress gate.
@@ -147,9 +179,9 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
     for (const pin of Object.values(pins)) { pin.removeAttribute('data-dim'); }
     continue;
   }
-  setFocus('calls');
-  new IntersectionObserver((entries) => {
-    visible = entries[entries.length - 1].isIntersecting;
-    if (visible && !frame) { prev = 0; frame = requestAnimationFrame(tick); }
-  }, { rootMargin: '120px 0px' }).observe(stage);
+  const FOCUS = { calls: ['calls', 'g0'], delivered: ['delivered', 'receipt'], blocked: ['blocked', 'g0'], receipt: ['receipt'] };
+  show(['calls', 'g0']);
+  playFigure(stage, (t, dt) => step(dt), {
+    onSeek: (id) => setFocus(FOCUS[id] || [id], 3),
+  });
 }

@@ -11,7 +11,7 @@
 // When the next record leaves the tunnel the loop starts again.
 //
 // Run: node scripts/figures/data-vault.mjs
-import { k, tools, basePlate, pinsHtml, stepsHtml, vcoil, writeFigure } from './lib.mjs';
+import { k, tools, basePlate, pinsHtml, stepsHtml, vcoil, playFigure, writeFigure } from './lib.mjs';
 
 const WIDTH = 760;
 const HEIGHT = 430;
@@ -376,10 +376,10 @@ const svg = k.figureSvg({
 });
 
 const pins = pinsHtml(P, WIDTH, HEIGHT, [
-  { id: 'transit', at: [-139, 0, TUNNEL.h + 7], icon: 'lock-key', title: 'In transit' },
-  { id: 'use', at: [CPU.x, 0, CPU.beam[1]], icon: 'cpu', title: 'In use' },
-  { id: 'ledger', at: [STAMP.x, -24, STAMP.arm[1]], icon: 'users-three', title: 'On the ledger' },
-  { id: 'rest', at: [VAULT.x + 46, -6, VAULT.h], icon: 'vault', title: 'At rest' },
+  { id: 'transit', n: 1, at: [-139, 0, TUNNEL.h + 7], icon: 'lock-key', title: 'In transit', sub: 'The tunnel: post-quantum TLS seals every connection', expand: true, seek: 'transit' },
+  { id: 'use', n: 2, at: [CPU.x, 0, CPU.beam[1]], icon: 'cpu', title: 'In use', sub: 'The press works on the record without opening it', expand: true, seek: 'use' },
+  { id: 'ledger', n: 3, at: [STAMP.x, -24, STAMP.arm[1]], icon: 'users-three', title: 'On the ledger', sub: 'The stamp puts a hash on chain, one key per party', expand: true, seek: 'ledger' },
+  { id: 'rest', n: 4, at: [VAULT.x + 46, -6, VAULT.h], icon: 'vault', title: 'At rest', sub: 'The vault locks it with AES-256, keys in an HSM', expand: true, seek: 'rest' },
   { id: 'record', at: [0, CAR.y + CAR.d, CAR_Z[0]], icon: 'file-lock', title: 'Your data', side: 'down' },
 ]);
 
@@ -410,10 +410,11 @@ const STAGES = [
   { id: 'transit', until: T.headDown[0], text: 'in transit · X25519 + ML-KEM-768' },
   { id: 'use', until: T.toStamp[0], text: 'in use · processed while encrypted' },
   { id: 'ledger', until: T.doorUp[0], text: 'on the ledger · encrypted per party' },
-  { id: 'rest', until: Infinity, text: 'at rest · AES-256 · keys in HSM' },
+  { id: 'rest', until: T.loop + 1, text: 'at rest · AES-256 · keys in HSM' },
 ];
 
 const live = `
+${playFigure.toString()}
 ${headRod.toString()}
 ${needle.toString()}
 ${stampLive.toString()}
@@ -440,7 +441,7 @@ for (const stage of document.querySelectorAll('[data-figure="data-vault"]')) {
   const span = (t, [a, b]) => clamp((t - a) / (b - a), 0, 1);
   const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const T = C.T, S = C.STATIONS;
-  let frame = 0, start = 0, visible = false, last = {};
+  let last = {};
   const set = (key, value, apply) => { if (last[key] !== value) { last[key] = value; apply(value); } };
 
   function carX(t) {
@@ -530,21 +531,11 @@ for (const stage of document.querySelectorAll('[data-figure="data-vault"]')) {
       pins.record.toggleAttribute('data-hidden', x < -104 || x > 58);
     }
   }
-  function tick(now) {
-    if (!start) start = now;
-    draw(((now - start) / 1000) % T.loop);
-    frame = visible ? requestAnimationFrame(tick) : 0;
-  }
-  if (still.matches) {
-    draw(T.stampDown[1] + 0.05);
-    for (const pin of Object.values(pins)) pin.removeAttribute('data-dim');
-    continue;
-  }
-  draw(0);
-  new IntersectionObserver((entries) => {
-    visible = entries[entries.length - 1].isIntersecting;
-    if (visible && !frame) frame = requestAnimationFrame(tick);
-  }, { rootMargin: '120px 0px' }).observe(stage);
+  playFigure(stage, (t) => draw(t), {
+    loop: T.loop,
+    stillAt: T.stampDown[1] + 0.05,
+    seek: { transit: 0.6, use: T.headDown[0], ledger: T.toStamp[0], rest: T.doorUp[0] },
+  });
 }
 `;
 

@@ -142,6 +142,14 @@ html:not(.dark) .iso.iso-auto{
 .fig-step-text b{font:600 13px/1.25 var(--font-sans,ui-sans-serif,system-ui,sans-serif);color:var(--anatomy-strong)}
 .fig-step-text small{font:400 12px/1.4 var(--font-sans,ui-sans-serif,system-ui,sans-serif);color:var(--anatomy-text)}
 .fig-step[data-on]{box-shadow:0 0 0 1.5px var(--fig-accent,#7c3aed)}
+.fig-pin-text small{white-space:normal;max-width:34ch}
+.fig-pin[data-expand]:not([data-on]) .fig-pin-text small{display:none}
+.fig-pin[data-seek] .fig-pin-tag{pointer-events:auto;cursor:pointer}
+.fig-pin-num{display:inline-grid;place-items:center;min-width:16px;height:16px;padding:0 4px;margin-right:5px;border-radius:999px;font:700 9.5px/1 var(--font-mono,ui-monospace,monospace);color:#fff;background:var(--fig-accent,#7c3aed);vertical-align:1px}
+.fig-steps>li{display:flex}
+.fig-step{width:100%;margin:0;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.fig-step:hover{box-shadow:0 0 0 1px color-mix(in oklab,var(--fig-accent,#7c3aed) 55%,transparent)}
+.fig-step:focus-visible{outline:2px solid var(--fig-accent,#7c3aed);outline-offset:2px}
 .fig-led{fill:var(--fig-accent,#7c3aed);transition:opacity .3s ease,fill .2s ease}
 .fig-led[data-state="ok"]{fill:#22a35a}
 .fig-led[data-state="bad"]{fill:#e5484d}
@@ -159,5 +167,5 @@ html.dark .iso,.iso-sheet{--fig-tag:#1c1c1c}
 html:not(.dark) .iso{--fig-accent:var(--accent-600,#7c3aed)}
 html.dark .iso{--fig-accent:var(--accent-400,#fb923c)}
 @media (max-width:520px){.fig-steps{grid-template-columns:1fr 1fr;gap:6px}.fig-step{padding:9px;gap:8px;border-radius:14px}.fig-step-icon{width:26px;height:26px;border-radius:8px}.fig-step-icon svg{width:15px;height:15px}.fig-step-text b{font-size:12px}.fig-step-text small{font-size:11px}}
-@media (max-width:640px){.fig-pin-text small{display:none}.fig-pin-tag{gap:5px;padding:3px 7px 3px 3px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10px}.fig-pin[data-dim]{visibility:hidden}}
+@media (max-width:640px){.fig-pin:not([data-on]) .fig-pin-text small{display:none}.fig-pin-text small{max-width:21ch}.fig-pin-tag{gap:5px;padding:3px 7px 3px 3px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10px}.fig-pin[data-dim]{visibility:hidden}}
 @media (prefers-reduced-motion:reduce){.fig-pin{transition:none}}

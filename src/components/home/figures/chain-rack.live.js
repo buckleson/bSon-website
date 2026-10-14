@@ -9,6 +9,37 @@ function blockSvg(K, P, n) {
   for (let i = 0; i < n; i++) rings.push(K.ring(4.3 + i * 4.6, 0, 1.3, 8, P, 12));
   return K.solidSvg(K.slabOf(plan, 0, 8, P, 3, 0.5), { tone: 'hi', crease: 'lo' }) + K.lineSvg(K.planOutline(K.insetPlan(plan, 1.8), 8, P, 3), { tone: 'faint' }) + K.lineSvg(rings.join(''), { tone: 'mid' });
 }
+function playFigure(stage, draw, opts) {
+  const { loop = 0, seek = {}, onSeek, stillAt = 0 } = opts || {};
+  const figure = stage.closest('.iso-figure') || stage;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let frame = 0, prev = 0, clock = 0, visible = false, failed = false;
+  const run = (dt) => {
+    try { draw(clock, dt); } catch (err) { if (!failed) { failed = true; console.warn('figure frame', err); } }
+  };
+  function tick(now) {
+    frame = visible ? requestAnimationFrame(tick) : 0;
+    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
+    prev = now;
+    clock = loop ? (clock + dt) % loop : clock + dt;
+    run(dt);
+  }
+  const jump = (id) => {
+    if (seek[id] != null) { clock = seek[id]; prev = 0; run(0); }
+    if (onSeek) onSeek(id);
+    if (!still && visible && !frame) frame = requestAnimationFrame(tick);
+  };
+  for (const el of figure.querySelectorAll('[data-step]')) el.addEventListener('click', () => jump(el.dataset.step));
+  for (const el of stage.querySelectorAll('[data-pin][data-seek]')) el.addEventListener('click', () => jump(el.dataset.seek));
+  clock = still ? stillAt : 0;
+  run(0);
+  if (still) return;
+  new IntersectionObserver((entries) => {
+    visible = entries[entries.length - 1].isIntersecting;
+    prev = 0;
+    if (visible && !frame) frame = requestAnimationFrame(tick);
+  }, { rootMargin: '120px 0px' }).observe(stage);
+}
 const P = {"origin":[383.6835862601172,223.07884133244823],"scale":1.4953762317831591,"azimuth":56,"elevation":30};
 const C = {"CUBE":5.6,"MODS":[{"id":"bank","x":-162,"w":36,"h":56,"period":1.5,"offset":0.2},{"id":"fintech","x":-114,"w":30,"h":40,"period":1.15,"offset":0.7},{"id":"ai","x":-72,"w":34,"h":54,"period":1.8,"offset":1.1},{"id":"asset","x":-24,"w":30,"h":38,"period":2.2,"offset":0.4},{"id":"new","x":12,"w":32,"h":48,"period":1.3,"offset":0.1}],"MOD_Y":{"y":-27,"d":22},"SOCKET_Z":3,"LIFT":34,"BUS":{"x":-168,"y":10,"w":226,"d":12},"LANE_Z":4,"TRAY_X":58,"CHAIN_X":94,"CHAIN_END":168,"FIRST_BLOCK":48213,"LOOP":16,"PHASES":[{"until":4,"step":"l1","pins":["l1"]},{"until":8,"step":"l2","pins":["bank","fintech","ai","asset"]},{"until":12.5,"step":"new","pins":["new"]},{"until":16,"step":"blocks","pins":["blocks","ai"]}],"NEW":{"down":[8,9.2],"up":[14.4,15.4]},"BURST":[12.4,14],"WIDTH":760,"HEIGHT":400};
 const K = { slabOf, solidSvg, lineSvg, planOutline, insetPlan, ring };
@@ -31,7 +62,7 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
   const SEAL = 2.6, SPEED = 78, DROP = 0.4, GAP = 5;
   const mods = C.MODS.map((m) => ({ ...m, cx: m.x + m.w / 2, next: m.offset, blink: -1 }));
   let clock = 0, lastSeal = 0, tray = 0, height = C.FIRST_BLOCK, lastSize = 0;
-  let packets = [], chain = [], frame = 0, prev = 0, visible = false, phase = -1;
+  let packets = [], chain = [], phase = '';
 
   function newState(t) {
     if (t < C.NEW.down[0] || t >= C.NEW.up[1]) return { lift: 1, seated: false };
@@ -107,13 +138,17 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
       return true;
     });
     // Labels and steps follow the loop's phases.
-    const index = C.PHASES.findIndex((p) => t < p.until);
-    if (index !== phase) {
-      phase = index;
-      const on = C.PHASES[index];
+    // In the L2 phase the modules light one at a time, so each note reads.
+    const index = Math.max(0, C.PHASES.findIndex((p) => t < p.until));
+    const on = C.PHASES[index];
+    let lit = on.pins;
+    if (on.step === 'l2') lit = [on.pins[Math.min(on.pins.length - 1, Math.floor(t - C.PHASES[index - 1].until))]];
+    const key = index + ':' + lit.join();
+    if (key !== phase) {
+      phase = key;
       for (const [id, el] of Object.entries(pins)) {
-        el.toggleAttribute('data-on', on.pins.includes(id));
-        el.toggleAttribute('data-dim', !on.pins.includes(id));
+        el.toggleAttribute('data-on', lit.includes(id));
+        el.toggleAttribute('data-dim', !lit.includes(id));
       }
       for (const s of steps) s.toggleAttribute('data-on', s.dataset.step === on.step);
     }
@@ -121,12 +156,6 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
     const liveCount = 4 + (ns.seated ? 1 : 0);
     const msg = 'block #' + height.toLocaleString('en-US') + ' · ' + (lastSize || '-') + ' tx · ' + liveCount + ' L2s live';
     if (readout && readout.textContent !== msg) readout.textContent = msg;
-  }
-  function tick(now) {
-    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
-    prev = now;
-    step(dt);
-    frame = visible ? requestAnimationFrame(tick) : 0;
   }
   if (still.matches) {
     // One still frame: every L2 seated and a chain of blocks of mixed sizes.
@@ -139,8 +168,16 @@ for (const stage of document.querySelectorAll('[data-figure="chain-rack"]')) {
     if (readout) readout.textContent = 'block #' + height.toLocaleString('en-US') + ' · 3 tx · 5 L2s live';
     continue;
   }
-  new IntersectionObserver((entries) => {
-    visible = entries[entries.length - 1].isIntersecting;
-    if (visible && !frame) { prev = 0; frame = requestAnimationFrame(tick); }
-  }, { rootMargin: '120px 0px' }).observe(stage);
+  // Steps and pins jump the loop to their phase.
+  const SEEK = { l1: 0, l2: C.PHASES[0].until, new: C.PHASES[1].until, blocks: C.PHASES[2].until };
+  playFigure(stage, (t, dt) => step(dt), {
+    onSeek: (id) => {
+      if (SEEK[id] == null) return;
+      const t = clock % C.LOOP;
+      clock += ((SEEK[id] - t) + C.LOOP) % C.LOOP;
+      lastSeal = clock;
+      mods.forEach((m) => { m.next = clock + m.offset; });
+      step(0);
+    },
+  });
 }

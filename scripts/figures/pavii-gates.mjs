@@ -11,7 +11,7 @@
 // right: the receipt Pavii records on Hyper 0X.
 //
 // Run: node scripts/figures/pavii-gates.mjs
-import { k, tools, basePlate, pinsHtml, stepsHtml, writeFigure } from './lib.mjs';
+import { k, tools, basePlate, pinsHtml, stepsHtml, playFigure, writeFigure } from './lib.mjs';
 
 const WIDTH = 760;
 const HEIGHT = 420;
@@ -22,6 +22,14 @@ const BELT = { x: -160, y: -11, w: 292, d: 22, r: 11 };
 const BELT_Z = [6, 9];
 const GATES = [-112, -76, -40, -4, 32, 68];
 const GATE_NAMES = ['injection', 'privacy', 'supply chain', 'budget', 'egress', 'output'];
+const GATE_LABELS = [
+  { icon: 'syringe', title: 'Injection gate', sub: 'Text in files and pages is data, not orders' },
+  { icon: 'eye-slash', title: 'Privacy gate', sub: 'Strips personal data and secrets' },
+  { icon: 'package', title: 'Supply-chain gate', sub: 'Only approved tools and MCP servers' },
+  { icon: 'gauge', title: 'Budget gate', sub: 'Caps tokens and spend per agent' },
+  { icon: 'file-lock', title: 'Egress contract', sub: 'On-chain rules for what may leave' },
+  { icon: 'funnel', title: 'Output gate', sub: 'Removes scripts, secrets, system prompts' },
+];
 const POST_Y = 19;
 const POST_TOP = 46;
 const BIN = { x: -132, y: -52, w: 226, d: 26, h: 8 };
@@ -212,11 +220,22 @@ const svg = k.figureSvg({
 });
 
 const pins = pinsHtml(P, WIDTH, HEIGHT, [
-  { id: 'calls', at: [FEEDER.x + FEEDER.w / 2, 0, FEEDER.z[1]], icon: 'robot', title: 'Prompts & tool calls' },
-  { id: 'gates', at: [GATES[2], 0, POST_TOP + 5], icon: 'shield-check', title: '6 security gates', lift: 26 },
-  { id: 'blocked', at: [BIN.x + BIN.w - 30, BIN.y + 4, BIN.h], icon: 'prohibit', title: 'Blocked' },
-  { id: 'receipt', at: [PRINTER.x + PRINTER.w / 2, PRINTER.y + PRINTER.d / 2, PRINTER.h], icon: 'receipt', title: 'Receipt on Hyper 0X', side: 'down' },
-  { id: 'delivered', at: [TRAY.x + TRAY.w / 2, TRAY.y + 4, TRAY.h], icon: 'check-circle', title: 'Safe calls' },
+  { id: 'calls', at: [FEEDER.x, 0, (FEEDER.z[0] + FEEDER.z[1]) / 2], icon: 'robot', title: 'Agent calls', side: 'left', lift: 14, seek: 'calls' },
+  ...GATE_LABELS.map((g, i) => ({
+    id: 'g' + i,
+    n: i + 1,
+    at: i % 2 ? [GATES[i], POST_Y, 0] : [GATES[i], 0, POST_TOP + 5],
+    side: i % 2 ? 'down' : 'up',
+    lift: i % 2 ? 14 : 0,
+    icon: g.icon,
+    title: g.title,
+    sub: g.sub,
+    expand: true,
+    seek: 'g' + i,
+  })),
+  { id: 'blocked', at: [BIN.x + BIN.w - 30, BIN.y + 4, BIN.h], icon: 'prohibit', title: 'Blocked calls break', seek: 'blocked' },
+  { id: 'receipt', at: [PRINTER.x + PRINTER.w, PRINTER.y + PRINTER.d / 2, PRINTER.h / 2], icon: 'receipt', title: 'Receipt on Hyper 0X', side: 'right', lift: 16, seek: 'receipt' },
+  { id: 'delivered', at: [TRAY.x + TRAY.w / 2, TRAY.y + 4, TRAY.h], icon: 'check-circle', title: 'Safe calls delivered', seek: 'delivered' },
 ]);
 
 const steps = stepsHtml([
@@ -242,6 +261,7 @@ const live = `
 ${puckSvg.toString()}
 ${halvesSvg.toString()}
 ${paperSvg.toString()}
+${playFigure.toString()}
 const P = ${JSON.stringify(P)};
 const C = ${JSON.stringify({ ...C, GATES, GATE_NAMES, CALLS, START_X, END_X, BELT_Z, BIN, TRAY })};
 const K = { solidSvg, cylinder, slabOf, extrude, lineSvg, ring, planOutline, pathOf, iso };
@@ -260,8 +280,8 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
   const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const SPAWN = 1.5, SPEED = 42, HOLD = 0.55, PUSH = 0.4, FALL = 0.35;
   const svgNS = 'http://www.w3.org/2000/svg';
-  let clock = 0, nextSpawn = 0, serial = 1200, lines = 3, frame = 0, prev = 0, visible = false;
-  let pucks = [], broken = [], lampUntil = C.GATES.map(() => 0), lampState = C.GATES.map(() => ''), focus = 'calls', focusUntil = 0;
+  let clock = 0, nextSpawn = 0, serial = 1200, lines = 3;
+  let pucks = [], broken = [], lampUntil = C.GATES.map(() => 0), lampState = C.GATES.map(() => ''), focusUntil = 0, shown = '';
 
   function spawn() {
     const call = C.CALLS[serial % C.CALLS.length];
@@ -280,13 +300,20 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
     paper.innerHTML = paperSvg(K, P, C, lines);
     const msg = 'call #' + p.id + ' · ' + (blocked ? C.GATE_NAMES[p.call.gate] + ' gate · blocked' : 'passed 6 gates · delivered');
     if (readout) readout.textContent = msg;
-    setFocus(blocked ? 'blocked' : 'delivered');
+    setFocus(blocked ? ['blocked', 'g' + p.call.gate] : ['delivered', 'receipt']);
   }
-  function setFocus(id) {
-    focus = id;
-    focusUntil = clock + 1.2;
-    for (const [key, el] of Object.entries(pins)) { el.toggleAttribute('data-on', key === id || (id === 'blocked' && key === 'gates')); el.toggleAttribute('data-dim', !(key === id || (id === 'blocked' && key === 'gates'))); }
-    for (const s of steps) s.toggleAttribute('data-on', s.dataset.step === id);
+  // Labels: a decision lights the gate that made it; between decisions the
+  // gates take turns, so each one's note can be read.
+  function show(ids) {
+    const key = ids.join();
+    if (key === shown) return;
+    shown = key;
+    for (const [id, el] of Object.entries(pins)) { el.toggleAttribute('data-on', ids.includes(id)); el.toggleAttribute('data-dim', !ids.includes(id)); }
+    for (const s of steps) s.toggleAttribute('data-on', ids.includes(s.dataset.step));
+  }
+  function setFocus(ids, hold = 1.4) {
+    focusUntil = clock + hold;
+    show(ids);
   }
   function step(dt) {
     clock += dt;
@@ -341,13 +368,7 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
       return true;
     });
     lamps.forEach((lamp, i) => { if (clock > lampUntil[i] && lamp.getAttribute('opacity') !== '0.25') { lamp.setAttribute('opacity', '0.25'); lamp.dataset.state = ''; lampState[i] = ''; } });
-    if (focus !== 'calls' && clock > focusUntil) setFocus('calls');
-  }
-  function tick(now) {
-    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
-    prev = now;
-    step(dt);
-    frame = visible ? requestAnimationFrame(tick) : 0;
+    if (clock > focusUntil) show(['calls', 'g' + (Math.floor(clock / 1.8) % C.GATES.length)]);
   }
   if (still.matches) {
     // A still moment: calls on the belt, one caught red at the egress gate.
@@ -355,11 +376,11 @@ for (const stage of document.querySelectorAll('[data-figure="pavii-gates"]')) {
     for (const pin of Object.values(pins)) { pin.removeAttribute('data-dim'); }
     continue;
   }
-  setFocus('calls');
-  new IntersectionObserver((entries) => {
-    visible = entries[entries.length - 1].isIntersecting;
-    if (visible && !frame) { prev = 0; frame = requestAnimationFrame(tick); }
-  }, { rootMargin: '120px 0px' }).observe(stage);
+  const FOCUS = { calls: ['calls', 'g0'], delivered: ['delivered', 'receipt'], blocked: ['blocked', 'g0'], receipt: ['receipt'] };
+  show(['calls', 'g0']);
+  playFigure(stage, (t, dt) => step(dt), {
+    onSeek: (id) => setFocus(FOCUS[id] || [id], 3),
+  });
 }
 `;
 

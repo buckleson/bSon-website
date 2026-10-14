@@ -35,7 +35,18 @@ export function figureParts(name: FigureName) {
 export function figureChunks(name: FigureName, target = 9000) {
   const { stage } = figureParts(name);
   const openEnd = stage.indexOf('>') + 1;
-  const svgClose = stage.lastIndexOf('</svg>');
+  // The drawing's own closing tag: the labels after it carry small SVG
+  // icons, so the last </svg> in the stage is not the drawing's.
+  const svgTag = /<(\/?)svg\b/g;
+  let svgDepth = 0;
+  let svgClose = stage.length;
+  for (let m = svgTag.exec(stage); m; m = svgTag.exec(stage)) {
+    svgDepth += m[1] ? -1 : 1;
+    if (svgDepth === 0) {
+      svgClose = m.index;
+      break;
+    }
+  }
   const svgOpen = stage.slice(0, openEnd);
   const inner = stage.slice(openEnd, svgClose);
   const pins = stage.slice(svgClose + '</svg>'.length);

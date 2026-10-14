@@ -8,7 +8,7 @@
 // spin back into line with the index bar, and the record comes out.
 //
 // Run: node scripts/figures/cipher-tower.mjs
-import { k, tools, basePlate, pinsHtml, stepsHtml, writeFigure } from './lib.mjs';
+import { k, tools, basePlate, pinsHtml, stepsHtml, playFigure, writeFigure } from './lib.mjs';
 
 const WIDTH = 560;
 const HEIGHT = 520;
@@ -169,12 +169,12 @@ const svg = k.figureSvg({
 const mid = r => (r.z0 + r.z1) / 2;
 const edge = [R * Math.cos(-Math.PI / 4), R * Math.sin(-Math.PI / 4)];
 const pins = pinsHtml(P, WIDTH, HEIGHT, [
-  { id: 'transit', at: [...edge, mid(rings[0])], icon: 'lock-key', title: 'In transit', side: 'right' },
-  { id: 'use', at: [...edge, mid(rings[1])], icon: 'cpu', title: 'In use', side: 'right' },
-  { id: 'ledger', at: [...edge, mid(rings[2])], icon: 'users-three', title: 'On the ledger', side: 'right' },
-  { id: 'rest', at: [...edge, mid(rings[3])], icon: 'vault', title: 'At rest', side: 'right' },
-  { id: 'hsm', at: [HSM.x + HSM.w / 2, HSM.y + HSM.d / 2, HSM.h], icon: 'key', title: 'Keys in HSM' },
-  { id: 'data', at: [-CHIP.w / 2, 0, CHIP.top + CHIP.h / 2], icon: 'file-lock', title: 'Your data', side: 'left' },
+  { id: 'transit', n: 1, at: [...edge, mid(rings[0])], icon: 'lock-key', title: 'In transit', sub: 'TLS 1.3 + post-quantum keys', side: 'right', lift: 22, seek: 'transit' },
+  { id: 'use', n: 2, at: [...edge, mid(rings[1])], icon: 'cpu', title: 'In use', sub: 'Worked on sealed, never opened', side: 'right', lift: 22, seek: 'use' },
+  { id: 'ledger', n: 3, at: [...edge, mid(rings[2])], icon: 'users-three', title: 'On the ledger', sub: 'A hash on chain, a key per party', side: 'right', lift: 22, seek: 'ledger' },
+  { id: 'rest', n: 4, at: [...edge, mid(rings[3])], icon: 'vault', title: 'At rest', sub: 'AES-256-GCM, keys in an HSM', side: 'right', lift: 22, seek: 'rest' },
+  { id: 'hsm', at: [HSM.x + HSM.w / 2, HSM.y + HSM.d / 2, HSM.h], icon: 'key', title: 'Owner key', sub: 'Held in a hardware security module', expand: true },
+  { id: 'data', at: [-CHIP.w / 2, 0, CHIP.top + CHIP.h / 2], icon: 'file-lock', title: 'Your record', sub: 'Drops into the core', side: 'left', expand: true },
 ]);
 
 const steps = stepsHtml([
@@ -197,6 +197,7 @@ const TEXT = ['in transit · X25519 + ML-KEM-768', 'in use · processed sealed',
 
 const live = `
 ${ringMarks.toString()}
+${playFigure.toString()}
 const P = ${JSON.stringify(P)};
 const C = ${JSON.stringify({ ...C, rings, SCRAMBLE, T, LAYERS, TEXT, CORE, CHIP })};
 const K = { pathOf, iso, lineSvg, radialTicks };
@@ -215,7 +216,7 @@ for (const stage of document.querySelectorAll('[data-figure="cipher-tower"]')) {
   const span = (t, [a, b]) => clamp((t - a) / (b - a), 0, 1);
   const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const T = C.T;
-  let frame = 0, start = 0, visible = false, last = [], lastState = '';
+  let last = [], lastState = '';
 
   function angle(i, t) {
     const locked = ease(span(t, T.lock[i]));
@@ -256,21 +257,11 @@ for (const stage of document.querySelectorAll('[data-figure="cipher-tower"]')) {
       if (readout) readout.textContent = state;
     }
   }
-  function tick(now) {
-    if (!start) start = now;
-    draw(((now - start) / 1000) % T.loop);
-    frame = visible ? requestAnimationFrame(tick) : 0;
-  }
-  if (still.matches) {
-    draw(4.6);
-    for (const pin of Object.values(pins)) pin.removeAttribute('data-dim');
-    continue;
-  }
-  draw(0);
-  new IntersectionObserver((entries) => {
-    visible = entries[entries.length - 1].isIntersecting;
-    if (visible && !frame) frame = requestAnimationFrame(tick);
-  }, { rootMargin: '120px 0px' }).observe(stage);
+  playFigure(stage, (t) => draw(t), {
+    loop: T.loop,
+    stillAt: 4.6,
+    seek: { transit: T.lock[0][0], use: T.lock[1][0], ledger: T.lock[2][0], rest: T.lock[3][0] },
+  });
 }
 `;
 

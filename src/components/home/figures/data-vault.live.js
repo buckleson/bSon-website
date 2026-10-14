@@ -1,4 +1,35 @@
 
+function playFigure(stage, draw, opts) {
+  const { loop = 0, seek = {}, onSeek, stillAt = 0 } = opts || {};
+  const figure = stage.closest('.iso-figure') || stage;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let frame = 0, prev = 0, clock = 0, visible = false, failed = false;
+  const run = (dt) => {
+    try { draw(clock, dt); } catch (err) { if (!failed) { failed = true; console.warn('figure frame', err); } }
+  };
+  function tick(now) {
+    frame = visible ? requestAnimationFrame(tick) : 0;
+    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
+    prev = now;
+    clock = loop ? (clock + dt) % loop : clock + dt;
+    run(dt);
+  }
+  const jump = (id) => {
+    if (seek[id] != null) { clock = seek[id]; prev = 0; run(0); }
+    if (onSeek) onSeek(id);
+    if (!still && visible && !frame) frame = requestAnimationFrame(tick);
+  };
+  for (const el of figure.querySelectorAll('[data-step]')) el.addEventListener('click', () => jump(el.dataset.step));
+  for (const el of stage.querySelectorAll('[data-pin][data-seek]')) el.addEventListener('click', () => jump(el.dataset.seek));
+  clock = still ? stillAt : 0;
+  run(0);
+  if (still) return;
+  new IntersectionObserver((entries) => {
+    visible = entries[entries.length - 1].isIntersecting;
+    prev = 0;
+    if (visible && !frame) frame = requestAnimationFrame(tick);
+  }, { rootMargin: '120px 0px' }).observe(stage);
+}
 function headRod(K, P, C, dz) {
   const top = C.CPU.rest + C.CPU.h + dz;
   return K.solidSvg(K.cylinder(C.CPU.x, 0, 2.4, top, C.CPU.housing - top, P, 20), { tone: 'hi', crease: 'none' });
@@ -66,7 +97,7 @@ function vcoil(cx, cy, r, z0, z1, turns, P, iso, depthOf, pathOf) {
   return { back: back.join(''), front: front.join('') };
 }
 const P = {"origin":[400.298445646955,256.26373176982975],"scale":1.4889675257762625,"azimuth":56,"elevation":30};
-const C = {"CPU":{"x":-60,"posts":[-44,44],"beam":[96,104],"rest":60,"h":16,"pin":4,"housing":84},"STAMP":{"x":4,"col":-46,"arm":[80,88],"housing":[68,80],"foot":7,"footH":6,"rest":50},"VAULT":{"x":66,"y":-40,"w":70,"d":80,"r":3,"h":66},"DIAL":{"x":98,"z":33,"face":40.4},"STATIONS":{"start":-139,"cpu":-60,"stamp":4,"vault":101},"LID_TOP":29,"CAR":{"x":-15,"y":-19,"w":30,"d":38,"r":3},"CAR_Z":[3,9],"HEAD_DOWN":33,"DOOR":{"x":61,"y":-27,"w":4,"d":54,"r":1,"z":[2,54],"open":50},"T":{"leave":[0.6,2],"headDown":[2,2.4],"compute":[2.4,3.4],"headUp":[3.4,3.8],"toStamp":[3.9,4.9],"stampDown":[4.9,5.15],"stampUp":[5.15,5.6],"unlock":[5.4,5.75],"doorUp":[5.75,6.25],"toVault":[6.25,7.35],"doorDown":[7.35,7.85],"lock":[7.85,8.3],"archive":[8.9,9.6],"loop":10.4},"STAGES":[{"id":"transit","until":2,"text":"in transit · X25519 + ML-KEM-768"},{"id":"use","until":3.9,"text":"in use · processed while encrypted"},{"id":"ledger","until":5.75,"text":"on the ledger · encrypted per party"},{"id":"rest","until":null,"text":"at rest · AES-256 · keys in HSM"}],"WIDTH":760,"HEIGHT":430,"PLATES":5};
+const C = {"CPU":{"x":-60,"posts":[-44,44],"beam":[96,104],"rest":60,"h":16,"pin":4,"housing":84},"STAMP":{"x":4,"col":-46,"arm":[80,88],"housing":[68,80],"foot":7,"footH":6,"rest":50},"VAULT":{"x":66,"y":-40,"w":70,"d":80,"r":3,"h":66},"DIAL":{"x":98,"z":33,"face":40.4},"STATIONS":{"start":-139,"cpu":-60,"stamp":4,"vault":101},"LID_TOP":29,"CAR":{"x":-15,"y":-19,"w":30,"d":38,"r":3},"CAR_Z":[3,9],"HEAD_DOWN":33,"DOOR":{"x":61,"y":-27,"w":4,"d":54,"r":1,"z":[2,54],"open":50},"T":{"leave":[0.6,2],"headDown":[2,2.4],"compute":[2.4,3.4],"headUp":[3.4,3.8],"toStamp":[3.9,4.9],"stampDown":[4.9,5.15],"stampUp":[5.15,5.6],"unlock":[5.4,5.75],"doorUp":[5.75,6.25],"toVault":[6.25,7.35],"doorDown":[7.35,7.85],"lock":[7.85,8.3],"archive":[8.9,9.6],"loop":10.4},"STAGES":[{"id":"transit","until":2,"text":"in transit · X25519 + ML-KEM-768"},{"id":"use","until":3.9,"text":"in use · processed while encrypted"},{"id":"ledger","until":5.75,"text":"on the ledger · encrypted per party"},{"id":"rest","until":11.4,"text":"at rest · AES-256 · keys in HSM"}],"WIDTH":760,"HEIGHT":430,"PLATES":5};
 const K = { cylinder, solidSvg, lineSvg, pathOf, iso, depthOf, dotsSvg, slabOf };
 for (const stage of document.querySelectorAll('[data-figure="data-vault"]')) {
   const svg = stage.querySelector('svg');
@@ -85,7 +116,7 @@ for (const stage of document.querySelectorAll('[data-figure="data-vault"]')) {
   const span = (t, [a, b]) => clamp((t - a) / (b - a), 0, 1);
   const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const T = C.T, S = C.STATIONS;
-  let frame = 0, start = 0, visible = false, last = {};
+  let last = {};
   const set = (key, value, apply) => { if (last[key] !== value) { last[key] = value; apply(value); } };
 
   function carX(t) {
@@ -175,19 +206,9 @@ for (const stage of document.querySelectorAll('[data-figure="data-vault"]')) {
       pins.record.toggleAttribute('data-hidden', x < -104 || x > 58);
     }
   }
-  function tick(now) {
-    if (!start) start = now;
-    draw(((now - start) / 1000) % T.loop);
-    frame = visible ? requestAnimationFrame(tick) : 0;
-  }
-  if (still.matches) {
-    draw(T.stampDown[1] + 0.05);
-    for (const pin of Object.values(pins)) pin.removeAttribute('data-dim');
-    continue;
-  }
-  draw(0);
-  new IntersectionObserver((entries) => {
-    visible = entries[entries.length - 1].isIntersecting;
-    if (visible && !frame) frame = requestAnimationFrame(tick);
-  }, { rootMargin: '120px 0px' }).observe(stage);
+  playFigure(stage, (t) => draw(t), {
+    loop: T.loop,
+    stillAt: T.stampDown[1] + 0.05,
+    seek: { transit: 0.6, use: T.headDown[0], ledger: T.toStamp[0], rest: T.doorUp[0] },
+  });
 }

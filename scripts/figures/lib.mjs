@@ -91,10 +91,12 @@ const pct = (v, of) => `${Math.round((v / of) * 10000) / 100}%`;
  */
 export function pinsHtml(P, width, height, labels) {
   return labels
-    .map(({ id, at, icon: name, title, sub, side = 'up', lift }) => {
+    .map(({ id, at, icon: name, title, sub, side = 'up', lift, expand, seek, n }) => {
       const [x, y] = k.iso(at, P);
-      const stem = lift ? ` style="height:max(12px,${(lift / 9.6).toFixed(2)}cqw)"` : '';
-      return `<span class="fig-pin" data-pin="${id}" data-side="${side}" style="left:${pct(x, width)};top:${pct(y, height)}"><span class="fig-pin-tag">${icon(name)}<span class="fig-pin-text"><b>${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</span></span><span class="fig-pin-stem"${stem}></span><span class="fig-pin-dot"></span></span>`;
+      const horizontal = side === 'left' || side === 'right';
+      const stem = lift ? ` style="${horizontal ? 'width' : 'height'}:max(12px,${(lift / 9.6).toFixed(2)}cqw)"` : '';
+      const extra = `${expand ? ' data-expand' : ''}${seek ? ` data-seek="${seek}"` : ''}`;
+      return `<span class="fig-pin" data-pin="${id}" data-side="${side}"${extra} style="left:${pct(x, width)};top:${pct(y, height)}"><span class="fig-pin-tag">${icon(name)}<span class="fig-pin-text"><b>${n ? `<span class="fig-pin-num">${n}</span>` : ''}${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</span></span><span class="fig-pin-stem"${stem}></span><span class="fig-pin-dot"></span></span>`;
     })
     .join('');
 }
@@ -102,7 +104,7 @@ export function pinsHtml(P, width, height, labels) {
 /** A numbered list under the drawing; the live script lights the current step. */
 export function stepsHtml(steps) {
   return `<ol class="fig-steps">${steps
-    .map(({ id, icon: name, title, sub }) => `<li class="fig-step" data-step="${id}"><span class="fig-step-icon">${icon(name)}</span><span class="fig-step-text"><b>${esc(title)}</b><small>${esc(sub)}</small></span></li>`)
+    .map(({ id, icon: name, title, sub }) => `<li><button type="button" class="fig-step" data-step="${id}"><span class="fig-step-icon">${icon(name)}</span><span class="fig-step-text"><b>${esc(title)}</b><small>${esc(sub)}</small></span></button></li>`)
     .join('')}</ol>`;
 }
 
@@ -133,6 +135,47 @@ export function vcoil(cx, cy, r, z0, z1, turns, P, iso, depthOf, pathOf) {
   }
   if (run.length > 1) (near ? front : back).push(pathOf(run));
   return { back: back.join(''), front: front.join('') };
+}
+
+/**
+ * The shared loop for every live figure, embedded with toString(). It keeps
+ * its own clock (paused offscreen, so a figure resumes where it stopped),
+ * schedules the next frame before drawing (one bad frame can never freeze
+ * the loop), and turns the step cards and seekable pins into controls that
+ * jump the animation to their stage.
+ * draw(t, dt): t is the loop clock in seconds, dt the time since the last frame.
+ * opts: { loop, seek: { stepId: seconds }, onSeek(id), stillAt }
+ */
+export function playFigure(stage, draw, opts) {
+  const { loop = 0, seek = {}, onSeek, stillAt = 0 } = opts || {};
+  const figure = stage.closest('.iso-figure') || stage;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let frame = 0, prev = 0, clock = 0, visible = false, failed = false;
+  const run = (dt) => {
+    try { draw(clock, dt); } catch (err) { if (!failed) { failed = true; console.warn('figure frame', err); } }
+  };
+  function tick(now) {
+    frame = visible ? requestAnimationFrame(tick) : 0;
+    const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
+    prev = now;
+    clock = loop ? (clock + dt) % loop : clock + dt;
+    run(dt);
+  }
+  const jump = (id) => {
+    if (seek[id] != null) { clock = seek[id]; prev = 0; run(0); }
+    if (onSeek) onSeek(id);
+    if (!still && visible && !frame) frame = requestAnimationFrame(tick);
+  };
+  for (const el of figure.querySelectorAll('[data-step]')) el.addEventListener('click', () => jump(el.dataset.step));
+  for (const el of stage.querySelectorAll('[data-pin][data-seek]')) el.addEventListener('click', () => jump(el.dataset.seek));
+  clock = still ? stillAt : 0;
+  run(0);
+  if (still) return;
+  new IntersectionObserver((entries) => {
+    visible = entries[entries.length - 1].isIntersecting;
+    prev = 0;
+    if (visible && !frame) frame = requestAnimationFrame(tick);
+  }, { rootMargin: '120px 0px' }).observe(stage);
 }
 
 // Site-level additions to the kit CSS: theme keying, card blending, pins.
@@ -173,6 +216,14 @@ const SITE_CSS = `
 .fig-step-text b{font:600 13px/1.25 var(--font-sans,ui-sans-serif,system-ui,sans-serif);color:var(--anatomy-strong)}
 .fig-step-text small{font:400 12px/1.4 var(--font-sans,ui-sans-serif,system-ui,sans-serif);color:var(--anatomy-text)}
 .fig-step[data-on]{box-shadow:0 0 0 1.5px var(--fig-accent,#7c3aed)}
+.fig-pin-text small{white-space:normal;max-width:34ch}
+.fig-pin[data-expand]:not([data-on]) .fig-pin-text small{display:none}
+.fig-pin[data-seek] .fig-pin-tag{pointer-events:auto;cursor:pointer}
+.fig-pin-num{display:inline-grid;place-items:center;min-width:16px;height:16px;padding:0 4px;margin-right:5px;border-radius:999px;font:700 9.5px/1 var(--font-mono,ui-monospace,monospace);color:#fff;background:var(--fig-accent,#7c3aed);vertical-align:1px}
+.fig-steps>li{display:flex}
+.fig-step{width:100%;margin:0;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.fig-step:hover{box-shadow:0 0 0 1px color-mix(in oklab,var(--fig-accent,#7c3aed) 55%,transparent)}
+.fig-step:focus-visible{outline:2px solid var(--fig-accent,#7c3aed);outline-offset:2px}
 .fig-led{fill:var(--fig-accent,#7c3aed);transition:opacity .3s ease,fill .2s ease}
 .fig-led[data-state="ok"]{fill:#22a35a}
 .fig-led[data-state="bad"]{fill:#e5484d}
@@ -190,7 +241,7 @@ html.dark .iso,.iso-sheet{--fig-tag:#1c1c1c}
 html:not(.dark) .iso{--fig-accent:var(--accent-600,#7c3aed)}
 html.dark .iso{--fig-accent:var(--accent-400,#fb923c)}
 @media (max-width:520px){.fig-steps{grid-template-columns:1fr 1fr;gap:6px}.fig-step{padding:9px;gap:8px;border-radius:14px}.fig-step-icon{width:26px;height:26px;border-radius:8px}.fig-step-icon svg{width:15px;height:15px}.fig-step-text b{font-size:12px}.fig-step-text small{font-size:11px}}
-@media (max-width:640px){.fig-pin-text small{display:none}.fig-pin-tag{gap:5px;padding:3px 7px 3px 3px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10px}.fig-pin[data-dim]{visibility:hidden}}
+@media (max-width:640px){.fig-pin:not([data-on]) .fig-pin-text small{display:none}.fig-pin-text small{max-width:21ch}.fig-pin-tag{gap:5px;padding:3px 7px 3px 3px}.fig-pin-tag>svg{width:18px;height:18px}.fig-pin-text b{font-size:10px}.fig-pin[data-dim]{visibility:hidden}}
 @media (prefers-reduced-motion:reduce){.fig-pin{transition:none}}
 `;
 
