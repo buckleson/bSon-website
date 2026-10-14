@@ -132,6 +132,7 @@ const explain: Record<string, { text: string; stat: string; statLabel: string }>
         p.classList.toggle('is-open', on);
         p.querySelector('[data-tab]')!.setAttribute('aria-expanded', String(on));
       });
+      document.dispatchEvent(new Event('pa:refresh'));
     };
     panels.forEach(panel => {
       const tab = panel.querySelector<HTMLElement>('[data-tab]')!;

@@ -20,6 +20,8 @@ import { brand, glyph, type BrandKey } from '@utils/glyphs';
  * - hyperrun: a match ends, the result is signed, players, fans and sponsors
  *   are paid.
  * Values in the scenes are illustrations, not live data.
+ * Scenes only animate while on screen (and, in the products accordion, while
+ * their panel is open); they start after the page has loaded.
  */
 interface Props {
   product: 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
@@ -122,7 +124,7 @@ const hrBuilt = [
 ];
 ---
 
-<div class:list={['pa accent-warm overflow-hidden rounded-[inherit] bg-[#0c0c0c]', fill ? 'absolute inset-0' : 'relative', className]} role="img" aria-label={`${meta.title}: ${meta.steps.map(step => step.join(' ')).join('; ')}`} style={`--pa-dur:${meta.dur}s`}>
+<div class:list={['pa pa-off accent-warm overflow-hidden rounded-[inherit] bg-[#0c0c0c]', fill ? 'absolute inset-0' : 'relative', className]} data-pa role="img" aria-label={`${meta.title}: ${meta.steps.map(step => step.join(' ')).join('; ')}`} style={`--pa-dur:${meta.dur}s`}>
   <svg viewBox={`0 0 ${W} ${H}`} class="block h-full w-full" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
     <defs>
       <pattern id={`pa-grid-${product}`} width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#212121" /></pattern>
@@ -470,6 +472,7 @@ const hrBuilt = [
 
 <style is:global>
   .pa { --pa-accent: var(--accent-500); }
+  .pa-off * { animation-play-state: paused !important; }
   .pa-node { fill: #171717; stroke: #2a2a2a; stroke-width: 1.2; }
   .pa-node-on { fill: color-mix(in oklab, var(--pa-accent) 16%, #171717); stroke: var(--pa-accent); stroke-width: 1.2; }
   .pa-chain { fill: var(--pa-accent); }
@@ -641,3 +644,31 @@ const hrBuilt = [
     .h0-first { opacity: 1; }
   }
 </style>
+
+<script>
+  // Run each scene only while it is visible: CSS animations pause through
+  // .pa-off, SMIL motion through pauseAnimations(). A scene inside a closed
+  // accordion panel counts as hidden; the accordion fires pa:refresh.
+  const scenes = [...document.querySelectorAll<HTMLElement>('[data-pa]')];
+  const inView = new WeakMap<HTMLElement, boolean>();
+  const update = (el: HTMLElement) => {
+    const on = !!inView.get(el) && !el.closest('[data-panel]:not(.is-open)');
+    el.classList.toggle('pa-off', !on);
+    const svg = el.querySelector('svg');
+    if (svg) on ? svg.unpauseAnimations() : svg.pauseAnimations();
+  };
+  scenes.forEach(el => el.querySelector('svg')?.pauseAnimations());
+  const start = () => {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        inView.set(entry.target as HTMLElement, entry.isIntersecting);
+        update(entry.target as HTMLElement);
+      }
+    }, { rootMargin: '80px 0px' });
+    scenes.forEach(el => observer.observe(el));
+    document.addEventListener('pa:refresh', () => scenes.forEach(update));
+  };
+  const idle = (fn: () => void) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
+  if (document.readyState === 'complete') idle(start);
+  else window.addEventListener('load', () => idle(start), { once: true });
+</script>
