@@ -35,21 +35,21 @@ const lanes = compare
         <div class:list={['cmp-lane rounded-[1.6rem] p-4 sm:p-6', kind === 'with' ? 'cmp-with glass-tint' : 'cmp-without glass-card']} data-lane={kind} data-break={lane.breakAt ?? -1} data-stop={lane.stopAt ?? -1}>
           <div class="flex flex-wrap items-center justify-between gap-3">
             <p class="cmp-badge">
-              {kind === 'with' ? <Glyph color="shield-checkmark" class="size-5" /> : <Glyph color="warning" class="size-5" />}
+              {kind === 'with' ? <Glyph ui="safe-shield" class="cmp-badge-icon size-[1.1rem]" /> : <Glyph ui="warning" class="cmp-badge-icon size-[1.1rem]" />}
               {title}
             </p>
             <p class="cmp-outcome" data-outcome>
-              {kind === 'with' ? <Glyph icon="check-circle" class="size-4" /> : <Glyph icon="x-circle" class="size-4" />}
+              {kind === 'with' ? <Glyph ui="check-circle" class="size-4" /> : <Glyph ui="close-circle" class="size-4" />}
               {lane.outcome}
             </p>
           </div>
           <div class="cmp-track mt-5" data-track>
-            <span class="cmp-packet" data-packet aria-hidden="true"><Glyph icon="paper-plane-tilt" class="size-3.5" /><span>{lane.packet}</span></span>
+            <span class="cmp-packet" data-packet aria-hidden="true"><Glyph ui="send-plane" class="size-3.5" /><span>{lane.packet}</span></span>
             <ol class="cmp-nodes">
               {lane.nodes.map(node => (
                 <li class:list={['cmp-node', node.guard && 'is-guard']} data-node>
                   <span class="cmp-tile">
-                    {node.icon.startsWith('ph:') ? <Glyph icon={node.icon.slice(3)} class="cmp-icon cmp-icon-ph" /> : <Glyph color={node.icon} class="cmp-icon" />}
+                    {node.icon.startsWith('ph:') ? <Glyph icon={node.icon.slice(3)} class="cmp-icon" /> : <Glyph ui={node.icon} class="cmp-icon" />}
                     {node.guard && <span class="cmp-guard-dot" aria-hidden="true"></span>}
                   </span>
                   <span class="cmp-label">{node.label}</span>
@@ -70,6 +70,8 @@ const lanes = compare
 )}
 
 <style>
+  .cmp-without :global(.cmp-badge-icon) { color: #dc2626; }
+  .cmp-with :global(.cmp-badge-icon) { color: #059669; }
   .cmp-badge { display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 999px; padding: 0.35rem 0.85rem 0.35rem 0.5rem; font-size: 0.85rem; font-weight: 650; background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
   .cmp-outcome { display: inline-flex; align-items: center; gap: 0.4rem; border-radius: 999px; padding: 0.3rem 0.75rem; font-size: 0.78rem; font-weight: 650; opacity: 0; transform: translateY(4px); transition: opacity 300ms ease, transform 300ms ease; }
   .cmp-without .cmp-outcome { color: #b91c1c; background: #fee2e2; }
@@ -82,17 +84,21 @@ const lanes = compare
   .cmp-nodes { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0.5rem; }
   .cmp-nodes::before { content: ''; position: absolute; left: 10%; right: 10%; top: 1.75rem; height: 2px; background: repeating-linear-gradient(90deg, color-mix(in oklab, var(--muted) 45%, transparent) 0 6px, transparent 6px 11px); }
   .cmp-node { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
-  .cmp-tile { position: relative; display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: 1.1rem; background: var(--card); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px var(--line), 0 10px 22px -14px rgb(30 30 90 / 0.45); transition: box-shadow 250ms ease, transform 250ms ease, background-color 250ms ease; }
-  .is-guard .cmp-tile { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 2px color-mix(in oklab, var(--accent-500) 70%, transparent), 0 12px 24px -12px color-mix(in oklab, var(--accent-500) 55%, transparent); }
-  .cmp-guard-dot { position: absolute; right: -0.3rem; top: -0.3rem; width: 0.85rem; height: 0.85rem; border-radius: 999px; background: linear-gradient(135deg, var(--accent-500), var(--color-violet-500)); box-shadow: 0 0 0 2px var(--card); }
-  .cmp-tile :global(.cmp-icon) { width: 2rem; height: 2rem; }
-  .cmp-tile :global(.cmp-icon-ph) { color: var(--accent-600); }
+  /* Clean schematic tiles: white with a thin border and a bold dark icon;
+     Hyper 0X and Pavii parts (guards) sit on a soft blue tile in blue. */
+  .cmp-tile { position: relative; display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: 1.1rem; background: var(--card); color: #1f2430; box-shadow: 0 0 0 1px #dfe3ec, 0 8px 18px -14px rgb(30 40 80 / 0.4); transition: box-shadow 250ms ease, transform 250ms ease, background-color 250ms ease, color 250ms ease; }
+  :global(.dark) .cmp-tile { color: #e6e6e6; box-shadow: 0 0 0 1px #2c2c2c; }
+  .is-guard .cmp-tile { background: #e8efff; color: #2453d4; box-shadow: 0 0 0 1.5px #b9cbff, 0 10px 22px -14px rgb(36 83 212 / 0.5); }
+  :global(.dark) .is-guard .cmp-tile { background: color-mix(in oklab, var(--accent-500) 22%, #161616); color: var(--accent-300); box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--accent-500) 45%, transparent); }
+  .cmp-guard-dot { position: absolute; right: -0.25rem; top: -0.25rem; width: 0.75rem; height: 0.75rem; border-radius: 999px; background: #2453d4; box-shadow: 0 0 0 2px var(--card); }
+  :global(.dark) .cmp-guard-dot { background: var(--accent-500); }
+  .cmp-tile :global(.cmp-icon) { width: 1.65rem; height: 1.65rem; }
   .cmp-label { margin-top: 0.6rem; font-size: 0.82rem; font-weight: 650; line-height: 1.2; color: var(--ink); }
   .cmp-sub { margin-top: 0.2rem; font-size: 0.72rem; line-height: 1.3; color: var(--muted); }
   .cmp-node[data-state='active'] .cmp-tile { transform: translateY(-3px) scale(1.06); box-shadow: inset 0 1px 0 #fff, 0 0 0 2px var(--accent-500), 0 14px 26px -12px color-mix(in oklab, var(--accent-500) 60%, transparent); }
   .cmp-node[data-state='visited'] .cmp-tile { box-shadow: inset 0 1px 0 #fff, 0 0 0 2px #34d399, 0 10px 22px -14px rgb(30 30 90 / 0.45); }
-  .cmp-node[data-state='bad'] .cmp-tile { background: #fee2e2; box-shadow: 0 0 0 2px #ef4444, 0 14px 26px -12px rgb(239 68 68 / 0.6); animation: cmp-shake 450ms ease; }
-  .cmp-node[data-state='stop'] .cmp-tile { background: #d1fae5; box-shadow: 0 0 0 2.5px #10b981, 0 0 0 8px rgb(16 185 129 / 0.18), 0 14px 26px -12px rgb(16 185 129 / 0.6); }
+  .cmp-node[data-state='bad'] .cmp-tile { background: #fee2e2; color: #b91c1c; box-shadow: 0 0 0 2px #ef4444, 0 14px 26px -12px rgb(239 68 68 / 0.6); animation: cmp-shake 450ms ease; }
+  .cmp-node[data-state='stop'] .cmp-tile { background: #d1fae5; color: #047857; box-shadow: 0 0 0 2.5px #10b981, 0 0 0 8px rgb(16 185 129 / 0.18), 0 14px 26px -12px rgb(16 185 129 / 0.6); }
   .cmp-node[data-state='done'] .cmp-tile { box-shadow: 0 0 0 2.5px #10b981, 0 0 0 8px rgb(16 185 129 / 0.15); }
   :global(.dark) .cmp-node[data-state='bad'] .cmp-tile { background: rgb(127 29 29 / 0.6); }
   :global(.dark) .cmp-node[data-state='stop'] .cmp-tile { background: rgb(6 78 59 / 0.6); }
@@ -105,7 +111,8 @@ const lanes = compare
   .cmp-packet[data-bad] > :global(svg) { background: #7f1d1d; }
 
   .cmp-step { display: flex; gap: 0.6rem; align-items: baseline; border-radius: 0.9rem; padding: 0.45rem 0.6rem; font-size: 0.875rem; line-height: 1.45; color: var(--muted); transition: background-color 250ms ease, color 250ms ease; }
-  .cmp-num { flex: none; display: inline-grid; place-items: center; width: 1.35rem; height: 1.35rem; border-radius: 999px; font: 700 0.7rem/1 var(--font-mono, ui-monospace, monospace); color: var(--ink); background: color-mix(in oklab, var(--ink) 8%, transparent); }
+  .cmp-num { flex: none; display: inline-grid; place-items: center; width: 1.35rem; height: 1.35rem; border-radius: 999px; font: 700 0.7rem/1 var(--font-mono, ui-monospace, monospace); color: #fff; background: #111318; }
+  :global(.dark) .cmp-num { color: #111318; background: #e6e6e6; }
   .cmp-step[data-on] { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
   .cmp-with .cmp-step[data-on] .cmp-num { background: #10b981; color: #fff; }
   .cmp-without .cmp-step[data-on] .cmp-num { background: #ef4444; color: #fff; }

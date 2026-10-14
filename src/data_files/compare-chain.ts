@@ -7,10 +7,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Fund share order',
       nodes: [
-        { icon: 'person', label: 'Client', sub: 'Buys fund shares' },
-        { icon: 'ph:stack-simple', label: 'Public rollup', sub: 'Single sequencer' },
-        { icon: 'globe', label: 'Public L1', sub: 'Shared with everyone' },
-        { icon: 'ph:eye', label: 'Open record', sub: 'Anyone can read it' },
+        { icon: 'user-3', label: 'Client', sub: 'Buys fund shares' },
+        { icon: 'layers', label: 'Public rollup', sub: 'Single sequencer' },
+        { icon: 'earth', label: 'Public L1', sub: 'Shared with everyone' },
+        { icon: 'eye-2', label: 'Open record', sub: 'Anyone can read it' },
       ],
       breakAt: 2,
       outcome: 'Fees rise with traffic you cannot control',
@@ -24,11 +24,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Fund share order',
       nodes: [
-        { icon: 'person', label: 'Client', sub: 'Buys fund shares' },
-        { icon: 'ph:stack', label: 'Fund L2', sub: 'Own sequencer and rules', guard: true },
-        { icon: 'ph:fingerprint', label: 'State root', sub: 'Fingerprint of all balances', guard: true },
-        { icon: 'ph:cube', label: 'Hyper 0X L1', sub: 'Final in one pass', guard: true },
-        { icon: 'clipboard-task', label: 'Auditor', sub: 'Checks one L1' },
+        { icon: 'user-3', label: 'Client', sub: 'Buys fund shares' },
+        { icon: 'layers', label: 'Fund L2', sub: 'Own sequencer and rules', guard: true },
+        { icon: 'fingerprint', label: 'State root', sub: 'Fingerprint of all balances', guard: true },
+        { icon: 'cube', label: 'Hyper 0X L1', sub: 'Final in one pass', guard: true },
+        { icon: 'list-check', label: 'Auditor', sub: 'Checks one L1' },
       ],
       outcome: 'Trade final, unaffected by other L2s',
       steps: [
@@ -45,10 +45,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Trade with a partner bank',
       nodes: [
-        { icon: 'building', label: 'Your bank', sub: 'Trades with a partner' },
-        { icon: 'globe', label: 'Public chain', sub: 'Anyone can validate' },
-        { icon: 'ph:eye', label: 'Every node', sub: 'Sees the transaction' },
-        { icon: 'building-multiple', label: 'Partner bank', sub: 'Same view as everyone' },
+        { icon: 'building-2', label: 'Your bank', sub: 'Trades with a partner' },
+        { icon: 'earth', label: 'Public chain', sub: 'Anyone can validate' },
+        { icon: 'eye-2', label: 'Every node', sub: 'Sees the transaction' },
+        { icon: 'building-4', label: 'Partner bank', sub: 'Same view as everyone' },
       ],
       breakAt: 2,
       outcome: 'Client data visible to every node',
@@ -62,11 +62,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Trade with a partner bank',
       nodes: [
-        { icon: 'building', label: 'Your bank', sub: 'Trades with a partner' },
-        { icon: 'ph:stack', label: 'Private L2', sub: 'Own sequencer and policies', guard: true },
-        { icon: 'lock-shield', label: 'Per-party keys', sub: 'Only the parties read', guard: true },
-        { icon: 'ph:cube', label: 'Hyper 0X L1', sub: 'Holds the state roots', guard: true },
-        { icon: 'building-multiple', label: 'Partner bank', sub: 'Checks the same record' },
+        { icon: 'building-2', label: 'Your bank', sub: 'Trades with a partner' },
+        { icon: 'layers', label: 'Private L2', sub: 'Own sequencer and policies', guard: true },
+        { icon: 'safe-lock', label: 'Per-party keys', sub: 'Only the parties read', guard: true },
+        { icon: 'cube', label: 'Hyper 0X L1', sub: 'Holds the state roots', guard: true },
+        { icon: 'building-4', label: 'Partner bank', sub: 'Checks the same record' },
       ],
       outcome: 'Shared record, data visible only to parties',
       steps: [
@@ -84,9 +84,9 @@ export const compareChain: Record<string, Compare> = {
       packet: 'Over-limit deposit transfer',
       nodes: [
         { icon: 'briefcase', label: 'Corporate client', sub: 'Sends over its limit' },
-        { icon: 'ph:user-circle-dashed', label: 'Unknown validators', sub: 'Anyone can join' },
-        { icon: 'globe', label: 'Public ledger', sub: 'Settles with no check' },
-        { icon: 'ph:binoculars', label: 'Monitoring', sub: 'Flags it afterwards' },
+        { icon: 'user-question', label: 'Unknown validators', sub: 'Anyone can join' },
+        { icon: 'earth', label: 'Public ledger', sub: 'Settles with no check' },
+        { icon: 'search-3', label: 'Monitoring', sub: 'Flags it afterwards' },
       ],
       breakAt: 2,
       outcome: 'Settled first, flagged later, no one accountable',
@@ -101,10 +101,10 @@ export const compareChain: Record<string, Compare> = {
       packet: 'Over-limit deposit transfer',
       nodes: [
         { icon: 'briefcase', label: 'Corporate client', sub: 'Sends over its limit' },
-        { icon: 'ph:stack', label: 'Private L2', sub: 'Tokenized deposits', guard: true },
-        { icon: 'document-lock', label: 'Rules as code', sub: 'KYC, limits, maker-checker', guard: true },
+        { icon: 'layers', label: 'Private L2', sub: 'Tokenized deposits', guard: true },
+        { icon: 'file-locked', label: 'Rules as code', sub: 'KYC, limits, maker-checker', guard: true },
         { icon: 'certificate', label: 'PKI validators', sub: 'Known legal entities', guard: true },
-        { icon: 'ph:cube', label: 'Hyper 0X L1', sub: 'Final in one pass', guard: true },
+        { icon: 'cube', label: 'Hyper 0X L1', sub: 'Final in one pass', guard: true },
       ],
       stopAt: 2,
       outcome: 'Blocked before it reaches the ledger',
@@ -122,10 +122,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Incoming client payment',
       nodes: [
-        { icon: 'person', label: 'Client', sub: 'Pays the fintech' },
-        { icon: 'globe', label: 'Public chain', sub: 'Probabilistic finality' },
-        { icon: 'building', label: 'Fintech', sub: 'Pays out the merchant' },
-        { icon: 'ph:git-fork', label: 'Reorg', sub: 'Replaces recent blocks' },
+        { icon: 'user-3', label: 'Client', sub: 'Pays the fintech' },
+        { icon: 'earth', label: 'Public chain', sub: 'Probabilistic finality' },
+        { icon: 'building-2', label: 'Fintech', sub: 'Pays out the merchant' },
+        { icon: 'git-branch', label: 'Reorg', sub: 'Replaces recent blocks' },
       ],
       breakAt: 3,
       outcome: 'Payout sent, incoming payment disappeared',
@@ -139,11 +139,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Incoming client payment',
       nodes: [
-        { icon: 'person', label: 'Client', sub: 'Pays the fintech' },
-        { icon: 'ph:users-three', label: 'aBFT consensus', sub: 'Known validators, no leader', guard: true },
-        { icon: 'ph:seal-check', label: 'Finality', sub: 'One pass, no reorgs', guard: true },
-        { icon: 'building', label: 'Fintech', sub: 'Pays on confirmation' },
-        { icon: 'building-store', label: 'Merchant', sub: 'Keeps the payout' },
+        { icon: 'user-3', label: 'Client', sub: 'Pays the fintech' },
+        { icon: 'group', label: 'aBFT consensus', sub: 'Known validators, no leader', guard: true },
+        { icon: 'safety-certificate', label: 'Finality', sub: 'One pass, no reorgs', guard: true },
+        { icon: 'building-2', label: 'Fintech', sub: 'Pays on confirmation' },
+        { icon: 'store', label: 'Merchant', sub: 'Keeps the payout' },
       ],
       outcome: 'The ledger matches the bank statement',
       steps: [
@@ -160,10 +160,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Salary-day payroll',
       nodes: [
-        { icon: 'building', label: 'Bank', sub: 'Salary-day peak' },
-        { icon: 'ph:cube', label: 'Fixed blocks', sub: 'Same cap every block' },
-        { icon: 'ph:queue', label: 'Backlog', sub: 'Payments wait in line' },
-        { icon: 'people', label: 'Employees', sub: 'Some salaries late' },
+        { icon: 'building-2', label: 'Bank', sub: 'Salary-day peak' },
+        { icon: 'cube', label: 'Fixed blocks', sub: 'Same cap every block' },
+        { icon: 'list-ordered', label: 'Backlog', sub: 'Payments wait in line' },
+        { icon: 'group', label: 'Employees', sub: 'Some salaries late' },
       ],
       breakAt: 1,
       outcome: 'Salaries late, while spare compute sits idle',
@@ -177,11 +177,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Salary-day payroll',
       nodes: [
-        { icon: 'building', label: 'Bank', sub: 'Salary-day peak' },
-        { icon: 'ph:stack', label: 'Payroll L2', sub: 'Own block settings', guard: true },
-        { icon: 'ph:stack-plus', label: 'Dynamic blocks', sub: 'Grow toward the maximum', guard: true },
-        { icon: 'ph:seal-check', label: 'Seal rule', sub: 'Size target or time limit', guard: true },
-        { icon: 'people', label: 'Employees', sub: 'Paid with no backlog' },
+        { icon: 'building-2', label: 'Bank', sub: 'Salary-day peak' },
+        { icon: 'layers', label: 'Payroll L2', sub: 'Own block settings', guard: true },
+        { icon: 'layer', label: 'Dynamic blocks', sub: 'Grow toward the maximum', guard: true },
+        { icon: 'safety-certificate', label: 'Seal rule', sub: 'Size target or time limit', guard: true },
+        { icon: 'group', label: 'Employees', sub: 'Paid with no backlog' },
       ],
       outcome: 'Peak absorbed, no backlog builds',
       steps: [
@@ -198,10 +198,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Rohan sells to Priya',
       nodes: [
-        { icon: 'person', label: 'Priya', sub: 'Buys coins from Rohan' },
-        { icon: 'ph:money', label: 'Payment leg', sub: 'Settles first' },
-        { icon: 'ph:coins', label: 'Asset leg', sub: 'Fails mid-trade' },
-        { icon: 'ph:receipt-x', label: 'Two records', sub: 'Teams must reconcile' },
+        { icon: 'user-3', label: 'Priya', sub: 'Buys coins from Rohan' },
+        { icon: 'cash', label: 'Payment leg', sub: 'Settles first' },
+        { icon: 'coin', label: 'Asset leg', sub: 'Fails mid-trade' },
+        { icon: 'bill-2', label: 'Two records', sub: 'Teams must reconcile' },
       ],
       breakAt: 2,
       outcome: 'Priya paid, but the coins never came',
@@ -215,11 +215,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Rohan sells to Priya',
       nodes: [
-        { icon: 'person', label: 'Priya', sub: 'Buys coins from Rohan' },
-        { icon: 'ph:wallet', label: 'Hyper Wallet', sub: 'Exchange and wallet in one' },
-        { icon: 'ph:rows', label: 'Order book', sub: 'Runs inside consensus', guard: true },
-        { icon: 'ph:swap', label: 'One ledger event', sub: 'Fill and both balances', guard: true },
-        { icon: 'checkmark-circle', label: 'Confirmed', sub: 'Both legs settled' },
+        { icon: 'user-3', label: 'Priya', sub: 'Buys coins from Rohan' },
+        { icon: 'wallet-4', label: 'Hyper Wallet', sub: 'Exchange and wallet in one' },
+        { icon: 'list-check', label: 'Order book', sub: 'Runs inside consensus', guard: true },
+        { icon: 'transfer-3', label: 'One ledger event', sub: 'Fill and both balances', guard: true },
+        { icon: 'check-circle', label: 'Confirmed', sub: 'Both legs settled' },
       ],
       outcome: 'Both legs settle in one step',
       steps: [
@@ -236,10 +236,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Bond order details',
       nodes: [
-        { icon: 'person', label: 'Investor', sub: 'Places a bond order' },
-        { icon: 'book-database', label: 'Shared ledger', sub: 'Hashed, not encrypted' },
-        { icon: 'ph:hard-drives', label: 'Validator copies', sub: 'Full copies for years' },
-        { icon: 'ph:user-circle-dashed', label: 'Attacker', sub: 'Reads a leaked copy' },
+        { icon: 'user-3', label: 'Investor', sub: 'Places a bond order' },
+        { icon: 'book-4', label: 'Shared ledger', sub: 'Hashed, not encrypted' },
+        { icon: 'server', label: 'Validator copies', sub: 'Full copies for years' },
+        { icon: 'user-question', label: 'Attacker', sub: 'Reads a leaked copy' },
       ],
       breakAt: 2,
       outcome: 'Investor details readable from one copy',
@@ -253,11 +253,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Bond order details',
       nodes: [
-        { icon: 'person', label: 'Investor', sub: 'Places a bond order' },
-        { icon: 'globe-shield', label: 'In transit', sub: 'Post-quantum-resistant TLS', guard: true },
-        { icon: 'ph:cpu', label: 'In use', sub: 'Per-party keys', guard: true },
-        { icon: 'document-lock', label: 'On the ledger', sub: 'Commitment and payload', guard: true },
-        { icon: 'ph:hard-drives', label: 'At rest', sub: 'Master keys in HSMs', guard: true },
+        { icon: 'user-3', label: 'Investor', sub: 'Places a bond order' },
+        { icon: 'safe-shield-2', label: 'In transit', sub: 'Post-quantum-resistant TLS', guard: true },
+        { icon: 'chip', label: 'In use', sub: 'Per-party keys', guard: true },
+        { icon: 'file-locked', label: 'On the ledger', sub: 'Commitment and payload', guard: true },
+        { icon: 'server', label: 'At rest', sub: 'Master keys in HSMs', guard: true },
       ],
       outcome: 'Attacker sees only ciphertext and fingerprints',
       steps: [
@@ -274,10 +274,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Recorded settlement traffic',
       nodes: [
-        { icon: 'document-text', label: 'Settlement record', sub: 'Private for decades' },
-        { icon: 'ph:tray-arrow-down', label: 'Harvester', sub: 'Records traffic today' },
-        { icon: 'ph:atom', label: 'Quantum computer', sub: 'Arrives in the future' },
-        { icon: 'ph:key', label: 'Classic key', sub: 'One scheme to break' },
+        { icon: 'document-2', label: 'Settlement record', sub: 'Private for decades' },
+        { icon: 'inbox', label: 'Harvester', sub: 'Records traffic today' },
+        { icon: 'cube-3d', label: 'Quantum computer', sub: 'Arrives in the future' },
+        { icon: 'key-2', label: 'Classic key', sub: 'One scheme to break' },
       ],
       breakAt: 3,
       outcome: 'Old settlement terms become readable',
@@ -291,11 +291,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Recorded settlement traffic',
       nodes: [
-        { icon: 'document-text', label: 'Settlement record', sub: 'Private for decades' },
-        { icon: 'ph:tray-arrow-down', label: 'Harvester', sub: 'Records traffic today' },
-        { icon: 'ph:atom', label: 'Quantum computer', sub: 'Tries to decrypt' },
-        { icon: 'lock-shield', label: 'Hybrid key', sub: 'ML-KEM-768 plus X25519', guard: true },
-        { icon: 'ph:stack-simple', label: 'Four layers', sub: 'Transit, use, ledger, rest', guard: true },
+        { icon: 'document-2', label: 'Settlement record', sub: 'Private for decades' },
+        { icon: 'inbox', label: 'Harvester', sub: 'Records traffic today' },
+        { icon: 'cube-3d', label: 'Quantum computer', sub: 'Tries to decrypt' },
+        { icon: 'safe-lock', label: 'Hybrid key', sub: 'ML-KEM-768 plus X25519', guard: true },
+        { icon: 'layers', label: 'Four layers', sub: 'Transit, use, ledger, rest', guard: true },
       ],
       stopAt: 3,
       outcome: 'Recorded traffic stays private under known attacks',
@@ -313,10 +313,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Your first use case',
       nodes: [
-        { icon: 'people-team', label: 'Your team', sub: 'Has one use case' },
+        { icon: 'group-3', label: 'Your team', sub: 'Has one use case' },
         { icon: 'code', label: 'Vendor', sub: 'Writes smart contracts only' },
         { icon: 'cloud', label: 'Rented chain', sub: 'Another firm runs it' },
-        { icon: 'apps', label: 'Your product', sub: 'Inherits fees and outages' },
+        { icon: 'grid', label: 'Your product', sub: 'Inherits fees and outages' },
       ],
       breakAt: 2,
       outcome: 'Fees and outages outside your control',
@@ -330,11 +330,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Your first use case',
       nodes: [
-        { icon: 'people-team', label: 'Your team', sub: 'Has one use case' },
-        { icon: 'clipboard-task', label: 'Scoped pilot', sub: 'Metrics agreed up front' },
-        { icon: 'person', label: 'Engineer', sub: 'Works inside your team' },
-        { icon: 'ph:stack', label: 'Private L2', sub: 'Rules as code', guard: true },
-        { icon: 'ph:cube', label: 'Hyper 0X L1', sub: 'Built by Buckleson', guard: true },
+        { icon: 'group-3', label: 'Your team', sub: 'Has one use case' },
+        { icon: 'list-check', label: 'Scoped pilot', sub: 'Metrics agreed up front' },
+        { icon: 'user-3', label: 'Engineer', sub: 'Works inside your team' },
+        { icon: 'layers', label: 'Private L2', sub: 'Rules as code', guard: true },
+        { icon: 'cube', label: 'Hyper 0X L1', sub: 'Built by Buckleson', guard: true },
       ],
       outcome: 'One partner owns the path to production',
       steps: [
@@ -351,10 +351,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'Restricted investor order',
       nodes: [
-        { icon: 'person-warning', label: 'Investor', sub: 'In a restricted country' },
-        { icon: 'phone', label: 'Broker app', sub: 'Takes any order' },
-        { icon: 'ph:coins', label: 'Token transfer', sub: 'No rules run first' },
-        { icon: 'ph:binoculars', label: 'Compliance team', sub: 'Checks after the trade' },
+        { icon: 'user-warning', label: 'Investor', sub: 'In a restricted country' },
+        { icon: 'cellphone', label: 'Broker app', sub: 'Takes any order' },
+        { icon: 'coin', label: 'Token transfer', sub: 'No rules run first' },
+        { icon: 'search-3', label: 'Compliance team', sub: 'Checks after the trade' },
       ],
       breakAt: 2,
       outcome: 'The issuer must unwind the bad trade',
@@ -368,11 +368,11 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'Restricted investor order',
       nodes: [
-        { icon: 'person-warning', label: 'Investor', sub: 'In a restricted country' },
-        { icon: 'phone', label: 'Investor app', sub: 'Hyper Wallet or yours' },
-        { icon: 'ph:stack', label: 'Private L2', sub: 'The issuer sets rules', guard: true },
-        { icon: 'document-lock', label: 'Rules as code', sub: 'KYC, country, limits', guard: true },
-        { icon: 'ph:swap', label: 'Atomic settlement', sub: 'Both legs or neither', guard: true },
+        { icon: 'user-warning', label: 'Investor', sub: 'In a restricted country' },
+        { icon: 'cellphone', label: 'Investor app', sub: 'Hyper Wallet or yours' },
+        { icon: 'layers', label: 'Private L2', sub: 'The issuer sets rules', guard: true },
+        { icon: 'file-locked', label: 'Rules as code', sub: 'KYC, country, limits', guard: true },
+        { icon: 'transfer-3', label: 'Atomic settlement', sub: 'Both legs or neither', guard: true },
       ],
       stopAt: 3,
       outcome: 'Blocked before execution, nothing to unwind',
@@ -390,10 +390,10 @@ export const compareChain: Record<string, Compare> = {
     without: {
       packet: 'One gram of gold',
       nodes: [
-        { icon: 'person', label: 'Investor', sub: 'Wants one gram' },
-        { icon: 'building-store', label: 'Dealer', sub: 'Dealer hours only' },
-        { icon: 'ph:coin-vertical', label: 'Smallest coin', sub: 'Often costs a premium' },
-        { icon: 'vault', label: 'Home safe', sub: 'Storage and insurance' },
+        { icon: 'user-3', label: 'Investor', sub: 'Wants one gram' },
+        { icon: 'store', label: 'Dealer', sub: 'Dealer hours only' },
+        { icon: 'coin-2', label: 'Smallest coin', sub: 'Often costs a premium' },
+        { icon: 'safe-box', label: 'Home safe', sub: 'Storage and insurance' },
       ],
       breakAt: 2,
       outcome: 'Premium paid, plus storage and insurance',
@@ -407,12 +407,12 @@ export const compareChain: Record<string, Compare> = {
     with: {
       packet: 'One gram of gold',
       nodes: [
-        { icon: 'person', label: 'Investor', sub: 'Wants one gram' },
-        { icon: 'ph:stack', label: 'Issuer L2', sub: 'Its own rules', guard: true },
-        { icon: 'document-lock', label: 'Rules as code', sub: 'KYC, country, limits', guard: true },
-        { icon: 'lock-shield', label: 'Per-party keys', sub: 'Record stays encrypted', guard: true },
-        { icon: 'ph:swap', label: 'One-step trade', sub: 'Gold and cash together', guard: true },
-        { icon: 'vault', label: 'Vault', sub: 'Allocated bars in trust' },
+        { icon: 'user-3', label: 'Investor', sub: 'Wants one gram' },
+        { icon: 'layers', label: 'Issuer L2', sub: 'Its own rules', guard: true },
+        { icon: 'file-locked', label: 'Rules as code', sub: 'KYC, country, limits', guard: true },
+        { icon: 'safe-lock', label: 'Per-party keys', sub: 'Record stays encrypted', guard: true },
+        { icon: 'transfer-3', label: 'One-step trade', sub: 'Gold and cash together', guard: true },
+        { icon: 'safe-box', label: 'Vault', sub: 'Allocated bars in trust' },
       ],
       outcome: 'One gram owned, settled in one step',
       steps: [

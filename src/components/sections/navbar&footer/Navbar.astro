@@ -75,14 +75,14 @@ const widths: Record<string, string> = {
         <div class:list={['mega-content p-3', widths[menu.id]]} data-menu={menu.id} hidden>
           <div class="grid gap-x-2" style={`grid-template-columns: repeat(${menu.columns.length}, minmax(0, 1fr));`}>
             {menu.columns.map((column, index) => (
-              <div class:list={['p-1', index > 0 && 'border-s border-line ps-3']}>
+              <div class:list={['p-1', index > 0 && 'border-s border-line ps-3']} data-tone={index % 3}>
                 <p class="px-2 pt-1 pb-2 font-mono text-[0.7rem] tracking-wide text-muted uppercase">{column.heading}</p>
                 <ul>
                   {column.items.map(item => (
                     <li>
                       <a href={href(item.href)} class="group flex items-start gap-3 rounded-xl p-2.5 transition duration-200 hover:bg-ground">
                         <span class="nav-icon grid size-10 shrink-0 place-items-center rounded-xl transition duration-300 group-hover:-rotate-6 group-hover:scale-105">
-                          <Glyph color={item.icon} class="size-6" />
+                          <Glyph ui={item.icon} class="size-[1.3rem]" />
                         </span>
                         <span class="min-w-0">
                           <span class="flex items-center gap-2 text-sm font-semibold text-ink">
@@ -139,14 +139,14 @@ const widths: Record<string, string> = {
         <button type="button" class="flex items-center gap-1 py-3 text-sm font-semibold text-muted" data-back>
           <Glyph icon="caret-left" class="size-4" />Back
         </button>
-        {menu.columns.map(column => (
-          <div class="mt-2">
+        {menu.columns.map((column, index) => (
+          <div class="mt-2" data-tone={index % 3}>
             <p class="font-mono text-[0.7rem] tracking-wide text-muted uppercase">{column.heading}</p>
             <ul class="mt-1">
               {column.items.map(item => (
                 <li>
                   <a href={href(item.href)} class="flex items-center gap-3 rounded-xl py-3">
-                    <span class="nav-icon grid size-11 shrink-0 place-items-center rounded-xl"><Glyph color={item.icon} class="size-6" /></span>
+                    <span class="nav-icon grid size-11 shrink-0 place-items-center rounded-xl"><Glyph ui={item.icon} class="size-6" /></span>
                     <span>
                       <span class="block font-semibold text-ink">{item.title}{item.badge && <span class="ms-2 text-xs font-medium text-orange-700 dark:text-orange-300">{item.badge}</span>}</span>
                       <span class="block text-sm text-muted">{item.desc}</span>
@@ -186,9 +186,12 @@ const widths: Record<string, string> = {
     background-color: color-mix(in oklab, var(--card) 74%, transparent);
     box-shadow: 0 0 0 1px var(--line), 0 18px 40px -24px rgb(10 10 10 / 0.35);
   }
-  /* Colour icons sit on a soft glass tile. */
-  .nav-icon { background: linear-gradient(145deg, #fff, color-mix(in oklab, var(--accent-100) 55%, #fff)); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--line) 80%, transparent), 0 6px 14px -8px rgb(40 40 110 / 0.35); }
-  :global(.dark) .nav-icon { background: linear-gradient(145deg, #232323, #191919); box-shadow: inset 0 0 0 1px #2c2c2c; }
+  /* Bold icons on a soft tinted tile; each menu column has its own colour. */
+  [data-tone] { --a: #2563eb; --t: #e7eeff; }
+  [data-tone='1'] { --a: #7c3aed; --t: #f0e9ff; }
+  [data-tone='2'] { --a: #059669; --t: #def6ec; }
+  .nav-icon { background: var(--t); color: var(--a); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--a) 16%, transparent); }
+  :global(.dark) .nav-icon { background: color-mix(in oklab, var(--a) 20%, #161616); color: color-mix(in oklab, var(--a) 65%, #fff); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--a) 30%, transparent); }
   .nav-links { background: color-mix(in oklab, var(--ink) 4%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--line) 80%, transparent); }
   .mega-panel { opacity: 0; transform: translate(-50%, -6px) scale(0.98); transform-origin: top center; transition: opacity 180ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1); }
   .mega-panel.is-open { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; }

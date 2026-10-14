@@ -69,7 +69,7 @@ const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
         <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-2 text-sm text-muted">
           <a href={localePath('en', '/blog/')} class="hover:text-ink">Blog</a>
           <span aria-hidden="true">/</span>
-          <a href={`${localePath('en', '/blog/')}#topic=${category.id}`} class="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-line hover:ring-orange-500"><Glyph color={category.icon} class="size-4" />{category.label}</a>
+          <a href={`${localePath('en', '/blog/')}#topic=${category.id}`} class="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-line hover:ring-orange-500" style={`--a:${category.accent}`}><Glyph ui={category.icon} class="size-4 text-[color:var(--a)]" />{category.label}</a>
         </nav>
         <h1 class="mt-5 text-4xl leading-[1.04] font-semibold text-balance text-ink sm:text-5xl">{data.title}</h1>
         <p class="mt-5 max-w-[60ch] text-lg leading-relaxed text-pretty text-muted">{data.description}</p>
@@ -83,7 +83,7 @@ const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
             </span>
           </span>
           <span class="inline-flex items-center gap-1.5"><Glyph icon="clock" class="size-4" />{data.readTime} min read</span>
-          {inPath && <span class="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1 text-xs font-semibold text-ink ring-1 ring-line"><Glyph color={inPath.path.icon} class="size-4" />Part {inPath.index + 1} of {inPath.path.slugs.length} · {inPath.path.title}</span>}
+          {inPath && <span class="inline-flex items-center gap-1.5 rounded-full bg-card px-3 py-1 text-xs font-semibold text-ink ring-1 ring-line"><Glyph ui={inPath.path.icon} class="size-4 text-violet-600 dark:text-orange-400" />Part {inPath.index + 1} of {inPath.path.slugs.length} · {inPath.path.title}</span>}
         </div>
       </div>
       <div class="relative min-h-[15rem] sm:min-h-[19rem] lg:min-h-full"><BlogArt post={post} chip /></div>
@@ -163,7 +163,7 @@ const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
       <div class="grid gap-4 xl:sticky xl:top-24">
         {inPath && (
           <div class="glass-card rounded-[1.4rem] p-5">
-            <p class="flex items-center gap-2 text-sm font-semibold text-ink"><Glyph color={inPath.path.icon} class="size-5" />{inPath.path.title}</p>
+            <p class="flex items-center gap-2 text-sm font-semibold text-ink"><Glyph ui={inPath.path.icon} class="size-5 text-violet-600 dark:text-orange-400" />{inPath.path.title}</p>
             <ol class="mt-3 grid gap-1">
               {pathPosts.map((entry, i) => (
                 <li>
@@ -177,7 +177,7 @@ const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
           </div>
         )}
         <div class="on-sheet rounded-[1.4rem] bg-sheet p-6 text-white">
-          <Glyph color="calendar-checkmark" class="size-8" />
+          <Glyph ui="calendar-month" class="size-8 text-orange-300" />
           <p class="mt-3 text-lg font-semibold text-balance">Building something like this?</p>
           <p class="mt-1.5 text-sm text-pretty text-white/70">Talk to a Buckleson engineer for 30 minutes. No slides, only your use case.</p>
           <div class="mt-5"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>

@@ -8,8 +8,8 @@
  *   request stops at `stopAt` when it is malicious, or reaches the end when
  *   it is a normal request (leave `stopAt` out), and the lane ends well.
  * `steps` (3 or 4) explain the lane in order, under the diagram.
- * Icons: a Fluent colour icon name (see the list in colorIcon, utils/glyphs)
- * or a Phosphor duotone icon prefixed with "ph:".
+ * Icons: a MingCute UI icon name (see uiSymbol in utils/glyphs.ts)
+ * (a Phosphor duotone icon also works, prefixed with "ph:").
  * Text is technical description, so it follows the plain-English rules in
  * WRITING.md, and it makes only claims that the post itself makes.
  */
@@ -40,10 +40,10 @@ const example: Record<string, Compare> = {
     without: {
       packet: 'PDF with hidden orders',
       nodes: [
-        { icon: 'document-text', label: 'Vendor PDF', sub: 'Hidden white text' },
-        { icon: 'bot', label: 'AI agent', sub: 'Reads it all as orders' },
+        { icon: 'document-2', label: 'Vendor PDF', sub: 'Hidden white text' },
+        { icon: 'ai', label: 'AI agent', sub: 'Reads it all as orders' },
         { icon: 'mail', label: 'Email tool', sub: 'No check on the call' },
-        { icon: 'ph:user-circle-dashed', label: 'Outside inbox', sub: 'The attacker' },
+        { icon: 'user-question', label: 'Outside inbox', sub: 'The attacker' },
       ],
       breakAt: 1,
       outcome: 'Customer file leaked, no record of why',
@@ -57,11 +57,11 @@ const example: Record<string, Compare> = {
     with: {
       packet: 'PDF with hidden orders',
       nodes: [
-        { icon: 'document-text', label: 'Vendor PDF', sub: 'Hidden white text' },
-        { icon: 'shield-checkmark', label: 'Injection gate', sub: 'Text is data', guard: true },
-        { icon: 'bot', label: 'AI agent', sub: 'Gets clean data' },
-        { icon: 'document-lock', label: 'Egress contract', sub: 'On Hyper 0X', guard: true },
-        { icon: 'receipt', label: 'Receipt', sub: 'Chained on Hyper 0X', guard: true },
+        { icon: 'document-2', label: 'Vendor PDF', sub: 'Hidden white text' },
+        { icon: 'safe-shield', label: 'Injection gate', sub: 'Text is data', guard: true },
+        { icon: 'ai', label: 'AI agent', sub: 'Gets clean data' },
+        { icon: 'file-locked', label: 'Egress contract', sub: 'On Hyper 0X', guard: true },
+        { icon: 'bill', label: 'Receipt', sub: 'Chained on Hyper 0X', guard: true },
       ],
       stopAt: 1,
       outcome: 'Blocked, with a receipt on Hyper 0X',

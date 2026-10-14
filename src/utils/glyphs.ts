@@ -96,40 +96,21 @@ export function brand(key: BrandKey): Brand {
   return BRANDS[key];
 }
 
-// ---- Colour icons --------------------------------------------------------
-// Fluent UI System Color Icons (MIT, Microsoft), from @iconify-json/fluent-color.
-// Multi-colour icons for places where the icon must say what the item is at a
-// glance (the navigation). Gradient ids get a per-use suffix, so a copy inside
-// a hidden menu never breaks the colours of a visible copy.
-const FLUENT = JSON.parse(readFileSync(join(process.cwd(), 'node_modules', '@iconify-json', 'fluent-color', 'icons.json'), 'utf8')) as {
+// ---- UI icons -------------------------------------------------------------
+// MingCute (Apache-2.0), from @iconify-json/mingcute: bold, rounded, one
+// colour (currentColor), for places where the icon must say what an item is
+// at a glance (navigation, topics, covers, diagrams). Names without a style
+// suffix get the filled style; "-line" names keep the outline style.
+const MINGCUTE = JSON.parse(readFileSync(join(process.cwd(), 'node_modules', '@iconify-json', 'mingcute', 'icons.json'), 'utf8')) as {
   icons: Record<string, { body: string; width?: number; height?: number }>;
   width?: number;
   height?: number;
 };
-let colorUses = 0;
 
-/** One icon's markup for the page sprite: ids prefixed with the icon name. */
-export function colorSymbol(name: string): { body: string; size: number } {
-  const key = [24, 20, 28, 32, 48, 16].map(size => `${name}-${size}`).find(k => FLUENT.icons[k]);
-  if (!key) throw new Error(`Unknown colour icon "${name}"`);
-  const icon = FLUENT.icons[key];
-  const size = icon.width ?? FLUENT.width ?? Number(key.split('-').pop());
-  const body = icon.body
-    .replace(/id="([^"]+)"/g, (_, id) => `id="ci-${name}-${id}"`)
-    .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#ci-${name}-${id})`)
-    .replace(/href="#([^"]+)"/g, (_, id) => `href="#ci-${name}-${id}"`);
-  return { body, size };
-}
-
-export function colorIcon(name: string): { body: string; size: number } {
-  const key = [24, 20, 28, 32, 48, 16].map(size => `${name}-${size}`).find(k => FLUENT.icons[k]);
-  if (!key) throw new Error(`Unknown colour icon "${name}"`);
-  const icon = FLUENT.icons[key];
-  const size = icon.width ?? FLUENT.width ?? Number(key.split('-').pop());
-  const uid = ++colorUses;
-  const body = icon.body
-    .replace(/id="([^"]+)"/g, (_, id) => `id="${id}-${uid}"`)
-    .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${id}-${uid})`)
-    .replace(/href="#([^"]+)"/g, (_, id) => `href="#${id}-${uid}"`);
-  return { body, size };
+/** One UI icon's markup for the page sprite (see UiSprite). */
+export function uiSymbol(name: string): { body: string; size: number } {
+  const key = name.endsWith('-line') || name.endsWith('-fill') ? name : `${name}-fill`;
+  const icon = MINGCUTE.icons[key];
+  if (!icon) throw new Error(`Unknown UI icon "${name}" (MingCute "${key}")`);
+  return { body: icon.body, size: icon.width ?? MINGCUTE.width ?? 24 };
 }

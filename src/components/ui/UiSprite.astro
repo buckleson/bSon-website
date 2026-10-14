@@ -1,0 +1,15 @@
+---
+import { uiSymbol } from '@utils/glyphs';
+
+/**
+ * Defines every UI icon used on the page once, at the end of the page; each
+ * icon on the page is a <use> of its symbol (they take currentColor).
+ */
+const names = [...(Astro.locals.uiIcons ?? [])].sort();
+---
+
+{names.length > 0 && (
+  <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+    {names.map(name => <symbol id={`ui-${name}`} set:html={uiSymbol(name).body} />)}
+  </svg>
+)}

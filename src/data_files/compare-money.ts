@@ -11,11 +11,11 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Plan for a bank wallet',
       nodes: [
-        { icon: 'ph:bank', label: 'Bank team', sub: 'Starts from zero' },
-        { icon: 'ph:key', label: 'Key management', sub: 'Built in-house' },
-        { icon: 'ph:plugs', label: 'Chain integrations', sub: 'Dozens to build' },
-        { icon: 'ph:clipboard-text', label: 'Security reviews', sub: 'For every chain' },
-        { icon: 'ph:hourglass', label: 'Launch', sub: 'Years away' },
+        { icon: 'bank', label: 'Bank team', sub: 'Starts from zero' },
+        { icon: 'key-2', label: 'Key management', sub: 'Built in-house' },
+        { icon: 'plugin-2', label: 'Chain integrations', sub: 'Dozens to build' },
+        { icon: 'clipboard', label: 'Security reviews', sub: 'For every chain' },
+        { icon: 'time-duration', label: 'Launch', sub: 'Years away' },
       ],
       breakAt: 2,
       outcome: 'Years of work, and every incident yours',
@@ -29,11 +29,11 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'Plan for a bank wallet',
       nodes: [
-        { icon: 'ph:bank', label: 'Bank team', sub: 'Your brand and rules' },
-        { icon: 'code-block', label: 'Hyper Wallet SDKs', sub: 'In production today', guard: true },
-        { icon: 'ph:key', label: 'Keys on device', sub: 'Non-custodial by default', guard: true },
-        { icon: 'ph:swap', label: 'Swaps', sub: 'Best route on many chains', guard: true },
-        { icon: 'link-multiple', label: 'Hyper 0X', sub: 'Atomic settlement', guard: true },
+        { icon: 'bank', label: 'Bank team', sub: 'Your brand and rules' },
+        { icon: 'terminal-box', label: 'Hyper Wallet SDKs', sub: 'In production today', guard: true },
+        { icon: 'key-2', label: 'Keys on device', sub: 'Non-custodial by default', guard: true },
+        { icon: 'transfer-3', label: 'Swaps', sub: 'Best route on many chains', guard: true },
+        { icon: 'link-2', label: 'Hyper 0X', sub: 'Atomic settlement', guard: true },
       ],
       outcome: 'Branded wallet live, users pay one fee',
       steps: [
@@ -50,10 +50,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Send $50 in stablecoin',
       nodes: [
-        { icon: 'phone', label: 'Bank app', sub: 'Customer taps Send' },
+        { icon: 'cellphone', label: 'Bank app', sub: 'Customer taps Send' },
         { icon: 'cloud', label: 'Bank server', sub: 'Calls the wallet API' },
-        { icon: 'ph:hard-drives', label: 'Provider server', sub: 'Holds the private key' },
-        { icon: 'ph:cube', label: 'Blockchain', sub: 'Gets the transfer' },
+        { icon: 'server', label: 'Provider server', sub: 'Holds the private key' },
+        { icon: 'cube', label: 'Blockchain', sub: 'Gets the transfer' },
       ],
       breakAt: 2,
       outcome: 'Keys on servers, so the wallet is custodial',
@@ -67,11 +67,11 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'Send $50 in stablecoin',
       nodes: [
-        { icon: 'phone', label: 'Bank app', sub: 'Your own design' },
-        { icon: 'code-block', label: 'Hyper Wallet SDK', sub: 'Runs inside the app', guard: true },
-        { icon: 'clipboard-task', label: 'Compliance hooks', sub: 'Your limits run first', guard: true },
-        { icon: 'ph:fingerprint', label: 'Device key', sub: 'Secure hardware signs', guard: true },
-        { icon: 'ph:cube', label: 'Blockchain', sub: 'Pending, then confirmed' },
+        { icon: 'cellphone', label: 'Bank app', sub: 'Your own design' },
+        { icon: 'terminal-box', label: 'Hyper Wallet SDK', sub: 'Runs inside the app', guard: true },
+        { icon: 'list-check', label: 'Compliance hooks', sub: 'Your limits run first', guard: true },
+        { icon: 'fingerprint', label: 'Device key', sub: 'Secure hardware signs', guard: true },
+        { icon: 'cube', label: 'Blockchain', sub: 'Pending, then confirmed' },
       ],
       outcome: 'Signed on the phone, checked before it runs',
       steps: [
@@ -88,10 +88,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Withdraw 1 BTC',
       nodes: [
-        { icon: 'person', label: 'User', sub: 'Asks to withdraw' },
-        { icon: 'phone', label: 'Custodial app', sub: 'Shows a balance only' },
-        { icon: 'vault', label: 'Pooled wallet', sub: 'Provider holds every key' },
-        { icon: 'ph:currency-btc', label: 'Bitcoin network', sub: 'Never gets the transfer' },
+        { icon: 'user-3', label: 'User', sub: 'Asks to withdraw' },
+        { icon: 'cellphone', label: 'Custodial app', sub: 'Shows a balance only' },
+        { icon: 'safe-box', label: 'Pooled wallet', sub: 'Provider holds every key' },
+        { icon: 'currency-bitcoin', label: 'Bitcoin network', sub: 'Never gets the transfer' },
       ],
       breakAt: 2,
       outcome: 'Provider fails, and withdrawals freeze',
@@ -105,10 +105,10 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'Withdraw 1 BTC',
       nodes: [
-        { icon: 'person', label: 'User', sub: 'Asks to withdraw' },
-        { icon: 'ph:wallet', label: 'Hyper Wallet', sub: 'Non-custodial by default', guard: true },
-        { icon: 'ph:key', label: 'Key on phone', sub: 'Only the user signs', guard: true },
-        { icon: 'ph:currency-btc', label: 'Bitcoin network', sub: 'Gets the transfer' },
+        { icon: 'user-3', label: 'User', sub: 'Asks to withdraw' },
+        { icon: 'wallet-4', label: 'Hyper Wallet', sub: 'Non-custodial by default', guard: true },
+        { icon: 'key-2', label: 'Key on phone', sub: 'Only the user signs', guard: true },
+        { icon: 'currency-bitcoin', label: 'Bitcoin network', sub: 'Gets the transfer' },
       ],
       outcome: 'Funds move with no provider approval',
       steps: [
@@ -125,10 +125,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Wallet on a new phone',
       nodes: [
-        { icon: 'phone', label: 'New phone', sub: 'The old one is lost' },
-        { icon: 'ph:wallet', label: 'Wallet app', sub: 'Asks for twelve words' },
-        { icon: 'ph:note-pencil', label: 'Seed phrase', sub: 'The paper is gone' },
-        { icon: 'lock-closed', label: 'Funds', sub: 'Locked for good' },
+        { icon: 'cellphone', label: 'New phone', sub: 'The old one is lost' },
+        { icon: 'wallet-4', label: 'Wallet app', sub: 'Asks for twelve words' },
+        { icon: 'edit-2', label: 'Seed phrase', sub: 'The paper is gone' },
+        { icon: 'lock', label: 'Funds', sub: 'Locked for good' },
       ],
       breakAt: 2,
       outcome: 'Words lost, so the money is lost',
@@ -142,11 +142,11 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'Wallet on a new phone',
       nodes: [
-        { icon: 'phone', label: 'New phone', sub: 'The old one is lost' },
-        { icon: 'ph:user-focus', label: 'Face scan', sub: 'Passkey sign-in', guard: true },
-        { icon: 'person-key', label: 'Smart account', sub: 'Recovery built in', guard: true },
-        { icon: 'link-multiple', label: 'Hyper 0X', sub: 'No seed phrases', guard: true },
-        { icon: 'savings', label: 'Funds', sub: 'Back in reach' },
+        { icon: 'cellphone', label: 'New phone', sub: 'The old one is lost' },
+        { icon: 'user-search', label: 'Face scan', sub: 'Passkey sign-in', guard: true },
+        { icon: 'key-2', label: 'Smart account', sub: 'Recovery built in', guard: true },
+        { icon: 'link-2', label: 'Hyper 0X', sub: 'No seed phrases', guard: true },
+        { icon: 'pig-money', label: 'Funds', sub: 'Back in reach' },
       ],
       outcome: 'A lost phone is not a lost wallet',
       steps: [
@@ -163,10 +163,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Stablecoin from Tron',
       nodes: [
-        { icon: 'ph:wallet', label: 'Tron wallet', sub: 'Gets paid in stablecoin' },
-        { icon: 'send', label: 'Send screen', sub: 'No network check' },
-        { icon: 'building', label: 'Exchange account', sub: 'Network not supported' },
-        { icon: 'ph:wallet', label: 'Ethereum wallet', sub: 'Funds never arrive' },
+        { icon: 'wallet-4', label: 'Tron wallet', sub: 'Gets paid in stablecoin' },
+        { icon: 'send-plane', label: 'Send screen', sub: 'No network check' },
+        { icon: 'building-2', label: 'Exchange account', sub: 'Network not supported' },
+        { icon: 'wallet-4', label: 'Ethereum wallet', sub: 'Funds never arrive' },
       ],
       breakAt: 2,
       outcome: 'Funds stuck, recovery slow or impossible',
@@ -180,11 +180,11 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'Stablecoin from Tron',
       nodes: [
-        { icon: 'person', label: 'Customer', sub: 'Paid on Tron' },
-        { icon: 'ph:wallet', label: 'Hyper Wallet', sub: 'Many chains, one app', guard: true },
-        { icon: 'ph:swap', label: 'Swap', sub: 'Best route', guard: true },
-        { icon: 'link-multiple', label: 'Hyper 0X', sub: 'Both legs or neither', guard: true },
-        { icon: 'data-pie', label: 'One balance', sub: 'Now on Ethereum' },
+        { icon: 'user-3', label: 'Customer', sub: 'Paid on Tron' },
+        { icon: 'wallet-4', label: 'Hyper Wallet', sub: 'Many chains, one app', guard: true },
+        { icon: 'transfer-3', label: 'Swap', sub: 'Best route', guard: true },
+        { icon: 'link-2', label: 'Hyper 0X', sub: 'Both legs or neither', guard: true },
+        { icon: 'chart-pie', label: 'One balance', sub: 'Now on Ethereum' },
       ],
       outcome: 'Swapped in one app, both legs settled',
       steps: [
@@ -201,11 +201,11 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Laptop order by card',
       nodes: [
-        { icon: 'person', label: 'Customer', sub: 'Buys a laptop' },
-        { icon: 'ph:credit-card', label: 'Card network', sub: 'Approves in seconds' },
-        { icon: 'ph:bank', label: 'Processor', sub: 'Pays days later' },
-        { icon: 'building-store', label: 'Retailer', sub: 'Ships the laptop' },
-        { icon: 'ph:arrow-u-up-left', label: 'Chargeback', sub: 'Months after delivery' },
+        { icon: 'user-3', label: 'Customer', sub: 'Buys a laptop' },
+        { icon: 'bank-card', label: 'Card network', sub: 'Approves in seconds' },
+        { icon: 'bank', label: 'Processor', sub: 'Pays days later' },
+        { icon: 'store', label: 'Retailer', sub: 'Ships the laptop' },
+        { icon: 'back-2', label: 'Chargeback', sub: 'Months after delivery' },
       ],
       breakAt: 4,
       outcome: 'Payment pulled back after the laptop ships',
@@ -219,11 +219,11 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'Laptop order in stablecoin',
       nodes: [
-        { icon: 'person', label: 'Customer', sub: 'Buys a laptop' },
-        { icon: 'ph:qr-code', label: 'Branded checkout', sub: 'Hyper Wallet SDKs', guard: true },
-        { icon: 'ph:wallet', label: 'Customer wallet', sub: 'Approves the amount' },
-        { icon: 'link-multiple', label: 'Hyper 0X', sub: 'Final in one pass', guard: true },
-        { icon: 'building-store', label: 'Retailer', sub: 'Ships at finality' },
+        { icon: 'user-3', label: 'Customer', sub: 'Buys a laptop' },
+        { icon: 'qrcode', label: 'Branded checkout', sub: 'Hyper Wallet SDKs', guard: true },
+        { icon: 'wallet-4', label: 'Customer wallet', sub: 'Approves the amount' },
+        { icon: 'link-2', label: 'Hyper 0X', sub: 'Final in one pass', guard: true },
+        { icon: 'store', label: 'Retailer', sub: 'Ships at finality' },
       ],
       outcome: 'Paid and final, with no chargeback later',
       steps: [
@@ -240,10 +240,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: '$0.40 of spare change',
       nodes: [
-        { icon: 'ph:coffee', label: 'Coffee', sub: '$4.60 on a card' },
-        { icon: 'ph:coins', label: 'Round-up', sub: 'Sets aside $0.40' },
-        { icon: 'savings', label: 'Change pot', sub: 'Waits for a threshold' },
-        { icon: 'ph:bank', label: 'Fund purchase', sub: 'Flat monthly fee' },
+        { icon: 'teacup', label: 'Coffee', sub: '$4.60 on a card' },
+        { icon: 'coin', label: 'Round-up', sub: 'Sets aside $0.40' },
+        { icon: 'pig-money', label: 'Change pot', sub: 'Waits for a threshold' },
+        { icon: 'bank', label: 'Fund purchase', sub: 'Flat monthly fee' },
       ],
       breakAt: 3,
       outcome: 'A flat fee eats the small balance',
@@ -257,11 +257,11 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: '$50 grocery bill',
       nodes: [
-        { icon: 'food', label: 'Grocery bill', sub: 'A $50 payment' },
-        { icon: 'ph:sliders', label: 'H0X Pay plan', sub: 'Coming soon, set once', guard: true },
-        { icon: 'ph:coins', label: 'Tokenized gold', sub: 'A $1 slice' },
-        { icon: 'link-multiple', label: 'Hyper 0X', sub: 'Settles every slice', guard: true },
-        { icon: 'data-pie', label: 'Portfolio', sub: 'Grows with each payment' },
+        { icon: 'shopping-bag-1', label: 'Grocery bill', sub: 'A $50 payment' },
+        { icon: 'settings-6', label: 'H0X Pay plan', sub: 'Coming soon, set once', guard: true },
+        { icon: 'coin', label: 'Tokenized gold', sub: 'A $1 slice' },
+        { icon: 'link-2', label: 'Hyper 0X', sub: 'Settles every slice', guard: true },
+        { icon: 'chart-pie', label: 'Portfolio', sub: 'Grows with each payment' },
       ],
       outcome: 'Each payment will add a slice of gold',
       steps: [
@@ -278,10 +278,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Daily grind reward',
       nodes: [
-        { icon: 'ph:game-controller', label: 'Daily grind', sub: 'Hours, not skill' },
-        { icon: 'database', label: 'Operator database', sub: 'Records the reward' },
-        { icon: 'coin-multiple', label: 'Token mint', sub: 'Mints new tokens' },
-        { icon: 'ph:trend-down', label: 'Token market', sub: 'Few reasons to hold' },
+        { icon: 'game-2', label: 'Daily grind', sub: 'Hours, not skill' },
+        { icon: 'server', label: 'Operator database', sub: 'Records the reward' },
+        { icon: 'coin', label: 'Token mint', sub: 'Mints new tokens' },
+        { icon: 'trending-down', label: 'Token market', sub: 'Few reasons to hold' },
       ],
       breakAt: 2,
       outcome: 'The reward token loses almost all value',
@@ -296,9 +296,9 @@ export const compareMoney: Record<string, Compare> = {
       packet: 'Match win reward',
       nodes: [
         { icon: 'trophy', label: 'Match win', sub: 'Skill, not hours' },
-        { icon: 'ph:signature', label: 'Signed result', sub: 'HyperRun, coming soon', guard: true },
-        { icon: 'document-lock', label: 'Rewards contract', sub: 'On Hyper 0X', guard: true },
-        { icon: 'ph:wallet', label: 'In-game wallet', sub: 'Hyper Wallet SDK', guard: true },
+        { icon: 'quill-pen', label: 'Signed result', sub: 'HyperRun, coming soon', guard: true },
+        { icon: 'file-locked', label: 'Rewards contract', sub: 'On Hyper 0X', guard: true },
+        { icon: 'wallet-4', label: 'In-game wallet', sub: 'Hyper Wallet SDK', guard: true },
       ],
       outcome: 'Wins will pay out on signed results',
       steps: [
@@ -315,10 +315,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'Edited match result',
       nodes: [
-        { icon: 'sport', label: 'Cup final', sub: 'Team A wins' },
-        { icon: 'person-edit', label: 'Insider', sub: 'Changes the score' },
-        { icon: 'database', label: 'Operator database', sub: 'No signature check' },
-        { icon: 'people', label: 'Fans', sub: 'Paid on a false result' },
+        { icon: 'game-1', label: 'Cup final', sub: 'Team A wins' },
+        { icon: 'user-edit', label: 'Insider', sub: 'Changes the score' },
+        { icon: 'server', label: 'Operator database', sub: 'No signature check' },
+        { icon: 'group', label: 'Fans', sub: 'Paid on a false result' },
       ],
       breakAt: 2,
       outcome: 'Wrong fans paid, no shared record',
@@ -332,11 +332,11 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'Edited match result',
       nodes: [
-        { icon: 'sport', label: 'Cup final', sub: 'Team A wins' },
-        { icon: 'ph:signature', label: 'Signed result', sub: 'HyperRun, coming soon', guard: true },
-        { icon: 'person-edit', label: 'Insider', sub: 'Changes the score' },
-        { icon: 'document-lock', label: 'Rewards contract', sub: 'On Hyper 0X', guard: true },
-        { icon: 'people', label: 'Fans', sub: 'Paid on the real result' },
+        { icon: 'game-1', label: 'Cup final', sub: 'Team A wins' },
+        { icon: 'quill-pen', label: 'Signed result', sub: 'HyperRun, coming soon', guard: true },
+        { icon: 'user-edit', label: 'Insider', sub: 'Changes the score' },
+        { icon: 'file-locked', label: 'Rewards contract', sub: 'On Hyper 0X', guard: true },
+        { icon: 'group', label: 'Fans', sub: 'Paid on the real result' },
       ],
       stopAt: 3,
       outcome: 'The contract will reject the edited result',
@@ -354,10 +354,10 @@ export const compareMoney: Record<string, Compare> = {
     without: {
       packet: 'New player sign-up',
       nodes: [
-        { icon: 'ph:game-controller', label: 'New player', sub: 'Wants to play' },
-        { icon: 'ph:puzzle-piece', label: 'Browser extension', sub: 'A separate wallet' },
-        { icon: 'ph:note-pencil', label: 'Seed phrase', sub: 'Write down 24 words' },
-        { icon: 'ph:gas-pump', label: 'Gas token', sub: 'Bought on an exchange' },
+        { icon: 'game-2', label: 'New player', sub: 'Wants to play' },
+        { icon: 'plugin', label: 'Browser extension', sub: 'A separate wallet' },
+        { icon: 'edit-2', label: 'Seed phrase', sub: 'Write down 24 words' },
+        { icon: 'gas-station', label: 'Gas token', sub: 'Bought on an exchange' },
         { icon: 'alert', label: 'Pop-ups', sub: 'One per action' },
       ],
       breakAt: 2,
@@ -372,10 +372,10 @@ export const compareMoney: Record<string, Compare> = {
     with: {
       packet: 'New player sign-up',
       nodes: [
-        { icon: 'ph:game-controller', label: 'New player', sub: 'Installs the game' },
-        { icon: 'ph:user-focus', label: 'Passkey sign-in', sub: 'Face scan, no words', guard: true },
-        { icon: 'ph:wallet', label: 'Embedded wallet', sub: 'Hyper Wallet SDK', guard: true },
-        { icon: 'ph:gas-pump', label: 'Sponsored fees', sub: 'The game pays them', guard: true },
+        { icon: 'game-2', label: 'New player', sub: 'Installs the game' },
+        { icon: 'user-search', label: 'Passkey sign-in', sub: 'Face scan, no words', guard: true },
+        { icon: 'wallet-4', label: 'Embedded wallet', sub: 'Hyper Wallet SDK', guard: true },
+        { icon: 'gas-station', label: 'Sponsored fees', sub: 'The game pays them', guard: true },
         { icon: 'trophy', label: 'First match', sub: 'Rewards land in wallet' },
       ],
       outcome: 'Player starts with no seed phrase or gas',

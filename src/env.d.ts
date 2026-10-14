@@ -7,7 +7,7 @@ declare namespace App {
     locale: import('@utils/locale').MarketingLocale;
     /** Copy table for `locale`; set in `src/middleware.ts`. */
     copy: import('@/copy').Copy;
-    /** Colour icons used on the page; ColorSprite defines each one once. */
-    colorIcons?: Set<string>;
+    /** UI icons used on the page; UiSprite defines each one once. */
+    uiIcons?: Set<string>;
   }
 }

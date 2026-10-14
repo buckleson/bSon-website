@@ -28,7 +28,7 @@ const search = [data.title, data.description, ...data.tags, category.label].join
   <div class="pc-inner">
     <div class="pc-art"><BlogArt post={post} /></div>
     <div class="pc-body">
-      <p class="inline-flex w-fit items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-line"><Glyph color={category.icon} class="size-4" />{category.label}</p>
+      <p class="inline-flex w-fit items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-xs font-semibold text-ink ring-1 ring-line" style={`--a:${category.accent}`}><Glyph ui={category.icon} class="pc-cat size-4" />{category.label}</p>
       <Heading class="pc-title mt-4 font-semibold text-balance text-ink">{data.title}</Heading>
       <p class="pc-text mt-2 text-sm leading-relaxed text-pretty text-muted">{data.description}</p>
       <p class="mt-auto flex items-center gap-3 pt-5 text-xs text-muted">
@@ -54,6 +54,7 @@ const search = [data.title, data.description, ...data.tags, category.label].join
   .pc-art { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
   .pc-body { display: flex; flex: 1; flex-direction: column; padding: 1.25rem 1.4rem 1.4rem; }
   .pc-title { font-size: 1.2rem; line-height: 1.25; }
+  .pc-cat { color: var(--a); }
   .pc-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   @container (min-width: 40rem) {
     .pc-inner { flex-direction: row; }
