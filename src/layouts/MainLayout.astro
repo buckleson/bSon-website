@@ -96,16 +96,5 @@ const metadata = buildPageMetadata({
       </main>
     </div>
     {!hideFooter && <FooterSection />}
-    <script>
-      // https://preline.co
-      import 'preline';
-      const init = () =>
-        (
-          window as Window & { HSStaticMethods?: { autoInit?: () => void } }
-        ).HSStaticMethods?.autoInit?.();
-      if (document.readyState === 'loading')
-        document.addEventListener('DOMContentLoaded', init);
-      else init();
-    </script>
   </body>
 </html>

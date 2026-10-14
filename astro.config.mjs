@@ -57,6 +57,10 @@ export default defineConfig({
     }),
     mdx(),
   ],
+  // Inline each page's CSS: no render-blocking stylesheet requests.
+  build: {
+    inlineStylesheets: 'always',
+  },
   experimental: {
     clientPrerender: true,
   },

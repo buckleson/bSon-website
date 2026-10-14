@@ -45,3 +45,11 @@ if (!reduced) {
     });
   });
 }
+
+// Sections that skip rendering until near (content-visibility) change height
+// when they first lay out; keep every scroll trigger's positions in step.
+let refreshTimer = 0;
+new ResizeObserver(() => {
+  window.clearTimeout(refreshTimer);
+  refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+}).observe(document.body);

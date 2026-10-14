@@ -43,11 +43,11 @@ const c = t.home;
     chips={c.hero.chips}
   />
 
-  <Box><GlanceBento label={c.glanceIntro.label} statement={c.glanceIntro.statement} pilot={c.glanceIntro.pilot} logosTitle={c.logos} /></Box>
+  <Box render><GlanceBento label={c.glanceIntro.label} statement={c.glanceIntro.statement} pilot={c.glanceIntro.pilot} logosTitle={c.logos} /></Box>
   <Box><ProductsAccordion index="01" {...c.products} /></Box>
   <Box><ServicesBento index="02" {...c.services} /></Box>
   <Box><HowItWorks index="03" {...c.how} tabs={c.how.tabs.map(tab => ({ ...tab, system: tab.system as SystemName }))} /></Box>
-  <Box><WhySection index="04" {...c.why} /></Box>
+  <Box render><WhySection index="04" {...c.why} /></Box>
   <Box><ProcessSteps index="05" {...c.process} /></Box>
   <Box tone="dark"><VisionSection index="06" {...c.vision} /></Box>
   <Box><FaqTimeline index="07" {...c.faq} faqs={t.data.faqs.faqs} /></Box>

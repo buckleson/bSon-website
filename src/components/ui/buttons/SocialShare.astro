@@ -38,29 +38,19 @@ const socialPlatforms: SocialPlatform[] = [
 ];
 ---
 
-<div class="hs-dropdown relative inline-flex [--auto-close:inside] [--placement:top-left]">
-  <button
-    id="hs-dropup"
-    type="button"
-    class="hs-dropdown-toggle inline-flex items-center gap-x-2 rounded-lg px-4 py-3 text-sm font-medium text-muted ring-zinc-500 outline-hidden transition duration-300 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:ring-3 dark:text-neutral-400 dark:ring-zinc-200 dark:hover:bg-neutral-700 dark:hover:text-white/70 dark:focus:outline-hidden"
-  >
-    <Icon name="share" class="h-4 w-4 group-hover:text-neutral-700" />
-
+<details class="share relative inline-block" data-share>
+  <summary class="inline-flex cursor-pointer list-none items-center gap-x-2 rounded-lg px-4 py-3 text-sm font-medium text-muted transition duration-300 hover:bg-ground hover:text-ink">
+    <Icon name="share" class="h-4 w-4" />
     {title}
-  </button>
-
-  <div
-    class="hs-dropdown-menu duration hs-dropdown-open:opacity-100 z-10 hidden w-72 divide-y divide-line rounded-2xl bg-card p-2 ring-1 ring-line opacity-0 shadow-md transition-[opacity,margin] dark:divide-neutral-700 dark:border dark:border-neutral-700 dark:bg-neutral-800"
-    aria-labelledby="hs-dropup"
-  >
+  </summary>
+  <div class="absolute bottom-full left-0 z-10 mb-2 w-72 divide-y divide-line rounded-2xl bg-card p-2 shadow-md ring-1 ring-line">
     <div class="py-2 first:pt-0 last:pb-0">
       {socialPlatforms.map(platform => (
         <a
-          class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-ground focus:bg-ground focus:outline-hidden dark:text-white/70 dark:hover:bg-neutral-700 dark:hover:text-white/70 dark:focus:bg-neutral-700"
+          class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-ground focus:bg-ground focus:outline-hidden"
           href={platform.url}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={t.share.shareOn(platform.name)}
         >
           <Icon name={platform.icon} class="size-4 shrink-0" />
           {t.share.shareOn(platform.name)}
@@ -68,79 +58,34 @@ const socialPlatforms: SocialPlatform[] = [
       ))}
     </div>
     <div class="py-2 first:pt-0 last:pb-0">
-      <button
-        type="button"
-        class="js-clipboard hover:text-dark focus-visible:ring-secondary group inline-flex w-full items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-ground focus:bg-ground focus:outline-hidden focus-visible:ring-1 focus-visible:outline-hidden dark:text-white/70 dark:hover:bg-neutral-700 dark:hover:text-white/70 dark:focus:bg-neutral-700"
-        data-clipboard-success-text={t.share.copied}
-      >
-        <Icon
-          name="clipboard"
-          class="js-clipboard-default h-4 w-4 transition group-hover:rotate-6"
-        />
-        <Icon
-          name="check"
-          class="js-clipboard-success hidden h-4 w-4 text-ink/80"
-        />
-        <span class="js-clipboard-success-text">{t.share.copyLink}</span>
+      <button type="button" class="group inline-flex w-full items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-ground focus:bg-ground focus:outline-hidden" data-copy-link data-copied={t.share.copied}>
+        <Icon name="clipboard" class="h-4 w-4 transition group-hover:rotate-6" />
+        <span data-copy-text>{t.share.copyLink}</span>
       </button>
     </div>
   </div>
-</div>
-
-{/* Import the necessary Clipboard plugin */}
-{/* https://clipboardjs.com/ */}
+</details>
 
 <script>
-  import ClipboardJS from 'clipboard';
-
-  // Initialization of Clipboard
-  (function () {
-    window.addEventListener('load', () => {
-      const clipboards =
-        document.querySelectorAll<HTMLElement>('.js-clipboard');
-
-      clipboards.forEach(el => {
-        const clipboard = new ClipboardJS(el, {
-          text: () => {
-            return window.location.href;
-          },
-        });
-
-        clipboard.on('success', () => {
-          const defaultElement = el.querySelector<HTMLElement>(
-            '.js-clipboard-default'
-          );
-          const successElement = el.querySelector<HTMLElement>(
-            '.js-clipboard-success'
-          );
-          const successTextElement = el.querySelector<HTMLElement>(
-            '.js-clipboard-success-text'
-          );
-          const successText = el.dataset.clipboardSuccessText || '';
-          let oldSuccessText: string | undefined;
-
-          if (successTextElement) {
-            oldSuccessText = successTextElement.textContent || '';
-            successTextElement.textContent = successText;
-          }
-
-          if (defaultElement && successElement) {
-            defaultElement.style.display = 'none';
-            successElement.style.display = 'block';
-          }
-
-          setTimeout(() => {
-            if (successTextElement && oldSuccessText !== undefined) {
-              successTextElement.textContent = oldSuccessText;
-            }
-
-            if (defaultElement && successElement) {
-              successElement.style.display = '';
-              defaultElement.style.display = '';
-            }
-          }, 800);
-        });
-      });
+  // Copy the page link; the label confirms for a moment.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-link]').forEach(button => {
+    button.addEventListener('click', async () => {
+      const label = button.querySelector<HTMLElement>('[data-copy-text]');
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+      } catch {
+        return;
+      }
+      if (!label) return;
+      const before = label.textContent;
+      label.textContent = button.dataset.copied ?? before;
+      setTimeout(() => (label.textContent = before), 1200);
     });
-  })();
+  });
+  // Close the menu when clicking elsewhere.
+  document.addEventListener('click', event => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-share][open]').forEach(menu => {
+      if (!menu.contains(event.target as Node)) menu.open = false;
+    });
+  });
 </script>

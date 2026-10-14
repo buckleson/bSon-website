@@ -115,6 +115,7 @@ html:not(.dark) .iso.iso-auto{
 .iso-stage{position:relative;container-type:inline-size}
 .iso-plate{container-type:inline-size}
 @container (max-width:600px){.iso-plate-corner[data-corner="hint"]{display:none}}
+.iso .iso-plate-corner{color:var(--anatomy-text)}
 .iso-hero{--anatomy-card:color-mix(in oklab,var(--card,#fff) 80%,transparent)}
 .iso-hero .iso-plate{padding:46px 14px 42px}
 .fig-pin{position:absolute;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,calc(-100% + 3px));pointer-events:none;transition:opacity .45s ease,transform .45s cubic-bezier(.22,1,.36,1);z-index:1}
