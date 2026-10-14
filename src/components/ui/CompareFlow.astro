@@ -98,7 +98,7 @@ const lanes = compare
   :global(.dark) .cmp-node[data-state='stop'] .cmp-tile { background: rgb(6 78 59 / 0.6); }
   @keyframes cmp-shake { 25% { transform: translateX(-3px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } }
 
-  .cmp-packet { position: absolute; left: 0; top: 0; z-index: 2; display: inline-flex; align-items: center; gap: 0.35rem; max-width: 11rem; padding: 0.25rem 0.6rem 0.25rem 0.3rem; border-radius: 999px; background: var(--ink); color: var(--card); font: 600 0.68rem/1.2 var(--font-mono, ui-monospace, monospace); white-space: nowrap; opacity: 0; box-shadow: 0 8px 20px -8px rgb(0 0 0 / 0.5); will-change: transform, opacity; pointer-events: none; }
+  .cmp-packet { position: absolute; left: 0; top: 0; z-index: 2; display: inline-flex; align-items: center; gap: 0.35rem; max-width: 15rem; padding: 0.25rem 0.6rem 0.25rem 0.3rem; border-radius: 999px; background: var(--ink); color: var(--card); font: 600 0.68rem/1.2 var(--font-mono, ui-monospace, monospace); white-space: nowrap; opacity: 0; box-shadow: 0 8px 20px -8px rgb(0 0 0 / 0.5); will-change: transform, opacity; pointer-events: none; }
   .cmp-packet > :global(svg) { flex: none; padding: 0.2rem; width: 1.3rem; height: 1.3rem; border-radius: 999px; background: var(--accent-500); color: #fff; }
   .cmp-packet span { overflow: hidden; text-overflow: ellipsis; }
   .cmp-packet[data-bad] { background: #dc2626; color: #fff; }
