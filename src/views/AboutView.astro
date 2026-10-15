@@ -30,7 +30,7 @@ const href = (url: string) => localePath(locale, url);
 <MainLayout title={copy.title} seoTitle={copy.seoTitle} description={copy.metaDescription} kind={{ type: 'AboutPage' }} faqs={copy.faq.items}>
   <section class="mx-auto max-w-[85rem] px-4 pt-14 pb-14 sm:px-6 lg:px-8 lg:pt-20">
     <p class="font-mono text-xs tracking-wide text-muted uppercase" data-reveal>{copy.label}</p>
-    <h1 class="mt-4 max-w-4xl text-[2.6rem] leading-[1] font-semibold text-ink sm:text-6xl lg:text-7xl">
+    <h1 class="mt-4 max-w-5xl text-[2.6rem] leading-[1] font-semibold text-ink sm:text-6xl lg:text-[3.6rem] xl:text-[4rem]">
       <span class="block">{copy.claim}</span>
       <span class="mark">{copy.payoff}</span>
     </h1>
