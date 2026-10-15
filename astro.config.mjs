@@ -36,13 +36,6 @@ export default defineConfig({
         { label: 'Start here', items: [{ autogenerate: { directory: 'guides' } }] },
         { label: 'Hyper 0X', items: [{ autogenerate: { directory: 'hyper-0x' } }] },
       ],
-      social: [
-        {
-          icon: 'github',
-          label: 'GitHub',
-          href: 'https://github.com/buckleson/bSon-website',
-        },
-      ],
       disable404Route: true,
       customCss: ['./src/assets/styles/starlight.css'],
       favicon: '/favicon.ico',
