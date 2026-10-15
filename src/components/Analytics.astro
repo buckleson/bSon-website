@@ -1,0 +1,28 @@
+---
+import { ANALYTICS_ID } from '@data/constants';
+
+/**
+ * Google Analytics 4. The tag loads after the page has loaded and the
+ * browser is idle (or on the first interaction, if that comes first), so it
+ * never competes with the first paint or adds blocking time.
+ */
+---
+
+<script is:inline define:vars={{ id: ANALYTICS_ID }}>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', id);
+  var loaded = false;
+  var load = function () {
+    if (loaded) return;
+    loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+    document.head.appendChild(s);
+  };
+  var idle = function () { ('requestIdleCallback' in window ? requestIdleCallback : setTimeout)(load, { timeout: 3000 }); };
+  if (document.readyState === 'complete') idle(); else addEventListener('load', idle, { once: true });
+  ['pointerdown', 'keydown', 'scroll'].forEach(function (e) { addEventListener(e, load, { once: true, passive: true }); });
+</script>

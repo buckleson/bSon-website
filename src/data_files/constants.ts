@@ -1,4 +1,7 @@
 
+/** Google Analytics 4 measurement ID. */
+export const ANALYTICS_ID = 'G-LDE5FJFQEG';
+
 /** Every "book a call" button links here. */
 export const BOOKING_URL = 'https://cal.com/buckleson-group/30min';
 
