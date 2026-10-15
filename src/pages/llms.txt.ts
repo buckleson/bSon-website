@@ -29,7 +29,7 @@ export const GET: APIRoute = async () => {
     `- Founder: ${ORGANIZATION.founder.name}, ${ORGANIZATION.founder.jobTitle}.`,
     `- Belief: ${copy.about.story.belief}`,
     ...copy.about.pillars.items.map(item => `- ${item.label}: ${item.title} ${item.text}`),
-    `- Beyond payments: ${copy.about.beyond.items.map(item => `${item.title.toLowerCase()}`).join(', ')}. ${copy.about.beyond.note}`,
+    `- Beyond payments: ${copy.about.beyond.items.map(item => item.title).join('; ')}. ${copy.about.beyond.note}`,
     '',
     '## Products',
     '',
