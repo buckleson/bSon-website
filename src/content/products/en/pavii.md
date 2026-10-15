@@ -45,7 +45,14 @@ details:
 cta:
   title: 'Book a Pavii demo'
   url: 'https://cal.com/buckleson-group/30min'
+website:
+  title: 'Visit pavii.tech'
+  url: 'https://www.pavii.tech/'
 learnMore:
+  - title: 'Pavii website: pavii.tech'
+    url: 'https://www.pavii.tech/'
+  - title: 'Agentic security FAQ on pavii.tech'
+    url: 'https://www.pavii.tech/agentic-security-faq/'
   - title: 'How to secure AI agents: 8 attacks'
     url: '/blog/how-to-secure-ai-agents/'
   - title: 'Proof of execution for AI'

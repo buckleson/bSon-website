@@ -31,6 +31,8 @@ const productsCollection = defineCollection({
     features: z.array(item),
     details: z.object({ title: z.string(), items: z.array(item) }),
     cta: z.object({ title: z.string(), url: z.string() }),
+    // The product's own website, when it has one (shown as a hero button).
+    website: z.object({ title: z.string(), url: z.string().url() }).optional(),
     learnMore: z.array(z.object({ title: z.string(), url: z.string() })).default([]),
     faqs: z.array(faq).default([]),
   }),
