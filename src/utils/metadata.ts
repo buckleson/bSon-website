@@ -79,6 +79,7 @@ export function absoluteUrl(path: string): string {
 
 const ORG_ID = `${SITE.url}/#organization`;
 const SITE_ID = `${SITE.url}/#website`;
+const FOUNDER_ID = `${SITE.url}/about/#founder`;
 
 /** Section names for breadcrumb levels, keyed by the first path segment. */
 const SECTIONS: Record<string, string> = {
@@ -128,7 +129,16 @@ export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
     description: copy.site.description,
     email: ORGANIZATION.email,
     knowsAbout: ORGANIZATION.knowsAbout,
+    founder: { '@id': FOUNDER_ID },
     ...(ORGANIZATION.sameAs.length > 0 && { sameAs: ORGANIZATION.sameAs }),
+  };
+  const founder = {
+    '@type': 'Person',
+    '@id': FOUNDER_ID,
+    name: ORGANIZATION.founder.name,
+    jobTitle: ORGANIZATION.founder.jobTitle,
+    image: absoluteUrl(`${BASE}${ORGANIZATION.founder.image}`),
+    worksFor: { '@id': ORG_ID },
   };
   const website = {
     '@type': 'WebSite',
@@ -200,11 +210,21 @@ export function buildPageMetadata(input: PageMetadataInput): PageMetadata {
         })),
       });
       break;
+    case 'AboutPage':
+      // The About page is about the company: its story and its founder.
+      Object.assign(page, {
+        '@type': 'AboutPage',
+        about: { '@id': ORG_ID },
+        mainEntity: { '@id': ORG_ID },
+        abstract: ORGANIZATION.story,
+      });
+      break;
     default:
       page['@type'] = kind.type;
   }
 
-  const graph: Record<string, unknown>[] = [organization, website, page];
+  // The founder node is tiny, so every page carries it with the Organization.
+  const graph: Record<string, unknown>[] = [organization, founder, website, page];
   const crumbs = breadcrumbs(pathname, input.title);
   if (crumbs) graph.push(crumbs);
   if (faqs.length > 0) {

@@ -19,6 +19,11 @@ export const SITE = {
 export const ORGANIZATION = {
   email: 'vijay@buckleson.com',
   sameAs: [] as string[],
+  /** The founder, as a schema.org Person (photo is a public file). */
+  founder: { name: 'Vijay', jobTitle: 'Founder', image: '/team/vijay.jpg' },
+  /** One-line company origin, used in structured data and llms.txt. */
+  story:
+    'Buckleson started with a crypto wallet, Hyper Wallet. To remove the hidden charges that many wallets add, it built its own blockchain, Hyper 0X, with an order book inside its consensus. Hyper 0X is modular, like microservices: a private L2 for each application and one shared L1 for settlement and audit.',
   knowsAbout: [
     'Blockchain development',
     'Custom blockchain networks',
@@ -32,6 +37,10 @@ export const ORGANIZATION = {
     'Post-quantum cryptography',
     'AI agent security',
     'Smart contracts',
+    'Privacy-preserving verification',
+    'Fractional ownership',
+    'Multi-party business processes',
+    'Order book exchanges',
   ],
 };
 

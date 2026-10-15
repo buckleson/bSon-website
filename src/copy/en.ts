@@ -233,12 +233,12 @@ export const en = {
     vision: {
       label: 'Our vision',
       statement:
-        'Every payment, asset and AI decision must leave a record that anyone with permission can verify. Hyper 0X keeps those records today.',
+        "We believe blockchain is more than crypto. It is the most underrated technology we have. It keeps people's data private and still shows a business the facts.",
       story: [
-        'We built our own blockchain, Hyper 0X, so that we control its fees, roadmap and security model.',
-        'Then we built our own products on it. Hyper Wallet and Pavii both run in production.',
-        'Today, Hyper 0X also runs the private L2s that we build for banks, fintechs and asset issuers.',
+        'Crypto made blockchain famous for payments. But a blockchain also lets companies that do not trust each other work from one shared record.',
+        'It can prove a fact, such as “this customer passed identity checks”, without showing the documents behind it. I started Buckleson to build systems like this, where a normal database is not enough.',
       ],
+      person: { name: 'Vijay', role: 'Founder' },
       cta: { title: 'Read our story', url: '/about/' },
     },
     glance: {
@@ -368,20 +368,43 @@ export const en = {
   },
   about: {
     title: 'About',
-    seoTitle: 'About Buckleson: Our Vision and Story',
+    seoTitle: 'About Buckleson: Our Story, Mission, Vision and Founder',
     metaDescription:
-      'Buckleson is a blockchain infrastructure company. Read our story, why we built our own blockchain, Hyper 0X, and the vision behind our products and services.',
+      'Buckleson started as a crypto wallet and built its own blockchain, Hyper 0X. Read our story, mission and vision, and what blockchain can do beyond payments.',
     label: 'About Buckleson',
-    claim: 'We build the infrastructure',
-    payoff: 'that money and AI run on.',
+    claim: 'Blockchain is more than payments.',
+    payoff: 'We build what else it can do.',
+    lead: 'Buckleson is a blockchain infrastructure company. We started with a crypto wallet. Then we built our own blockchain, Hyper 0X. Today we build private blockchains, tokenized assets, wallets and AI-agent security for banks, fintechs, asset issuers and AI teams.',
     story: {
       label: 'Our story',
-      title: 'Why we own every layer, from the blockchain to the app.',
-      paragraphs: [
-        'Buckleson builds blockchain infrastructure and the products that run on it. We started from one belief: one company must be responsible for the whole system. Then banks, fintechs and AI teams can trust it with real money and real decisions.',
-        'Hyper 0X is our answer. It is our own permissioned L1: a main blockchain that only approved parties can join. Each customer gets a private L2, a separate chain that settles on Hyper 0X. Every transaction is final in one pass, and every connection is post-quantum-resistant.',
-        'The numbers below come from our own products. H0X Pay and HyperRun will launch next.',
+      title: 'From a wallet to our own blockchain.',
+      steps: [
+        {
+          title: 'We started with a wallet.',
+          text: 'Our first product was Hyper Wallet, a crypto wallet and exchange in one app. Today it has 33K+ portfolios and 2M+ transactions.',
+        },
+        {
+          title: 'We saw the hidden charges.',
+          text: 'Many wallets earn money from charges that users do not see. Examples are a worse price on each swap or a wallet fee on top of the exchange fee. We wanted to remove these charges, not hide them better.',
+        },
+        {
+          title: 'We built a blockchain that works as an order book.',
+          text: 'So we built our own blockchain, Hyper 0X. An order book runs inside its consensus, so the chain matches buy and sell orders itself, like an exchange that no single party runs. Users pay one fee, not two. Hyper Wallet users have saved $128K+ in wallet fees.',
+        },
+        {
+          title: 'We met the blockchain trilemma.',
+          text: 'Most blockchains give up one of three things: decentralization, scalability or security. We wanted a modular chain that keeps all three.',
+        },
+        {
+          title: 'Microservices gave us the answer.',
+          text: 'Good software splits one large system into small services. We did the same with a blockchain. Each application or policy gets its own L2, or an L3 on top of it. When one application needs more transactions, only its L2 grows. The shared L1 does the final settlement and audit for all of them, and no single node sets the order of transactions.',
+        },
+        {
+          title: 'Today',
+          text: 'Hyper 0X runs our own products and the private chains that we build for banks, fintechs, asset issuers and AI teams. Pavii protects AI agents on it. H0X Pay and HyperRun will launch next.',
+        },
       ],
+      belief: 'We believe blockchain is one of the most underrated technologies. Payments are only the start.',
     },
     stats: [
       { value: '2M+', label: 'transactions through Hyper Wallet' },
@@ -389,13 +412,103 @@ export const en = {
       { value: '$128K+', label: 'saved by users in wallet fees' },
       { value: '100M+', label: 'AI tokens saved by Pavii' },
     ],
-    team: {
-      label: 'Team',
-      claim: 'Engineers, not',
-      payoff: 'generalists.',
+    pillars: {
+      label: 'What drives us',
+      claim: 'Why we exist,',
+      payoff: 'and what makes us different.',
+      items: [
+        {
+          label: 'Mission',
+          title: 'Solve what a database cannot.',
+          text: 'We use blockchain where a normal database is not enough: records that many companies share, privacy with proof, and ownership that everyone can check.',
+        },
+        {
+          label: 'Vision',
+          title: 'Records that nobody can secretly change.',
+          text: 'We want critical systems to run on shared records that nobody can secretly edit, while each person keeps control of their own data.',
+        },
+        {
+          label: 'Goal',
+          title: 'A blockchain for every application.',
+          text: 'We want any company to start its own chain as easily as a cloud server. Each application gets a private L2, with settlement and audit on one shared L1.',
+        },
+        {
+          label: 'Moat',
+          title: 'We own every layer.',
+          text: 'We built the L1, the L2s, the wallet and the AI security gateway ourselves. So we control fees, roadmap and security, and we test every idea in our own products first.',
+        },
+      ],
+    },
+    beyond: {
+      label: 'Beyond payments',
+      claim: 'Where blockchain does',
+      payoff: 'what a database cannot.',
+      body: 'A database works when one company owns the data and everyone trusts that company. Many real problems have no such owner. That is where a blockchain helps.',
+      items: [
+        {
+          icon: 'idcard',
+          title: 'Prove a fact, keep the data private',
+          text: 'Check that a customer passed identity checks, is old enough or has enough funds, without seeing their documents. The proof is enough, and the data stays with its owner.',
+          url: '/blog/verify-customers-without-sharing-data/',
+        },
+        {
+          icon: 'group-3',
+          title: 'Run one process across many companies',
+          text: 'A shipment, a loan or an insurance claim can involve five companies. On a shared ledger, each party sees the same steps and only its own private data. Nobody has to own the database.',
+          url: '/services/custom-blockchains/',
+        },
+        {
+          icon: 'coin',
+          title: 'Own a part of a large asset',
+          text: 'Split a building, a fund or a bar of gold into small units. Each owner can prove what they own, and units trade and settle in one step.',
+          url: '/services/asset-tokenization/',
+        },
+        {
+          icon: 'safe-lock',
+          title: 'Audit without exposing everything',
+          text: 'Each party keeps its records encrypted, and the ledger keeps a fingerprint of each one. An auditor can confirm that nothing changed and read only what it has a key for.',
+          url: '/blog/blockchain-data-encryption-four-layers/',
+        },
+        {
+          icon: 'list-check',
+          title: 'Rules that run before money moves',
+          text: 'Limits, approvals and identity checks run before a transaction executes. A breach does not happen, so nobody has to undo it later.',
+          url: '/blog/compliance-as-code-blockchain/',
+        },
+        {
+          icon: 'ai',
+          title: 'AI agents that you can audit',
+          text: 'Every action of an AI agent leaves a signed receipt on the chain. Nobody can secretly change it, so you can give agents real work.',
+          url: '/products/pavii/',
+        },
+      ],
+      note: 'And payments too: they settle in one pass, with one fee.',
+      more: { title: 'What blockchain can do beyond payments', url: '/blog/blockchain-use-cases-beyond-payments/' },
+    },
+    faq: {
+      label: 'Questions about us',
+      claim: 'About Buckleson,',
+      payoff: 'in short answers.',
+      items: [
+        {
+          question: 'Who founded Buckleson?',
+          answer: 'Vijay founded Buckleson. The company started with a crypto wallet, Hyper Wallet, and then built its own blockchain, Hyper 0X.',
+        },
+        {
+          question: 'Why did Buckleson build its own blockchain?',
+          answer: 'Many wallets earn money from hidden charges. Buckleson built Hyper 0X with an order book inside its consensus, so users pay one fee, not two. Then the team made it modular: a private L2 for each application and one shared L1 for settlement and audit.',
+        },
+        {
+          question: 'What can a blockchain do besides payments?',
+          answer: 'A blockchain can prove a fact without showing private data. It lets many companies run one process on a shared record. It splits large assets into small units that owners can verify. It also runs rules before a transaction executes and keeps a record of AI agent actions that nobody can secretly change.',
+        },
+        {
+          question: 'How does Hyper 0X handle the blockchain trilemma?',
+          answer: 'Hyper 0X splits the work, like microservices. Each application gets its own L2, so it can grow alone. The shared L1 does the final settlement and audit with leaderless consensus, so no single node sets the order of transactions.',
+        },
+      ],
     },
   },
-
   contact: {
     title: 'Contact',
     seoTitle: 'Contact Buckleson: Talk to a Blockchain Engineer',

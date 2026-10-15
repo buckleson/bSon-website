@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { SITE } from '@data/constants';
+import { SITE, ORGANIZATION } from '@data/constants';
 import { getCopy } from '@/copy';
 import { entriesFor, pathFor } from '@utils/content';
 import { localePath } from '@utils/locale';
@@ -23,6 +23,14 @@ export const GET: APIRoute = async () => {
     '',
     ...copy.home.glance.facts.map(fact => `- ${fact.term}: ${fact.detail}`),
     '',
+    '## About',
+    '',
+    `- [About Buckleson](${url('/about/')}): ${ORGANIZATION.story}`,
+    `- Founder: ${ORGANIZATION.founder.name}, ${ORGANIZATION.founder.jobTitle}.`,
+    `- Belief: ${copy.about.story.belief}`,
+    ...copy.about.pillars.items.map(item => `- ${item.label}: ${item.title} ${item.text}`),
+    `- Beyond payments: ${copy.about.beyond.items.map(item => `${item.title.toLowerCase()}`).join(', ')}. ${copy.about.beyond.note}`,
+    '',
     '## Products',
     '',
     ...products.map(
@@ -44,7 +52,7 @@ export const GET: APIRoute = async () => {
     '',
     '## FAQ',
     '',
-    `- [Blockchain & AI-agent security FAQ](${url('/faq/')}): answers on enterprise blockchains, AI-agent security, asset tokenization, business wallets and post-quantum encryption.`,
+    `- [FAQ: blockchain, tokenization, wallets and AI agents](${url('/faq/')}): answers on enterprise blockchains, AI-agent security, asset tokenization, business wallets and post-quantum encryption.`,
     '',
     '## Docs',
     '',
