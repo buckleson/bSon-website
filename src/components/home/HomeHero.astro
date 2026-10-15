@@ -64,17 +64,6 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
     background: radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--ink) 13%, transparent) 1px, transparent 1.2px) 0 0 / 22px 22px;
     mask-image: linear-gradient(100deg, rgb(0 0 0 / 0.35) 10%, #000 55%);
   }
-  /* The typed text: a black underline that follows each letter; it fades
-     while the phrase erases (and the first, untyped phrase has none). */
-  [data-typer-text] {
-    text-decoration-line: underline;
-    text-decoration-color: var(--ink);
-    text-decoration-thickness: 0.07em;
-    text-underline-offset: 0.12em;
-    text-decoration-skip-ink: none;
-    transition: text-decoration-color 250ms ease;
-  }
-  [data-typer].is-erasing [data-typer-text] { text-decoration-color: transparent; }
   .typer-caret {
     display: inline-block;
     width: 0.06em;
@@ -95,9 +84,7 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   document.querySelectorAll<HTMLElement>('[data-hero]').forEach(hero => {
-    // Rotating last line: type, pause, erase, next. The typed text carries a
-    // black underline that grows letter by letter as it types; the underline
-    // fades while the phrase erases.
+    // Rotating last line: type, pause, erase, next.
     const typer = hero.querySelector<HTMLElement>('[data-typer]');
     if (typer && !reduced) {
       const phrases: string[] = JSON.parse(typer.dataset.typer!);
@@ -110,13 +97,11 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
           shown--;
           if (shown <= 0) { erasing = false; index = (index + 1) % phrases.length; }
         } else shown++;
-        typer.classList.toggle('is-erasing', erasing);
         out.textContent = phrases[index].slice(0, Math.max(shown, 0)) || ' ';
         let delay = erasing ? 30 : 60;
         if (!erasing && shown >= phrases[index].length) { erasing = true; delay = 2000; }
         window.setTimeout(tick, delay);
       };
-      typer.classList.add('is-erasing');
       window.setTimeout(tick, 2400);
     }
     if (reduced) return;
