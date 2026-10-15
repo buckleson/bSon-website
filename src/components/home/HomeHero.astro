@@ -37,15 +37,15 @@ const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
           <span class="mark" data-typer-text>{phrases[0]}</span><span class="typer-caret" aria-hidden="true"></span>
         </span>
       </h1>
-      <p class="mt-5 max-w-[30rem] text-base leading-relaxed text-pretty text-muted sm:text-lg">{intro}</p>
+      <p class="mt-5 max-w-[30rem] text-base leading-relaxed text-pretty text-muted sm:text-lg">{intro.replaceAll('Hyper 0X', 'Hyper\u00A00X')}</p>
       <div class="mt-8 flex flex-wrap gap-3" data-hero-in>
         <a href={primary.url} class="cta-pill"><span>{primary.title}</span><span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span></a>
         <a href={secondary.url} class="cta-ghost text-ink">{secondary.title}</a>
       </div>
-      <ul class="mt-10 flex flex-wrap gap-2" data-hero-in>
+      <ul class="mt-8 flex flex-wrap gap-1.5 sm:mt-10 sm:gap-2" data-hero-in>
         {chips.map((chip, index) => (
-          <li class="inline-flex items-center gap-2 rounded-full bg-card px-3.5 py-2 text-sm text-ink/85 ring-1 ring-line">
-            <Glyph icon={chipIcons[index]} class="size-4 text-ink" />{chip}
+          <li class="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1.5 text-xs text-ink/85 ring-1 ring-line sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm">
+            <Glyph icon={chipIcons[index]} class="size-3.5 text-ink sm:size-4" />{chip}
           </li>
         ))}
       </ul>
