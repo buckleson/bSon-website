@@ -124,14 +124,14 @@ const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
       </div>
 
       {data.diagram && (
-        <section class="mt-14" aria-labelledby="architecture-title">
+        <section class="cv-lazy mt-14" aria-labelledby="architecture-title">
           <h2 id="architecture-title" class="text-2xl font-semibold text-ink">Architecture in detail</h2>
           <Diagram name={data.diagram} class="mt-4" />
         </section>
       )}
 
       {data.faqs.length > 0 && (
-        <section class="mt-14" aria-labelledby="faq-title">
+        <section class="cv-lazy mt-14" aria-labelledby="faq-title">
           <h2 id="faq-title" class="text-2xl font-semibold text-ink">Frequently asked questions</h2>
           <div class="mt-4 divide-y divide-line">
             {data.faqs.map(faq => (
@@ -202,7 +202,7 @@ const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
   </div>
 
   {related.length > 0 && (
-    <section class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8" aria-labelledby="related-title">
+    <section class="cv-lazy mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8" aria-labelledby="related-title">
       <h2 id="related-title" class="text-3xl font-semibold text-ink">More on {category.label.toLowerCase()}</h2>
       <ul class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {related.map(entry => <li><CardPost post={entry} /></li>)}
@@ -212,6 +212,8 @@ const next = inPath ? bySlug[inPath.path.slugs[inPath.index + 1]] : undefined;
 </MainLayout>
 
 <style>
+  /* Sections far below the fold skip style and layout until they come near. */
+  .cv-lazy { content-visibility: auto; contain-intrinsic-size: auto 36rem; }
   @media (min-width: 1024px) { .post-layout { grid-template-columns: 14rem minmax(0, 1fr); } .post-rail { grid-column: 2; } }
   @media (min-width: 1280px) { .post-layout { grid-template-columns: 15rem minmax(0, 46rem) 18rem; justify-content: space-between; } .post-rail { grid-column: auto; } }
   .toc-link[aria-current='true'] { background: var(--card); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line); }

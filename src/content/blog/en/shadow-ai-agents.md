@@ -84,7 +84,7 @@ Do not shut everything down on day one, because the business depends on some age
 
 What changes for one agent:
 
-| | Shadow agent | Agent behind one gateway |
+| Topic | Shadow agent | Agent behind one gateway |
 |---|---|---|
 | Who knows that it exists | Only its owner | The security team, from the inventory |
 | Credentials | A personal key with full rights | Its own credentials, scoped to the task |

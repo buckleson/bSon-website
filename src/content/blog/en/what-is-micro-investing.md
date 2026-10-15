@@ -48,7 +48,7 @@ The trade-off is that it links investing to spending. Spend more and you invest 
 
 ## How do the methods compare?
 
-| | Round-ups | Slice of every payment | Recurring deposit |
+| Topic | Round-ups | Slice of every payment | Recurring deposit |
 |---|---|---|---|
 | Amount invested | Spare change, up to $0.99 per purchase | A set percentage of each payment | A fixed amount on a schedule |
 | Predictability | Low | Medium, scales with payments | High |

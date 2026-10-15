@@ -42,7 +42,7 @@ A signed match result is a small record that the game server or the official ref
 
 ## How is this different from a traditional platform?
 
-| | Traditional platform | On-chain predictions |
+| Topic | Traditional platform | On-chain predictions |
 |---|---|---|
 | Who holds the money | The operator | A smart contract with published rules |
 | Who records the result | The operator's database | A signed result anyone can verify |

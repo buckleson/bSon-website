@@ -53,7 +53,7 @@ The lessons point to a different design, often called play-and-earn or skill-bas
 - **Results are verifiable.** The game server signs match results, and code that anyone can check makes the payouts.
 - **Easy onboarding.** Players get a wallet without seed phrases (lists of backup words) or gas tokens (tokens that pay network fees). They can start in minutes.
 
-| | Early play-to-earn | Sustainable skill-based model |
+| Topic | Early play-to-earn | Sustainable skill-based model |
 |---|---|---|
 | Where reward money comes from | New tokens and new players | Revenue: fees, sponsors, cosmetics |
 | What earns rewards | Time spent grinding | Skill, wins and rankings |

@@ -21,7 +21,7 @@ For most enterprises, the best answer is a private L2: your own blockchain layer
 
 ## What is the difference?
 
-| | Public blockchain | Private chain | Private L2 on Hyper 0X |
+| Topic | Public blockchain | Private chain | Private L2 on Hyper 0X |
 |---|---|---|---|
 | Who can validate | Anyone | Your consortium | Known, PKI-bound validators |
 | Who can see data | Everyone | Members | Only the parties to each record |

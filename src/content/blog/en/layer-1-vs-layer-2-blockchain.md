@@ -46,7 +46,7 @@ Ethereum now supports this model. Its Dencun upgrade in March 2024 (EIP-4844) ga
 
 ## Layer 1 vs layer 2 at a glance
 
-| | Layer 1 | Layer 2 |
+| Topic | Layer 1 | Layer 2 |
 |---|---|---|
 | Main job | Consensus, security and the final record | Transactions at scale |
 | Who orders transactions | The validators of the L1 | The sequencer of the L2 |

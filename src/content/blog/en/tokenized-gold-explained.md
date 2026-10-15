@@ -48,7 +48,7 @@ When you read a report, check the date and the firm. Check that it covers alloca
 
 ## How does tokenized gold compare with ETFs and physical gold?
 
-| | Tokenized gold | Gold ETF | Physical gold |
+| Topic | Tokenized gold | Gold ETF | Physical gold |
 |---|---|---|---|
 | What you own | A token backed by gold in a vault | Shares in a fund that holds gold | The bars or coins themselves |
 | When you can trade | Around the clock | Stock exchange hours | Dealer hours |

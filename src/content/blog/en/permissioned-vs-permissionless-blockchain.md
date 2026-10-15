@@ -29,7 +29,7 @@ A related but separate question is who can read the data. People often call that
 
 ## How do they compare?
 
-| | Permissionless | Permissioned |
+| Topic | Permissionless | Permissioned |
 |---|---|---|
 | Who can validate | Anyone | Approved, identified organisations |
 | Who is accountable | No one in particular | Each validator, by name |

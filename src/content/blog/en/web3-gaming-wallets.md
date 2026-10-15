@@ -53,7 +53,7 @@ Two more techniques make the wallet invisible during play.
 
 ## Custodial, non-custodial or MPC: which should a game choose?
 
-| | Custodial | Non-custodial embedded | MPC (split key) |
+| Topic | Custodial | Non-custodial embedded | MPC (split key) |
 |---|---|---|---|
 | Who controls the key | The game or a provider | The player's device or passkey | Shared between player and provider |
 | Recovery | The provider restores access | Built into the account design | A backup share restores the key |

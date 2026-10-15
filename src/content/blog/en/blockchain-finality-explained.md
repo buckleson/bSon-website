@@ -44,7 +44,7 @@ The honest trade-off is this: if more than a third of validators go offline, a B
 
 Ethereum sits in between. Since its move to proof of stake, in which validators lock up ETH as a deposit, it has **economic finality**. Ethereum finalises blocks at checkpoints, about 13 minutes later. To reverse a finalised block, attackers must give up a large share of all staked ETH.
 
-| | Probabilistic | Economic | Deterministic |
+| Topic | Probabilistic | Economic | Deterministic |
 |---|---|---|---|
 | Example | Bitcoin | Ethereum (proof of stake) | Hyper 0X, CometBFT chains |
 | When is it final? | Never absolutely, but safer with each block | At checkpoints, about 13 minutes later | As soon as it is confirmed |

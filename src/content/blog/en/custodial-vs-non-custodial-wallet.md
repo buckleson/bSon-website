@@ -25,7 +25,7 @@ A private key, a secret number that signs transactions, controls every crypto as
 
 In a custodial wallet, the provider holds the keys, often in pooled wallets. Cold storage (keys kept offline) or hardware security modules (HSMs, tamper-resistant devices built to store keys) protect those wallets. The user sees an account balance, as on an exchange. In a non-custodial wallet, also called self-custody, the wallet creates and stores the key on the user's phone or hardware device. The provider supplies the software but cannot move the funds.
 
-| | Custodial | Non-custodial |
+| Topic | Custodial | Non-custodial |
 |---|---|---|
 | Who holds the keys | The provider | The user, on their device |
 | Who can move funds | The provider, on instruction | Only the user |

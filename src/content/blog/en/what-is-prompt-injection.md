@@ -27,7 +27,7 @@ An attacker can embarrass you through a chatbot that only answers questions. An 
 
 ## What is the difference between direct and indirect prompt injection?
 
-| | Direct prompt injection | Indirect prompt injection |
+| Topic | Direct prompt injection | Indirect prompt injection |
 |---|---|---|
 | Who writes the attack | The person who types into the AI | A third party who never talks to the AI |
 | Where it hides | The chat box or API request | Documents, web pages, emails, tool output |

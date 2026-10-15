@@ -85,6 +85,9 @@ const COVERS: Record<string, [string, string, string, string]> = {
   'tokenized-bonds-explained': ['certificate', 'coin', 'calendar', 'transfer-3'],
   'web3-game-economy-design': ['game-2', 'coin', 'balance', 'flask'],
   'what-is-a-blockchain-bridge': ['bridge', 'transfer-3', 'safe-lock', 'check-circle'],
+  'verify-customers-without-sharing-data': ['user-hide', 'passport', 'seal', 'link-2'],
+  'blockchain-use-cases-beyond-payments': ['cube-3d', 'idcard', 'group-3', 'fingerprint'],
+  'blockchain-vs-database': ['server', 'cube-3d', 'list-check', 'balance'],
 };
 
 export function coverIcons(post: CollectionEntry<'blog'>): [string, string, string, string] {
@@ -100,7 +103,7 @@ export const readingPaths: { id: string; title: string; text: string; icon: stri
     text: 'The ideas behind every chain we build, in the order they make sense.',
     icon: 'bulb',
     category: 'infrastructure',
-    slugs: ['layer-1-vs-layer-2-blockchain', 'private-l2-vs-public-blockchain', 'permissioned-vs-permissionless-blockchain', 'blockchain-finality-explained', 'how-to-choose-a-blockchain-development-company'],
+    slugs: ['blockchain-vs-database', 'blockchain-use-cases-beyond-payments', 'layer-1-vs-layer-2-blockchain', 'private-l2-vs-public-blockchain', 'permissioned-vs-permissionless-blockchain', 'blockchain-finality-explained'],
   },
   {
     id: 'agents',

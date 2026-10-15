@@ -62,7 +62,7 @@ Run these rules before the trade executes, because a check after the trade can o
 
 The token changes the record and the payments. It does not change the credit of the issuer or the legal claim of the holder.
 
-| | Traditional bond | Tokenized bond |
+| Topic | Traditional bond | Tokenized bond |
 |---|---|---|
 | Legal terms and claim | Set in the bond documents | The same documents |
 | Custodian | Holds the bond | The same role, or the chain is the register |

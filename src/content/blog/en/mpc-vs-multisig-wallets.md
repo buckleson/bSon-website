@@ -36,7 +36,7 @@ Because the rule lives on the chain, anyone can check it. The record shows which
 
 The table compares the two models side by side.
 
-| | MPC wallet | Multisig wallet |
+| Topic | MPC wallet | Multisig wallet |
 |---|---|---|
 | How control splits | One key, split into shares | Several full keys |
 | What the chain sees | One normal signature | Several signatures or a contract call |

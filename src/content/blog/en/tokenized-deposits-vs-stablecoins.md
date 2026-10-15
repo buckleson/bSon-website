@@ -34,7 +34,7 @@ Most stablecoins run on public blockchains. Anyone with a wallet can hold and se
 
 The main difference is the balance sheet behind the token. The table shows how that one difference changes everything else.
 
-| | Tokenized deposit | Stablecoin |
+| Topic | Tokenized deposit | Stablecoin |
 |---|---|---|
 | Who issues it | A licensed bank | A stablecoin issuer, sometimes a bank |
 | Who owes the money | The bank, like any deposit | The issuer |

@@ -83,7 +83,7 @@ A signature proves who reported a result and that nobody changed it afterwards. 
 - **Key theft.** If an attacker steals the signing key, the contract accepts forged results. HSMs, key rotation and alerts on unusual signing activity reduce this risk.
 - **One signer.** A single key is a single point of failure. For large prizes, require signatures from two or more independent parties, such as the game server and a referee. Add a short dispute window before money moves.
 
-| | Unsigned result | Signed result |
+| Topic | Unsigned result | Signed result |
 |---|---|---|
 | Who decides the winner | Often the client or an editable database | The game server |
 | Can someone change it later? | Yes, without a trace | No, the edit breaks the seal |

@@ -69,7 +69,7 @@ No single setting removes MEV. A good wallet combines several layers.
 5. **Atomic settlement.** Both sides of the trade settle in one step, or neither side settles. Read more in [atomic settlement](../atomic-settlement/).
 6. **Clear results.** The wallet shows the quote, the fill and the fee side by side, so users see what they paid.
 
-| | Unprotected swap | Protected swap |
+| Topic | Unprotected swap | Protected swap |
 |---|---|---|
 | Who sees the swap first | Anyone who reads the mempool | Only the parties that settle it |
 | Default slippage | Wide, set once | Tight, set per trade |

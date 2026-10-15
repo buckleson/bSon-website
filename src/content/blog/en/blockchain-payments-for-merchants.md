@@ -43,7 +43,7 @@ For a coffee, a merchant can accept a payment the moment it appears. For a car, 
 
 ## How do blockchain payments compare with card payments?
 
-| | Card payment | Blockchain payment |
+| Topic | Card payment | Blockchain payment |
 |---|---|---|
 | When funds settle | Usually one to three business days | At network finality, from seconds to about an hour |
 | Chargebacks | Yes, often months later | No, the merchant sends any refunds |
