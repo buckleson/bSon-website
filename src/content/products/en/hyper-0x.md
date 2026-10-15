@@ -42,6 +42,8 @@ details:
       subTitle: 'The chain can record AI decisions and actions as signed, chained transactions for audits, billing and disputes.'
     - title: 'Network type'
       subTitle: 'A permissioned L1. Each customer has an L2 that posts its state roots to the L1.'
+    - title: 'L3s (coming soon)'
+      subTitle: 'An L3 will run on top of an L2, for one application or one policy. It will settle on its L2, and the L2 settles on the L1.'
 cta:
   title: 'Book a call with an engineer'
   url: 'https://cal.com/buckleson-group/30min'

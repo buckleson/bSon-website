@@ -393,11 +393,11 @@ export const en = {
         },
         {
           title: 'We met the blockchain trilemma.',
-          text: 'Most blockchains give up one of three things: decentralization, scalability or security. We wanted a modular chain that keeps all three.',
+          text: 'Most blockchains give up one of three things: decentralization, scalability or security. We built Hyper 0X as a modular chain that keeps all three.',
         },
         {
           title: 'Microservices gave us the answer.',
-          text: 'Good software splits one large system into small services. We did the same with a blockchain. Each application or policy gets its own L2, or an L3 on top of it. When one application needs more transactions, only its L2 grows. The shared L1 does the final settlement and audit for all of them, and no single node sets the order of transactions.',
+          text: 'Good software splits one large system into small services. We did the same with a blockchain. Each application or policy gets its own L2. L3s on top of an L2 are coming soon. When one application needs more transactions, only its L2 grows. The shared L1 does the final settlement and audit for all of them, and no single node sets the order of transactions.',
         },
         {
           title: 'Today',
@@ -504,7 +504,7 @@ export const en = {
         },
         {
           question: 'How does Hyper 0X handle the blockchain trilemma?',
-          answer: 'Hyper 0X splits the work, like microservices. Each application gets its own L2, so it can grow alone. The shared L1 does the final settlement and audit with leaderless consensus, so no single node sets the order of transactions.',
+          answer: 'Hyper 0X splits the work, like microservices. Each application gets its own L2, so it can grow alone, and L3s on top of an L2 are coming soon. The shared L1 does the final settlement and audit with leaderless consensus, so no single node sets the order of transactions.',
         },
       ],
     },

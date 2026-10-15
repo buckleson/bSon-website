@@ -23,7 +23,7 @@ export const ORGANIZATION = {
   founder: { name: 'Vijay', jobTitle: 'Founder', image: '/team/vijay.jpg' },
   /** One-line company origin, used in structured data and llms.txt. */
   story:
-    'Buckleson started with a crypto wallet, Hyper Wallet. To remove the hidden charges that many wallets add, it built its own blockchain, Hyper 0X, with an order book inside its consensus. Hyper 0X is modular, like microservices: a private L2 for each application and one shared L1 for settlement and audit.',
+    'Buckleson started with a crypto wallet, Hyper Wallet. To remove the hidden charges that many wallets add, it built its own blockchain, Hyper 0X, with an order book inside its consensus. Hyper 0X is modular, like microservices: a private L2 for each application and one shared L1 for settlement and audit. L3s on top of an L2 are coming soon.',
   knowsAbout: [
     'Blockchain development',
     'Custom blockchain networks',
