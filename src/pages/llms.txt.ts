@@ -28,6 +28,7 @@ export const GET: APIRoute = async () => {
     `- [About Buckleson](${url('/about/')}): ${ORGANIZATION.story}`,
     `- Founder: ${ORGANIZATION.founder.name}, ${ORGANIZATION.founder.jobTitle}.`,
     `- Belief: ${copy.about.story.belief}`,
+    `- What we do now: ${copy.about.now.items.map(item => `${item.title} (${item.tag})`).join('; ')}.`,
     ...copy.about.pillars.items.map(item => `- ${item.label}: ${item.title} ${item.text}`),
     `- Beyond payments: ${copy.about.beyond.items.map(item => item.title).join('; ')}. ${copy.about.beyond.note}`,
     '',

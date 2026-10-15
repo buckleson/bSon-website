@@ -374,11 +374,11 @@ export const en = {
     label: 'About Buckleson',
     claim: 'Blockchain is more than payments.',
     payoff: 'We build what else it can do.',
-    lead: 'Buckleson is a blockchain infrastructure company. We started with a crypto wallet. Then we built our own blockchain, Hyper 0X. Today we build private blockchains, tokenized assets, wallets and AI-agent security for banks, fintechs, asset issuers and AI teams.',
+    lead: 'Buckleson is a blockchain infrastructure company, not a crypto company. We rebuild systems where traditional technology cannot solve the problem, such as shared records, private data and payments that must be safe and cheap. Today, we use blockchain to protect the new, AI-driven internet.',
     story: {
       label: 'Our story',
-      title: 'How did a wallet company end up protecting AI agents?',
-      intro: 'It started with a simple crypto wallet. Each problem that we fixed showed us a bigger one.',
+      title: 'Our journey from crypto wallets to blockchain infrastructure',
+      intro: 'We are not just another blockchain or crypto company. We use blockchain to fix problems that existing systems cannot fix. Each problem that we fixed showed us a bigger one.',
       steps: [
         {
           label: 'The wallet',
@@ -425,6 +425,42 @@ export const en = {
       { value: '$128K+', label: 'saved by users in wallet fees' },
       { value: '100M+', label: 'AI tokens saved by Pavii' },
     ],
+    now: {
+      label: 'What we do now',
+      claim: 'What are we now?',
+      payoff: 'We protect the new internet.',
+      body: 'AI agents and people now share data and money online every day. We build the blockchain layer that keeps them safe.',
+      items: [
+        {
+          tag: 'Pavii',
+          icon: 'safe-shield',
+          title: 'Protecting AI with blockchain',
+          text: 'Pavii checks every call that an AI agent makes, keeps personal data private and records each action on Hyper 0X. Nobody can secretly change that record.',
+          url: '/products/pavii/',
+        },
+        {
+          tag: 'Hyper Wallet and H0X Pay',
+          icon: 'currency-dollar',
+          title: 'Stablecoin payments',
+          text: 'We are building stablecoin payments on the crypto wallet and exchange that we already run. Payments are safer and cost less than traditional transfers.',
+          url: '/products/h0x-pay/',
+        },
+        {
+          tag: 'Hyper 0X',
+          icon: 'cube-3d',
+          title: 'Faster L1 and L2 chains',
+          text: 'Hyper 0X gives each application its own L2, settled on one shared L1. Each transaction is final in one pass, and every connection is post-quantum-resistant.',
+          url: '/products/hyper-0x/',
+        },
+        {
+          tag: 'SDKs and MCP',
+          icon: 'terminal-box',
+          title: 'Tools for builders and their AI agents',
+          text: 'Our SDKs and MCP servers let developers and their AI agents build on Hyper 0X faster. You write smart contracts in Rust, a language that blocks many common bugs.',
+          url: '/guides/getting-started/',
+        },
+      ],
+    },
     pillars: {
       label: 'What drives us',
       claim: 'Why we exist,',
