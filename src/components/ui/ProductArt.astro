@@ -44,11 +44,11 @@ const logo = (key: BrandKey, x: number, y: number, size: number, white = false) 
 };
 
 const META = {
-  'hyper-0x': { title: 'How Hyper 0X works', icon: 'cube', live: true, dur: 9, steps: [['Each app gets', 'its own L2'], ['Every L2 settles', 'on one L1'], ['Final in one pass,', 'no reorgs']] },
+  'hyper-0x': { title: 'How Hyper 0X works', icon: 'cube', live: true, dur: 9, steps: [['Each app gets', 'its own L2'], ['Every L2 settles', 'on one L1'], ['Final in one pass,', 'never reordered']] },
   pavii: { title: 'How Pavii protects agents', icon: 'shield-check', live: true, dur: 12, steps: [['Agents send prompts', 'and tool calls'], ['Six gates check', 'every call'], ['Bad calls stop,', 'receipts on-chain']] },
-  'hyper-wallet': { title: 'Inside Hyper Wallet', icon: 'wallet', live: true, dur: 8, steps: [['Every chain in', 'one app'], ['Best-route swap,', 'MEV-protected'], ['Both legs settle', 'at once']] },
-  'h0x-pay': { title: 'How H0X Pay works', icon: 'coins', live: false, dur: 9, steps: [['Pay as usual,', 'by link or QR'], ['A slice of each', 'payment is invested'], ['Your tokenized', 'gold grows']] },
-  hyperrun: { title: 'How HyperRun pays out', icon: 'crosshair', live: false, dur: 9, steps: [['Play a ranked', 'match'], ['The result is', 'signed'], ['Players and fans', 'get paid']] },
+  'hyper-wallet': { title: 'Inside Hyper Wallet', icon: 'wallet', live: true, dur: 8, steps: [['Every chain in', 'one app'], ['Best-route swap,', 'MEV-protected'], ['Both sides settle', 'at once']] },
+  'h0x-pay': { title: 'How H0X Pay will work', icon: 'coins', live: false, dur: 9, steps: [['Pay as usual,', 'by link or QR'], ['Part of each', 'payment buys gold'], ['Your tokenized', 'gold grows']] },
+  hyperrun: { title: 'How HyperRun will pay out', icon: 'crosshair', live: false, dur: 9, steps: [['Play a ranked', 'match'], ['The game signs', 'the result'], ['Players and fans', 'get paid']] },
 } as const;
 const meta = META[product];
 

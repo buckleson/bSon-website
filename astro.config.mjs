@@ -7,22 +7,21 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  // GitHub Pages project site. For a custom domain (www.buckleson.com),
-  // set `site` to that domain and remove `base`.
-  site: 'https://buckleson.github.io',
-  base: '/bSon-website',
+  // GitHub Pages with the custom domain buckleson.com (public/CNAME), served
+  // from the domain root, so there is no `base` path.
+  site: 'https://buckleson.com',
   image: {
     domains: ['images.unsplash.com'],
   },
   prefetch: true,
   // Old URLs from the first site version; Astro emits a redirect page for each.
   redirects: {
-    '/blog/post-1': '/bSon-website/blog/post-quantum-resistant-blockchain/',
-    '/blog/post-2': '/bSon-website/blog/how-to-secure-ai-agents/',
-    '/blog/post-3': '/bSon-website/blog/atomic-settlement/',
-    '/insights/insight-1': '/bSon-website/blog/dynamic-blocks/',
-    '/insights/insight-2': '/bSon-website/blog/proof-of-execution-ai/',
-    '/insights/insight-3': '/bSon-website/blog/account-abstraction-no-seed-phrases/',
+    '/blog/post-1': '/blog/post-quantum-resistant-blockchain/',
+    '/blog/post-2': '/blog/how-to-secure-ai-agents/',
+    '/blog/post-3': '/blog/atomic-settlement/',
+    '/insights/insight-1': '/blog/dynamic-blocks/',
+    '/insights/insight-2': '/blog/proof-of-execution-ai/',
+    '/insights/insight-3': '/blog/account-abstraction-no-seed-phrases/',
   },
   integrations: [
     sitemap({

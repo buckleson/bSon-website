@@ -33,7 +33,7 @@ const soon = data.status === 'coming-soon';
 const href = (url: string) => localePath('en', url);
 
 const extras: Record<typeof slug, { flow: FlowName; highlight?: { value: string; label: string }; chips: string[] }> = {
-  'hyper-0x': { flow: 'hyper0x', highlight: { value: '1 pass', label: 'to a final record, with no reorgs' }, chips: ['aBFT consensus', 'Post-quantum-resistant', 'Private L2s', 'EVM · Solana · Sui bridges'] },
+  'hyper-0x': { flow: 'hyper0x', highlight: { value: '1 pass', label: 'to a final record, never reordered' }, chips: ['aBFT consensus', 'Post-quantum-resistant', 'Private L2s', 'EVM · Solana · Sui bridges'] },
   pavii: { flow: 'pavii', highlight: { value: '100M+', label: 'AI tokens saved across 82K+ queries' }, chips: ['Claude', 'Claude Code', 'Codex', 'ChatGPT', 'Grok', 'OpenCode', 'Custom agents'] },
   'hyper-wallet': { flow: 'wallet', highlight: { value: '2M+', label: 'transactions, 33K+ portfolios and $128K+ saved in fees' }, chips: ['Bitcoin', 'Ethereum', 'Solana', 'Tron', 'TON', 'XRP', 'Stellar', 'Sui'] },
   'h0x-pay': { flow: 'pay', chips: ['Gold first', 'Index funds next', 'Crypto payments'] },
@@ -88,9 +88,9 @@ const next = () => String(++n).padStart(2, '0');
     <SectionHead
       index={next()}
       label="Threats"
-      claim="Ten ways agents get attacked,"
+      claim="Ten attacks on AI agents,"
       payoff="and how Pavii stops each one."
-      body="We say plainly where the blockchain adds real protection, where it helps with part of the job, and where it only gives evidence after the fact."
+      body="For each attack, we say plainly what the blockchain adds: real protection, help with part of the job, or only evidence after the attack."
       id="threats-title"
     />
     <ThreatGrid class="mt-10" />
@@ -108,7 +108,7 @@ const next = () => String(++n).padStart(2, '0');
 )}
 
 <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="specs-title">
-  <SectionHead index={next()} label={data.details.title} claim={soon ? 'What we are' : 'What runs'} payoff={soon ? 'building next.' : 'under the hood.'} id="specs-title" />
+  <SectionHead index={next()} label={data.details.title} claim={soon ? 'What we are' : 'What runs'} payoff={soon ? 'building next.' : 'inside it.'} id="specs-title" />
   <ul class="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
     {data.details.items.map((item, i) => (
       <li class="glass-card rounded-[1.4rem] p-6" data-reveal-item>
@@ -155,8 +155,8 @@ const next = () => String(++n).padStart(2, '0');
 <section class="px-2 pb-6 sm:px-3">
   <div class="on-sheet rounded-[2rem] bg-sheet px-6 py-16 text-center text-white" data-reveal>
     <h2 class="mx-auto max-w-2xl text-3xl font-semibold text-balance sm:text-5xl">
-      <span class="block">{soon ? 'Be first to use' : `Put ${data.title}`}</span>
-      <span class="mark">{soon ? data.title : 'to work.'}</span>
+      <span class="block">{soon ? 'Be the first to use' : `Use ${data.title}`}</span>
+      <span class="mark">{soon ? data.title : 'in your business.'}</span>
     </h2>
     <p class="mx-auto mt-4 max-w-xl text-pretty text-white/70">A 30-minute call with a Buckleson engineer. Tell us what you want to build. We will show you how it runs on Hyper 0X.</p>
     <div class="mt-8"><PrimaryCTA title={data.cta.title} url={href(data.cta.url)} /></div>

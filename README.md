@@ -4,13 +4,13 @@ Marketing site for Buckleson: custom blockchain solutions, powered by **Hyper 0X
 Built with [Astro](https://astro.build) on the MIT-licensed
 [ScrewFast](https://github.com/mearashadowfax/ScrewFast) template.
 
-Live: https://buckleson.github.io/bSon-website/
+Live: https://buckleson.com/ (GitHub Pages, custom domain)
 
 ## Develop
 
 ```sh
 pnpm install
-pnpm dev        # http://localhost:4321/bSon-website/
+pnpm dev        # http://localhost:4321/
 pnpm build      # type-check + static build into dist/
 ```
 

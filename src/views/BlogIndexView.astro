@@ -120,7 +120,7 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
   </section>
 
   <section class="mx-auto max-w-[85rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20" aria-labelledby="paths-title">
-    <SectionHead index="01" label="Reading paths" claim="Not sure where to start?" payoff="Follow a path." body="Short, ordered sets of articles for one goal. Each one builds on the last." id="paths-title" />
+    <SectionHead index="01" label="Reading paths" claim="Not sure where to start?" payoff="Follow a path." body="Short sets of articles for one goal, in order. Each article adds to the one before it." id="paths-title" />
     <ol class="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2" data-reveal-group>
       {readingPaths.map(path => {
         const items = path.slugs.map(slug => bySlug[slug]).filter(Boolean);
@@ -154,7 +154,7 @@ const PATTERN = ['wide', 'std', 'std', 'std', 'std', 'wide', 'std'] as const;
   <section class="px-2 pb-6 sm:px-3">
     <div class="on-sheet rounded-[2rem] bg-sheet px-6 py-16 text-center text-white" data-reveal>
       <h2 class="mx-auto max-w-2xl text-3xl font-semibold text-balance sm:text-5xl"><span class="block">Want this built</span><span class="mark">for your team?</span></h2>
-      <p class="mx-auto mt-4 max-w-xl text-pretty text-white/70">Talk to the engineers who wrote these guides. Thirty minutes is enough to map your use case.</p>
+      <p class="mx-auto mt-4 max-w-xl text-pretty text-white/70">Talk to the engineers who wrote these guides. Thirty minutes is enough to discuss your use case.</p>
       <div class="mt-8"><PrimaryCTA title="Book a call" url={BOOKING_URL} /></div>
     </div>
   </section>

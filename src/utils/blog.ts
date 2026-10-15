@@ -80,6 +80,11 @@ const COVERS: Record<string, [string, string, string, string]> = {
   'mev-protection-explained': ['transfer-3', 'wallet-4', 'list-ordered', 'safe-shield'],
   'signed-match-results-gaming': ['game-2', 'quill-pen', 'trophy', 'file-locked'],
   'system-prompt-leakage': ['ai', 'eye', 'key-2', 'safe-shield'],
+  'mpc-vs-multisig-wallets': ['key-2', 'group', 'faceid', 'safe-shield'],
+  'shadow-ai-agents': ['incognito-mode', 'ai', 'radar', 'list-check'],
+  'tokenized-bonds-explained': ['certificate', 'coin', 'calendar', 'transfer-3'],
+  'web3-game-economy-design': ['game-2', 'coin', 'balance', 'flask'],
+  'what-is-a-blockchain-bridge': ['bridge', 'transfer-3', 'safe-lock', 'check-circle'],
 };
 
 export function coverIcons(post: CollectionEntry<'blog'>): [string, string, string, string] {

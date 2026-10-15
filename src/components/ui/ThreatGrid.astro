@@ -14,8 +14,8 @@ interface Props {
 
 const { class: className, limit = threats.length } = Astro.props;
 const badge = {
-  yes: { label: 'Blockchain: core', icon: 'link-simple', cls: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200' },
-  partly: { label: 'Blockchain: part', icon: 'link-simple-break', cls: 'bg-yellow-100 text-yellow-900 dark:bg-yellow-950 dark:text-yellow-200' },
+  yes: { label: 'Blockchain: real protection', icon: 'link-simple', cls: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200' },
+  partly: { label: 'Blockchain: helps in part', icon: 'link-simple-break', cls: 'bg-yellow-100 text-yellow-900 dark:bg-yellow-950 dark:text-yellow-200' },
   evidence: { label: 'Blockchain: evidence only', icon: 'magnifying-glass', cls: 'bg-ground text-muted ring-1 ring-line' },
 };
 ---
@@ -40,7 +40,7 @@ const badge = {
             <Glyph icon="caret-down" class="size-4 transition group-open:rotate-180" />See an example
           </summary>
           <p class="mt-3 rounded-xl bg-ground p-3 text-sm text-pretty text-muted"><span class="font-semibold text-ink">Example.</span> {threat.example}</p>
-          <p class="mt-2 text-sm text-pretty text-muted"><span class="font-semibold text-ink">What the chain adds.</span> {threat.chainText}</p>
+          <p class="mt-2 text-sm text-pretty text-muted"><span class="font-semibold text-ink">What the blockchain adds.</span> {threat.chainText}</p>
         </details>
       </div>
     </li>

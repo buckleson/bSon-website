@@ -4,11 +4,15 @@ function playFigure(stage, draw, opts) {
   const figure = stage.closest('.iso-figure') || stage;
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let frame = 0, prev = 0, clock = 0, visible = false, failed = false;
+  // Phones and tablets draw at 30 frames a second: the motion stays smooth
+  // and the main thread gets half the work.
+  const minStep = matchMedia('(pointer: coarse)').matches ? 1000 / 30 - 2 : 0;
   const run = (dt) => {
     try { draw(clock, dt); } catch (err) { if (!failed) { failed = true; console.warn('figure frame', err); } }
   };
   function tick(now) {
     frame = visible ? requestAnimationFrame(tick) : 0;
+    if (minStep && prev && now - prev < minStep) return;
     const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
     prev = now;
     clock = loop ? (clock + dt) % loop : clock + dt;
@@ -158,30 +162,35 @@ for (const stage of document.querySelectorAll('[data-figure="data-vault"]')) {
     el.style.top = (y / C.HEIGHT) * 100 + '%';
   }
 
+  // Every part is touched only when its value changes (most of the loop,
+  // most parts stand still), so an idle frame costs almost nothing.
   function draw(t) {
     const x = carX(t);
-    car.setAttribute('transform', translateAlong(P, [x, 0, 0]));
-    marks.setAttribute('opacity', t >= T.stampDown[1] ? '1' : '0');
+    set('car', x.toFixed(2), () => car.setAttribute('transform', translateAlong(P, [x, 0, 0])));
+    set('marks', t >= T.stampDown[1], (on) => marks.setAttribute('opacity', on ? '1' : '0'));
     // Compute head comes down; the needle swings while it works.
     const dz = headDz(t);
-    headEl.setAttribute('transform', translateAlong(P, [0, 0, dz]));
-    rod.innerHTML = headRod(K, P, C, dz);
+    set('head', dz.toFixed(2), () => {
+      headEl.setAttribute('transform', translateAlong(P, [0, 0, dz]));
+      rod.innerHTML = headRod(K, P, C, dz);
+    });
     const working = t >= T.compute[0] && t < T.compute[1];
     const swing = working ? Math.abs(Math.sin(((t - T.compute[0]) / (T.compute[1] - T.compute[0])) * Math.PI * 3)) : 0;
-    needleEl.innerHTML = needle(K, P, C, -50 + 100 * swing);
+    set('needle', swing.toFixed(2), () => { needleEl.innerHTML = needle(K, P, C, -50 + 100 * swing); });
     // The stamp presses the keys onto the lid; a copy is filed.
     const fz = footZ(t);
     set('foot', fz.toFixed(2), () => { stamp.innerHTML = stampLive(K, P, C, fz, vcoil); });
     const filed = span(t, [T.stampDown[1] - 0.05, T.stampUp[1]]);
     const newest = plates[plates.length - 1];
-    newest.setAttribute('opacity', t >= T.stampDown[1] - 0.05 ? '1' : '0');
-    newest.setAttribute('transform', translateAlong(P, [0, 0, 18 * (1 - ease(filed))]));
+    set('newest', t >= T.stampDown[1] - 0.05, (on) => newest.setAttribute('opacity', on ? '1' : '0'));
+    set('filed', filed.toFixed(3), () => newest.setAttribute('transform', translateAlong(P, [0, 0, 18 * (1 - ease(filed))])));
     // Before the loop ends the stack sinks one record into the tray: the
     // oldest is archived and the stack looks as it did at the start.
     const sink = ease(span(t, T.archive));
-    platesEl.setAttribute('transform', translateAlong(P, [0, 0, -3 * sink]));
+    set('sink', sink.toFixed(3), () => platesEl.setAttribute('transform', translateAlong(P, [0, 0, -3 * sink])));
     // The vault opens, takes the box, closes and bolts.
-    doorEl.setAttribute('transform', translateAlong(P, [0, 0, doorDz(t)]));
+    const door = doorDz(t);
+    set('door', door.toFixed(2), () => doorEl.setAttribute('transform', translateAlong(P, [0, 0, door])));
     const lock = locked(t);
     set('lock', lock.toFixed(3), () => {
       boltsEl.innerHTML = bolts(K, P, C, lock);
@@ -202,8 +211,8 @@ for (const stage of document.querySelectorAll('[data-figure="data-vault"]')) {
       if (readout) readout.textContent = 'stage ' + (index + 1) + ' of 4 · ' + current.text;
     });
     if (pins.record) {
-      place(pins.record, [x, C.CAR.y + C.CAR.d, C.CAR_Z[0]]);
-      pins.record.toggleAttribute('data-hidden', x < -104 || x > 58);
+      set('recordPin', x.toFixed(1), () => place(pins.record, [x, C.CAR.y + C.CAR.d, C.CAR_Z[0]]));
+      set('recordHidden', x < -104 || x > 58, (hidden) => pins.record.toggleAttribute('data-hidden', hidden));
     }
   }
   playFigure(stage, (t) => draw(t), {

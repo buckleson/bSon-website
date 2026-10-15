@@ -28,27 +28,27 @@ type Art = 'hyper-0x' | 'pavii' | 'hyper-wallet' | 'h0x-pay' | 'hyperrun';
 // Under each tagline: how it works in two sentences, and one real number.
 const explain: Record<string, { text: string; stat: string; statLabel: string }> = {
   'hyper-0x': {
-    text: 'Each application runs on its own private L2 with its own rules. Every L2 settles on the shared Hyper 0X L1, where transactions are final in one pass.',
+    text: 'Each application runs on its own L2, a private blockchain with its own rules. Every L2 settles on the shared Hyper 0X L1 (the main chain), where transactions are final in one pass.',
     stat: '1 pass',
-    statLabel: 'to final, no reorgs',
+    statLabel: 'to final, never reordered',
   },
   pavii: {
-    text: 'Pavii sits between your agents and your systems. Every prompt and tool call passes six gates. Safe calls go through. Pavii stops malicious calls and logs them on Hyper 0X.',
+    text: 'Pavii is a gateway between your agents and your systems. Every prompt and tool call goes through six gates. Safe calls continue. Pavii stops malicious calls and records them on Hyper 0X.',
     stat: '100M+',
     statLabel: 'AI tokens saved',
   },
   'hyper-wallet': {
-    text: 'One non-custodial app for every major chain. Swaps take the best route with MEV protection, and both legs of a trade settle at once.',
+    text: 'One non-custodial app (you hold your own keys) for every major chain. Swaps take the best route, and MEV protection stops bots from trading ahead of you. Both sides of a trade settle at once.',
     stat: '2M+',
     statLabel: 'transactions',
   },
   'h0x-pay': {
-    text: 'Pay and get paid in crypto as usual. Your plan puts a slice of every payment into tokenized gold, and each payment settles on Hyper 0X.',
+    text: 'You will pay and get paid in crypto as usual. Your plan will put a small part of every payment into tokenized gold. Each payment will settle on Hyper 0X.',
     stat: 'Soon',
     statLabel: 'early access open',
   },
   hyperrun: {
-    text: 'Play ranked matches in a realistic shooter. The game signs every result before it pays out, so players, fans and sponsors get a fair payout.',
+    text: 'Players will compete in ranked matches in a realistic shooter. The game will sign every result before any payout, so players, fans and sponsors get paid fairly.',
     stat: 'Soon',
     statLabel: 'early access open',
   },

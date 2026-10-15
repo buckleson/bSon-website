@@ -6,13 +6,14 @@ import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
-const BASE = '/bSon-website';
+// The site is served from the root of its custom domain (no base path).
+const BASE = '';
 
 const REQUIRED_FILES = ['index.html', '404.html', 'robots.txt', 'llms.txt', 'llms-full.txt', 'rss.xml', 'sitemap-index.xml', 'og/default.png'];
 
 // Cheap content assertions for key pages (site-relative route -> needles).
 const EXPECTATIONS = {
-  '/': ['<html lang="en"', 'blockchain infrastructure company', '"@type":"FAQPage"', 'data-hero', 'id="services"', 'data-vault', 'chain-rack', 'pavii-gates', 'cipher-tower'],
+  '/': ['<html lang="en"', 'We build blockchain infrastructure', '"@type":"FAQPage"', 'data-hero', 'id="services"', 'data-vault', 'chain-rack', 'pavii-gates', 'cipher-tower'],
   '/about/': ['"@type":"AboutPage"', 'Our story'],
   '/faq/': ['"@type":"FAQPage"', 'id="ai-agent-security"', 'ML-KEM'],
   '/products/': ['Hyper 0X', 'Coming soon'],
@@ -102,7 +103,7 @@ for (const file of pages) {
   for (const word of BANNED) if (word.test(text)) fail(route, `contains banned text ${word}`);
 
   // Internal links must resolve to a built file.
-  for (const [, href] of html.matchAll(/href="(\/bSon-website[^"#?]*)/g)) {
+  for (const [, href] of html.matchAll(/href="(\/(?!\/)[^"#?]*)/g)) {
     let path = href.slice(BASE.length) || '/';
     if (path.endsWith('/')) path += 'index.html';
     else if (!/\.[a-z0-9]+$/i.test(path)) path += '/index.html';

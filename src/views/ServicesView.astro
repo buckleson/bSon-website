@@ -87,7 +87,7 @@ const steps = servicePages[0].steps;
 
   <section class="mx-auto max-w-[85rem] px-2 py-14 sm:px-3 lg:py-20" aria-labelledby="process-title">
     <div class="rounded-[2rem] bg-paper px-4 py-12 ring-1 ring-paper-line sm:px-8 lg:px-10">
-    <SectionHead index="02" label="How we work" claim="Small first," payoff="then production." body="You see it work before you commit. Every project starts with one use case and one measure of success." id="process-title" />
+    <SectionHead index="02" label="How we work" claim="Small first," payoff="then production." body="You see it work before you decide. Every project starts with one use case and one measure of success." id="process-title" />
     <ol class="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
       {steps.map((step, i) => (
         <li class="rounded-[1.6rem] bg-card p-6 ring-1 ring-paper-line" data-reveal-item>
@@ -96,7 +96,7 @@ const steps = servicePages[0].steps;
             <span class="font-mono text-xs text-muted">Step {i + 1}</span>
           </div>
           <h3 class="mt-5 text-lg font-semibold text-ink">{step.title}</h3>
-          <p class="mt-1.5 text-sm leading-relaxed text-pretty text-muted">{i === 1 ? 'A small, real version on your own L2, with the success measure agreed at the start.' : i === 2 ? 'Your security team reviews the design, the keys and the access before go-live.' : step.text}</p>
+          <p class="mt-1.5 text-sm leading-relaxed text-pretty text-muted">{i === 1 ? 'A small, real version on your own L2, with the success measure agreed at the start.' : i === 2 ? 'Your security team reviews the design, the keys and the access before launch.' : step.text}</p>
         </li>
       ))}
     </ol>

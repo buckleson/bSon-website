@@ -28,7 +28,7 @@ Buckleson owns its L1, Hyper 0X: post-quantum-resistant, with aBFT finality and 
   - HyperRun (coming soon)
 - **Services:** custom blockchains and asset tokenization, custom wallets/exchanges/compliance, wallet SDKs, agentic security, forward-deployed engineering.
 - **Terminology:** always "Hyper 0X"; "post-quantum-resistant", never "quantum-proof"; no TPS or latency numbers; never mention Hyper Tern.
-- **Hosting:** static site on GitHub Pages (base /bSon-website). Custom domain www.buckleson.com comes later. There is no backend.
+- **Hosting:** static site on GitHub Pages at the custom domain buckleson.com (public/CNAME). There is no backend.
 
 ## Brand Commitments
 - Name: Buckleson. Logo marks are in `src/images/brand/`.

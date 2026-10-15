@@ -9,9 +9,9 @@ export const SITE = {
     'Buckleson builds custom blockchains for enterprises. Hyper 0X, our own post-quantum-resistant L1, powers Pavii AI-agent security, Hyper Wallet and every solution we ship.',
   description_short: 'Custom blockchain solutions, powered by Hyper 0X.',
   /** Scheme + host the site is served from (no path). */
-  origin: 'https://buckleson.github.io',
-  /** Home page URL, including the deploy base path. */
-  url: 'https://buckleson.github.io/bSon-website',
+  origin: 'https://buckleson.com',
+  /** Home page URL, including the deploy base path (none on the custom domain). */
+  url: 'https://buckleson.com',
   author: 'Buckleson',
 };
 

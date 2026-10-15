@@ -22,22 +22,22 @@ const { badge, lead, phrases, intro, primary, secondary, chips } = Astro.props;
 const chipIcons = ['stack', 'diamond', 'wallet', 'shield-check'];
 ---
 
-<section class="hero relative mx-2 overflow-hidden rounded-[2rem] ring-1 ring-line sm:mx-3" data-hero>
+<section class="hero relative mx-2 -mt-16 overflow-hidden rounded-[2rem] ring-1 ring-line sm:mx-3 sm:-mt-[3.75rem]" data-hero>
   <div aria-hidden="true" class="hero-paper pointer-events-none absolute inset-0"></div>
 
-  <div class="relative mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] items-center gap-10 px-5 pt-12 pb-10 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-8 lg:pt-16 lg:pb-14">
+  <div class="relative mx-auto grid max-w-[90rem] grid-cols-[minmax(0,1fr)] items-center gap-10 px-5 pt-20 pb-10 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-8 lg:pt-[4.5rem] lg:pb-14">
     <div class="lg:ps-2">
       <p class="inline-flex items-center gap-2 rounded-full bg-card px-3 py-1.5 text-xs font-medium text-ink/80 ring-1 ring-line" data-hero-in>
         <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500/60"></span><span class="relative inline-flex size-2 rounded-full bg-emerald-500"></span></span>
         {badge}
       </p>
-      <h1 class="mt-6 text-[2.6rem] leading-[0.98] font-semibold text-ink sm:text-6xl lg:text-[3.6rem] xl:text-[4.1rem]">
+      <h1 class="mt-6 text-[2.4rem] leading-[0.98] font-semibold text-ink sm:text-[3.4rem] lg:text-[3.3rem] xl:text-[3.8rem]">
         <span class="block">{lead}</span>
         <span class="block min-h-[1.05em]" data-typer={JSON.stringify(phrases)}>
           <span class="mark" data-typer-text>{phrases[0]}</span><span class="typer-caret" aria-hidden="true"></span>
         </span>
       </h1>
-      <p class="mt-6 max-w-[34rem] text-lg leading-relaxed text-pretty text-muted">{intro}</p>
+      <p class="mt-5 max-w-[30rem] text-base leading-relaxed text-pretty text-muted sm:text-lg">{intro}</p>
       <div class="mt-8 flex flex-wrap gap-3" data-hero-in>
         <a href={primary.url} class="cta-pill"><span>{primary.title}</span><span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span></a>
         <a href={secondary.url} class="cta-ghost text-ink">{secondary.title}</a>

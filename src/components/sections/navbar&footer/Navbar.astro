@@ -57,9 +57,8 @@ const widths: Record<string, string> = {
       </ul>
       <div class="flex items-center gap-2 justify-self-end">
         <ThemeIcon />
-        <a href={href('/contact/')} class="hidden rounded-full border border-ink/20 px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink/60 sm:inline-flex lg:hidden xl:inline-flex">Contact</a>
         <a href={BOOKING_URL} class="cta-pill hidden whitespace-nowrap sm:inline-flex">
-          <span>Book a call</span>
+          <span>Contact us</span>
           <span class="cta-chip"><Glyph icon="arrow-up-right" class="size-3.5" /></span>
         </a>
         <button type="button" class="grid size-10 place-items-center rounded-full text-ink hover:bg-ink/5 lg:hidden" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false" data-mobile-open>
@@ -164,8 +163,7 @@ const widths: Record<string, string> = {
     ))}
   </div>
   <div class="grid gap-2 border-t border-line p-4">
-    <a href={href('/contact/')} class="rounded-full border border-ink/20 py-3 text-center font-semibold text-ink">Contact</a>
-    <a href={BOOKING_URL} class="rounded-full bg-orange-600 py-3 text-center font-semibold text-white dark:bg-orange-700">Book a call</a>
+    <a href={BOOKING_URL} class="rounded-full bg-orange-600 py-3 text-center font-semibold text-white dark:bg-orange-700">Contact us</a>
   </div>
 </div>
 )}
@@ -217,7 +215,7 @@ const widths: Record<string, string> = {
   let closeTimer = 0;
 
   // Hide on scroll down, show on scroll up.
-  let lastY = window.scrollY;
+  let lastY = 0; // read on the first scroll, not at load (that would force a layout)
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     header.classList.toggle('is-scrolled', y > 8);

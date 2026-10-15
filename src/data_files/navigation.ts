@@ -28,20 +28,20 @@ export const megaMenus: MegaMenu[] = [
       {
         heading: 'Platform',
         items: [
-          { title: 'Hyper 0X', desc: 'Our own L1, a private L2 for you', href: '/products/hyper-0x/', icon: 'link-2' },
+          { title: 'Hyper 0X', desc: 'Our blockchain, with a private L2 for you', href: '/products/hyper-0x/', icon: 'link-2' },
         ],
       },
       {
         heading: 'Products',
         items: [
-          { title: 'Pavii', desc: 'Security for every AI agent call', href: '/products/pavii/', icon: 'safe-shield' },
-          { title: 'Hyper Wallet & SDKs', desc: 'Wallet, exchange and white-label SDKs', href: '/products/hyper-wallet/', icon: 'laptop' },
+          { title: 'Pavii', desc: 'Checks every call your AI agents make', href: '/products/pavii/', icon: 'safe-shield' },
+          { title: 'Hyper Wallet & SDKs', desc: 'Wallet, exchange and SDKs for your brand', href: '/products/hyper-wallet/', icon: 'laptop' },
         ],
       },
       {
         heading: 'Coming soon',
         items: [
-          { title: 'H0X Pay', desc: 'Invest a slice of every payment', href: '/products/h0x-pay/', icon: 'coin', badge: 'Soon' },
+          { title: 'H0X Pay', desc: 'Invest part of every payment', href: '/products/h0x-pay/', icon: 'coin', badge: 'Soon' },
           { title: 'HyperRun', desc: 'Play, predict and earn', href: '/products/hyperrun/', icon: 'trophy', badge: 'Soon' },
         ],
       },
@@ -67,10 +67,10 @@ export const megaMenus: MegaMenu[] = [
         ],
       },
       {
-        heading: 'Secure & integrate',
+        heading: 'Protect & connect',
         items: [
           { title: 'Wallet SDKs', desc: 'Wallets inside your own apps', href: '/services/wallet-sdks/', icon: 'terminal-box' },
-          { title: 'AI-agent security', desc: 'Gates and receipts for agents', href: '/services/ai-agent-security/', icon: 'ai' },
+          { title: 'AI-agent security', desc: 'Security gates and receipts for agents', href: '/services/ai-agent-security/', icon: 'ai' },
           { title: 'Forward-deployed engineering', desc: 'Our engineers in your team', href: '/services/forward-deployed-engineering/', icon: 'group-3' },
         ],
       },
@@ -88,7 +88,7 @@ export const megaMenus: MegaMenu[] = [
         heading: 'Learn',
         items: [
           { title: 'Blog', desc: 'Guides from our engineers', href: '/blog/', icon: 'news' },
-          { title: 'FAQ', desc: 'Blockchain and AI security, answered', href: '/faq/', icon: 'question' },
+          { title: 'FAQ', desc: 'Answers on blockchain and AI security', href: '/faq/', icon: 'question' },
           { title: 'Hyper 0X docs', desc: 'How the chain works', href: '/guides/intro/', icon: 'book-2' },
           { title: 'RSS feed', desc: 'Every new article', href: '/rss.xml', icon: 'announcement' },
         ],
@@ -96,10 +96,10 @@ export const megaMenus: MegaMenu[] = [
       {
         heading: 'Popular guides',
         items: [
-          { title: 'Asset tokenization', desc: 'Launch tokenized assets', href: '/blog/asset-tokenization-guide/', icon: 'coin' },
-          { title: 'Secure AI agents', desc: '8 attacks and how to stop them', href: '/blog/how-to-secure-ai-agents/', icon: 'safe-lock' },
-          { title: 'Prompt injection', desc: 'How it works, how to stop it', href: '/blog/what-is-prompt-injection/', icon: 'warning' },
-          { title: 'Layer 1 vs layer 2', desc: 'One L1, many L2s', href: '/blog/layer-1-vs-layer-2-blockchain/', icon: 'server' },
+          { title: 'Asset tokenization', desc: 'How to launch tokenized assets', href: '/blog/asset-tokenization-guide/', icon: 'coin' },
+          { title: 'Protect AI agents', desc: '8 attacks and how to stop them', href: '/blog/how-to-secure-ai-agents/', icon: 'safe-lock' },
+          { title: 'Prompt injection', desc: 'How it works and how to stop it', href: '/blog/what-is-prompt-injection/', icon: 'warning' },
+          { title: 'Layer 1 or layer 2?', desc: 'One L1, many L2s', href: '/blog/layer-1-vs-layer-2-blockchain/', icon: 'server' },
         ],
       },
     ],
@@ -117,7 +117,7 @@ export const megaMenus: MegaMenu[] = [
         items: [
           { title: 'About us', desc: 'Our vision and story', href: '/about/', icon: 'building-2' },
           { title: 'Contact', desc: 'Talk to an engineer', href: '/contact/', icon: 'mail' },
-          { title: 'Book a call', desc: '30 minutes, your use case', href: 'https://cal.com/buckleson-group/30min', icon: 'calendar-month' },
+          { title: 'Book a call', desc: '30 minutes about your use case', href: 'https://cal.com/buckleson-group/30min', icon: 'calendar-month' },
         ],
       },
     ],

@@ -151,11 +151,15 @@ export function playFigure(stage, draw, opts) {
   const figure = stage.closest('.iso-figure') || stage;
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let frame = 0, prev = 0, clock = 0, visible = false, failed = false;
+  // Phones and tablets draw at 30 frames a second: the motion stays smooth
+  // and the main thread gets half the work.
+  const minStep = matchMedia('(pointer: coarse)').matches ? 1000 / 30 - 2 : 0;
   const run = (dt) => {
     try { draw(clock, dt); } catch (err) { if (!failed) { failed = true; console.warn('figure frame', err); } }
   };
   function tick(now) {
     frame = visible ? requestAnimationFrame(tick) : 0;
+    if (minStep && prev && now - prev < minStep) return;
     const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
     prev = now;
     clock = loop ? (clock + dt) % loop : clock + dt;

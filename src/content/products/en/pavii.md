@@ -1,6 +1,6 @@
 ---
 title: 'Pavii'
-seoTitle: 'Pavii: AI Agent Security on the Blockchain | Buckleson'
+seoTitle: 'Pavii: AI Agent Security Platform and Gateway | Buckleson'
 description: 'Pavii protects AI agents such as Claude, Codex, ChatGPT and Grok. Every call passes six security gates and leaves a receipt on the Hyper 0X blockchain.'
 order: 2
 status: 'live'
